@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -14,7 +15,7 @@ namespace DotnetMicroOrm.Formatters;
 /// Properly handles quoted fields, line breaks, and special characters.
 /// Includes header row with property names.
 /// </summary>
-public class CsvFormatter : IOutputFormatter
+public class sealed CsvFormatter : IOutputFormatter
 {
     private readonly string _delimiter;
     private readonly string _lineEnding;

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.Middleware;
 /// Prevents unhandled exceptions from propagating and ensures consistent error format.
 /// Logs errors for debugging and monitoring purposes.
 /// </summary>
-public class ErrorHandlingMiddleware : IMiddleware
+public class sealed ErrorHandlingMiddleware : IMiddleware
 {
     public int Order => 1; // Execute first to wrap all other middleware
 
@@ -88,7 +89,7 @@ public class ErrorHandlingMiddleware : IMiddleware
 /// <summary>
 /// Standardized error response format returned to clients
 /// </summary>
-public class ErrorResponse
+public class sealed ErrorResponse
 {
     /// <summary>Machine-readable error code</summary>
     public string Code { get; set; } = string.Empty;

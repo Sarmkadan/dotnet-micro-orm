@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -11,7 +12,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Fluent validation builder for entities
 /// </summary>
-public class ValidationBuilder
+public class sealed ValidationBuilder
 {
     private readonly List<string> _errors = [];
 
@@ -23,7 +24,7 @@ public class ValidationBuilder
     }
 
     public ValidationBuilder NotNull(object? value, string propertyName) =>
-        When(value == null, $"{propertyName} is required");
+        When(value is null, $"{propertyName} is required");
 
     public ValidationBuilder NotEmpty(string? value, string propertyName) =>
         When(string.IsNullOrWhiteSpace(value), $"{propertyName} cannot be empty");

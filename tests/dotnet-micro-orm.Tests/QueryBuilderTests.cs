@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -10,7 +11,7 @@ using Moq;
 
 namespace DotnetMicroOrm.Tests;
 
-public class QueryBuilderTests
+public class sealed QueryBuilderTests
 {
     private readonly Mock<IRepository<Product>> _repositoryMock = new();
 

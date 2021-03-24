@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.Utils;
 /// and database query metrics. Provides detailed performance reports and alerting
 /// when thresholds are exceeded.
 /// </summary>
-public class PerformanceMonitor : IDisposable
+public class sealed PerformanceMonitor : IDisposable
 {
     private readonly Stopwatch _stopwatch;
     private readonly string _operationName;
@@ -126,7 +127,7 @@ public class PerformanceMonitor : IDisposable
 /// <summary>
 /// Performance metrics report
 /// </summary>
-public class PerformanceReport
+public class sealed PerformanceReport
 {
     /// <summary>Operation name</summary>
     public string OperationName { get; set; } = string.Empty;

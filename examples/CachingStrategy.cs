@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -20,7 +21,7 @@ namespace DotnetMicroOrm.Examples
     /// Demonstrates caching strategies for optimal performance.
     /// Cached queries are 100-1000x faster than database queries.
     /// </summary>
-    public class CachingStrategyExample
+    public class sealed CachingStrategyExample
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ICacheProvider _cacheProvider;
@@ -107,7 +108,7 @@ namespace DotnetMicroOrm.Examples
 
             // Check cache first
             var cached = _cacheProvider.Get<List<Product>>(cacheKey);
-            if (cached != null)
+            if (cached is not null)
                 return cached;
 
             // Cache miss - query database
@@ -123,7 +124,7 @@ namespace DotnetMicroOrm.Examples
         private async Task<List<Product>> GetFeaturedProductsAsync(IRepository<Product> repository)
         {
             var cached = _cacheProvider.Get<List<Product>>(FeaturedProductsCacheKey);
-            if (cached != null)
+            if (cached is not null)
                 return cached;
 
             var spec = new Specification<Product>()

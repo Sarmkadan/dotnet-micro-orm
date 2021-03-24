@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -10,7 +11,7 @@ namespace DotnetMicroOrm.Middleware;
 /// Tracks requests per user/IP and blocks excessive traffic with configurable thresholds.
 /// Uses token bucket algorithm for smooth rate limiting without sudden cutoffs.
 /// </summary>
-public class RateLimitingMiddleware : IMiddleware
+public class sealed RateLimitingMiddleware : IMiddleware
 {
     private readonly RateLimitConfig _config;
     private readonly Dictionary<string, TokenBucket> _buckets = [];
@@ -129,7 +130,7 @@ public class RateLimitingMiddleware : IMiddleware
 /// <summary>
 /// Configuration for rate limiting behavior
 /// </summary>
-public class RateLimitConfig
+public class sealed RateLimitConfig
 {
     /// <summary>Maximum number of requests allowed per window</summary>
     public int MaxRequests { get; set; } = 100;
