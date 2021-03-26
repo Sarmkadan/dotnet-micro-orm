@@ -9,6 +9,9 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>DotnetMicroOrm</AssemblyName>
     <RootNamespace>DotnetMicroOrm</RootNamespace>
+    <Authors>Vladyslav Zaiets</Authors>
+    <RepositoryUrl>https://github.com/sarmkadan/dotnet-micro-orm</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
