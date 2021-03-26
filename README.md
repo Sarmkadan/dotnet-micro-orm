@@ -1,8 +1,9 @@
-# DotnetMicroOrm - High-Performance Micro-ORM for .NET
-
+[![Build](https://github.com/sarmkadan/dotnet-micro-orm/actions/workflows/build.yml/badge.svg)](https://github.com/sarmkadan/dotnet-micro-orm/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com)
+[![.NET](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/)
 [![Latest Release](https://img.shields.io/badge/Version-1.2.0-brightgreen.svg)](https://github.com/Sarmkadan/dotnet-micro-orm/releases)
+
+# DotnetMicroOrm - High-Performance Micro-ORM for .NET
 
 A lightning-fast, lightweight ORM for .NET that prioritizes performance, simplicity, and developer experience. Built with compiled expressions, intelligent caching, and multi-database support for SQL Server, PostgreSQL, MySQL, and SQLite.
 
