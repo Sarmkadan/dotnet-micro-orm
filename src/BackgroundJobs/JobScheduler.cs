@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -11,7 +12,7 @@ namespace DotnetMicroOrm.BackgroundJobs;
 /// Schedules and executes background jobs with support for intervals, retries,
 /// and execution history tracking. Thread-safe and designed for distributed use.
 /// </summary>
-public class JobScheduler : IAsyncDisposable
+public class sealed JobScheduler : IAsyncDisposable
 {
     private readonly Dictionary<string, (IBackgroundJob job, JobScheduleConfig config)> _jobs = [];
     private readonly ConcurrentDictionary<string, Timer?> _timers = [];

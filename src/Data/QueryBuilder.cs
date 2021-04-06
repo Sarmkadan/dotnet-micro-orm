@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -11,7 +12,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Fluent query builder for complex queries
 /// </summary>
-public class QueryBuilder<T> : IQueryBuilder<T> where T : BaseEntity
+public class sealed QueryBuilder<T> : IQueryBuilder<T> where T : BaseEntity
 {
     private readonly IRepository<T> _repository;
     private Expression<Func<T, bool>>? _whereClause;
@@ -70,10 +71,10 @@ public class QueryBuilder<T> : IQueryBuilder<T> where T : BaseEntity
     {
         var query = _repository.Query();
 
-        if (_whereClause != null)
+        if (_whereClause is not null)
             query = query.Where(_whereClause);
 
-        if (_orderBy != null)
+        if (_orderBy is not null)
             query = _orderBy(query);
 
         if (_skip.HasValue)
@@ -89,10 +90,10 @@ public class QueryBuilder<T> : IQueryBuilder<T> where T : BaseEntity
     {
         var query = _repository.Query();
 
-        if (_whereClause != null)
+        if (_whereClause is not null)
             query = query.Where(_whereClause);
 
-        if (_orderBy != null)
+        if (_orderBy is not null)
             query = _orderBy(query);
 
         return await Task.FromResult(query.FirstOrDefault());
@@ -102,7 +103,7 @@ public class QueryBuilder<T> : IQueryBuilder<T> where T : BaseEntity
     {
         var query = _repository.Query();
 
-        if (_whereClause != null)
+        if (_whereClause is not null)
             query = query.Where(_whereClause);
 
         return await Task.FromResult(query.Count());

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.Events;
 /// Handlers are executed synchronously or asynchronously based on configuration.
 /// Thread-safe and designed for single-application use (for distributed use, consider message queues).
 /// </summary>
-public class EventBus : IEventBus
+public class sealed EventBus : IEventBus
 {
     private readonly ConcurrentDictionary<Type, List<object>> _subscribers = [];
     private readonly bool _executeAsync;

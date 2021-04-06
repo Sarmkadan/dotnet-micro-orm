@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.Cli;
 /// Parses and validates command-line arguments with support for subcommands,
 /// options, and arguments. Provides help text and error handling.
 /// </summary>
-public class CommandParser
+public class sealed CommandParser
 {
     private readonly Dictionary<string, CommandDefinition> _commands = [];
     private readonly StringBuilder _helpText = new();
@@ -165,7 +166,7 @@ public class CommandParser
 /// <summary>
 /// Context passed to command handlers containing parsed arguments and options
 /// </summary>
-public class CommandContext
+public class sealed CommandContext
 {
     public string CommandName { get; set; } = string.Empty;
     public Action<CommandContext>? Handler { get; set; }

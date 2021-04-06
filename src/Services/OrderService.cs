@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -11,7 +12,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Order service for order processing and management
 /// </summary>
-public class OrderService : IAsyncDisposable
+public class sealed OrderService : IAsyncDisposable
 {
     private readonly IRepository<Order> _orderRepository;
     private readonly IRepository<OrderItem> _orderItemRepository;
@@ -68,7 +69,7 @@ public class OrderService : IAsyncDisposable
     public async Task<Order> AddOrderItemAsync(int orderId, int productId, string productName, int quantity, decimal unitPrice)
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
-        if (order == null)
+        if (order is null)
             throw new InvalidOperationException("Order not found");
 
         var item = new OrderItem(orderId, productId, productName, quantity, unitPrice)
@@ -91,7 +92,7 @@ public class OrderService : IAsyncDisposable
     public async Task<Order> ConfirmOrderAsync(int orderId)
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
-        if (order == null)
+        if (order is null)
             throw new InvalidOperationException("Order not found");
 
         if (order.Status != "Pending")
@@ -109,7 +110,7 @@ public class OrderService : IAsyncDisposable
     public async Task<Order> ShipOrderAsync(int orderId, DateTime? shipDate = null)
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
-        if (order == null)
+        if (order is null)
             throw new InvalidOperationException("Order not found");
 
         order.Ship(shipDate ?? DateTime.UtcNow);
@@ -120,7 +121,7 @@ public class OrderService : IAsyncDisposable
     public async Task<Order> DeliverOrderAsync(int orderId)
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
-        if (order == null)
+        if (order is null)
             throw new InvalidOperationException("Order not found");
 
         order.MarkAsDelivered();
@@ -131,7 +132,7 @@ public class OrderService : IAsyncDisposable
     public async Task<Order> CancelOrderAsync(int orderId)
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
-        if (order == null)
+        if (order is null)
             throw new InvalidOperationException("Order not found");
 
         order.Cancel();

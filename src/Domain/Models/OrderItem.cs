@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -9,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Represents an individual item within an order
 /// </summary>
 [Table("OrderItems")]
-public class OrderItem : BaseEntity
+public class sealed OrderItem : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }

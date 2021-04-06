@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -10,7 +11,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Product-specific repository with inventory and catalog operations
 /// </summary>
-public class ProductRepository : Repository<Product>
+public class sealed ProductRepository : Repository<Product>
 {
     public ProductRepository(IDatabaseContext context) : base(context) { }
 

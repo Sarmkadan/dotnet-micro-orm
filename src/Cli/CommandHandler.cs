@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.Cli;
 /// Executes CLI commands with proper exception handling and output formatting.
 /// Coordinates between command parser and business logic services.
 /// </summary>
-public class CommandHandler
+public class sealed CommandHandler
 {
     private readonly IDatabaseContext _dbContext;
     private readonly IServiceProvider _serviceProvider;

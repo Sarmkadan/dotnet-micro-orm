@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -26,7 +27,7 @@ public interface IMiddleware
 /// <summary>
 /// Context passed through middleware pipeline containing request/response data
 /// </summary>
-public class MiddlewareContext
+public class sealed MiddlewareContext
 {
     /// <summary>Unique request identifier for tracing and logging</summary>
     public string RequestId { get; set; } = Guid.NewGuid().ToString();
@@ -62,7 +63,7 @@ public class MiddlewareContext
 /// <summary>
 /// Authentication information attached to context after auth middleware processes
 /// </summary>
-public class AuthenticationInfo
+public class sealed AuthenticationInfo
 {
     public int UserId { get; set; }
     public string Username { get; set; } = string.Empty;

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -9,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Specifies the database table name for the entity
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class TableAttribute : Attribute
+public class sealed TableAttribute : Attribute
 {
     public string Name { get; }
     public string Schema { get; set; } = Constants.OrmConstants.DefaultSchema;
@@ -21,7 +22,7 @@ public class TableAttribute : Attribute
 /// Specifies column mapping for a property
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class ColumnAttribute : Attribute
+public class sealed ColumnAttribute : Attribute
 {
     public string Name { get; }
     public bool IsPrimaryKey { get; set; }
@@ -42,13 +43,13 @@ public class ColumnAttribute : Attribute
 /// Indicates the property should not be mapped to a database column
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class NotMappedAttribute : Attribute { }
+public class sealed NotMappedAttribute : Attribute { }
 
 /// <summary>
 /// Specifies a foreign key relationship
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class ForeignKeyAttribute : Attribute
+public class sealed ForeignKeyAttribute : Attribute
 {
     public string ReferencedTable { get; }
     public string ReferencedColumn { get; }
@@ -64,7 +65,7 @@ public class ForeignKeyAttribute : Attribute
 /// Marks a property as a unique constraint
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class UniqueAttribute : Attribute
+public class sealed UniqueAttribute : Attribute
 {
     public string? Name { get; set; }
 }
@@ -73,7 +74,7 @@ public class UniqueAttribute : Attribute
 /// Marks a property as indexed
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class IndexedAttribute : Attribute
+public class sealed IndexedAttribute : Attribute
 {
     public string? Name { get; set; }
     public bool IsUnique { get; set; }
@@ -83,7 +84,7 @@ public class IndexedAttribute : Attribute
 /// Marks a property as a computed/generated column
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class ComputedAttribute : Attribute
+public class sealed ComputedAttribute : Attribute
 {
     public string? ComputationExpression { get; set; }
 }

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -18,7 +19,7 @@ namespace DotnetMicroOrm.Examples
     /// Demonstrates entity validation before persistence.
     /// Shows how to validate business rules and constraints.
     /// </summary>
-    public class ValidationExample
+    public class sealed ValidationExample
     {
         private readonly IServiceProvider _serviceProvider;
 
