@@ -143,7 +143,8 @@ public sealed class QueryPlanCache : IQueryPlanCache
 
     /// <summary>
     /// Produces a stable, normalized fingerprint for the supplied SQL by collapsing whitespace,
-    /// uppercasing the text, stripping trailing semicolons, and hashing with SHA-256.
+    /// uppercasing the text, stripping trailing semicolons, replacing dynamic parameter names with a generic placeholder,
+    /// and hashing with SHA-256.
     /// </summary>
     /// <param name="sql">Raw SQL statement to fingerprint.</param>
     /// <returns>A lowercase hex-encoded SHA-256 hash of the normalized SQL.</returns>
@@ -152,7 +153,14 @@ public sealed class QueryPlanCache : IQueryPlanCache
         if (string.IsNullOrWhiteSpace(sql))
             throw new ArgumentException("SQL must not be empty", nameof(sql));
 
+        // Normalize whitespace, uppercase, and strip trailing semicolons.
         var normalized = Regex.Replace(sql.Trim().ToUpperInvariant(), @"\s+", " ").TrimEnd(';');
+
+        // Replace all parameter names (e.g., @p1, @paramName) with a generic placeholder (@p)
+        // to ensure structurally identical queries produce the same fingerprint regardless of
+        // dynamically generated parameter names.
+        normalized = Regex.Replace(normalized, @"@\w+", "@P"); 
+
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(normalized));
         return Convert.ToHexString(bytes).ToLowerInvariant();
     }
