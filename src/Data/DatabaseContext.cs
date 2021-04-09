@@ -152,6 +152,37 @@ public class sealed DatabaseContext : IDatabaseContext
         }
     }
 
+    // Executes query returning rows as an IAsyncEnumerable
+    public async IAsyncEnumerable<Dictionary<string, object>> ExecuteStreamAsync(string query, Dictionary<string, object>? parameters = null)
+    {
+        await OpenAsync();
+
+        await using var command = _connection!.CreateCommand();
+        command.CommandText = query;
+        command.CommandTimeout = Constants.OrmConstants.DefaultCommandTimeout;
+        command.Transaction = _transaction;
+
+        ApplyParameters(command, parameters);
+
+        try
+        {
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                var row = new Dictionary<string, object>();
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    row[reader.GetName(i)] = reader.IsDBNull(i) ? DBNull.Value : reader.GetValue(i);
+                }
+                yield return row;
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new QueryExecutionException($"Streaming query execution failed: {ex.Message}", query, ex);
+        }
+    }
+
     // Begins transaction
     public async Task<bool> BeginTransactionAsync(TransactionIsolationLevel isolationLevel)
     {
