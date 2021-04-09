@@ -88,3 +88,9 @@ public class sealed ComputedAttribute : Attribute
 {
     public string? ComputationExpression { get; set; }
 }
+
+/// <summary>
+/// Marks a property as a concurrency token (e.g., for optimistic concurrency control).
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class sealed ConcurrencyTokenAttribute : Attribute { }
