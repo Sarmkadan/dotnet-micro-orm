@@ -14,7 +14,7 @@ namespace DotnetMicroOrm.Caching;
 /// Suitable for single-server applications. Includes automatic expiration
 /// and pattern-based removal for cache invalidation.
 /// </summary>
-public class sealed MemoryCacheProvider : ICacheProvider
+public sealed class MemoryCacheProvider : ICacheProvider
 {
     private readonly ConcurrentDictionary<string, CacheEntry> _cache = [];
     private readonly ConcurrentDictionary<string, Timer> _timers = [];
@@ -51,7 +51,7 @@ public class sealed MemoryCacheProvider : ICacheProvider
             return;
         }
 
-        var expiresAt = expiration.HasValue ? DateTime.UtcNow.Add(expiration.Value) : null;
+        DateTime? expiresAt = expiration.HasValue ? DateTime.UtcNow.Add(expiration.Value) : null;
 
         var entry = new CacheEntry
         {
@@ -74,7 +74,7 @@ public class sealed MemoryCacheProvider : ICacheProvider
             var timer = new Timer(
                 _ => RemoveAsync(key).GetAwaiter().GetResult(),
                 null,
-                expiration.Value,
+                expiration!.Value,
                 Timeout.InfiniteTimeSpan);
 
             _timers[key] = timer;
@@ -95,7 +95,7 @@ public class sealed MemoryCacheProvider : ICacheProvider
             await SetAsync(key, value, expiration);
         }
 
-        return value;
+        return value!;
     }
 
     public async Task RemoveAsync(string key)
@@ -159,7 +159,7 @@ public class sealed MemoryCacheProvider : ICacheProvider
 
         var exists = _cache.TryGetValue(key, out var entry);
 
-        if (exists && entry.ExpiresAt.HasValue && DateTime.UtcNow >= entry.ExpiresAt)
+        if (exists && entry is not null && entry.ExpiresAt.HasValue && DateTime.UtcNow >= entry.ExpiresAt.Value)
         {
             await RemoveAsync(key);
             return false;
@@ -213,7 +213,7 @@ public class sealed MemoryCacheProvider : ICacheProvider
     public async ValueTask DisposeAsync()
     {
         await ClearAsync();
-        _cleanupSemaphore?.Dispose();
+        _cleanupSemaphore.Dispose();
     }
 
     private class CacheEntry

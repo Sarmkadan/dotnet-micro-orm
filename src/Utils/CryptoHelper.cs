@@ -34,16 +34,13 @@ public static class CryptoHelper
             var salt = new byte[SaltLength];
             rng.GetBytes(salt);
 
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations, HashAlgorithmName.SHA256))
-            {
-                var hash = pbkdf2.GetBytes(HashLength);
-                var hashBytes = new byte[SaltLength + HashLength];
+            var hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA256, HashLength);
+            var hashBytes = new byte[SaltLength + HashLength];
 
-                Buffer.BlockCopy(salt, 0, hashBytes, 0, SaltLength);
-                Buffer.BlockCopy(hash, 0, hashBytes, SaltLength, HashLength);
+            Buffer.BlockCopy(salt, 0, hashBytes, 0, SaltLength);
+            Buffer.BlockCopy(hash, 0, hashBytes, SaltLength, HashLength);
 
-                return Convert.ToBase64String(hashBytes);
-            }
+            return Convert.ToBase64String(hashBytes);
         }
     }
 
@@ -66,16 +63,13 @@ public static class CryptoHelper
             var salt = new byte[SaltLength];
             Buffer.BlockCopy(hashBytes, 0, salt, 0, SaltLength);
 
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations, HashAlgorithmName.SHA256))
-            {
-                var hash = pbkdf2.GetBytes(HashLength);
+            var hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA256, HashLength);
 
-                // Constant-time comparison to prevent timing attacks
-                var storedHashPortion = new byte[HashLength];
-                Buffer.BlockCopy(hashBytes, SaltLength, storedHashPortion, 0, HashLength);
+            // Constant-time comparison to prevent timing attacks
+            var storedHashPortion = new byte[HashLength];
+            Buffer.BlockCopy(hashBytes, SaltLength, storedHashPortion, 0, HashLength);
 
-                return CryptographicEquals(hash, storedHashPortion);
-            }
+            return CryptographicEquals(hash, storedHashPortion);
         }
         catch
         {

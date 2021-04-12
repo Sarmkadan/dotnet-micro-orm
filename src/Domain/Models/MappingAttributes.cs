@@ -10,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Specifies the database table name for the entity
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class sealed TableAttribute : Attribute
+public sealed class TableAttribute : Attribute
 {
     public string Name { get; }
     public string Schema { get; set; } = Constants.OrmConstants.DefaultSchema;
@@ -22,14 +22,14 @@ public class sealed TableAttribute : Attribute
 /// Specifies column mapping for a property
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class sealed ColumnAttribute : Attribute
+public sealed class ColumnAttribute : Attribute
 {
     public string Name { get; }
     public bool IsPrimaryKey { get; set; }
     public bool IsNullable { get; set; } = true;
-    public int? MaxLength { get; set; }
-    public int? Precision { get; set; }
-    public int? Scale { get; set; }
+    public int MaxLength { get; set; }
+    public int Precision { get; set; }
+    public int Scale { get; set; }
     public string? DefaultValue { get; set; }
     public bool IsAutoIncrement { get; set; }
     public string? ColumnType { get; set; }
@@ -43,13 +43,13 @@ public class sealed ColumnAttribute : Attribute
 /// Indicates the property should not be mapped to a database column
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class sealed NotMappedAttribute : Attribute { }
+public sealed class NotMappedAttribute : Attribute { }
 
 /// <summary>
 /// Specifies a foreign key relationship
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class sealed ForeignKeyAttribute : Attribute
+public sealed class ForeignKeyAttribute : Attribute
 {
     public string ReferencedTable { get; }
     public string ReferencedColumn { get; }
@@ -65,7 +65,7 @@ public class sealed ForeignKeyAttribute : Attribute
 /// Marks a property as a unique constraint
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class sealed UniqueAttribute : Attribute
+public sealed class UniqueAttribute : Attribute
 {
     public string? Name { get; set; }
 }
@@ -74,7 +74,7 @@ public class sealed UniqueAttribute : Attribute
 /// Marks a property as indexed
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class sealed IndexedAttribute : Attribute
+public sealed class IndexedAttribute : Attribute
 {
     public string? Name { get; set; }
     public bool IsUnique { get; set; }
@@ -84,7 +84,7 @@ public class sealed IndexedAttribute : Attribute
 /// Marks a property as a computed/generated column
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class sealed ComputedAttribute : Attribute
+public sealed class ComputedAttribute : Attribute
 {
     public string? ComputationExpression { get; set; }
 }
@@ -93,4 +93,4 @@ public class sealed ComputedAttribute : Attribute
 /// Marks a property as a concurrency token (e.g., for optimistic concurrency control).
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class sealed ConcurrencyTokenAttribute : Attribute { }
+public sealed class ConcurrencyTokenAttribute : Attribute { }

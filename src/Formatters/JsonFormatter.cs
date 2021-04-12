@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.Formatters;
 /// JSON formatter using System.Text.Json for efficient serialization.
 /// Provides configurable indentation and property naming conventions.
 /// </summary>
-public class sealed JsonFormatter : IOutputFormatter
+public sealed class JsonFormatter : IOutputFormatter
 {
     private readonly JsonSerializerOptions _options;
 
@@ -26,9 +26,9 @@ public class sealed JsonFormatter : IOutputFormatter
             WriteIndented = indented,
             PropertyNameCaseInsensitive = false,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            Converters = new[] { new JsonStringEnumConverter() }
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
+        _options.Converters.Add(new JsonStringEnumConverter());
     }
 
     public string Format(object? data)

@@ -62,7 +62,7 @@ public sealed class PreparedStatementPool : IPreparedStatementPool
         }
 
         entry.LastUsedAt = DateTime.UtcNow;
-        Interlocked.Increment(ref entry.UseCount);
+        entry.UseCount++;
         Interlocked.Increment(ref _poolHits);
 
         _logger.LogDebug("Prepared statement pool hit for key {StatementKey} (UseCount={UseCount})", statementKey, entry.UseCount);

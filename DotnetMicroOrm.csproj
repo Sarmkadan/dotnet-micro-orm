@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
     <AssemblyName>DotnetMicroOrm</AssemblyName>
     <RootNamespace>DotnetMicroOrm</RootNamespace>
     <PackageId>Zaiets.dotnet.micro.orm</PackageId>
@@ -23,11 +24,15 @@
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+    <Compile Remove="examples/**/*.cs" />
+    <Compile Remove="tests/**/*.cs" />
+    <Compile Remove="src/Controllers/**/*.cs" />
+    <Compile Remove="src/Program.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Represents an individual item within an order
 /// </summary>
 [Table("OrderItems")]
-public class sealed OrderItem : BaseEntity
+public class OrderItem : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }

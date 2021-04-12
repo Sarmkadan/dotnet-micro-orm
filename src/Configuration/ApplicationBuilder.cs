@@ -5,6 +5,7 @@
 // =============================================================================
 
 using DotnetMicroOrm.Caching;
+using DotnetMicroOrm.Constants;
 using DotnetMicroOrm.Integration;
 using DotnetMicroOrm.Middleware;
 using DotnetMicroOrm.Pipeline;
@@ -17,7 +18,7 @@ namespace DotnetMicroOrm.Configuration;
 /// Sets up database connections, middleware pipeline, caching, integration services,
 /// and other components in a composable manner.
 /// </summary>
-public class sealed ApplicationBuilder
+public sealed class ApplicationBuilder
 {
     private IDatabaseContext? _dbContext;
     private readonly PipelineBuilder _pipelineBuilder = new();
@@ -144,7 +145,7 @@ public class sealed ApplicationBuilder
 /// <summary>
 /// Complete application configuration
 /// </summary>
-public class sealed ApplicationConfiguration
+public sealed class ApplicationConfiguration
 {
     /// <summary>Database context</summary>
     public required IDatabaseContext DatabaseContext { get; set; }
@@ -176,7 +177,7 @@ public class sealed ApplicationConfiguration
 /// <summary>
 /// Dummy logger implementation for compilation
 /// </summary>
-public class sealed ConsoleLogger<T> : ILogger<T>
+public sealed class ConsoleLogger<T> : ILogger<T>
 {
     public void LogInformation(string message, params object?[] args) => Console.WriteLine(message, args);
     public void LogDebug(string message, params object?[] args) { } // Suppress debug

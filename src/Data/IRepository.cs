@@ -7,6 +7,7 @@
 namespace DotnetMicroOrm.Data;
 
 using System.Linq.Expressions;
+using DotnetMicroOrm.Constants;
 using DotnetMicroOrm.Domain.Models;
 
 /// <summary>
@@ -37,7 +38,7 @@ public interface IRepository<T> where T : BaseEntity
 /// </summary>
 public interface IUnitOfWork : IAsyncDisposable
 {
-    IRepository<T> Repository<T>() where T : BaseEntity;
+    IRepository<T> Repository<T>() where T : BaseEntity, new();
     Task<bool> BeginTransactionAsync(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.ReadCommitted);
     Task<bool> CommitAsync();
     Task<bool> RollbackAsync();
@@ -57,6 +58,9 @@ public interface IDatabaseContext : IAsyncDisposable
     Task<List<Dictionary<string, object>>> ExecuteQueryAsync(string query, Dictionary<string, object>? parameters = null);
     IAsyncEnumerable<Dictionary<string, object>> ExecuteStreamAsync(string query, Dictionary<string, object>? parameters = null);
     Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null);
+    Task<bool> BeginTransactionAsync(TransactionIsolationLevel isolationLevel);
+    Task<bool> CommitAsync();
+    Task<bool> RollbackAsync();
     DatabaseProvider GetDatabaseProvider();
     string GetConnectionString();
 }

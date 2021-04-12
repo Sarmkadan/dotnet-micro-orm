@@ -10,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Represents a customer order entity
 /// </summary>
 [Table("Orders")]
-public class sealed Order : BaseEntity
+public class Order : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }
