@@ -1,7 +1,8 @@
+[![CI](https://github.com/sarmkadan/dotnet-micro-orm/actions/workflows/ci.yml/badge.svg)](https://github.com/sarmkadan/dotnet-micro-orm/actions/workflows/ci.yml)
 [![Build](https://github.com/sarmkadan/dotnet-micro-orm/actions/workflows/build.yml/badge.svg)](https://github.com/sarmkadan/dotnet-micro-orm/actions/workflows/build.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![.NET](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/)
-[![Latest Release](https://img.shields.io/badge/Version-2.0.2-brightgreen.svg)](https://github.com/Sarmkadan/dotnet-micro-orm/releases)
+[![License](https://img.shields.io/github/license/sarmkadan/dotnet-micro-orm)](https://github.com/sarmkadan/dotnet-micro-orm/blob/main/LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4)](https://dotnet.microsoft.com/)
+[![Latest Release](https://img.shields.io/github/v/release/sarmkadan/dotnet-micro-orm)](https://github.com/sarmkadan/dotnet-micro-orm/releases)
 
 # DotnetMicroOrm - High-Performance Micro-ORM for .NET
 
