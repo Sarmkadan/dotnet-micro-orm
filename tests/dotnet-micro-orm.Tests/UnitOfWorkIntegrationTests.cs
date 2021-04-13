@@ -185,15 +185,10 @@ public sealed class UnitOfWorkIntegrationTests
     }
 
     [Fact]
-    public void Dispose_CleansUpResources()
+    public async Task Dispose_CleansUpResources()
     {
-        var act = () =>
-        {
-            var uow = new UnitOfWork(_contextMock.Object);
-            uow.Dispose();
-        };
-
-        act.Should().NotThrow();
+        var uow = new UnitOfWork(_contextMock.Object);
+        await uow.DisposeAsync();
     }
 
     [Fact]
