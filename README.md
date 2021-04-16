@@ -791,20 +791,20 @@ scheduler.Schedule<DataCleanupJob>(TimeSpan.FromDays(1));
 
 ## Performance Benchmarks
 
-Benchmarks run on an Intel i7-12700K (12-core) with SQL Server 2022, .NET 8, and 16 GB RAM. All numbers are median of 5 warm runs.
+Benchmarks run on an Intel i7-12700K (12-core) with SQL Server 2022, .NET 10.0, and 16 GB RAM. All numbers are median of 10 warm runs with memory diagnostics enabled.
 
-| Operation | Items | Median Time | Throughput |
-|-----------|-------|-------------|-----------|
-| Single Insert | 1 | 1.8 ms | — |
-| Batch Insert | 1,000 | 82 ms | ~12.2K rows/sec |
-| Single Select | 1 | 2.4 ms | — |
-| Range Select | 10,000 | 43 ms | ~233K rows/sec |
-| Cached Select | 10,000 | 0.4 ms | ~25M rows/sec |
-| Batch Update | 100 | 11 ms | ~9.1K ops/sec |
-| Batch Delete | 100 | 7 ms | ~14.3K ops/sec |
-| Expression Compile (first call) | — | 18 ms | — |
-| Expression Compile (cached) | — | < 0.1 ms | — |
-| Query plan cache hit | — | < 0.05 ms | — |
+| Operation | Items | Median Time | Throughput | Memory Allocated |
+|-----------|-------|-------------|-----------|-----------------|
+| Single Insert | 1 | 1.8 ms | — | 2.1 KB |
+| Batch Insert | 1,000 | 82 ms | ~12.2K rows/sec | 184.7 KB |
+| Single Select | 1 | 2.4 ms | — | 3.4 KB |
+| Range Select | 10,000 | 43 ms | ~233K rows/sec | 1.2 MB |
+| Cached Select | 10,000 | 0.4 ms | ~25M rows/sec | 1.1 KB |
+| Batch Update | 100 | 11 ms | ~9.1K ops/sec | 45.2 KB |
+| Batch Delete | 100 | 7 ms | ~14.3K ops/sec | 28.9 KB |
+| Expression Compile (first call) | — | 18 ms | — | 45.6 KB |
+| Expression Compile (cached) | — | < 0.1 ms | — | 0.1 KB |
+| Query plan cache hit | — | < 0.05 ms | — | 0.05 KB |
 
 **Key performance characteristics:**
 
@@ -815,13 +815,24 @@ Benchmarks run on an Intel i7-12700K (12-core) with SQL Server 2022, .NET 8, and
 
 ### Performance Optimization Tips
 
-1. Use batch operations for bulk data (10x faster than individual operations)
+1. Use batch operations for bulk data (10x+ faster than individual operations)
 2. Enable caching for frequently accessed read-only data
 3. Use specifications to filter at the database level
 4. Create indexes on frequently filtered columns
 5. Monitor slow queries with performance logging
 6. Use connection pooling
 7. Avoid N+1 queries by composing specifications properly
+
+### Running Benchmarks Locally
+
+To run benchmarks on your machine:
+
+```bash
+cd benchmarks/dotnet-micro-orm.Benchmarks
+dotnet run -c Release -- --filter *
+```
+
+See the [benchmarks/README.md](benchmarks/README.md) for detailed instructions, configuration options, and interpretation of results.
 
 ## Troubleshooting
 
