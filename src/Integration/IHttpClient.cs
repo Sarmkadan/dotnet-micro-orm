@@ -41,7 +41,7 @@ public interface IHttpClient : IAsyncDisposable
 /// <summary>
 /// Response data from HTTP requests
 /// </summary>
-public class sealed HttpResponseData
+public sealed class HttpResponseData
 {
     /// <summary>HTTP status code</summary>
     public int StatusCode { get; set; }
@@ -71,7 +71,7 @@ public class sealed HttpResponseData
 /// <summary>
 /// Configuration for HTTP client behavior
 /// </summary>
-public class sealed HttpClientConfig
+public sealed class HttpClientConfig
 {
     /// <summary>Default request timeout</summary>
     public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(30);

@@ -20,7 +20,7 @@ namespace DotnetMicroOrm.Examples
     /// Demonstrates batch operations (bulk insert, update, delete) for high performance.
     /// Batch operations are 10-20x faster than individual operations.
     /// </summary>
-    public class sealed BatchOperationsExample
+    public sealed class BatchOperationsExample
     {
         private readonly IServiceProvider _serviceProvider;
 

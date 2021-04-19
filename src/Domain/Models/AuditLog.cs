@@ -10,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Records audit trail for entity changes and system operations
 /// </summary>
 [Table("AuditLogs")]
-public class sealed AuditLog : BaseEntity
+public sealed class AuditLog : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }

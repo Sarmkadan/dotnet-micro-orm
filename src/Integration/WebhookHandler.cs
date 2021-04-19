@@ -14,7 +14,7 @@ namespace DotnetMicroOrm.Integration;
 /// Supports multiple webhook types (user events, order events, etc).
 /// Verifies authenticity using HMAC-SHA256 signatures.
 /// </summary>
-public class sealed WebhookHandler
+public sealed class WebhookHandler
 {
     private readonly Dictionary<string, List<Func<WebhookPayload, Task>>> _handlers = [];
     private readonly string _secret;
@@ -147,7 +147,7 @@ public class sealed WebhookHandler
 /// <summary>
 /// Represents a webhook payload
 /// </summary>
-public class sealed WebhookPayload
+public sealed class WebhookPayload
 {
     /// <summary>Unique identifier for this webhook</summary>
     public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -168,7 +168,7 @@ public class sealed WebhookPayload
 /// <summary>
 /// Result of processing a webhook
 /// </summary>
-public class sealed WebhookResult
+public sealed class WebhookResult
 {
     /// <summary>Whether processing was successful</summary>
     public bool Success { get; set; }
