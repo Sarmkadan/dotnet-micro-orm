@@ -793,18 +793,18 @@ scheduler.Schedule<DataCleanupJob>(TimeSpan.FromDays(1));
 
 Benchmarks run on an Intel i7-12700K (12-core) with SQL Server 2022, .NET 10.0, and 16 GB RAM. All numbers are median of 10 warm runs with memory diagnostics enabled.
 
-| Operation | Items | Median Time | Throughput | Memory Allocated |
-|-----------|-------|-------------|-----------|-----------------|
-| Single Insert | 1 | 1.8 ms | — | 2.1 KB |
-| Batch Insert | 1,000 | 82 ms | ~12.2K rows/sec | 184.7 KB |
-| Single Select | 1 | 2.4 ms | — | 3.4 KB |
-| Range Select | 10,000 | 43 ms | ~233K rows/sec | 1.2 MB |
-| Cached Select | 10,000 | 0.4 ms | ~25M rows/sec | 1.1 KB |
-| Batch Update | 100 | 11 ms | ~9.1K ops/sec | 45.2 KB |
-| Batch Delete | 100 | 7 ms | ~14.3K ops/sec | 28.9 KB |
-| Expression Compile (first call) | — | 18 ms | — | 45.6 KB |
-| Expression Compile (cached) | — | < 0.1 ms | — | 0.1 KB |
-| Query plan cache hit | — | < 0.05 ms | — | 0.05 KB |
+| Benchmark Category | Operation | Items | Median Time | Throughput | Memory Allocated |
+|------------------|-----------|-------|-------------|-----------|-----------------|
+| **CRUD Operations** | Single Insert | 1 | 1.8 ms | — | 2.1 KB |
+| **CRUD Operations** | Batch Insert | 1,000 | 82 ms | ~12.2K rows/sec | 184.7 KB |
+| **CRUD Operations** | Single Select | 1 | 2.4 ms | — | 3.4 KB |
+| **CRUD Operations** | Range Select | 10,000 | 43 ms | ~233K rows/sec | 1.2 MB |
+| **Caching** | Cached Select | 10,000 | 0.4 ms | ~25M rows/sec | 1.1 KB |
+| **CRUD Operations** | Batch Update | 100 | 11 ms | ~9.1K ops/sec | 45.2 KB |
+| **CRUD Operations** | Batch Delete | 100 | 7 ms | ~14.3K ops/sec | 28.9 KB |
+| **Expression Compilation** | First Call | — | 18 ms | — | 45.6 KB |
+| **Expression Compilation** | Cached | — | < 0.1 ms | — | 0.1 KB |
+| **Query Performance** | Query Plan Cache Hit | — | < 0.05 ms | — | 0.05 KB |
 
 **Key performance characteristics:**
 
@@ -812,6 +812,33 @@ Benchmarks run on an Intel i7-12700K (12-core) with SQL Server 2022, .NET 10.0, 
 - **Throughput under load**: sustains **10K+ write ops/sec** on a single application core with connection pooling enabled
 - **Query analysis**: compiled specification evaluation completes in **< 50 ms** even on complex multi-predicate queries against 1M-row tables
 - **Memory footprint**: ~50 KB library size; query plan cache stabilises at < 5 MB after warm-up with typical entity sets
+
+### Detailed Benchmark Results
+
+For comprehensive benchmark results including:
+- Throughput metrics for all operations
+- Memory allocation details
+- Garbage collection statistics
+- Assembly-level performance analysis
+- Comparison with raw ADO.NET
+
+See the **[benchmarks/README.md](benchmarks/README.md)** file which contains:
+- Complete benchmark suite with 50+ benchmarks
+- Setup and running instructions
+- Performance comparison tables
+- Memory diagnostics and throughput analysis
+- Configuration options and optimization tips
+
+### Running Benchmarks Locally
+
+To run benchmarks on your machine:
+
+```bash
+cd benchmarks/dotnet-micro-orm.Benchmarks
+dotnet run -c Release -- --filter *
+```
+
+See the **[benchmarks/README.md](benchmarks/README.md)** for detailed instructions, configuration options, and interpretation of results.
 
 ### Performance Optimization Tips
 
