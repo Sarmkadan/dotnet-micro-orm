@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.Events;
 /// Responds to user creation, updates, and deletion with appropriate actions
 /// like logging, cache invalidation, and notification sending.
 /// </summary>
-public class sealed UserCreatedEventHandler : IEventHandler<UserCreatedEvent>
+public sealed class UserCreatedEventHandler : IEventHandler<UserCreatedEvent>
 {
     private readonly IAuditService _auditService;
 
@@ -57,7 +57,7 @@ public class sealed UserCreatedEventHandler : IEventHandler<UserCreatedEvent>
 /// <summary>
 /// Handles user update events with logging and cache invalidation
 /// </summary>
-public class sealed UserUpdatedEventHandler : IEventHandler<UserUpdatedEvent>
+public sealed class UserUpdatedEventHandler : IEventHandler<UserUpdatedEvent>
 {
     private readonly IAuditService _auditService;
 
@@ -102,7 +102,7 @@ public class sealed UserUpdatedEventHandler : IEventHandler<UserUpdatedEvent>
 /// <summary>
 /// Handles user deletion events with cleanup
 /// </summary>
-public class sealed UserDeletedEventHandler : IEventHandler<UserDeletedEvent>
+public sealed class UserDeletedEventHandler : IEventHandler<UserDeletedEvent>
 {
     public int Priority => 50; // Lower priority - execute last
 

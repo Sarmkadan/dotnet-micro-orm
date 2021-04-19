@@ -18,7 +18,7 @@ namespace DotnetMicroOrm.Examples
     /// Demonstrates transaction management and ACID compliance.
     /// Shows how to handle rollback and maintain data integrity.
     /// </summary>
-    public class sealed TransactionManagementExample
+    public sealed class TransactionManagementExample
     {
         private readonly IServiceProvider _serviceProvider;
 

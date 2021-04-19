@@ -11,7 +11,7 @@ namespace DotnetMicroOrm.Services;
 /// Collects data on usage patterns, performance metrics, and business KPIs.
 /// Supports real-time metrics and historical aggregation.
 /// </summary>
-public class sealed AnalyticsService
+public sealed class AnalyticsService
 {
     private readonly Dictionary<string, Metric> _metrics = [];
     private readonly List<Event> _events = [];
@@ -229,7 +229,7 @@ public class sealed AnalyticsService
 /// <summary>
 /// Represents a metric with recorded values
 /// </summary>
-public class sealed Metric
+public sealed class Metric
 {
     public string Name { get; set; } = string.Empty;
     public List<MetricValue> Values { get; set; } = [];
@@ -238,7 +238,7 @@ public class sealed Metric
 /// <summary>
 /// Individual metric value with timestamp
 /// </summary>
-public class sealed MetricValue
+public sealed class MetricValue
 {
     public double Value { get; set; }
     public DateTime Timestamp { get; set; }
@@ -248,7 +248,7 @@ public class sealed MetricValue
 /// <summary>
 /// Summary statistics for a metric
 /// </summary>
-public class sealed MetricSummary
+public sealed class MetricSummary
 {
     public string MetricName { get; set; } = string.Empty;
     public int Count { get; set; }
@@ -264,7 +264,7 @@ public class sealed MetricSummary
 /// <summary>
 /// Represents a tracked event
 /// </summary>
-public class sealed Event
+public sealed class Event
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public string Type { get; set; } = string.Empty;
@@ -276,7 +276,7 @@ public class sealed Event
 /// <summary>
 /// Complete analytics report
 /// </summary>
-public class sealed AnalyticsReport
+public sealed class AnalyticsReport
 {
     public DateTime GeneratedAt { get; set; }
     public int MetricCount { get; set; }

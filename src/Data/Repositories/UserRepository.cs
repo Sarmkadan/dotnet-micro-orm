@@ -11,7 +11,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// User-specific repository with extended operations
 /// </summary>
-public class sealed UserRepository : Repository<User>
+public sealed class UserRepository : Repository<User>
 {
     public UserRepository(IDatabaseContext context) : base(context) { }
 

@@ -11,7 +11,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Product-specific repository with inventory and catalog operations
 /// </summary>
-public class sealed ProductRepository : Repository<Product>
+public sealed class ProductRepository : Repository<Product>
 {
     public ProductRepository(IDatabaseContext context) : base(context) { }
 

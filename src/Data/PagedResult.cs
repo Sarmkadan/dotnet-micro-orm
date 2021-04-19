@@ -10,7 +10,7 @@ namespace DotnetMicroOrm.Data;
 /// Represents a paginated result set with metadata for navigation.
 /// Used for list endpoints to provide efficient data retrieval and pagination.
 /// </summary>
-public class sealed PagedResult<T>
+public sealed class PagedResult<T>
 {
     /// <summary>The items in the current page</summary>
     public List<T> Items { get; set; } = [];
@@ -137,7 +137,7 @@ public class sealed PagedResult<T>
 /// <summary>
 /// Pagination information for requesting specific pages
 /// </summary>
-public class sealed PaginationInfo
+public sealed class PaginationInfo
 {
     /// <summary>Page number (1-based)</summary>
     public int PageNumber { get; set; } = 1;
@@ -171,7 +171,7 @@ public class sealed PaginationInfo
 /// <summary>
 /// Pagination request from API
 /// </summary>
-public class sealed PaginationRequest
+public sealed class PaginationRequest
 {
     /// <summary>Page number (1-based), defaults to 1</summary>
     public int Page { get; set; } = 1;

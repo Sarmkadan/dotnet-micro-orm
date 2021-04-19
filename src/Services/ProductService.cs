@@ -13,7 +13,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Product service for catalog and inventory management
 /// </summary>
-public class sealed ProductService : IAsyncDisposable
+public sealed class ProductService : IAsyncDisposable
 {
     private readonly ProductRepository _productRepository;
     private readonly IDatabaseContext _context;

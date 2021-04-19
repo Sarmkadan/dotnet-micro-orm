@@ -11,7 +11,7 @@ namespace DotnetMicroOrm.Formatters;
 /// Provides a centralized way to instantiate formatters with consistent configuration.
 /// Supports registration of custom formatter implementations.
 /// </summary>
-public class sealed FormatterFactory
+public sealed class FormatterFactory
 {
     private readonly Dictionary<OutputFormat, Func<IOutputFormatter>> _formatters = [];
 
@@ -100,7 +100,7 @@ public class sealed FormatterFactory
 /// <summary>
 /// Plain text formatter for simple string output
 /// </summary>
-public class sealed PlainTextFormatter : IOutputFormatter
+public sealed class PlainTextFormatter : IOutputFormatter
 {
     public string ContentType => "text/plain";
 

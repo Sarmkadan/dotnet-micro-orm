@@ -34,7 +34,7 @@ public interface IBackgroundJob
 /// <summary>
 /// Job execution result with timing and status information
 /// </summary>
-public class sealed JobExecutionResult
+public sealed class JobExecutionResult
 {
     /// <summary>Job identifier</summary>
     public string JobId { get; set; } = string.Empty;
@@ -61,7 +61,7 @@ public class sealed JobExecutionResult
 /// <summary>
 /// Configuration for job scheduling
 /// </summary>
-public class sealed JobScheduleConfig
+public sealed class JobScheduleConfig
 {
     /// <summary>Run immediately on startup</summary>
     public bool RunOnStartup { get; set; }
