@@ -1,0 +1,50 @@
+## Rider
+.idea/
+*.sln.iml
+
+## Visual Studio
+.vs/
+.vscode/
+bin/
+obj/
+*.csproj.user
+*.suo
+*.sln.docstates
+
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+
+## OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+## Test Results
+TestResults/
+*.trx
+coverage/
+.coverage
+
+## User files
+*.user
+*.userosscache
+*.sln.iml
+.env
+.env.local
+appsettings.Development.json
+packages/
+*.DotSettings.user
