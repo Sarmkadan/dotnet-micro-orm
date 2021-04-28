@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -9,7 +10,7 @@ namespace DotnetMicroOrm.Utils;
 /// Generic API response wrapper for consistent response formatting across all endpoints.
 /// Provides a unified structure for success, error, and paginated responses.
 /// </summary>
-public class ApiResponse<T>
+public class sealed ApiResponse<T>
 {
     /// <summary>Indicates if the operation was successful</summary>
     public bool Success { get; set; }
@@ -84,7 +85,7 @@ public class ApiResponse<T>
 /// <summary>
 /// Paginated API response
 /// </summary>
-public class ApiPagedResponse<T>
+public class sealed ApiPagedResponse<T>
 {
     /// <summary>Indicates if the operation was successful</summary>
     public bool Success { get; set; }
@@ -147,7 +148,7 @@ public class ApiPagedResponse<T>
 /// <summary>
 /// Pagination metadata for paginated responses
 /// </summary>
-public class PaginationMetadata
+public class sealed PaginationMetadata
 {
     /// <summary>Current page number (1-based)</summary>
     public int PageNumber { get; set; }
@@ -171,7 +172,7 @@ public class PaginationMetadata
 /// <summary>
 /// Simple success response with no data
 /// </summary>
-public class ApiResponse
+public class sealed ApiResponse
 {
     /// <summary>Indicates if the operation was successful</summary>
     public bool Success { get; set; }

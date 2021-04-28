@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.Pipeline;
 /// Allows composing multiple middleware components in a specific order.
 /// Executes middleware in FIFO order, except for error handling which executes first.
 /// </summary>
-public class PipelineBuilder
+public class sealed PipelineBuilder
 {
     private readonly List<IMiddleware> _middlewares = [];
 

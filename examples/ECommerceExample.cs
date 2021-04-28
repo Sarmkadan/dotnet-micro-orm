@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -18,7 +19,7 @@ namespace DotnetMicroOrm.Examples
     /// Comprehensive e-commerce example showing real-world usage patterns.
     /// Demonstrates inventory management, order processing, and reporting.
     /// </summary>
-    public class ECommerceExample
+    public class sealed ECommerceExample
     {
         private readonly IServiceProvider _serviceProvider;
 
@@ -195,7 +196,7 @@ namespace DotnetMicroOrm.Examples
                 var product = await productRepository.FirstOrDefaultAsync(
                     new Specification<Product>().Where(p => p.Name == "iPhone 15 Pro"));
 
-                if (product == null)
+                if (product is null)
                     throw new Exception("Product not found");
 
                 // Check stock

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Product service for catalog and inventory management
 /// </summary>
-public class ProductService : IAsyncDisposable
+public class sealed ProductService : IAsyncDisposable
 {
     private readonly ProductRepository _productRepository;
     private readonly IDatabaseContext _context;
@@ -30,7 +31,7 @@ public class ProductService : IAsyncDisposable
             throw new ArgumentException("SKU must be at least 3 characters");
 
         var existingSku = await _productRepository.GetBySkuAsync(sku);
-        if (existingSku != null)
+        if (existingSku is not null)
             throw new InvalidOperationException("Product with this SKU already exists");
 
         var product = new Product(sku, name, price, categoryId)
@@ -64,7 +65,7 @@ public class ProductService : IAsyncDisposable
     public async Task<Product> UpdateProductAsync(int productId, string? name = null, decimal? price = null, string? description = null)
     {
         var product = await _productRepository.GetByIdAsync(productId);
-        if (product == null)
+        if (product is null)
             throw new InvalidOperationException("Product not found");
 
         if (!string.IsNullOrWhiteSpace(name))
@@ -73,7 +74,7 @@ public class ProductService : IAsyncDisposable
         if (price.HasValue && price > 0)
             product.Price = price.Value;
 
-        if (description != null)
+        if (description is not null)
             product.Description = description;
 
         product.ModifiedDate = DateTime.UtcNow;
@@ -84,7 +85,7 @@ public class ProductService : IAsyncDisposable
     public async Task<Product> UpdateStockAsync(int productId, int quantity)
     {
         var product = await _productRepository.GetByIdAsync(productId);
-        if (product == null)
+        if (product is null)
             throw new InvalidOperationException("Product not found");
 
         if (quantity < 0)
@@ -99,7 +100,7 @@ public class ProductService : IAsyncDisposable
     public async Task<Product> IncreaseStockAsync(int productId, int quantity)
     {
         var product = await _productRepository.GetByIdAsync(productId);
-        if (product == null)
+        if (product is null)
             throw new InvalidOperationException("Product not found");
 
         product.IncreaseStock(quantity);
@@ -110,7 +111,7 @@ public class ProductService : IAsyncDisposable
     public async Task<Product> DecreaseStockAsync(int productId, int quantity)
     {
         var product = await _productRepository.GetByIdAsync(productId);
-        if (product == null)
+        if (product is null)
             throw new InvalidOperationException("Product not found");
 
         product.DecreaseStock(quantity);
@@ -145,7 +146,7 @@ public class ProductService : IAsyncDisposable
     public async Task<Product> DeactivateProductAsync(int productId)
     {
         var product = await _productRepository.GetByIdAsync(productId);
-        if (product == null)
+        if (product is null)
             throw new InvalidOperationException("Product not found");
 
         product.IsActive = false;

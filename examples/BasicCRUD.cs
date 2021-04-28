@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -17,7 +18,7 @@ namespace DotnetMicroOrm.Examples
     /// <summary>
     /// Demonstrates basic Create, Read, Update, Delete operations with DotnetMicroOrm.
     /// </summary>
-    public class BasicCRUDExample
+    public class sealed BasicCRUDExample
     {
         private readonly IServiceProvider _serviceProvider;
 

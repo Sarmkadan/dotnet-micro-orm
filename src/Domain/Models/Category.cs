@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -9,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Represents a product category entity
 /// </summary>
 [Table("Categories")]
-public class Category : BaseEntity
+public class sealed Category : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }
@@ -87,7 +88,7 @@ public class Category : BaseEntity
     private string BuildBreadcrumb(string current = "")
     {
         var path = string.IsNullOrEmpty(current) ? Name : $"{Name} > {current}";
-        return ParentCategory != null ? ParentCategory.BuildBreadcrumb(path) : path;
+        return ParentCategory is not null ? ParentCategory.BuildBreadcrumb(path) : path;
     }
 
     public int GetProductCount() => Products.Count;

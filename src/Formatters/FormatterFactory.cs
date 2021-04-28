@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -10,7 +11,7 @@ namespace DotnetMicroOrm.Formatters;
 /// Provides a centralized way to instantiate formatters with consistent configuration.
 /// Supports registration of custom formatter implementations.
 /// </summary>
-public class FormatterFactory
+public class sealed FormatterFactory
 {
     private readonly Dictionary<OutputFormat, Func<IOutputFormatter>> _formatters = [];
 
@@ -99,7 +100,7 @@ public class FormatterFactory
 /// <summary>
 /// Plain text formatter for simple string output
 /// </summary>
-public class PlainTextFormatter : IOutputFormatter
+public class sealed PlainTextFormatter : IOutputFormatter
 {
     public string ContentType => "text/plain";
 

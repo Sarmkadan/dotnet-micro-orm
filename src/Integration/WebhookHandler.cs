@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -13,7 +14,7 @@ namespace DotnetMicroOrm.Integration;
 /// Supports multiple webhook types (user events, order events, etc).
 /// Verifies authenticity using HMAC-SHA256 signatures.
 /// </summary>
-public class WebhookHandler
+public class sealed WebhookHandler
 {
     private readonly Dictionary<string, List<Func<WebhookPayload, Task>>> _handlers = [];
     private readonly string _secret;
@@ -146,7 +147,7 @@ public class WebhookHandler
 /// <summary>
 /// Represents a webhook payload
 /// </summary>
-public class WebhookPayload
+public class sealed WebhookPayload
 {
     /// <summary>Unique identifier for this webhook</summary>
     public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -167,7 +168,7 @@ public class WebhookPayload
 /// <summary>
 /// Result of processing a webhook
 /// </summary>
-public class WebhookResult
+public class sealed WebhookResult
 {
     /// <summary>Whether processing was successful</summary>
     public bool Success { get; set; }

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -19,7 +20,7 @@ public interface INotificationService
 /// <summary>
 /// Default notification service implementation
 /// </summary>
-public class NotificationService : INotificationService
+public class sealed NotificationService : INotificationService
 {
     private readonly Queue<Notification> _queue = new();
     private readonly Dictionary<string, string> _templates = [];
@@ -178,7 +179,7 @@ public enum NotificationStatus
 /// <summary>
 /// Represents a notification to be sent
 /// </summary>
-public class Notification
+public class sealed Notification
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public NotificationType Type { get; set; }

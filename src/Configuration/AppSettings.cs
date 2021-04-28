@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -8,7 +9,7 @@ namespace DotnetMicroOrm.Configuration;
 /// <summary>
 /// Application settings configuration
 /// </summary>
-public class AppSettings
+public class sealed AppSettings
 {
     public DatabaseSettings Database { get; set; } = new();
     public OrmSettings Orm { get; set; } = new();
@@ -18,7 +19,7 @@ public class AppSettings
 /// <summary>
 /// Database configuration settings
 /// </summary>
-public class DatabaseSettings
+public class sealed DatabaseSettings
 {
     /// <summary>
     /// Database connection string
@@ -69,7 +70,7 @@ public class DatabaseSettings
 /// <summary>
 /// ORM-specific configuration settings
 /// </summary>
-public class OrmSettings
+public class sealed OrmSettings
 {
     /// <summary>
     /// Enable change tracking
@@ -120,7 +121,7 @@ public class OrmSettings
 /// <summary>
 /// Logging configuration settings
 /// </summary>
-public class LoggingSettings
+public class sealed LoggingSettings
 {
     /// <summary>
     /// Minimum log level

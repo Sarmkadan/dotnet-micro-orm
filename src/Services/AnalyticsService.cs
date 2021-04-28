@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -10,7 +11,7 @@ namespace DotnetMicroOrm.Services;
 /// Collects data on usage patterns, performance metrics, and business KPIs.
 /// Supports real-time metrics and historical aggregation.
 /// </summary>
-public class AnalyticsService
+public class sealed AnalyticsService
 {
     private readonly Dictionary<string, Metric> _metrics = [];
     private readonly List<Event> _events = [];
@@ -228,7 +229,7 @@ public class AnalyticsService
 /// <summary>
 /// Represents a metric with recorded values
 /// </summary>
-public class Metric
+public class sealed Metric
 {
     public string Name { get; set; } = string.Empty;
     public List<MetricValue> Values { get; set; } = [];
@@ -237,7 +238,7 @@ public class Metric
 /// <summary>
 /// Individual metric value with timestamp
 /// </summary>
-public class MetricValue
+public class sealed MetricValue
 {
     public double Value { get; set; }
     public DateTime Timestamp { get; set; }
@@ -247,7 +248,7 @@ public class MetricValue
 /// <summary>
 /// Summary statistics for a metric
 /// </summary>
-public class MetricSummary
+public class sealed MetricSummary
 {
     public string MetricName { get; set; } = string.Empty;
     public int Count { get; set; }
@@ -263,7 +264,7 @@ public class MetricSummary
 /// <summary>
 /// Represents a tracked event
 /// </summary>
-public class Event
+public class sealed Event
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public string Type { get; set; } = string.Empty;
@@ -275,7 +276,7 @@ public class Event
 /// <summary>
 /// Complete analytics report
 /// </summary>
-public class AnalyticsReport
+public class sealed AnalyticsReport
 {
     public DateTime GeneratedAt { get; set; }
     public int MetricCount { get; set; }
