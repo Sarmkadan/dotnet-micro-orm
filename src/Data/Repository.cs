@@ -138,10 +138,58 @@ public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Bulk insert
     public async Task<List<T>> AddRangeAsync(List<T> entities)
     {
-        var results = new List<T>();
+        const int MAX_SQL_PARAMS_PER_BATCH = 2000; // SQL Server limit is 2100, leaving some buffer
+
+        if (!entities.Any())
+        {
+            return new List<T>();
+        }
+
+        // Validate all entities upfront
         foreach (var entity in entities)
-            results.Add(await AddAsync(entity));
-        return results;
+        {
+            entity.Validate(out var errors);
+            if (errors.Count > 0)
+                throw new EntityValidationException("Entity validation failed", errors);
+            entity.PreSave();
+        }
+
+        var mappedColumns = GetMappedColumns().Where(c => !c.IsPrimaryKey).ToList(); // Exclude primary key for insert
+        var parametersPerEntity = mappedColumns.Count;
+
+        if (parametersPerEntity == 0)
+        {
+            throw new OrmException("No columns mapped for entity, cannot perform batch insert.");
+        }
+
+        var maxEntitiesPerBatch = MAX_SQL_PARAMS_PER_BATCH / parametersPerEntity;
+        if (maxEntitiesPerBatch == 0)
+        {
+            // This scenario implies that even a single entity exceeds the parameter limit,
+            // which should ideally not happen if MAX_SQL_PARAMS_PER_BATCH is well-chosen.
+            // For safety, we can revert to single inserts or throw a more specific error.
+            // For now, let's assume parametersPerEntity < MAX_SQL_PARAMS_PER_BATCH
+            // and throw if it's not the case.
+            throw new OrmException($"Single entity has {parametersPerEntity} parameters, exceeding MAX_SQL_PARAMS_PER_BATCH ({MAX_SQL_PARAMS_PER_BATCH}). Adjust MAX_SQL_PARAMS_PER_BATCH or mapped columns.");
+        }
+
+        var allResults = new List<T>();
+        var columnNames = string.Join(", ", mappedColumns.Select(c => $"[{c.ColumnName}]"));
+
+        for (int i = 0; i < entities.Count; i += maxEntitiesPerBatch)
+        {
+            var batch = entities.Skip(i).Take(maxEntitiesPerBatch).ToList();
+            if (!batch.Any()) continue;
+
+            var (valuesClause, batchParameters) = BuildBatchInsertParameters(batch, mappedColumns);
+            var query = $"INSERT INTO [{_schema}].[{_tableName}] ({columnNames}) VALUES {valuesClause}";
+
+            await _context.ExecuteNonQueryAsync(query, batchParameters);
+            allResults.AddRange(batch);
+            _changeTracking.AddRange(batch);
+        }
+
+        return allResults;
     }
 
     // Bulk delete
@@ -218,15 +266,39 @@ public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
         return columns;
     }
 
-    private Dictionary<string, object> BuildParameters(T entity, List<ColumnMapping> columns)
+    private Dictionary<string, object> BuildParameters(T entity, List<ColumnMapping> columns, string? parameterPrefix = null)
     {
         var parameters = new Dictionary<string, object>();
         foreach (var column in columns)
         {
+            var paramName = parameterPrefix is null ? column.PropertyName : $"{parameterPrefix}_{column.PropertyName}";
             var value = typeof(T).GetProperty(column.PropertyName)?.GetValue(entity);
-            parameters[column.PropertyName] = value ?? DBNull.Value;
+            parameters[paramName] = value ?? DBNull.Value;
         }
         return parameters;
+    }
+
+    private (string ValuesClause, Dictionary<string, object> Parameters) BuildBatchInsertParameters(List<T> entities, List<ColumnMapping> columns)
+    {
+        var allParameters = new Dictionary<string, object>();
+        var valueSets = new List<string>();
+
+        for (int i = 0; i < entities.Count; i++)
+        {
+            var entity = entities[i];
+            var parameterPrefix = $"p{i}"; // Unique prefix for each entity in the batch
+            var entityParameters = BuildParameters(entity, columns, parameterPrefix);
+            
+            foreach (var param in entityParameters)
+            {
+                allParameters.Add(param.Key, param.Value);
+            }
+
+            var parameterNamesForEntity = string.Join(", ", columns.Select(c => $"@{parameterPrefix}_{c.PropertyName}"));
+            valueSets.Add($"({parameterNamesForEntity})");
+        }
+
+        return (string.Join(", ", valueSets), allParameters);
     }
 
     private T MapToEntity(Dictionary<string, object> row)
