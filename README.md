@@ -20,6 +20,7 @@ A lightning-fast, lightweight ORM for .NET that prioritizes performance, simplic
 - [Advanced Features](#advanced-features)
 - [Performance Benchmarks](#performance-benchmarks)
 - [Troubleshooting](#troubleshooting)
+- [Documentation](#documentation)
 - [Related Projects](#related-projects)
 - [Testing](#testing)
 - [Contributing](#contributing)
@@ -775,6 +776,18 @@ A: Increase `CommandTimeout` in configuration or check database connectivity.
   }
 }
 ```
+
+## Documentation
+
+Detailed documentation covering various aspects of DotnetMicroOrm can be found in the `docs/` directory:
+
+*   [API Reference](docs/api-reference.md)
+*   [Architecture](docs/architecture.md)
+*   [Deployment](docs/deployment.md)
+*   [FAQ](docs/faq.md)
+*   [Getting Started](docs/getting-started.md)
+*   [Multi-Database Support](docs/MultiDatabaseSupport.md)
+*   [Migration Guide V2](docs/MIGRATION_v2.md)
 
 ## Related Projects
 
