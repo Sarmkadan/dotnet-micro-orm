@@ -6,10 +6,11 @@
 
 using DotnetMicroOrm.Utils;
 using FluentAssertions;
+using Xunit;
 
 namespace DotnetMicroOrm.Tests;
 
-public class sealed ValidationHelperTests
+public sealed class ValidationHelperTests
 {
     [Fact]
     public void ValidatePassword_StrongPassword_ReturnsSuccess()

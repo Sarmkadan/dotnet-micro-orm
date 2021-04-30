@@ -8,13 +8,14 @@ namespace DotnetMicroOrm.Data;
 
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
+using DotnetMicroOrm.Constants;
+using Microsoft.Data.SqlClient;
 using DotnetMicroOrm.Exceptions;
 
 /// <summary>
 /// Database context managing connections and command execution
 /// </summary>
-public class sealed DatabaseContext : IDatabaseContext
+public sealed class DatabaseContext : IDatabaseContext
 {
     private readonly string _connectionString;
     private readonly DatabaseProvider _provider;
@@ -164,9 +165,18 @@ public class sealed DatabaseContext : IDatabaseContext
 
         ApplyParameters(command, parameters);
 
+        DbDataReader reader;
         try
         {
-            await using var reader = await command.ExecuteReaderAsync();
+            reader = await command.ExecuteReaderAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new QueryExecutionException($"Streaming query execution failed: {ex.Message}", query, ex);
+        }
+
+        await using (reader)
+        {
             while (await reader.ReadAsync())
             {
                 var row = new Dictionary<string, object>();
@@ -176,10 +186,6 @@ public class sealed DatabaseContext : IDatabaseContext
                 }
                 yield return row;
             }
-        }
-        catch (Exception ex)
-        {
-            throw new QueryExecutionException($"Streaming query execution failed: {ex.Message}", query, ex);
         }
     }
 

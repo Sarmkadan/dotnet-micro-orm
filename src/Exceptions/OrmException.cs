@@ -9,7 +9,7 @@ namespace DotnetMicroOrm.Exceptions;
 /// <summary>
 /// Base exception for all ORM-related errors
 /// </summary>
-public class sealed OrmException : Exception
+public class OrmException : Exception
 {
     public string? ErrorCode { get; set; }
     public Dictionary<string, object>? ErrorContext { get; set; }
@@ -41,7 +41,7 @@ public class sealed OrmException : Exception
 /// <summary>
 /// Thrown when database connection fails
 /// </summary>
-public class sealed DatabaseConnectionException : OrmException
+public sealed class DatabaseConnectionException : OrmException
 {
     public DatabaseConnectionException(string message, Exception? innerException = null)
         : base(message, "DB_CONNECTION_ERROR", innerException) { }
@@ -50,7 +50,7 @@ public class sealed DatabaseConnectionException : OrmException
 /// <summary>
 /// Thrown when entity mapping fails
 /// </summary>
-public class sealed EntityMappingException : OrmException
+public sealed class EntityMappingException : OrmException
 {
     public EntityMappingException(string message, string? propertyName = null)
         : base(message, "ENTITY_MAPPING_ERROR")
@@ -63,7 +63,7 @@ public class sealed EntityMappingException : OrmException
 /// <summary>
 /// Thrown when query execution fails
 /// </summary>
-public class sealed QueryExecutionException : OrmException
+public sealed class QueryExecutionException : OrmException
 {
     public QueryExecutionException(string message, string? query = null, Exception? innerException = null)
         : base(message, "QUERY_EXECUTION_ERROR", innerException)
@@ -76,7 +76,7 @@ public class sealed QueryExecutionException : OrmException
 /// <summary>
 /// Thrown when entity validation fails
 /// </summary>
-public class sealed EntityValidationException : OrmException
+public sealed class EntityValidationException : OrmException
 {
     public List<string> ValidationErrors { get; } = [];
 
@@ -91,7 +91,7 @@ public class sealed EntityValidationException : OrmException
 /// <summary>
 /// Thrown when concurrency conflict occurs
 /// </summary>
-public class sealed ConcurrencyException : OrmException
+public sealed class ConcurrencyException : OrmException
 {
     public ConcurrencyException(string message, object? entityKey = null)
         : base(message, "CONCURRENCY_CONFLICT")

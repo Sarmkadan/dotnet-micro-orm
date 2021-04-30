@@ -10,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Represents a product entity in the catalog
 /// </summary>
 [Table("Products")]
-public class sealed Product : BaseEntity
+public class Product : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }

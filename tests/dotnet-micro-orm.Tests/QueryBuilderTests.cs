@@ -8,10 +8,11 @@ using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Domain.Models;
 using FluentAssertions;
 using Moq;
+using Xunit;
 
 namespace DotnetMicroOrm.Tests;
 
-public class sealed QueryBuilderTests
+public sealed class QueryBuilderTests
 {
     private readonly Mock<IRepository<Product>> _repositoryMock = new();
 

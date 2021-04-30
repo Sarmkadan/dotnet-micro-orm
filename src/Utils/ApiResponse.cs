@@ -10,7 +10,7 @@ namespace DotnetMicroOrm.Utils;
 /// Generic API response wrapper for consistent response formatting across all endpoints.
 /// Provides a unified structure for success, error, and paginated responses.
 /// </summary>
-public class sealed ApiResponse<T>
+public sealed class ApiResponse<T>
 {
     /// <summary>Indicates if the operation was successful</summary>
     public bool Success { get; set; }
@@ -45,7 +45,7 @@ public class sealed ApiResponse<T>
     }
 
     /// <summary>Creates an error response</summary>
-    public static ApiResponse<T> CreateError(string message, string errorCode = "ERROR", T? data = null)
+    public static ApiResponse<T> CreateError(string message, string errorCode = "ERROR", T? data = default)
     {
         return new ApiResponse<T>
         {
@@ -85,7 +85,7 @@ public class sealed ApiResponse<T>
 /// <summary>
 /// Paginated API response
 /// </summary>
-public class sealed ApiPagedResponse<T>
+public sealed class ApiPagedResponse<T>
 {
     /// <summary>Indicates if the operation was successful</summary>
     public bool Success { get; set; }
@@ -148,7 +148,7 @@ public class sealed ApiPagedResponse<T>
 /// <summary>
 /// Pagination metadata for paginated responses
 /// </summary>
-public class sealed PaginationMetadata
+public sealed class PaginationMetadata
 {
     /// <summary>Current page number (1-based)</summary>
     public int PageNumber { get; set; }
@@ -172,7 +172,7 @@ public class sealed PaginationMetadata
 /// <summary>
 /// Simple success response with no data
 /// </summary>
-public class sealed ApiResponse
+public sealed class ApiResponse
 {
     /// <summary>Indicates if the operation was successful</summary>
     public bool Success { get; set; }

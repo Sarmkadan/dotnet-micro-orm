@@ -10,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Tracks inventory movements and stock levels for products
 /// </summary>
 [Table("Inventory")]
-public class sealed Inventory : BaseEntity
+public class Inventory : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }

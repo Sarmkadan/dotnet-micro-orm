@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.Pipeline;
 /// Allows composing multiple middleware components in a specific order.
 /// Executes middleware in FIFO order, except for error handling which executes first.
 /// </summary>
-public class sealed PipelineBuilder
+public sealed class PipelineBuilder
 {
     private readonly List<IMiddleware> _middlewares = [];
 
@@ -57,7 +57,8 @@ public class sealed PipelineBuilder
         {
             int index = -1;
 
-            Func<MiddlewareContext, Task> next = async (ctx) =>
+            Func<MiddlewareContext, Task> next = null!;
+            next = async (ctx) =>
             {
                 index++;
 

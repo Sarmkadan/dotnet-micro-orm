@@ -213,10 +213,10 @@ public static class ReflectionHelper
     /// Gets the underlying type of a nullable type
     /// Example: For Nullable&lt;int&gt;, returns typeof(int)
     /// </summary>
-    public static Type GetUnderlyingType(Type type)
+    public static Type? GetUnderlyingType(Type? type)
     {
         if (type is null)
-            return type;
+            return null;
 
         return Nullable.GetUnderlyingType(type) ?? type;
     }

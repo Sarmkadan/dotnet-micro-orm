@@ -14,7 +14,7 @@ using DotnetMicroOrm.Exceptions;
 /// <summary>
 /// Generic base repository with CRUD and query operations
 /// </summary>
-public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
+public class Repository<T> : IRepository<T> where T : BaseEntity, new()
 {
     private readonly IDatabaseContext _context;
     private readonly List<T> _changeTracking = [];
@@ -136,7 +136,7 @@ public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
             {
                 throw new ConcurrencyException($"Concurrency conflict detected for entity {typeof(T).Name} with Id {idValue}. The entity may have been modified or deleted by another user.")
                     .WithContext("EntityType", typeof(T).Name)
-                    .WithContext("EntityId", idValue);
+                    .WithContext("EntityId", idValue!);
             }
             throw new OrmException($"Entity {typeof(T).Name} with Id {idValue} not found for update.");
         }
@@ -196,7 +196,7 @@ public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
             {
                 throw new ConcurrencyException($"Concurrency conflict detected for entity {typeof(T).Name} with Id {idValue}. The entity may have been modified or deleted by another user.")
                     .WithContext("EntityType", typeof(T).Name)
-                    .WithContext("EntityId", idValue);
+                    .WithContext("EntityId", idValue!);
             }
             return false; // Entity not found for delete
         }

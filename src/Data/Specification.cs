@@ -5,6 +5,7 @@
 // =============================================================================
 
 using System.Linq.Expressions;
+using DotnetMicroOrm.Domain.Models;
 
 namespace DotnetMicroOrm.Data;
 
@@ -74,16 +75,16 @@ public abstract class Specification<T> where T : class
 /// <summary>
 /// User specification for common user queries
 /// </summary>
-public class sealed ActiveUsersSpecification : Specification<User>
+public sealed class ActiveUsersSpecification : Specification<User>
 {
     public ActiveUsersSpecification()
     {
         Criteria = u => u.IsActive;
-        ApplyOrderBy(u => u.CreatedAt);
+        ApplyOrderBy(u => u.CreatedDate);
     }
 }
 
-public class sealed UserByIdSpecification : Specification<User>
+public sealed class UserByIdSpecification : Specification<User>
 {
     public UserByIdSpecification(int userId)
     {
@@ -92,7 +93,7 @@ public class sealed UserByIdSpecification : Specification<User>
     }
 }
 
-public class sealed UsersByEmailSpecification : Specification<User>
+public sealed class UsersByEmailSpecification : Specification<User>
 {
     public UsersByEmailSpecification(string email)
     {
@@ -103,7 +104,7 @@ public class sealed UsersByEmailSpecification : Specification<User>
 /// <summary>
 /// Product specifications
 /// </summary>
-public class sealed ActiveProductsSpecification : Specification<Product>
+public sealed class ActiveProductsSpecification : Specification<Product>
 {
     public ActiveProductsSpecification()
     {
@@ -112,7 +113,7 @@ public class sealed ActiveProductsSpecification : Specification<Product>
     }
 }
 
-public class sealed ProductsByPriceRangeSpecification : Specification<Product>
+public sealed class ProductsByPriceRangeSpecification : Specification<Product>
 {
     public ProductsByPriceRangeSpecification(decimal minPrice, decimal maxPrice)
     {
@@ -121,86 +122,47 @@ public class sealed ProductsByPriceRangeSpecification : Specification<Product>
     }
 }
 
-public class sealed LowStockProductsSpecification : Specification<Product>
+public sealed class LowStockProductsSpecification : Specification<Product>
 {
     public LowStockProductsSpecification(int lowStockThreshold)
     {
-        Criteria = p => p.Inventory.Quantity < lowStockThreshold && p.IsActive;
-        AddInclude("Inventory");
-        ApplyOrderBy(p => p.Inventory.Quantity);
+        Criteria = p => p.StockQuantity < lowStockThreshold && p.IsActive;
+        ApplyOrderBy(p => p.StockQuantity);
     }
 }
 
 /// <summary>
 /// Order specifications
 /// </summary>
-public class sealed UserOrdersSpecification : Specification<Order>
+public sealed class UserOrdersSpecification : Specification<Order>
 {
     public UserOrdersSpecification(int userId)
     {
         Criteria = o => o.UserId == userId;
         AddInclude("Items");
-        ApplyOrderByDescending(o => o.CreatedAt);
+        ApplyOrderByDescending(o => o.CreatedDate);
     }
 }
 
-public class sealed PendingOrdersSpecification : Specification<Order>
+public sealed class PendingOrdersSpecification : Specification<Order>
 {
     public PendingOrdersSpecification()
     {
         Criteria = o => o.Status == "Pending" || o.Status == "Confirmed";
         AddInclude("Items");
         AddInclude("User");
-        ApplyOrderBy(o => o.CreatedAt);
+        ApplyOrderBy(o => o.CreatedDate);
     }
 }
 
-public class sealed RecentOrdersSpecification : Specification<Order>
+public sealed class RecentOrdersSpecification : Specification<Order>
 {
     public RecentOrdersSpecification(int daysBefore = 30)
     {
         var cutoffDate = DateTime.UtcNow.AddDays(-daysBefore);
-        Criteria = o => o.CreatedAt >= cutoffDate;
-        ApplyOrderByDescending(o => o.CreatedAt);
+        Criteria = o => o.CreatedDate >= cutoffDate;
+        ApplyOrderByDescending(o => o.CreatedDate);
         ApplyPaging(1, 50);
     }
 }
 
-/// <summary>
-/// Placeholder domain model interfaces for specification implementation
-/// </summary>
-public interface User
-{
-    int Id { get; }
-    string Email { get; }
-    bool IsActive { get; }
-    DateTime CreatedAt { get; }
-}
-
-public interface Product
-{
-    int Id { get; }
-    string Name { get; }
-    decimal Price { get; }
-    bool IsActive { get; }
-    Inventory Inventory { get; }
-}
-
-public interface Inventory
-{
-    int Quantity { get; }
-}
-
-public interface Order
-{
-    int Id { get; }
-    int UserId { get; }
-    string Status { get; }
-    DateTime CreatedAt { get; }
-    List<OrderItem> Items { get; }
-}
-
-public interface OrderItem
-{
-    int Id { get; }
-}

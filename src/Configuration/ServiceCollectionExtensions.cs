@@ -6,8 +6,10 @@
 
 namespace DotnetMicroOrm.Configuration;
 
+using DotnetMicroOrm.Constants;
 using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// Extension methods for dependency injection configuration
@@ -41,6 +43,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<UserService>();
         services.AddScoped<ProductService>();
         services.AddScoped<OrderService>();
+        services.AddScoped<IAuditService, AuditService>();
         services.AddScoped<AuditService>();
 
         return services;
@@ -73,7 +76,7 @@ public static class ServiceCollectionExtensions
 /// <summary>
 /// ORM configuration options
 /// </summary>
-public class sealed OrmConfiguration
+public sealed class OrmConfiguration
 {
     /// <summary>
     /// Default command timeout in seconds
