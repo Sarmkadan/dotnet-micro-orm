@@ -29,6 +29,7 @@ public interface IRepository<T> where T : BaseEntity
     Task<List<T>> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate = null);
     Task<(List<T> Items, int TotalCount)> GetPagedWithCountAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate = null);
     IQueryable<T> Query();
+    IAsyncEnumerable<T> QueryStreamAsync(string query, Dictionary<string, object>? parameters = null);
 }
 
 /// <summary>
@@ -54,6 +55,7 @@ public interface IDatabaseContext : IAsyncDisposable
     Task<bool> TestConnectionAsync();
     Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null);
     Task<List<Dictionary<string, object>>> ExecuteQueryAsync(string query, Dictionary<string, object>? parameters = null);
+    IAsyncEnumerable<Dictionary<string, object>> ExecuteStreamAsync(string query, Dictionary<string, object>? parameters = null);
     Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null);
     DatabaseProvider GetDatabaseProvider();
     string GetConnectionString();
