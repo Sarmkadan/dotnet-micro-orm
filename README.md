@@ -243,54 +243,12 @@ await productRepository.DeleteAsync(product.Id);
 
 ## Usage Examples
 
-### Example 1: CRUD Service Pattern
+Explore the library with practical usage examples located in the [`examples/`](./examples/) directory:
 
-```csharp
-public class ProductService
-{
-    private readonly IRepository<Product> _productRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public ProductService(IRepository<Product> productRepository, IUnitOfWork unitOfWork)
-    {
-        _productRepository = productRepository;
-        _unitOfWork = unitOfWork;
-    }
-
-    public async Task<Product> CreateProductAsync(string name, string description, decimal price)
-    {
-        var product = new Product
-        {
-            Name = name,
-            Description = description,
-            Price = price,
-            StockQuantity = 0,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        await _productRepository.AddAsync(product);
-        await _unitOfWork.SaveChangesAsync();
-        return product;
-    }
-
-    public async Task<Product> GetProductAsync(int id)
-    {
-        return await _productRepository.GetByIdAsync(id);
-    }
-
-    public async Task UpdateProductPriceAsync(int id, decimal newPrice)
-    {
-        var product = await _productRepository.GetByIdAsync(id);
-        if (product != null)
-        {
-            product.Price = newPrice;
-            product.UpdatedAt = DateTime.UtcNow;
-            await _productRepository.UpdateAsync(product);
-            await _unitOfWork.SaveChangesAsync();
-        }
-    }
-}
-```
+- [**BasicUsage.cs**](./examples/BasicUsage.cs): Minimal setup and first database call.
+- [**AdvancedUsage.cs**](./examples/AdvancedUsage.cs): Configuration, transaction management, and error handling.
+- [**IntegrationExample.cs**](./examples/IntegrationExample.cs): Dependency injection wiring for ASP.NET Core applications.
+- [**Other Examples**](./examples/): Includes batch operations, caching strategies, and E-commerce scenarios.
 
 ### Example 2: Batch Operations for Import
 
