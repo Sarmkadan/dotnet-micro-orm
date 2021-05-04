@@ -54,8 +54,8 @@ public sealed class RepositoryIntegrationTests
             new Dictionary<string, object> { { "Id", 2 }, { "Sku", "SKU002" }, { "Name", "Widget B" }, { "Price", 20.00m } }
         };
 
-        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>()))
-            .ReturnsAsync(rows);
+        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
+            .ReturnsAsync(rows.ToList());
 
         var result = await _repository.GetAllAsync();
 
@@ -77,7 +77,7 @@ public sealed class RepositoryIntegrationTests
     public async Task CountAsync_WithNoData_ReturnsZero()
     {
         _contextMock.Setup(c => c.ExecuteScalarAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
-            .ReturnsAsync(null);
+            .ReturnsAsync((object?)null);
 
         var result = await _repository.CountAsync();
 
@@ -119,7 +119,7 @@ public sealed class RepositoryIntegrationTests
             .ReturnsAsync(1);
 
         _contextMock.Setup(c => c.ExecuteScalarAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
-            .ReturnsAsync(null);
+            .ReturnsAsync((object?)null);
 
         var result = await _repository.UpdateAsync(product);
 
@@ -290,8 +290,8 @@ public sealed class RepositoryIntegrationTests
         _contextMock.Setup(c => c.ExecuteScalarAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
             .ReturnsAsync(10L);
 
-        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>()))
-            .ReturnsAsync(rows);
+        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
+            .ReturnsAsync(rows.ToList());
 
         var result = await _repository.GetPagedAsync(1, 3);
 
@@ -303,8 +303,8 @@ public sealed class RepositoryIntegrationTests
     {
         var rows = new[] { new Dictionary<string, object> { { "Id", 1 } } };
 
-        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>()))
-            .ReturnsAsync(rows);
+        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
+            .ReturnsAsync(rows.ToList());
 
         var result = await _repository.FirstOrDefaultAsync(p => p.Id == 1);
 
@@ -314,7 +314,7 @@ public sealed class RepositoryIntegrationTests
     [Fact]
     public async Task FirstOrDefaultAsync_WithNonExistentEntity_ReturnsNull()
     {
-        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>()))
+        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
             .ReturnsAsync([]);
 
         var result = await _repository.FirstOrDefaultAsync(p => p.Id == 999);

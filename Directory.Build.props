@@ -1,1 +1,10 @@
-<Project>\n    <PropertyGroup>\n        <LangVersion>latest</LangVersion>\n        <ImplicitUsings>enable</ImplicitUsings>\n        <Nullable>enable</Nullable>\n        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>\n        <Authors>Vladyslav Zaiets</Authors>\n        <PackageProjectUrl>https://github.com/sarmkadan/dotnet-micro-orm</PackageProjectUrl>\n    </PropertyGroup>\n</Project>
+<Project>
+    <PropertyGroup>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <Authors>Vladyslav Zaiets</Authors>
+        <PackageProjectUrl>https://github.com/sarmkadan/dotnet-micro-orm</PackageProjectUrl>
+    </PropertyGroup>
+</Project>

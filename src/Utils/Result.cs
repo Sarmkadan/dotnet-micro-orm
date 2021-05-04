@@ -80,16 +80,28 @@ public abstract record Result<T>
     public Result<T> Tap(Action<T> action) =>
         this switch
         {
-            Success s => { action(s.Data); return this; },
+            Success s => DoTap(s, action),
             _ => this
         };
+
+    private Result<T> DoTap(Success s, Action<T> action)
+    {
+        action(s.Data);
+        return this;
+    }
 
     public async Task<Result<T>> TapAsync(Func<T, Task> action) =>
         this switch
         {
-            Success s => { await action(s.Data); return this; },
+            Success s => await DoTapAsync(s, action),
             _ => this
         };
+
+    private async Task<Result<T>> DoTapAsync(Success s, Func<T, Task> action)
+    {
+        await action(s.Data);
+        return this;
+    }
 }
 
 /// <summary>

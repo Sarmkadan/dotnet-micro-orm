@@ -239,12 +239,12 @@ public sealed class UserModelTests
         var afterUpdate = DateTime.UtcNow;
 
         user.LastLoginDate.Should().NotBeNull();
-        user.LastLoginDate.Should().BeGreaterThanOrEqualTo(beforeUpdate);
-        user.LastLoginDate.Should().BeLessThanOrEqualTo(afterUpdate);
+        user.LastLoginDate.Should().BeOnOrAfter(beforeUpdate);
+        user.LastLoginDate.Should().BeOnOrBefore(afterUpdate);
     }
 
     [Fact]
-    public void UpdateLastLogin_MultipleUpdates_UpdatesToLatestTime()
+    public async Task UpdateLastLogin_MultipleUpdates_UpdatesToLatestTime()
     {
         var user = new User("johndoe", "john@example.com", "hashedpassword1234567890");
 
@@ -255,7 +255,7 @@ public sealed class UserModelTests
         user.UpdateLastLogin();
         var secondLogin = user.LastLoginDate;
 
-        secondLogin.Should().BeGreaterThan(firstLogin!.Value);
+        secondLogin.Should().BeAfter(firstLogin!.Value);
     }
 
     [Fact]
@@ -279,7 +279,7 @@ public sealed class UserModelTests
         user.PasswordHash.Should().Be("hashedpasswordtoken");
         user.IsActive.Should().BeTrue();
         user.IsEmailVerified.Should().BeFalse();
-        user.CreatedDate.Should().BeLessThanOrEqualTo(DateTime.UtcNow);
+        user.CreatedDate.Should().BeOnOrBefore(DateTime.UtcNow);
         user.Version.Should().Be(1);
     }
 

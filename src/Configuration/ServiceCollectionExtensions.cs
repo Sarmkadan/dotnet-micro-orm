@@ -8,6 +8,8 @@ namespace DotnetMicroOrm.Configuration;
 
 using DotnetMicroOrm.Constants;
 using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Migrations;
+using DotnetMicroOrm.Profiling;
 using DotnetMicroOrm.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -39,6 +41,18 @@ public static class ServiceCollectionExtensions
         // Register repositories
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+        // Register batch upsert
+        services.AddScoped(typeof(IBatchUpsertOperation<>), typeof(BatchUpsertOperation<>));
+
+        // Register query profiler
+        services.AddSingleton<IQueryProfiler, QueryProfiler>();
+
+        // Register migration runner
+        services.AddScoped<IMigrationRunner>(sp =>
+            new MigrationRunner(
+                sp.GetRequiredService<IDatabaseContext>(),
+                sp.GetServices<IMigration>()));
+
         // Register services
         services.AddScoped<UserService>();
         services.AddScoped<ProductService>();
@@ -46,6 +60,16 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuditService, AuditService>();
         services.AddScoped<AuditService>();
 
+        return services;
+    }
+
+    /// <summary>
+    /// Registers a migration implementation so it is discovered by <see cref="IMigrationRunner"/>.
+    /// </summary>
+    public static IServiceCollection AddMigration<TMigration>(this IServiceCollection services)
+        where TMigration : class, IMigration
+    {
+        services.AddTransient<IMigration, TMigration>();
         return services;
     }
 

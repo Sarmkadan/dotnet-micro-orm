@@ -325,6 +325,6 @@ public sealed class ProductModelTests
         product.Price.Should().Be(49.99m);
         product.CategoryId.Should().Be(5);
         product.IsActive.Should().BeTrue();
-        product.CreatedDate.Should().BeLessThanOrEqualTo(DateTime.UtcNow);
+        product.CreatedDate.Should().BeOnOrBefore(DateTime.UtcNow);
     }
 }
