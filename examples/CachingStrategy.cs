@@ -21,7 +21,7 @@ namespace DotnetMicroOrm.Examples
     /// Demonstrates caching strategies for optimal performance.
     /// Cached queries are 100-1000x faster than database queries.
     /// </summary>
-    public class sealed CachingStrategyExample
+    public sealed class CachingStrategyExample
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ICacheProvider _cacheProvider;

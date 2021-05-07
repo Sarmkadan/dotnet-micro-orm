@@ -19,7 +19,7 @@ namespace DotnetMicroOrm.Examples
     /// Comprehensive e-commerce example showing real-world usage patterns.
     /// Demonstrates inventory management, order processing, and reporting.
     /// </summary>
-    public class sealed ECommerceExample
+    public sealed class ECommerceExample
     {
         private readonly IServiceProvider _serviceProvider;
 

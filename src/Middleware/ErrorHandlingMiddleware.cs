@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.Middleware;
 /// Prevents unhandled exceptions from propagating and ensures consistent error format.
 /// Logs errors for debugging and monitoring purposes.
 /// </summary>
-public class sealed ErrorHandlingMiddleware : IMiddleware
+public sealed class ErrorHandlingMiddleware : IMiddleware
 {
     public int Order => 1; // Execute first to wrap all other middleware
 
@@ -89,7 +89,7 @@ public class sealed ErrorHandlingMiddleware : IMiddleware
 /// <summary>
 /// Standardized error response format returned to clients
 /// </summary>
-public class sealed ErrorResponse
+public sealed class ErrorResponse
 {
     /// <summary>Machine-readable error code</summary>
     public string Code { get; set; } = string.Empty;

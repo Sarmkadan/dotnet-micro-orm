@@ -125,12 +125,12 @@ public sealed class BatchOperationsTests
     }
 }
 
-public sealed class BatchUpsertOperationTests
+public sealed class BatchOperationsUpsertTests
 {
     private readonly Mock<IDatabaseContext> _contextMock = new();
     private readonly BatchUpsertOperation<Product> _batchUpsert;
 
-    public BatchUpsertOperationTests()
+    public BatchOperationsUpsertTests()
     {
         _batchUpsert = new BatchUpsertOperation<Product>(_contextMock.Object);
     }

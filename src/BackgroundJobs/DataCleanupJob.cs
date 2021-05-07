@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.BackgroundJobs;
 /// Runs on a schedule (typically nightly) to maintain database health and performance.
 /// Configurable retention periods for different data types.
 /// </summary>
-public class sealed DataCleanupJob : IBackgroundJob
+public sealed class DataCleanupJob : IBackgroundJob
 {
     private readonly IDatabaseContext _dbContext;
     private readonly DataCleanupConfig _config;
@@ -137,7 +137,7 @@ public class sealed DataCleanupJob : IBackgroundJob
 /// <summary>
 /// Configuration for data cleanup behavior
 /// </summary>
-public class sealed DataCleanupConfig
+public sealed class DataCleanupConfig
 {
     /// <summary>Number of days to retain audit logs</summary>
     public int AuditLogRetentionDays { get; set; } = 90;

@@ -11,7 +11,7 @@ namespace DotnetMicroOrm.Integration;
 /// Provides retry logic, timeout handling, and logging capabilities.
 /// Thread-safe and designed for reuse across multiple requests.
 /// </summary>
-public class sealed DefaultHttpClient : IHttpClient
+public sealed class DefaultHttpClient : IHttpClient
 {
     private readonly System.Net.Http.HttpClient _httpClient;
     private readonly HttpClientConfig _config;
@@ -169,7 +169,7 @@ public interface IRetryPolicy
 /// Exponential backoff retry strategy
 /// Delays increase exponentially: 1s, 2s, 4s, 8s, etc (capped at 30s)
 /// </summary>
-public class sealed ExponentialBackoffRetryPolicy : IRetryPolicy
+public sealed class ExponentialBackoffRetryPolicy : IRetryPolicy
 {
     private readonly TimeSpan _maxDelay = TimeSpan.FromSeconds(30);
 
@@ -183,7 +183,7 @@ public class sealed ExponentialBackoffRetryPolicy : IRetryPolicy
 /// <summary>
 /// Linear retry strategy with fixed delays
 /// </summary>
-public class sealed LinearRetryPolicy : IRetryPolicy
+public sealed class LinearRetryPolicy : IRetryPolicy
 {
     private readonly TimeSpan _delayBetweenRetries;
 

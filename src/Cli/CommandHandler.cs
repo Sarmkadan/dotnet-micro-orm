@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.Cli;
 /// Executes CLI commands with proper exception handling and output formatting.
 /// Coordinates between command parser and business logic services.
 /// </summary>
-public class sealed CommandHandler
+public sealed class CommandHandler
 {
     private readonly IDatabaseContext _dbContext;
     private readonly IServiceProvider _serviceProvider;

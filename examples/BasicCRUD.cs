@@ -18,7 +18,7 @@ namespace DotnetMicroOrm.Examples
     /// <summary>
     /// Demonstrates basic Create, Read, Update, Delete operations with DotnetMicroOrm.
     /// </summary>
-    public class sealed BasicCRUDExample
+    public sealed class BasicCRUDExample
     {
         private readonly IServiceProvider _serviceProvider;
 
