@@ -187,13 +187,8 @@ public class RepositoryBenchmarks
     [BenchmarkCategory("ComplexQueries")]
     public async Task GetWithOrdering()
     {
-        var entities = await _repository.GetAsync(
-            e => e.Value > 0,
-            orderBy: e => e.Value,
-            descending: false,
-            skip: 0,
-            take: 50
-        );
+        var matches = await _repository.GetAsync(e => e.Value > 0);
+        var entities = matches.OrderBy(e => e.Value).Skip(0).Take(50).ToList();
         if (entities.Count < 1)
             throw new InvalidOperationException("No entities found");
     }
@@ -217,16 +212,14 @@ public class RepositoryBenchmarks
     [BenchmarkCategory("AdvancedQueries")]
     public async Task GetWithComplexSpecification()
     {
-        var spec = new Specification<BenchmarkTestEntity>()
-            .Where(e => e.Value > 100)
-            .AndWhere(e => e.Value < 9000)
-            .AndWhere(e => e.Name.StartsWith("Entity"))
+        var matches = await _repository.GetAsync(
+            e => e.Value > 100 && e.Value < 9000 && e.Name.StartsWith("Entity"));
+        var entities = matches
             .OrderBy(e => e.Value)
             .ThenByDescending(e => e.Name)
             .Skip(10)
-            .Take(50);
-
-        var entities = await _repository.GetAsync(spec);
+            .Take(50)
+            .ToList();
         if (entities.Count < 1)
             throw new InvalidOperationException("No entities found");
     }

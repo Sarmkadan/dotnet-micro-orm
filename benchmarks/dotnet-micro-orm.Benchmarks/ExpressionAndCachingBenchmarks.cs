@@ -131,11 +131,8 @@ public class ExpressionAndCachingBenchmarks
     [BenchmarkCategory("QueryPerformance")]
     public async Task OrderByQuery()
     {
-        var entities = await _repository.GetAsync(
-            e => e.Value > 0,
-            orderBy: e => e.Value,
-            descending: false
-        );
+        var matches = await _repository.GetAsync(e => e.Value > 0);
+        var entities = matches.OrderBy(e => e.Value).ToList();
         if (entities.Count < 1)
             throw new InvalidOperationException("No entities found");
     }

@@ -1,5 +1,6 @@
 #nullable enable
 
+using DotnetMicroOrm.Constants;
 using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Exceptions;
 using FluentAssertions;

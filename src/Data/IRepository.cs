@@ -26,6 +26,7 @@ public interface IRepository<T> where T : BaseEntity
     Task<bool> DeleteAsync(int id);
     Task<bool> DeleteAsync(T entity);
     Task<List<T>> AddRangeAsync(List<T> entities);
+    Task<List<T>> UpdateRangeAsync(List<T> entities);
     Task<int> DeleteRangeAsync(List<T> entities);
     Task<List<T>> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate = null);
     Task<(List<T> Items, int TotalCount)> GetPagedWithCountAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate = null);

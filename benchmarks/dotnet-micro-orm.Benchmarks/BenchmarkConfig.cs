@@ -21,6 +21,6 @@ public class BenchmarkConfig
             .AddDiagnoser(MemoryDiagnoser.Default)
             .AddDiagnoser(new DisassemblyDiagnoser(new DisassemblyDiagnoserConfig(maxDepth: 3)))
             .KeepBenchmarkFiles(false)
-            .ArtifactsPath("benchmarks-results");
+            .WithArtifactsPath("benchmarks-results");
     }
 }

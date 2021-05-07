@@ -253,13 +253,15 @@ public sealed class BatchUpsertOperation<T> : IBatchUpsertOperation<T>
         throw new OrmException("Unsupported key selector expression. Use a single property or an anonymous-type projection.");
     }
 
-    private string GetTableName()
+    /// <summary>Resolves the table name for <typeparamref name="T"/> from its mapping attributes.</summary>
+    public string GetTableName()
     {
         var attr = typeof(T).GetCustomAttribute<Domain.Models.TableAttribute>();
         return attr?.Name ?? typeof(T).Name + "s";
     }
 
-    private string GetTableSchema()
+    /// <summary>Resolves the table schema for <typeparamref name="T"/> from its mapping attributes.</summary>
+    public string GetTableSchema()
     {
         var attr = typeof(T).GetCustomAttribute<Domain.Models.TableAttribute>();
         return attr?.Schema ?? OrmConstants.DefaultSchema;
