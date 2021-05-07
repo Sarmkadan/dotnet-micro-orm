@@ -257,6 +257,15 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
         return allResults;
     }
 
+    // Bulk update
+    public async Task<List<T>> UpdateRangeAsync(List<T> entities)
+    {
+        var updated = new List<T>(entities.Count);
+        foreach (var entity in entities)
+            updated.Add(await UpdateAsync(entity));
+        return updated;
+    }
+
     // Bulk delete
     public async Task<int> DeleteRangeAsync(List<T> entities)
     {

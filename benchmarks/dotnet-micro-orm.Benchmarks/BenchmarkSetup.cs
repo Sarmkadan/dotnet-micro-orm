@@ -1,3 +1,4 @@
+using DotnetMicroOrm.Configuration;
 using DotnetMicroOrm.Constants;
 using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Domain.Models;
@@ -26,17 +27,12 @@ public static class BenchmarkSetup
         var services = new ServiceCollection();
 
         // Configure DotnetMicroOrm
-        services.AddDatabaseContext(options =>
+        services.AddDotnetMicroOrm(_connectionString, DatabaseProvider.SqlServer, options =>
         {
-            options.ConnectionString = _connectionString;
-            options.DatabaseType = DatabaseProvider.SqlServer;
             options.EnableChangeTracking = true;
-            options.EnableCaching = false; // Disable caching for clean benchmarks
+            options.EnableExpressionCaching = false; // Disable caching for clean benchmarks
             options.CommandTimeout = 30;
         });
-
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         _serviceProvider = services.BuildServiceProvider();
         return _serviceProvider;
@@ -50,7 +46,7 @@ public static class BenchmarkSetup
         try
         {
             var serviceProvider = GetServiceProvider();
-            var databaseContext = serviceProvider.GetRequiredService<IDatabaseContext>();
+            var databaseContext = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<IDatabaseContext>(serviceProvider);
 
             // Create database if not exists
             await databaseContext.OpenAsync();
@@ -105,7 +101,7 @@ public static class BenchmarkSetup
         try
         {
             var serviceProvider = GetServiceProvider();
-            var databaseContext = serviceProvider.GetRequiredService<IDatabaseContext>();
+            var databaseContext = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<IDatabaseContext>(serviceProvider);
             await databaseContext.OpenAsync();
             await databaseContext.ExecuteNonQueryAsync("DELETE FROM BenchmarkTestEntities");
         }

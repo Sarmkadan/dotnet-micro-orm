@@ -29,8 +29,8 @@ public class ComparisonBenchmarks
 
         // Setup DotnetMicroOrm
         _serviceProvider = BenchmarkSetup.GetServiceProvider();
-        _repository = _serviceProvider.GetRequiredService<IRepository<BenchmarkTestEntity>>();
-        _unitOfWork = _serviceProvider.GetRequiredService<IUnitOfWork>();
+        _repository = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<IRepository<BenchmarkTestEntity>>(_serviceProvider);
+        _unitOfWork = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<IUnitOfWork>(_serviceProvider);
 
         // Create raw ADO.NET connection
         _rawConnection = new SqlConnection(_connectionString);
@@ -213,13 +213,8 @@ public class ComparisonBenchmarks
     [BenchmarkCategory("QueryComparison")]
     public async Task Query_GetWithOrdering()
     {
-        var entities = await _repository.GetAsync(
-            e => e.Value > 0,
-            orderBy: e => e.Value,
-            descending: false,
-            skip: 0,
-            take: 50
-        );
+        var matches = await _repository.GetAsync(e => e.Value > 0);
+        var entities = matches.OrderBy(e => e.Value).Skip(0).Take(50).ToList();
         if (entities.Count < 1) throw new InvalidOperationException("No entities found");
     }
 
@@ -268,7 +263,7 @@ public class ComparisonBenchmarks
     [BenchmarkCategory("BatchComparison")]
     public async Task BatchDelete_100_Entities()
     {
-        await _repository.DeleteRangeAsync(_testEntities.Take(100).Select(e => e.Id).ToList());
+        await _repository.DeleteRangeAsync(_testEntities.Take(100).ToList());
         await _unitOfWork.SaveChangesAsync();
     }
 }

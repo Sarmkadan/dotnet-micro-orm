@@ -128,12 +128,12 @@ public class BatchOperationsBenchmarks
     [BenchmarkCategory("BatchDelete")]
     public async Task DeleteRangeAsync_5000_Entities()
     {
-        var ids = new List<int>();
+        var entities = new List<BenchmarkTestEntity>();
         for (int i = 0; i < 5000; i++)
         {
-            ids.Add(i + 1);
+            entities.Add(new BenchmarkTestEntity { Id = i + 1 });
         }
-        await _repository.DeleteRangeAsync(ids);
+        await _repository.DeleteRangeAsync(entities);
         await _unitOfWork.SaveChangesAsync();
     }
 

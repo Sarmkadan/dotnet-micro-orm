@@ -36,7 +36,7 @@ public static class ServiceCollectionExtensions
 
         // Register unit of work
         services.AddScoped<IUnitOfWork>(sp =>
-            new UnitOfWork(sp.GetRequiredService<IDatabaseContext>()));
+            new UnitOfWork(Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<IDatabaseContext>(sp)));
 
         // Register repositories
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -50,7 +50,7 @@ public static class ServiceCollectionExtensions
         // Register migration runner
         services.AddScoped<IMigrationRunner>(sp =>
             new MigrationRunner(
-                sp.GetRequiredService<IDatabaseContext>(),
+                Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<IDatabaseContext>(sp),
                 sp.GetServices<IMigration>()));
 
         // Register services
