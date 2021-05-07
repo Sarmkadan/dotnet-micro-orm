@@ -15,7 +15,7 @@ namespace DotnetMicroOrm.Formatters;
 /// Properly handles quoted fields, line breaks, and special characters.
 /// Includes header row with property names.
 /// </summary>
-public class sealed CsvFormatter : IOutputFormatter
+public sealed class CsvFormatter : IOutputFormatter
 {
     private readonly string _delimiter;
     private readonly string _lineEnding;

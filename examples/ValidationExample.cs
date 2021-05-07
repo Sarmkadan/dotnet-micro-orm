@@ -19,7 +19,7 @@ namespace DotnetMicroOrm.Examples
     /// Demonstrates entity validation before persistence.
     /// Shows how to validate business rules and constraints.
     /// </summary>
-    public class sealed ValidationExample
+    public sealed class ValidationExample
     {
         private readonly IServiceProvider _serviceProvider;
 

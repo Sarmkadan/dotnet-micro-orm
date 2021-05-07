@@ -14,7 +14,7 @@ namespace DotnetMicroOrm.Formatters;
 /// Converts objects to XML elements with proper escaping.
 /// Handles collections as repeating elements.
 /// </summary>
-public class sealed XmlFormatter : IOutputFormatter
+public sealed class XmlFormatter : IOutputFormatter
 {
     private readonly bool _indented;
     private readonly string _rootElementName;

@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.Middleware;
 /// Supports API key authentication, bearer token validation, and role-based access.
 /// Populates AuthenticationInfo in middleware context for downstream handlers.
 /// </summary>
-public class sealed AuthenticationMiddleware : IMiddleware
+public sealed class AuthenticationMiddleware : IMiddleware
 {
     private readonly Dictionary<string, (int userId, string role)> _apiKeys = [];
 
@@ -134,7 +134,7 @@ public class sealed AuthenticationMiddleware : IMiddleware
 /// Middleware for role-based authorization
 /// Ensures user has required role before allowing operation
 /// </summary>
-public class sealed AuthorizationMiddleware : IMiddleware
+public sealed class AuthorizationMiddleware : IMiddleware
 {
     private readonly Dictionary<string, string[]> _operationRoles = [];
 

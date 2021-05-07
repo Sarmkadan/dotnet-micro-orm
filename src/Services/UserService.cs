@@ -16,7 +16,7 @@ using DotnetMicroOrm.Exceptions;
 /// <summary>
 /// User service for authentication and user management
 /// </summary>
-public class sealed UserService : IAsyncDisposable
+public sealed class UserService : IAsyncDisposable
 {
     private readonly UserRepository _userRepository;
     private readonly IDatabaseContext _context;

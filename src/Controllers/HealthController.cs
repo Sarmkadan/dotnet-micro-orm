@@ -8,7 +8,7 @@ namespace DotnetMicroOrm.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class sealed HealthController : ControllerBase
+    public sealed class HealthController : ControllerBase
     {
         private readonly IDatabaseContext _dbContext;
 

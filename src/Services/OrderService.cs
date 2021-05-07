@@ -12,7 +12,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Order service for order processing and management
 /// </summary>
-public class sealed OrderService : IAsyncDisposable
+public sealed class OrderService : IAsyncDisposable
 {
     private readonly IRepository<Order> _orderRepository;
     private readonly IRepository<OrderItem> _orderItemRepository;
