@@ -432,3 +432,79 @@
 +- chore: add examples and supporting files
 +- chore: add Docker support
 +- chore: add NuGet package metadata
+
+# 2026-07-08 23:18:43.883012
++Add structured logging to sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Ensure Microsoft.Extensions.Logging is used (add ILogger<T> injection if missing)
++2. Add meaningful log messages to key operations:
++   - LogInformation for successful operations
++   - LogWarning for recoverable issues
++   - LogError for failures (with exception)
++   - LogDebug for detailed flow info
++3. Use structured logging with named parameters: _logger.LogInformation("Processing {ItemId}", item.Id)
++4. Do NOT add logging to every single method - only key entry/exit points and error paths
++
++Commit as: "feat: add structured logging"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
+
+# 2026-07-08 23:18:43.883798
++Add structured logging to sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Ensure Microsoft.Extensions.Logging is used (add ILogger<T> injection if missing)
++2. Add meaningful log messages to key operations:
++   - LogInformation for successful operations
++   - LogWarning for recoverable issues
++   - LogError for failures (with exception)
++   - LogDebug for detailed flow info
++3. Use structured logging with named parameters: _logger.LogInformation("Processing {ItemId}", item.Id)
++4. Do NOT add logging to every single method - only key entry/exit points and error paths
++
++Commit as: "feat: add structured logging"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
