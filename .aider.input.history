@@ -52,3 +52,383 @@
 +- Push to main when done
 +
 +IMPORTANT: Do NOT run the benchmarks. Only write the benchmark code and verify it compiles with dotnet build.
+
+# 2026-07-08 18:08:25.332316
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
+
+# 2026-07-08 18:08:25.332373
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
+
+# 2026-07-08 18:09:40.874583
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
+
+# 2026-07-08 18:09:40.874690
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
+
+# 2026-07-08 18:10:51.900316
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
+
+# 2026-07-08 18:10:51.900373
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
+
+# 2026-07-08 18:18:14.249007
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
+
+# 2026-07-08 18:18:14.249133
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
+
+# 2026-07-08 18:33:14.119451
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
+
+# 2026-07-08 18:33:14.121395
++Improve error handling in sarmkadan/dotnet-micro-orm.
++Work in: /home/redrocket/task-factory/workdir/dotnet-micro-orm
++
++1. Review the main service classes for error handling gaps
++2. Add custom exception types in an Exceptions/ folder:
++   - DotnetMicroOrmException (base)
++   - ConfigurationException
++   - ValidationException (if applicable)
++3. Add proper try-catch blocks where external calls happen (HTTP, DB, file I/O)
++4. Add guard clauses (ArgumentNullException) to public methods missing them
++5. Do NOT over-engineer - only add where genuinely needed
++
++Commit as: "fix: improve error handling with custom exceptions"
++
++Git config:
++  git config user.name "Vladyslav Zaiets"
++  git config user.email "rutova2@gmail.com"
++
++CRITICAL RULES:
++- Do NOT add Co-Authored-By headers
++- Do NOT mention AI, Claude, GPT, Copilot, generated, automated anywhere in code or commits
++- Do NOT mention Red Rocket or Amdaris anywhere
++- Write natural commit messages
++- Push to main when done
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- perf: add BenchmarkDotNet performance benchmarks
++- fix: resolve compile errors across library, tests and benchmarks
++- fix: correct sealed keyword placement and resolve duplicate test class name
++- fix: exclude benchmarks project from main project compile scope
++- perf: add BenchmarkDotNet performance benchmarks
++- chore: don't treat warnings as errors
++- chore: add examples and supporting files
++- chore: add Docker support
++- chore: add NuGet package metadata
