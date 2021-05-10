@@ -144,7 +144,12 @@ Benchmarks for expression compilation and caching performance:
 - `FirstOrDefaultWithPredicate` - FirstOrDefault with predicate
 - `FirstOrDefaultNoMatch` - FirstOrDefault with no match
 
-### 4. ComparisonBenchmarks (NEW)
+### 4. AuditServiceBenchmarks (NEW)
+Benchmarks for audit logging operations:
+- `LogInsertAsync` - Log entity creation
+- `LogUpdateAsync` - Log entity update
+
+### 5. ComparisonBenchmarks (NEW)
 Benchmarks comparing DotnetMicroOrm with raw ADO.NET:
 - **RawADO** category: Raw ADO.NET operations for comparison
   - `RawADO_GetById` - Single entity retrieval via raw SQL
