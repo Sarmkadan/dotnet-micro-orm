@@ -48,3 +48,5 @@ coverage/
 appsettings.Development.json
 packages/
 *.DotSettings.user
+BenchmarkDotNet.Artifacts/
+.aider*
