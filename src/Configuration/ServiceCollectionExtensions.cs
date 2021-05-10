@@ -11,6 +11,7 @@ using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Migrations;
 using DotnetMicroOrm.Profiling;
 using DotnetMicroOrm.Services;
+using DotnetMicroOrm.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
@@ -27,6 +28,11 @@ public static class ServiceCollectionExtensions
         DatabaseProvider provider = DatabaseProvider.SqlServer,
         Action<OrmConfiguration>? configureOptions = null)
     {
+        if (services is null)
+            throw new ArgumentNullException(nameof(services));
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new ConfigurationException("Connection string cannot be null or empty.");
+
         var config = new OrmConfiguration();
         configureOptions?.Invoke(config);
 

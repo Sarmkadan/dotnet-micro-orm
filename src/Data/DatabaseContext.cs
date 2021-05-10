@@ -83,6 +83,9 @@ public sealed class DatabaseContext : IDatabaseContext
     // Executes scalar query
     public async Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)
     {
+        if (string.IsNullOrWhiteSpace(query))
+            throw new ArgumentException("Query cannot be null or empty.", nameof(query));
+
         await OpenAsync();
         await using var command = _connection!.CreateCommand();
         command.CommandText = query;
@@ -103,6 +106,9 @@ public sealed class DatabaseContext : IDatabaseContext
     // Executes query returning rows
     public async Task<List<Dictionary<string, object>>> ExecuteQueryAsync(string query, Dictionary<string, object>? parameters = null)
     {
+        if (string.IsNullOrWhiteSpace(query))
+            throw new ArgumentException("Query cannot be null or empty.", nameof(query));
+
         await OpenAsync();
         var results = new List<Dictionary<string, object>>();
 
@@ -135,6 +141,9 @@ public sealed class DatabaseContext : IDatabaseContext
     // Executes non-query command
     public async Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null)
     {
+        if (string.IsNullOrWhiteSpace(query))
+            throw new ArgumentException("Query cannot be null or empty.", nameof(query));
+
         await OpenAsync();
         await using var command = _connection!.CreateCommand();
         command.CommandText = query;
@@ -156,6 +165,9 @@ public sealed class DatabaseContext : IDatabaseContext
     // Executes query returning rows as an IAsyncEnumerable
     public async IAsyncEnumerable<Dictionary<string, object>> ExecuteStreamAsync(string query, Dictionary<string, object>? parameters = null)
     {
+        if (string.IsNullOrWhiteSpace(query))
+            throw new ArgumentException("Query cannot be null or empty.", nameof(query));
+
         await OpenAsync();
 
         await using var command = _connection!.CreateCommand();

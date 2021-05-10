@@ -38,6 +38,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Retrieves first entity matching predicate
     public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
     {
+        if (predicate is null)
+            throw new ArgumentNullException(nameof(predicate));
+
         var list = await GetAsync(predicate);
         return list.FirstOrDefault();
     }
@@ -53,6 +56,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Retrieves entities matching predicate
     public async Task<List<T>> GetAsync(Expression<Func<T, bool>> predicate)
     {
+        if (predicate is null)
+            throw new ArgumentNullException(nameof(predicate));
+
         var all = await GetAllAsync();
         return all.AsQueryable().Where(predicate).ToList();
     }
@@ -68,6 +74,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Checks if entity exists
     public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)
     {
+        if (predicate is null)
+            throw new ArgumentNullException(nameof(predicate));
+
         var count = await CountAsync(predicate);
         return count > 0;
     }
@@ -75,6 +84,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Adds entity
     public async Task<T> AddAsync(T entity)
     {
+        if (entity is null)
+            throw new ArgumentNullException(nameof(entity));
+
         entity.Validate(out var errors);
         if (errors.Count > 0)
             throw new EntityValidationException("Entity validation failed", errors);
@@ -97,6 +109,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Updates entity
     public async Task<T> UpdateAsync(T entity)
     {
+        if (entity is null)
+            throw new ArgumentNullException(nameof(entity));
+
         entity.Validate(out var errors);
         if (errors.Count > 0)
             throw new EntityValidationException("Entity validation failed", errors);
@@ -119,7 +134,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
             var concurrencyProperty = typeof(T).GetProperty(concurrencyTokenInfo.PropertyName);
             if (concurrencyProperty is null)
                 throw new OrmException($"Concurrency token property '{concurrencyTokenInfo.PropertyName}' not found on entity.");
-            
+
             var originalConcurrencyValue = concurrencyProperty.GetValue(entity);
             if (originalConcurrencyValue is null)
                 throw new OrmException($"Concurrency token '{concurrencyTokenInfo.PropertyName}' cannot be null for entity with Id {idValue}.");
@@ -140,13 +155,10 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
             }
             throw new OrmException($"Entity {typeof(T).Name} with Id {idValue} not found for update.");
         }
-        
+
         // Update the concurrency token value on the entity after successful update
-        if (concurrencyTokenInfo.PropertyName is not null && concurrencyTokenInfo.PropertyType != typeof(byte[])) // Only update if not a rowversion type
+        if (concurrencyTokenInfo.PropertyName is not null && concurrencyTokenInfo.PropertyType != typeof(byte[]))
         {
-            // For timestamp/rowversion, the database updates it automatically.
-            // For other types, like a version counter, we might need to increment it here or re-fetch.
-            // For simplicity, we'll re-fetch if it's not a byte[] (SQL Server timestamp)
             var newConcurrencyValue = await GetConcurrencyTokenValueAsync(idValue!, concurrencyTokenInfo.ColumnName!);
             typeof(T).GetProperty(concurrencyTokenInfo.PropertyName!)?.SetValue(entity, newConcurrencyValue);
         }
@@ -166,6 +178,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Deletes entity
     public async Task<bool> DeleteAsync(T entity)
     {
+        if (entity is null)
+            throw new ArgumentNullException(nameof(entity));
+
         var idProperty = typeof(T).GetProperty("Id") ?? throw new OrmException("Entity must have Id property for Delete operations");
         var idValue = idProperty.GetValue(entity);
         var query = $"DELETE FROM [{_schema}].[{_tableName}] WHERE [Id] = @Id";
@@ -179,7 +194,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
             var concurrencyProperty = typeof(T).GetProperty(concurrencyTokenInfo.PropertyName);
             if (concurrencyProperty is null)
                 throw new OrmException($"Concurrency token property '{concurrencyTokenInfo.PropertyName}' not found on entity.");
-            
+
             var originalConcurrencyValue = concurrencyProperty.GetValue(entity);
             if (originalConcurrencyValue is null)
                 throw new OrmException($"Concurrency token '{concurrencyTokenInfo.PropertyName}' cannot be null for entity with Id {idValue}.");
@@ -198,9 +213,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
                     .WithContext("EntityType", typeof(T).Name)
                     .WithContext("EntityId", idValue!);
             }
-            return false; // Entity not found for delete
+            return false;
         }
-        
+
         _changeTracking.Remove(entity);
         return true;
     }
@@ -210,10 +225,10 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     {
         const int MAX_SQL_PARAMS_PER_BATCH = 2000; // SQL Server limit is 2100, leaving some buffer
 
+        if (entities is null)
+            throw new ArgumentNullException(nameof(entities));
         if (!entities.Any())
-        {
             return new List<T>();
-        }
 
         // Validate all entities upfront
         foreach (var entity in entities)
@@ -228,15 +243,11 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
         var parametersPerEntity = mappedColumns.Count;
 
         if (parametersPerEntity == 0)
-        {
             throw new OrmException("No columns mapped for entity, cannot perform batch insert.");
-        }
 
         var maxEntitiesPerBatch = MAX_SQL_PARAMS_PER_BATCH / parametersPerEntity;
         if (maxEntitiesPerBatch == 0)
-        {
             throw new OrmException($"Single entity has {parametersPerEntity} parameters, exceeding MAX_SQL_PARAMS_PER_BATCH ({MAX_SQL_PARAMS_PER_BATCH}). Adjust MAX_SQL_PARAMS_PER_BATCH or mapped columns.");
-        }
 
         var allResults = new List<T>();
         var columnNames = string.Join(", ", mappedColumns.Select(c => $"[{c.ColumnName}]"));
@@ -260,6 +271,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Bulk update
     public async Task<List<T>> UpdateRangeAsync(List<T> entities)
     {
+        if (entities is null)
+            throw new ArgumentNullException(nameof(entities));
+
         var updated = new List<T>(entities.Count);
         foreach (var entity in entities)
             updated.Add(await UpdateAsync(entity));
@@ -269,6 +283,9 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Bulk delete
     public async Task<int> DeleteRangeAsync(List<T> entities)
     {
+        if (entities is null)
+            throw new ArgumentNullException(nameof(entities));
+
         var deletedCount = 0;
         foreach (var entity in entities)
             if (await DeleteAsync(entity))
@@ -371,7 +388,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
             var entity = entities[i];
             var parameterPrefix = $"p{i}"; // Unique prefix for each entity in the batch
             var entityParameters = BuildParameters(entity, columns, parameterPrefix);
-            
+
             foreach (var param in entityParameters)
             {
                 allParameters.Add(param.Key, param.Value);
@@ -413,7 +430,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
                 var columnAttr = prop.GetCustomAttribute<ColumnAttribute>();
                 if (columnAttr is null)
                     throw new OrmException($"ConcurrencyToken property '{prop.Name}' must also have a ColumnAttribute.");
-                
+
                 return new ConcurrencyTokenInfo
                 {
                     PropertyName = prop.Name,

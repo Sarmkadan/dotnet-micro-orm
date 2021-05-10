@@ -45,12 +45,16 @@ public sealed class UnitOfWork : IUnitOfWork
     // Begins transaction
     public async Task<bool> BeginTransactionAsync(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.ReadCommitted)
     {
-        if (_transactionActive)
-            throw new OrmException("Transaction already active", "UOW_TRANSACTION_ACTIVE");
-
-        var result = await _context.BeginTransactionAsync(isolationLevel);
-        _transactionActive = result;
-        return result;
+        try
+        {
+            var result = await _context.BeginTransactionAsync(isolationLevel);
+            _transactionActive = result;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw new ConfigurationException("Failed to begin transaction.", ex);
+        }
     }
 
     // Commits transaction
@@ -88,7 +92,7 @@ public sealed class UnitOfWork : IUnitOfWork
         }
         catch (Exception ex)
         {
-            throw new OrmException($"Rollback failed: {ex.Message}", innerException: ex);
+            throw new ConfigurationException("Transaction rollback failed.", ex);
         }
     }
 

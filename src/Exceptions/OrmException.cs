@@ -9,32 +9,17 @@ namespace DotnetMicroOrm.Exceptions;
 /// <summary>
 /// Base exception for all ORM-related errors
 /// </summary>
-public class OrmException : Exception
+public class OrmException : DotnetMicroOrmException
 {
-    public string? ErrorCode { get; set; }
-    public Dictionary<string, object>? ErrorContext { get; set; }
-
     public OrmException(string message, string? errorCode = null, Exception? innerException = null)
-        : base(message, innerException)
+        : base(message, errorCode, innerException)
     {
-        ErrorCode = errorCode;
     }
 
-    public OrmException WithContext(string key, object value)
+    public new OrmException WithContext(string key, object value)
     {
-        ErrorContext ??= [];
-        ErrorContext[key] = value;
+        base.WithContext(key, value);
         return this;
-    }
-
-    public override string ToString()
-    {
-        var baseString = base.ToString();
-        if (ErrorCode is not null)
-            baseString += $"\nError Code: {ErrorCode}";
-        if (ErrorContext?.Count > 0)
-            baseString += $"\nContext: {string.Join(", ", ErrorContext.Select(kvp => $"{kvp.Key}={kvp.Value}"))}";
-        return baseString;
     }
 }
 
