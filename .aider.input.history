@@ -554,3 +554,95 @@
 +- fix: exclude benchmarks project from main project compile scope
 +- perf: add BenchmarkDotNet performance benchmarks
 +- chore: don't treat warnings as errors
+
+# 2026-07-10 05:19:09.249436
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/BatchOperationsBenchmarksExtensions.cs`.
++
++It must contain `public static class BatchOperationsBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `BatchOperationsBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/BatchOperationsBenchmarks.cs`).
++
++The REAL public members of `BatchOperationsBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task AddRangeAsync_1000_Entities
++public async Task AddRangeAsync_5000_Entities
++public async Task UpdateRangeAsync_1000_Entities
++public async Task UpdateRangeAsync_5000_Entities
++public async Task DeleteRangeAsync_1000_Entities
++public async Task DeleteRangeAsync_5000_Entities
++public async Task BulkInsert_100_Entities
++public async Task BulkInsert_10000_Entities
++public async Task BatchInsert_1000_Entities_With_Relations
++public async Task BatchUpdate_Complex_Predicate
++public async Task BatchDelete_With_Where_Clause
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 40s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/BatchOperationsBenchmarksExtensions.cs(15,65): error CS0246: The type or namespace name 'BatchOperationsBenchmarks' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/dotnet-micro-orm.Benchmarks.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/BatchOperationsBenchmarksExtensions.cs(44,69): error CS0246: The type or namespace name 'BatchOperationsBenchmarks' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchma
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to HealthController.cs
++- feat: add specification combinators and markdown formatter
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:19:09.249543
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/BatchOperationsBenchmarksExtensions.cs`.
++
++It must contain `public static class BatchOperationsBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `BatchOperationsBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/BatchOperationsBenchmarks.cs`).
++
++The REAL public members of `BatchOperationsBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task AddRangeAsync_1000_Entities
++public async Task AddRangeAsync_5000_Entities
++public async Task UpdateRangeAsync_1000_Entities
++public async Task UpdateRangeAsync_5000_Entities
++public async Task DeleteRangeAsync_1000_Entities
++public async Task DeleteRangeAsync_5000_Entities
++public async Task BulkInsert_100_Entities
++public async Task BulkInsert_10000_Entities
++public async Task BatchInsert_1000_Entities_With_Relations
++public async Task BatchUpdate_Complex_Predicate
++public async Task BatchDelete_With_Where_Clause
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 40s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/BatchOperationsBenchmarksExtensions.cs(15,65): error CS0246: The type or namespace name 'BatchOperationsBenchmarks' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/dotnet-micro-orm.Benchmarks.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/BatchOperationsBenchmarksExtensions.cs(44,69): error CS0246: The type or namespace name 'BatchOperationsBenchmarks' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchma
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to HealthController.cs
++- feat: add specification combinators and markdown formatter
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
