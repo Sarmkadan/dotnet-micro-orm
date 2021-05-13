@@ -646,3 +646,93 @@
 +- chore: apply workspace updates
 +- chore: apply workspace updates
 +- chore: apply workspace updates
+
+# 2026-07-10 05:23:20.392768
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ExpressionAndCachingBenchmarksExtensions.cs`.
++
++It must contain `public static class ExpressionAndCachingBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ExpressionAndCachingBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ExpressionAndCachingBenchmarks.cs`).
++
++The REAL public members of `ExpressionAndCachingBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task ExpressionCompile_FirstCall
++public async Task ExpressionCompile_SubsequentCall
++public async Task ComplexExpression_FirstCall
++public async Task ComplexExpression_SubsequentCall
++public async Task SimplePredicateQuery
++public async Task MultiplePredicateQuery
++public async Task RangeQuery
++public async Task OrderByQuery
++public async Task PagedQuery
++public async Task CountAll
++public async Task CountWithPredicate
++public async Task AnyOperation
++public async Task FirstOrDefaultWithPredicate
++public async Task FirstOrDefaultNoMatch
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to HealthController.cs
++- feat: add specification combinators and markdown formatter
++- chore: apply workspace updates
+
+# 2026-07-10 05:23:20.392868
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ExpressionAndCachingBenchmarksExtensions.cs`.
++
++It must contain `public static class ExpressionAndCachingBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ExpressionAndCachingBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ExpressionAndCachingBenchmarks.cs`).
++
++The REAL public members of `ExpressionAndCachingBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task ExpressionCompile_FirstCall
++public async Task ExpressionCompile_SubsequentCall
++public async Task ComplexExpression_FirstCall
++public async Task ComplexExpression_SubsequentCall
++public async Task SimplePredicateQuery
++public async Task MultiplePredicateQuery
++public async Task RangeQuery
++public async Task OrderByQuery
++public async Task PagedQuery
++public async Task CountAll
++public async Task CountWithPredicate
++public async Task AnyOperation
++public async Task FirstOrDefaultWithPredicate
++public async Task FirstOrDefaultNoMatch
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to HealthController.cs
++- feat: add specification combinators and markdown formatter
++- chore: apply workspace updates
