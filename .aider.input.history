@@ -736,3 +736,99 @@
 +- docs: add XML documentation comments to HealthController.cs
 +- feat: add specification combinators and markdown formatter
 +- chore: apply workspace updates
+
+# 2026-07-10 05:34:25.667841
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/RepositoryBenchmarksExtensions.cs`.
++
++It must contain `public static class RepositoryBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `RepositoryBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/RepositoryBenchmarks.cs`).
++
++The REAL public members of `RepositoryBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task GetByIdAsync
++public async Task AddAsync
++public async Task UpdateAsync
++public async Task DeleteAsync
++public async Task AddRangeAsync_100_Entities
++public async Task UpdateRangeAsync_100_Entities
++public async Task DeleteRangeAsync_100_Entities
++public async Task GetAllAsync
++public async Task GetByPredicateAsync
++public async Task CountAsync
++public async Task AnyAsync
++public async Task GetPagedAsync
++public async Task GetWithOrdering
++public async Task GetWithMultiplePredicates
++public async Task GetWithComplexSpecification
++public async Task GetPagedPerformance
++public async Task FirstOrDefaultPerformance
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to HealthController.cs
+
+# 2026-07-10 05:34:25.667904
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/RepositoryBenchmarksExtensions.cs`.
++
++It must contain `public static class RepositoryBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `RepositoryBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/RepositoryBenchmarks.cs`).
++
++The REAL public members of `RepositoryBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task GetByIdAsync
++public async Task AddAsync
++public async Task UpdateAsync
++public async Task DeleteAsync
++public async Task AddRangeAsync_100_Entities
++public async Task UpdateRangeAsync_100_Entities
++public async Task DeleteRangeAsync_100_Entities
++public async Task GetAllAsync
++public async Task GetByPredicateAsync
++public async Task CountAsync
++public async Task AnyAsync
++public async Task GetPagedAsync
++public async Task GetWithOrdering
++public async Task GetWithMultiplePredicates
++public async Task GetWithComplexSpecification
++public async Task GetPagedPerformance
++public async Task FirstOrDefaultPerformance
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to HealthController.cs
