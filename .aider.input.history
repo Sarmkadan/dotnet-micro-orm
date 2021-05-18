@@ -832,3 +832,1015 @@
 +- chore: apply workspace updates
 +- chore: apply workspace updates
 +- docs: add XML documentation comments to HealthController.cs
+
+# 2026-07-10 05:36:56.503056
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:36:56.503120
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:38:05.183825
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:38:05.183910
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:39:15.747767
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:39:15.748051
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:39:26.522814
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:39:26.522909
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:40:36.130336
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:40:36.130403
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:41:45.123585
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:41:45.123659
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:42:55.457306
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:42:55.457450
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:44:02.427070
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:44:02.427158
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:47:14.709229
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:47:14.709307
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:48:26.287314
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:48:26.287414
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:48:36.158055
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 05:48:36.158310
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarksExtensions.cs`.
++
++It must contain `public static class ComparisonBenchmarksExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `ComparisonBenchmarks` (same namespace as the original file `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++The REAL public members of `ComparisonBenchmarks` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
