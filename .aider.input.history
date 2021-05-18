@@ -2140,3 +2140,69 @@
 +- (no commit message provided)
 +- chore: apply workspace updates
 +- chore: apply workspace updates
+
+# 2026-07-10 07:00:01.582032
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/BenchmarkSetupJsonExtensions.cs`.
++
++It must contain `public static class BenchmarkSetupJsonExtensions` (same namespace as `benchmarks/dotnet-micro-orm.Benchmarks/BenchmarkSetup.cs`) with fully implemented System.Text.Json helpers for the existing type `BenchmarkSetup`:
++- `string ToJson(this BenchmarkSetup value, bool indented = false)`
++- `static BenchmarkSetup? FromJson(string json)`
++- `static bool TryFromJson(string json, out BenchmarkSetup? value)` (catches JsonException, returns false)
++Use a single cached `JsonSerializerOptions` (camelCase) in a private static readonly field.
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 73s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/BenchmarkSetupJsonExtensions.cs(23,42): error CS0721: 'BenchmarkSetup': static types cannot be used as parameters [/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/dotnet-micro-orm.Benchmarks.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/BenchmarkSetupJsonExtensions.cs(38,39): error CS0722: 'BenchmarkSetup': static types cannot be used as return types [/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/dotnet-micro-orm.Benchmarks.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- feat: add ComparisonBenchmarks extensions to run and compare
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
+
+# 2026-07-10 07:00:01.582225
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `benchmarks/dotnet-micro-orm.Benchmarks/BenchmarkSetupJsonExtensions.cs`.
++
++It must contain `public static class BenchmarkSetupJsonExtensions` (same namespace as `benchmarks/dotnet-micro-orm.Benchmarks/BenchmarkSetup.cs`) with fully implemented System.Text.Json helpers for the existing type `BenchmarkSetup`:
++- `string ToJson(this BenchmarkSetup value, bool indented = false)`
++- `static BenchmarkSetup? FromJson(string json)`
++- `static bool TryFromJson(string json, out BenchmarkSetup? value)` (catches JsonException, returns false)
++Use a single cached `JsonSerializerOptions` (camelCase) in a private static readonly field.
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 73s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/BenchmarkSetupJsonExtensions.cs(23,42): error CS0721: 'BenchmarkSetup': static types cannot be used as parameters [/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/dotnet-micro-orm.Benchmarks.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/BenchmarkSetupJsonExtensions.cs(38,39): error CS0722: 'BenchmarkSetup': static types cannot be used as return types [/home/redrocket/task-factory/workdir/dotnet-micro-orm/benchmarks/dotnet-micro-orm.Benchmarks/dotnet-micro-orm.Benchmarks.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- feat: add ComparisonBenchmarks extensions to run and compare
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
