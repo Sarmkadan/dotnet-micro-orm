@@ -2206,3 +2206,535 @@
 +- chore: apply workspace updates
 +- (no commit message provided)
 +- chore: apply workspace updates
+
+# 2026-07-10 08:18:15.841225
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:18:15.841315
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:20:36.954313
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:20:36.954399
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:21:49.070894
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:21:49.074090
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:22:58.566762
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:22:58.566836
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:24:08.264222
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:24:08.264319
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:27:20.773713
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:27:20.773809
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:28:34.300822
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 08:28:34.301012
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Exceptions/DotnetMicroOrmExceptionExtensions.cs`.
++
++It must contain `public static class DotnetMicroOrmExceptionExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `DotnetMicroOrmException` (same namespace as the original file `src/Exceptions/DotnetMicroOrmException.cs`).
++
++The REAL public members of `DotnetMicroOrmException` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 360s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Exceptions/DotnetMicroOrmExceptionExtensions.cs(15,42): error CS1739: The best overload for 'WithContext' does not have a parameter named 'errorCode' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
