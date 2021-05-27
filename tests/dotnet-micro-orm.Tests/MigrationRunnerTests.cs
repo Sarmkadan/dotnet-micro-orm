@@ -10,10 +10,15 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace DotnetMicroOrm.Tests;
-
+/// <summary>
+/// Tests for the MigrationRunner class.
+/// </summary>
 public sealed class MigrationRunnerTests
 {
+    /// <summary>
+    /// Builds a mock IDatabaseContext instance.
+    /// </summary>
+    /// <returns>A mock IDatabaseContext instance.</returns>
     private static Mock<IDatabaseContext> BuildContextMock()
     {
         var mock = new Mock<IDatabaseContext>();
@@ -33,6 +38,9 @@ public sealed class MigrationRunnerTests
         return mock;
     }
 
+    /// <summary>
+    /// Tests that MigrateAsync applies pending migrations in version order.
+    /// </summary>
     [Fact]
     public async Task MigrateAsync_PendingMigrations_AppliesThemInVersionOrder()
     {
@@ -60,6 +68,9 @@ public sealed class MigrationRunnerTests
         applied.Should().Equal("20240101_001", "20240102_001");
     }
 
+    /// <summary>
+    /// Tests that GetPendingMigrationsAsync excludes already applied migrations.
+    /// </summary>
     [Fact]
     public async Task GetPendingMigrationsAsync_AlreadyApplied_ExcludesThem()
     {
@@ -91,6 +102,9 @@ public sealed class MigrationRunnerTests
         pending[0].Version.Should().Be("20240103_001");
     }
 
+    /// <summary>
+    /// Tests that MigrateToAsync limits application to the target version.
+    /// </summary>
     [Fact]
     public async Task MigrateToAsync_LimitsApplicationToTargetVersion()
     {
