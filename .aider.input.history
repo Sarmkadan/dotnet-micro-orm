@@ -2830,3 +2830,495 @@
 +- chore: apply workspace updates
 +- chore: apply workspace updates
 +- chore: apply workspace updates
+
+# 2026-07-10 10:00:06.368888
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:00:06.368975
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:01:15.879807
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:01:15.879865
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:01:31.649639
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:01:31.649753
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:02:41.370330
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:02:41.370424
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:03:51.355867
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:03:51.356248
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:05:01.033426
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
+
+# 2026-07-10 10:05:01.033548
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/EventBusExtensions.cs`.
++
++It must contain `public static class EventBusExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `EventBus` (same namespace as the original file `src/Events/EventBus.cs`).
++
++The REAL public members of `EventBus` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 269s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(4,24): error CS1514: { expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/EventBusExtensions.cs(41,2): error CS1513: } expected [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- feat: add OrderItem extension methods for enhanced order item functionality
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to MigrationRunnerTests class.
++- chore: apply workspace updates
++- feat: add DotnetMicroOrmException extension methods
++- chore: apply workspace updates
