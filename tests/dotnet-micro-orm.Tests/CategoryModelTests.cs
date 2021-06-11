@@ -4,10 +4,14 @@ using DotnetMicroOrm.Domain.Models;
 using FluentAssertions;
 using Xunit;
 
-namespace DotnetMicroOrm.Tests;
-
+/// <summary>
+/// Tests for the Category model.
+/// </summary>
 public sealed class CategoryModelTests
 {
+    /// <summary>
+    /// Tests that a Category can be created with valid parameters.
+    /// </summary>
     [Fact]
     public void Constructor_WithParameters_CreatesValidCategory()
     {
@@ -27,6 +31,9 @@ public sealed class CategoryModelTests
         category.CreatedDate.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
     }
 
+    /// <summary>
+    /// Tests that a Category is valid when all properties are valid.
+    /// </summary>
     [Fact]
     public void Validate_WithValidCategory_ReturnsTrue()
     {
@@ -45,6 +52,9 @@ public sealed class CategoryModelTests
         errors.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that a Category is invalid when the name is empty.
+    /// </summary>
     [Fact]
     public void Validate_WithEmptyName_ReturnsFalse()
     {
@@ -59,6 +69,9 @@ public sealed class CategoryModelTests
         errors.Should().ContainSingle().Which.Should().Be("Category name is required and must be at least 2 characters");
     }
 
+    /// <summary>
+    /// Tests that a Category is invalid when the name is too short.
+    /// </summary>
     [Fact]
     public void Validate_WithShortName_ReturnsFalse()
     {
@@ -73,6 +86,9 @@ public sealed class CategoryModelTests
         errors.Should().ContainSingle().Which.Should().Be("Category name is required and must be at least 2 characters");
     }
 
+    /// <summary>
+    /// Tests that a Category is invalid when the slug is empty.
+    /// </summary>
     [Fact]
     public void Validate_WithEmptySlug_ReturnsFalse()
     {
@@ -87,6 +103,9 @@ public sealed class CategoryModelTests
         errors.Should().ContainSingle().Which.Should().Be("Category slug is required and must be at least 2 characters");
     }
 
+    /// <summary>
+    /// Tests that a Category is invalid when the slug is too short.
+    /// </summary>
     [Fact]
     public void Validate_WithShortSlug_ReturnsFalse()
     {
@@ -101,6 +120,9 @@ public sealed class CategoryModelTests
         errors.Should().ContainSingle().Which.Should().Be("Category slug is required and must be at least 2 characters");
     }
 
+    /// <summary>
+    /// Tests that a Category is invalid when the display order is negative.
+    /// </summary>
     [Fact]
     public void Validate_WithNegativeDisplayOrder_ReturnsFalse()
     {
@@ -118,6 +140,9 @@ public sealed class CategoryModelTests
         errors.Should().ContainSingle().Which.Should().Be("Display order cannot be negative");
     }
 
+    /// <summary>
+    /// Tests that moving up a Category decrements its display order.
+    /// </summary>
     [Fact]
     public void MoveUp_WithDisplayOrderGreaterThanZero_DecrementsOrder()
     {
@@ -134,6 +159,9 @@ public sealed class CategoryModelTests
         category.DisplayOrder.Should().Be(4);
     }
 
+    /// <summary>
+    /// Tests that moving up a Category does not change its display order when it is already at the top.
+    /// </summary>
     [Fact]
     public void MoveUp_WithDisplayOrderZero_StaysZero()
     {
@@ -150,6 +178,9 @@ public sealed class CategoryModelTests
         category.DisplayOrder.Should().Be(0);
     }
 
+    /// <summary>
+    /// Tests that moving down a Category increments its display order.
+    /// </summary>
     [Fact]
     public void MoveDown_IncrementsDisplayOrder()
     {
@@ -166,6 +197,9 @@ public sealed class CategoryModelTests
         category.DisplayOrder.Should().Be(4);
     }
 
+    /// <summary>
+    /// Tests that getting the breadcrumb for a Category with a parent returns the full path.
+    /// </summary>
     [Fact]
     public void GetBreadcrumb_WithParentCategory_ReturnsFullPath()
     {
@@ -187,6 +221,9 @@ public sealed class CategoryModelTests
         breadcrumb.Should().Be("Electronics > Laptops");
     }
 
+    /// <summary>
+    /// Tests that getting the breadcrumb for a Category without a parent returns the category name.
+    /// </summary>
     [Fact]
     public void GetBreadcrumb_WithoutParentCategory_ReturnsCategoryName()
     {
@@ -203,6 +240,9 @@ public sealed class CategoryModelTests
         breadcrumb.Should().Be("Books");
     }
 
+    /// <summary>
+    /// Tests that getting the product count for a Category with no products returns 0.
+    /// </summary>
     [Fact]
     public void GetProductCount_WithNoProducts_ReturnsZero()
     {
@@ -216,6 +256,9 @@ public sealed class CategoryModelTests
         count.Should().Be(0);
     }
 
+    /// <summary>
+    /// Tests that deactivating a Category sets its IsActive property to false.
+    /// </summary>
     [Fact]
     public void Deactivate_SetsIsActiveToFalse()
     {
@@ -232,6 +275,9 @@ public sealed class CategoryModelTests
         category.IsActive.Should().BeFalse();
     }
 
+    /// <summary>
+    /// Tests that deactivating a Category with subcategories deactivates all of them.
+    /// </summary>
     [Fact]
     public void Deactivate_WithSubCategories_DeactivatesAll()
     {
