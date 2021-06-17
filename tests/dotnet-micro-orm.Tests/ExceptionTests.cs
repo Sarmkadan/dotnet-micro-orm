@@ -4,10 +4,14 @@ using DotnetMicroOrm.Exceptions;
 using FluentAssertions;
 using Xunit;
 
-namespace DotnetMicroOrm.Tests;
-
+/// <summary>
+/// Tests for the DotnetMicroOrm exceptions.
+/// </summary>
 public sealed class ExceptionTests
 {
+    /// <summary>
+    /// Tests that an OrmException can be created with a message.
+    /// </summary>
     [Fact]
     public void OrmException_WithMessage_CreatesInstance()
     {
@@ -19,6 +23,9 @@ public sealed class ExceptionTests
         exception.InnerException.Should().BeNull();
     }
 
+    /// <summary>
+    /// Tests that an OrmException can be created with a message and an error code.
+    /// </summary>
     [Fact]
     public void OrmException_WithMessageAndErrorCode_CreatesInstance()
     {
@@ -29,6 +36,9 @@ public sealed class ExceptionTests
         exception.ErrorCode.Should().Be("TEST_ERROR");
     }
 
+    /// <summary>
+    /// Tests that an OrmException can be created with a message, an error code, and an inner exception.
+    /// </summary>
     [Fact]
     public void OrmException_WithMessageInnerExceptionAndErrorCode_CreatesInstance()
     {
@@ -41,6 +51,9 @@ public sealed class ExceptionTests
         exception.InnerException.Should().Be(innerException);
     }
 
+    /// <summary>
+    /// Tests that an OrmException can be created with a context.
+    /// </summary>
     [Fact]
     public void OrmException_WithContext_AddsContext()
     {
@@ -55,6 +68,9 @@ public sealed class ExceptionTests
         exception.ErrorContext!["Key2"].Should().Be(42);
     }
 
+    /// <summary>
+    /// Tests that a DatabaseConnectionException can be created with a message.
+    /// </summary>
     [Fact]
     public void DatabaseConnectionException_WithMessage_CreatesInstance()
     {
@@ -65,6 +81,9 @@ public sealed class ExceptionTests
         exception.ErrorCode.Should().Be("DB_CONNECTION_ERROR");
     }
 
+    /// <summary>
+    /// Tests that an EntityMappingException can be created with a message.
+    /// </summary>
     [Fact]
     public void EntityMappingException_WithMessage_CreatesInstance()
     {
@@ -75,6 +94,9 @@ public sealed class ExceptionTests
         exception.ErrorCode.Should().Be("ENTITY_MAPPING_ERROR");
     }
 
+    /// <summary>
+    /// Tests that an EntityMappingException can be created with a message and a property name.
+    /// </summary>
     [Fact]
     public void EntityMappingException_WithMessageAndPropertyName_CreatesInstance()
     {
@@ -87,6 +109,9 @@ public sealed class ExceptionTests
         exception.ErrorContext!["Property"].Should().Be("PropertyName");
     }
 
+    /// <summary>
+    /// Tests that a QueryExecutionException can be created with a message.
+    /// </summary>
     [Fact]
     public void QueryExecutionException_WithMessage_CreatesInstance()
     {
@@ -97,6 +122,9 @@ public sealed class ExceptionTests
         exception.ErrorCode.Should().Be("QUERY_EXECUTION_ERROR");
     }
 
+    /// <summary>
+    /// Tests that a QueryExecutionException can be created with a message and a query.
+    /// </summary>
     [Fact]
     public void QueryExecutionException_WithMessageAndQuery_CreatesInstance()
     {
@@ -109,6 +137,9 @@ public sealed class ExceptionTests
         exception.ErrorContext!["Query"].Should().Be("SELECT * FROM Table");
     }
 
+    /// <summary>
+    /// Tests that an EntityValidationException can be created with a message.
+    /// </summary>
     [Fact]
     public void EntityValidationException_WithMessage_CreatesInstance()
     {
@@ -120,6 +151,9 @@ public sealed class ExceptionTests
         exception.ValidationErrors.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that an EntityValidationException can be created with a message and validation errors.
+    /// </summary>
     [Fact]
     public void EntityValidationException_WithMessageAndErrors_CreatesInstance()
     {
@@ -134,6 +168,9 @@ public sealed class ExceptionTests
         exception.ValidationErrors[1].Should().Be("Error 2");
     }
 
+    /// <summary>
+    /// Tests that a ConcurrencyException can be created with a message.
+    /// </summary>
     [Fact]
     public void ConcurrencyException_WithMessage_CreatesInstance()
     {
@@ -144,6 +181,9 @@ public sealed class ExceptionTests
         exception.ErrorCode.Should().Be("CONCURRENCY_CONFLICT");
     }
 
+    /// <summary>
+    /// Tests that a ConcurrencyException can be created with a message and an entity key.
+    /// </summary>
     [Fact]
     public void ConcurrencyException_WithMessageAndEntityKey_CreatesInstance()
     {
