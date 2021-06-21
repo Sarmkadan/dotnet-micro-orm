@@ -3554,3 +3554,49 @@
 +- chore: apply workspace updates
 +- chore: apply workspace updates
 +- chore: apply workspace updates
+
+# 2026-07-10 17:20:37.731894
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/ValidationHelperTests.cs`.
++
++Document the type `ValidationHelperTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/ValidationHelperTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to ExceptionTests class.
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 17:20:37.762861
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/ValidationHelperTests.cs`.
++
++Document the type `ValidationHelperTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/ValidationHelperTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- docs: add XML documentation comments to ExceptionTests class.
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
