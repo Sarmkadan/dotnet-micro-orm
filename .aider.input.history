@@ -3646,3 +3646,141 @@
 +- chore: apply workspace updates
 +- chore: apply workspace updates
 +- chore: apply workspace updates
+
+# 2026-07-10 18:03:41.631569
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++Document the type `RepositoryIntegrationTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 18:03:41.631856
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++Document the type `RepositoryIntegrationTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 18:04:48.789593
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++Document the type `RepositoryIntegrationTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 18:04:48.789708
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++Document the type `RepositoryIntegrationTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 18:05:58.526656
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++Document the type `RepositoryIntegrationTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 18:05:58.527345
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++Document the type `RepositoryIntegrationTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/RepositoryIntegrationTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates

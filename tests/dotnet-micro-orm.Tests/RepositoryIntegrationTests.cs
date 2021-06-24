@@ -13,16 +13,28 @@ using Xunit;
 
 namespace DotnetMicroOrm.Tests;
 
+/// <summary>
+/// Provides integration tests for the <see cref="Repository{TEntity}"/> class.
+/// Tests verify that repository operations work correctly with mocked database context,
+/// ensuring proper interaction patterns and exception handling for various scenarios.
+/// </summary>
 public sealed class RepositoryIntegrationTests
 {
     private readonly Mock<IDatabaseContext> _contextMock = new();
     private readonly Repository<Product> _repository;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RepositoryIntegrationTests"/> class.
+    /// Sets up the mock database context and repository for testing.
+    /// </summary>
     public RepositoryIntegrationTests()
     {
         _repository = new Repository<Product>(_contextMock.Object);
     }
 
+    /// <summary>
+    /// Tests that the repository constructor throws an <see cref="ArgumentNullException"/> when null context is provided.
+    /// </summary>
     [Fact]
     public void Constructor_WithNullContext_ThrowsArgumentNullException()
     {
@@ -31,6 +43,9 @@ public sealed class RepositoryIntegrationTests
         act.Should().Throw<ArgumentNullException>().WithParameterName("context");
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.GetByIdAsync"/> returns a product with matching ID when valid ID is provided.
+    /// </summary>
     [Fact]
     public async Task GetByIdAsync_WithValidId_ReturnsProductWithMatchingId()
     {
@@ -45,6 +60,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().NotBeNull();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.GetAllAsync"/> returns all products when multiple products exist in the database.
+    /// </summary>
     [Fact]
     public async Task GetAllAsync_WithMultipleProducts_ReturnsAllProducts()
     {
@@ -62,6 +80,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().HaveCount(2);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.CountAsync"/> returns the correct count when data exists in the database.
+    /// </summary>
     [Fact]
     public async Task CountAsync_WithData_ReturnsCorrectCount()
     {
@@ -73,6 +94,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().Be(5);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.CountAsync"/> returns zero when no data exists in the database.
+    /// </summary>
     [Fact]
     public async Task CountAsync_WithNoData_ReturnsZero()
     {
@@ -84,6 +108,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().Be(0);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.AddAsync"/> successfully inserts a valid product into the database.
+    /// </summary>
     [Fact]
     public async Task AddAsync_WithValidProduct_InsertsSuccessfully()
     {
@@ -100,6 +127,9 @@ public sealed class RepositoryIntegrationTests
             Times.Once);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.AddAsync"/> throws <see cref="EntityValidationException"/> when invalid product is provided.
+    /// </summary>
     [Fact]
     public async Task AddAsync_WithInvalidProduct_ThrowsEntityValidationException()
     {
@@ -110,6 +140,9 @@ public sealed class RepositoryIntegrationTests
         await act.Should().ThrowAsync<EntityValidationException>();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.UpdateAsync"/> successfully updates a valid product in the database.
+    /// </summary>
     [Fact]
     public async Task UpdateAsync_WithValidProduct_UpdatesSuccessfully()
     {
@@ -129,6 +162,9 @@ public sealed class RepositoryIntegrationTests
             Times.Once);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.UpdateAsync"/> throws <see cref="EntityValidationException"/> when invalid product is provided.
+    /// </summary>
     [Fact]
     public async Task UpdateAsync_WithInvalidProduct_ThrowsEntityValidationException()
     {
@@ -139,6 +175,9 @@ public sealed class RepositoryIntegrationTests
         await act.Should().ThrowAsync<EntityValidationException>();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.UpdateAsync"/> throws <see cref="OrmException"/> when attempting to update a non-existent product.
+    /// </summary>
     [Fact]
     public async Task UpdateAsync_WithNonExistentProduct_ThrowsOrmException()
     {
@@ -152,6 +191,9 @@ public sealed class RepositoryIntegrationTests
         await act.Should().ThrowAsync<OrmException>();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.DeleteAsync(int)"/> successfully deletes a product by ID when the product exists.
+    /// </summary>
     [Fact]
     public async Task DeleteAsync_WithValidId_DeletesSuccessfully()
     {
@@ -168,6 +210,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.DeleteAsync(int)"/> returns false when attempting to delete a non-existent product by ID.
+    /// </summary>
     [Fact]
     public async Task DeleteAsync_WithNonExistentId_ReturnsFalse()
     {
@@ -179,6 +224,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().BeFalse();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.DeleteAsync(TEntity)"/> successfully deletes a product entity when it exists in the database.
+    /// </summary>
     [Fact]
     public async Task DeleteAsync_WithEntity_DeletesSuccessfully()
     {
@@ -192,6 +240,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.AddRangeAsync"/> returns an empty list when an empty list of products is provided.
+    /// </summary>
     [Fact]
     public async Task AddRangeAsync_WithEmptyList_ReturnsEmptyList()
     {
@@ -203,6 +254,9 @@ public sealed class RepositoryIntegrationTests
             Times.Never);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.AddRangeAsync"/> successfully inserts all valid products when a list of products is provided.
+    /// </summary>
     [Fact]
     public async Task AddRangeAsync_WithValidProducts_InsertsAll()
     {
@@ -224,6 +278,9 @@ public sealed class RepositoryIntegrationTests
             Times.Once);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.AddRangeAsync"/> throws <see cref="EntityValidationException"/> when an invalid product is included in the list.
+    /// </summary>
     [Fact]
     public async Task AddRangeAsync_WithInvalidProduct_ThrowsEntityValidationException()
     {
@@ -238,6 +295,9 @@ public sealed class RepositoryIntegrationTests
         await act.Should().ThrowAsync<EntityValidationException>();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.DeleteRangeAsync"/> successfully deletes all provided product entities from the database.
+    /// </summary>
     [Fact]
     public async Task DeleteRangeAsync_WithValidEntities_DeletesAll()
     {
@@ -255,6 +315,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().Be(2);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.ExistsAsync"/> returns true when an entity matching the predicate exists in the database.
+    /// </summary>
     [Fact]
     public async Task ExistsAsync_WithExistingEntity_ReturnsTrue()
     {
@@ -266,6 +329,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.ExistsAsync"/> returns false when no entity matching the predicate exists in the database.
+    /// </summary>
     [Fact]
     public async Task ExistsAsync_WithNonExistentEntity_ReturnsFalse()
     {
@@ -277,6 +343,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().BeFalse();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.GetPagedAsync"/> returns paginated results when valid page number and page size parameters are provided.
+    /// </summary>
     [Fact]
     public async Task GetPagedAsync_WithValidParameters_ReturnsPaginatedResults()
     {
@@ -298,6 +367,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().HaveCount(3);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.FirstOrDefaultAsync"/> returns the entity when it exists in the database matching the predicate.
+    /// </summary>
     [Fact]
     public async Task FirstOrDefaultAsync_WithExistingEntity_ReturnsEntity()
     {
@@ -311,6 +383,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().NotBeNull();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.FirstOrDefaultAsync"/> returns null when no entity matching the predicate exists in the database.
+    /// </summary>
     [Fact]
     public async Task FirstOrDefaultAsync_WithNonExistentEntity_ReturnsNull()
     {
@@ -322,6 +397,9 @@ public sealed class RepositoryIntegrationTests
         result.Should().BeNull();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{TEntity}.QueryStreamAsync"/> yields results when a valid SQL query is provided.
+    /// </summary>
     [Fact]
     public async Task QueryStreamAsync_WithValidQuery_YieldsResults()
     {
