@@ -9,16 +9,26 @@ using Xunit;
 
 namespace DotnetMicroOrm.Tests;
 
+/// <summary>
+/// Contains unit tests for the <see cref="Repository{T}"/> class.
+/// Tests repository operations against mocked database context to verify correct behavior.
+/// </summary>
 public sealed class RepositoryTests
 {
     private readonly Mock<IDatabaseContext> _contextMock = new();
     private readonly Repository<User> _repository;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RepositoryTests"/> class.
+    /// </summary>
     public RepositoryTests()
     {
         _repository = new Repository<User>(_contextMock.Object);
     }
 
+    /// <summary>
+    /// Tests that the repository constructor throws an <see cref="ArgumentNullException"/> when provided with a null database context.
+    /// </summary>
     [Fact]
     public void Constructor_WithNullContext_ThrowsArgumentNullException()
     {
@@ -27,6 +37,10 @@ public sealed class RepositoryTests
         act.Should().Throw<ArgumentNullException>().WithParameterName("context");
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.GetByIdAsync"/> returns the expected entity when querying with an existing ID.
+    /// Verifies that the repository correctly maps database results to the entity model.
+    /// </summary>
     [Fact]
     public async Task GetByIdAsync_WithExistingId_ReturnsEntity()
     {
@@ -48,6 +62,10 @@ public sealed class RepositoryTests
         result.Username.Should().Be("testuser");
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.GetByIdAsync"/> returns null when querying with a non-existing ID.
+    /// Verifies proper handling of missing entities in the repository.
+    /// </summary>
     [Fact]
     public async Task GetByIdAsync_WithNonExistingId_ReturnsNull()
     {
@@ -59,6 +77,10 @@ public sealed class RepositoryTests
         result.Should().BeNull();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.GetAllAsync"/> returns all entities when multiple entities exist in the database.
+    /// Verifies that the repository correctly retrieves and maps all records.
+    /// </summary>
     [Fact]
     public async Task GetAllAsync_WithMultipleEntities_ReturnsAllEntities()
     {
@@ -82,6 +104,10 @@ public sealed class RepositoryTests
         result[1].Id.Should().Be(2);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.GetAllAsync"/> returns an empty list when no entities exist in the database.
+    /// Verifies proper handling of empty result sets.
+    /// </summary>
     [Fact]
     public async Task GetAllAsync_WithNoEntities_ReturnsEmptyList()
     {
@@ -93,6 +119,10 @@ public sealed class RepositoryTests
         result.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.GetAsync"/> returns filtered entities when a predicate matches existing entities.
+    /// Verifies that the repository correctly applies the predicate filter to database queries.
+    /// </summary>
     [Fact]
     public async Task GetAsync_WithMatchingPredicate_ReturnsFilteredEntities()
     {
@@ -115,6 +145,10 @@ public sealed class RepositoryTests
         result[0].Username.Should().Be("admin");
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.GetAsync"/> returns an empty list when no entities match the specified predicate.
+    /// Verifies proper filtering behavior when no records satisfy the criteria.
+    /// </summary>
     [Fact]
     public async Task GetAsync_WithNoMatchingPredicate_ReturnsEmptyList()
     {
@@ -136,6 +170,10 @@ public sealed class RepositoryTests
         result.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.CountAsync"/> returns the correct count when filtering with a predicate.
+    /// Verifies that the repository correctly counts entities matching the specified criteria.
+    /// </summary>
     [Fact]
     public async Task CountAsync_WithPredicate_ReturnsCorrectCount()
     {
@@ -147,6 +185,10 @@ public sealed class RepositoryTests
         result.Should().Be(5);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.CountAsync"/> returns the total count when no predicate is provided.
+    /// Verifies that the repository correctly counts all entities in the database when no filter is applied.
+    /// </summary>
     [Fact]
     public async Task CountAsync_WithNullPredicate_ReturnsTotalCount()
     {
@@ -158,6 +200,10 @@ public sealed class RepositoryTests
         result.Should().Be(10);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.ExistsAsync"/> returns true when an entity matching the predicate exists.
+    /// Verifies that the repository correctly identifies existing entities in the database.
+    /// </summary>
     [Fact]
     public async Task ExistsAsync_WithExistingEntity_ReturnsTrue()
     {
@@ -169,6 +215,10 @@ public sealed class RepositoryTests
         result.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.ExistsAsync"/> returns false when no entity matches the predicate.
+    /// Verifies that the repository correctly identifies non-existing entities in the database.
+    /// </summary>
     [Fact]
     public async Task ExistsAsync_WithNonExistingEntity_ReturnsFalse()
     {
@@ -180,6 +230,10 @@ public sealed class RepositoryTests
         result.Should().BeFalse();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.AddAsync"/> successfully adds a valid entity to the database.
+    /// Verifies that the repository correctly persists new entities and returns the added entity with an assigned ID.
+    /// </summary>
     [Fact]
     public async Task AddAsync_WithValidEntity_AddsSuccessfully()
     {
@@ -195,6 +249,10 @@ public sealed class RepositoryTests
         _contextMock.Verify(c => c.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()), Times.Once);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.AddAsync"/> throws an <see cref="EntityValidationException"/> when adding an invalid entity.
+    /// Verifies that the repository validates entity data before attempting to persist it to the database.
+    /// </summary>
     [Fact]
     public async Task AddAsync_WithInvalidEntity_ThrowsEntityValidationException()
     {
@@ -205,6 +263,10 @@ public sealed class RepositoryTests
         await act.Should().ThrowAsync<EntityValidationException>();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.UpdateAsync"/> successfully updates an existing valid entity in the database.
+    /// Verifies that the repository correctly persists changes to existing entities and returns the updated entity.
+    /// </summary>
     [Fact]
     public async Task UpdateAsync_WithValidEntity_UpdatesSuccessfully()
     {
@@ -219,6 +281,10 @@ public sealed class RepositoryTests
         result.Id.Should().Be(1);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.UpdateAsync"/> throws an <see cref="EntityValidationException"/> when updating an invalid entity.
+    /// Verifies that the repository validates entity data before attempting to update it in the database.
+    /// </summary>
     [Fact]
     public async Task UpdateAsync_WithInvalidEntity_ThrowsEntityValidationException()
     {
@@ -229,6 +295,10 @@ public sealed class RepositoryTests
         await act.Should().ThrowAsync<EntityValidationException>();
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.DeleteAsync"/> successfully deletes an entity with a valid ID from the database.
+    /// Verifies that the repository correctly removes entities and returns true to indicate successful deletion.
+    /// </summary>
     [Fact]
     public async Task DeleteAsync_WithValidId_DeletesSuccessfully()
     {
@@ -241,6 +311,10 @@ public sealed class RepositoryTests
         _contextMock.Verify(c => c.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()), Times.Once);
     }
 
+    /// <summary>
+    /// Tests that <see cref="Repository{T}.DeleteAsync"/> returns false when attempting to delete an entity with a non-existing ID.
+    /// Verifies that the repository correctly handles attempts to delete non-existent entities.
+    /// </summary>
     [Fact]
     public async Task DeleteAsync_WithNonExistingId_ReturnsFalse()
     {
