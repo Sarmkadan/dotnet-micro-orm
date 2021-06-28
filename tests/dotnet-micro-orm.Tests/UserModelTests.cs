@@ -10,8 +10,16 @@ using Xunit;
 
 namespace DotnetMicroOrm.Tests;
 
+/// <summary>
+/// Contains unit tests for the <see cref="User"/> model class.
+/// Tests various validation scenarios, property behaviors, and method functionality
+/// to ensure the User model works as expected in different use cases.
+/// </summary>
 public sealed class UserModelTests
 {
+    /// <summary>
+    /// Tests that validation passes when all user properties are valid.
+    /// </summary>
     [Fact]
     public void Validate_WithValidUser_ReturnsTrue()
     {
@@ -23,6 +31,9 @@ public sealed class UserModelTests
         errors.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that validation fails when username is empty and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithEmptyUsername_ReturnsFalseWithError()
     {
@@ -34,6 +45,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("Username"));
     }
 
+    /// <summary>
+    /// Tests that validation fails when username is null and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithNullUsername_ReturnsFalseWithError()
     {
@@ -45,6 +59,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("Username"));
     }
 
+    /// <summary>
+    /// Tests that validation fails when username is too short (less than 3 characters) and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithShortUsername_ReturnsFalseWithError()
     {
@@ -56,6 +73,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("Username") && e.Contains("3 characters"));
     }
 
+    /// <summary>
+    /// Tests that validation fails when email is invalid and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithInvalidEmail_ReturnsFalseWithError()
     {
@@ -67,6 +87,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("Email"));
     }
 
+    /// <summary>
+    /// Tests that validation fails when email is empty and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithEmptyEmail_ReturnsFalseWithError()
     {
@@ -78,6 +101,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("Email"));
     }
 
+    /// <summary>
+    /// Tests that validation fails when email is null and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithNullEmail_ReturnsFalseWithError()
     {
@@ -89,6 +115,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("Email"));
     }
 
+    /// <summary>
+    /// Tests that validation fails when password hash is too short and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithShortPasswordHash_ReturnsFalseWithError()
     {
@@ -100,6 +129,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("Password hash"));
     }
 
+    /// <summary>
+    /// Tests that validation fails when password hash is empty and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithEmptyPasswordHash_ReturnsFalseWithError()
     {
@@ -111,6 +143,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("Password hash"));
     }
 
+    /// <summary>
+    /// Tests that validation fails when first name exceeds maximum length (50 characters) and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithLongFirstName_ReturnsFalseWithError()
     {
@@ -126,6 +161,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("First name"));
     }
 
+    /// <summary>
+    /// Tests that validation fails when last name exceeds maximum length (50 characters) and returns appropriate error message.
+    /// </summary>
     [Fact]
     public void Validate_WithLongLastName_ReturnsFalseWithError()
     {
@@ -141,6 +179,9 @@ public sealed class UserModelTests
         errors.Should().Contain(e => e.Contains("Last name"));
     }
 
+    /// <summary>
+    /// Tests that validation passes when both first and last names are valid and included in full name.
+    /// </summary>
     [Fact]
     public void Validate_WithValidFirstAndLastNames_IncludesInValidation()
     {
@@ -156,6 +197,9 @@ public sealed class UserModelTests
         errors.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that validation returns all validation errors when multiple properties are invalid.
+    /// </summary>
     [Fact]
     public void Validate_WithMultipleErrors_ReturnsAllErrors()
     {
@@ -167,6 +211,9 @@ public sealed class UserModelTests
         errors.Should().HaveCountGreaterThanOrEqualTo(3);
     }
 
+    /// <summary>
+    /// Tests that GetFullName() returns combined first and last names separated by space when both are present.
+    /// </summary>
     [Fact]
     public void GetFullName_WithFirstAndLastNames_ReturnsCombined()
     {
@@ -181,6 +228,9 @@ public sealed class UserModelTests
         fullName.Should().Be("John Doe");
     }
 
+    /// <summary>
+    /// Tests that GetFullName() returns only the first name when last name is not set.
+    /// </summary>
     [Fact]
     public void GetFullName_WithOnlyFirstName_ReturnsFirstName()
     {
@@ -194,6 +244,9 @@ public sealed class UserModelTests
         fullName.Should().Be("John");
     }
 
+    /// <summary>
+    /// Tests that GetFullName() returns only the last name when first name is not set.
+    /// </summary>
     [Fact]
     public void GetFullName_WithOnlyLastName_ReturnsLastName()
     {
@@ -207,6 +260,9 @@ public sealed class UserModelTests
         fullName.Should().Be("Doe");
     }
 
+    /// <summary>
+    /// Tests that GetFullName() returns empty string when neither first nor last name is set.
+    /// </summary>
     [Fact]
     public void GetFullName_WithNoNames_ReturnsEmpty()
     {
@@ -217,6 +273,9 @@ public sealed class UserModelTests
         fullName.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that MarkAsEmailVerified() sets the IsEmailVerified property to true.
+    /// </summary>
     [Fact]
     public void MarkAsEmailVerified_ChangesEmailVerificationFlag()
     {
@@ -228,6 +287,9 @@ public sealed class UserModelTests
         user.IsEmailVerified.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that UpdateLastLogin() sets the LastLoginDate property to current UTC time.
+    /// </summary>
     [Fact]
     public void UpdateLastLogin_SetsLastLoginDate()
     {
@@ -243,6 +305,9 @@ public sealed class UserModelTests
         user.LastLoginDate.Should().BeOnOrBefore(afterUpdate);
     }
 
+    /// <summary>
+    /// Tests that UpdateLastLogin() updates the LastLoginDate to the latest time when called multiple times.
+    /// </summary>
     [Fact]
     public async Task UpdateLastLogin_MultipleUpdates_UpdatesToLatestTime()
     {
@@ -258,6 +323,9 @@ public sealed class UserModelTests
         secondLogin.Should().BeAfter(firstLogin!.Value);
     }
 
+    /// <summary>
+    /// Tests that Deactivate() sets the IsActive property to false.
+    /// </summary>
     [Fact]
     public void Deactivate_SetsIsActiveFalse()
     {
@@ -269,6 +337,9 @@ public sealed class UserModelTests
         user.IsActive.Should().BeFalse();
     }
 
+    /// <summary>
+    /// Tests that the constructor with parameters initializes all user properties correctly including defaults.
+    /// </summary>
     [Fact]
     public void Constructor_WithParameters_InitializesFieldsCorrectly()
     {
@@ -283,6 +354,9 @@ public sealed class UserModelTests
         user.Version.Should().Be(1);
     }
 
+    /// <summary>
+    /// Tests that the default constructor initializes user with default values for all properties.
+    /// </summary>
     [Fact]
     public void Constructor_Default_InitializesWithDefaults()
     {
@@ -293,6 +367,9 @@ public sealed class UserModelTests
         user.Orders.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that the IsActive property can be modified directly after user creation.
+    /// </summary>
     [Fact]
     public void IsActive_CanBeModifiedDirectly()
     {
@@ -304,6 +381,9 @@ public sealed class UserModelTests
         user.IsActive.Should().BeFalse();
     }
 
+    /// <summary>
+    /// Tests that the Version property defaults to 1 when a user is created.
+    /// </summary>
     [Fact]
     public void Version_DefaultsToOne()
     {
