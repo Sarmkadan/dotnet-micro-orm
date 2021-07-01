@@ -4198,3 +4198,171 @@
 +- chore: apply workspace updates
 +- chore: apply workspace updates
 +- chore: apply workspace updates
+
+# 2026-07-10 21:35:38.772578
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Cli/CommandHandlerExtensions.cs`.
++
++It must contain `public static class CommandHandlerExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `CommandHandler` (same namespace as the original file `src/Cli/CommandHandler.cs`).
++
++The REAL public members of `CommandHandler` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public CommandHandler
++public async Task<int> ExecuteAsync
++public T GetService<T>
++public CommandParser CreateStandardParser
++```
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Every method solves its problem COMPLETELY. If you cannot implement something for real, OMIT that method entirely - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application". A smaller honest class beats a padded fake one.
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit on one line, pattern matching over if-chains, target-typed new.
++- Return IReadOnlyList<T>/IEnumerable<T> from queries, not List<T>. Use CultureInfo.InvariantCulture for machine-facing parsing/formatting of numbers/dates.
++- XML doc comments on every public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 209s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Cli/CommandHandlerExtensions.cs(39,42): error CS7036: There is no argument given that corresponds to the required parameter 'context' of 'CommandHandler.ExecuteAsync(CommandContext)' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Cli/CommandHandlerExtensions.cs(39,42): error CS7036: There is no argument given that corresponds to the required parameter 'context' of 'CommandHandler.ExecuteAsync(CommandContext)' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 21:35:38.773127
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Cli/CommandHandlerExtensions.cs`.
++
++It must contain `public static class CommandHandlerExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `CommandHandler` (same namespace as the original file `src/Cli/CommandHandler.cs`).
++
++The REAL public members of `CommandHandler` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public CommandHandler
++public async Task<int> ExecuteAsync
++public T GetService<T>
++public CommandParser CreateStandardParser
++```
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Every method solves its problem COMPLETELY. If you cannot implement something for real, OMIT that method entirely - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application". A smaller honest class beats a padded fake one.
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit on one line, pattern matching over if-chains, target-typed new.
++- Return IReadOnlyList<T>/IEnumerable<T> from queries, not List<T>. Use CultureInfo.InvariantCulture for machine-facing parsing/formatting of numbers/dates.
++- XML doc comments on every public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 209s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Cli/CommandHandlerExtensions.cs(39,42): error CS7036: There is no argument given that corresponds to the required parameter 'context' of 'CommandHandler.ExecuteAsync(CommandContext)' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Cli/CommandHandlerExtensions.cs(39,42): error CS7036: There is no argument given that corresponds to the required parameter 'context' of 'CommandHandler.ExecuteAsync(CommandContext)' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 21:36:55.957979
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Cli/CommandHandlerExtensions.cs`.
++
++It must contain `public static class CommandHandlerExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `CommandHandler` (same namespace as the original file `src/Cli/CommandHandler.cs`).
++
++The REAL public members of `CommandHandler` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public CommandHandler
++public async Task<int> ExecuteAsync
++public T GetService<T>
++public CommandParser CreateStandardParser
++```
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Every method solves its problem COMPLETELY. If you cannot implement something for real, OMIT that method entirely - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application". A smaller honest class beats a padded fake one.
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit on one line, pattern matching over if-chains, target-typed new.
++- Return IReadOnlyList<T>/IEnumerable<T> from queries, not List<T>. Use CultureInfo.InvariantCulture for machine-facing parsing/formatting of numbers/dates.
++- XML doc comments on every public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 209s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Cli/CommandHandlerExtensions.cs(39,42): error CS7036: There is no argument given that corresponds to the required parameter 'context' of 'CommandHandler.ExecuteAsync(CommandContext)' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Cli/CommandHandlerExtensions.cs(39,42): error CS7036: There is no argument given that corresponds to the required parameter 'context' of 'CommandHandler.ExecuteAsync(CommandContext)' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
+
+# 2026-07-10 21:36:55.958058
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Cli/CommandHandlerExtensions.cs`.
++
++It must contain `public static class CommandHandlerExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `CommandHandler` (same namespace as the original file `src/Cli/CommandHandler.cs`).
++
++The REAL public members of `CommandHandler` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public CommandHandler
++public async Task<int> ExecuteAsync
++public T GetService<T>
++public CommandParser CreateStandardParser
++```
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Every method solves its problem COMPLETELY. If you cannot implement something for real, OMIT that method entirely - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application". A smaller honest class beats a padded fake one.
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit on one line, pattern matching over if-chains, target-typed new.
++- Return IReadOnlyList<T>/IEnumerable<T> from queries, not List<T>. Use CultureInfo.InvariantCulture for machine-facing parsing/formatting of numbers/dates.
++- XML doc comments on every public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 209s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Cli/CommandHandlerExtensions.cs(39,42): error CS7036: There is no argument given that corresponds to the required parameter 'context' of 'CommandHandler.ExecuteAsync(CommandContext)' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Cli/CommandHandlerExtensions.cs(39,42): error CS7036: There is no argument given that corresponds to the required parameter 'context' of 'CommandHandler.ExecuteAsync(CommandContext)' [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- chore: apply workspace updates
++- (no commit message provided)
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
++- chore: apply workspace updates
