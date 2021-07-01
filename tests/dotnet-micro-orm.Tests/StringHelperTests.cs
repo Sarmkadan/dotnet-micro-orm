@@ -10,8 +10,14 @@ using Xunit;
 
 namespace DotnetMicroOrm.Tests;
 
+/// <summary>
+/// Tests for the StringHelper utility methods.
+/// </summary>
 public sealed class StringHelperTests
 {
+    /// <summary>
+    /// Verifies that <see cref="StringHelper.ToKebabCase(string)"/> converts a PascalCase string to kebab-case.
+    /// </summary>
     [Fact]
     public void ToKebabCase_PascalCaseInput_ReturnsKebabCase()
     {
@@ -20,6 +26,9 @@ public sealed class StringHelperTests
         result.Should().Be("user-profile");
     }
 
+    /// <summary>
+    /// Verifies that <see cref="StringHelper.ToSnakeCase(string)"/> converts a PascalCase string to snake_case.
+    /// </summary>
     [Fact]
     public void ToSnakeCase_PascalCaseInput_ReturnsSnakeCase()
     {
@@ -28,6 +37,9 @@ public sealed class StringHelperTests
         result.Should().Be("user_profile");
     }
 
+    /// <summary>
+    /// Verifies that <see cref="StringHelper.ToPascalCase(string)"/> converts a kebab-case string to PascalCase.
+    /// </summary>
     [Fact]
     public void ToPascalCase_KebabCaseInput_ReturnsPascalCase()
     {
@@ -36,6 +48,10 @@ public sealed class StringHelperTests
         result.Should().Be("UserProfile");
     }
 
+    /// <summary>
+    /// Verifies that <see cref="StringHelper.Truncate(string,int)"/> truncates a string that exceeds the maximum length,
+    /// appends the ellipsis suffix, and respects the specified bound.
+    /// </summary>
     [Fact]
     public void Truncate_StringExceedsMaxLength_AppendsSuffixAndRespectsBound()
     {
