@@ -16,12 +16,15 @@ namespace DotnetMicroOrm.Benchmarks
         /// sequentially and returns the elapsed time for each.
         /// </summary>
         /// <param name="benchmarks">The benchmark instance.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="benchmarks"/> is <see langword="null"/>.</exception>
         /// <returns>
         /// A dictionary where the key is the benchmark method name and the value is the
         /// time it took to complete.
         /// </returns>
         public static async Task<Dictionary<string, TimeSpan>> RunAllBenchmarksAsync(this ComparisonBenchmarks benchmarks)
         {
+            ArgumentNullException.ThrowIfNull(benchmarks);
+
             var results = new Dictionary<string, TimeSpan>();
 
             var methods = new (string Name, Func<Task> Action)[]
@@ -59,8 +62,13 @@ namespace DotnetMicroOrm.Benchmarks
         /// Measures and returns the elapsed time for the raw ADO.NET Get‑by‑Id
         /// operation versus the DotnetMicroOrm Get‑by‑Id operation.
         /// </summary>
+        /// <param name="benchmarks">The benchmark instance.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="benchmarks"/> is <see langword="null"/>.</exception>
+        /// <returns>A tuple containing the elapsed times for raw ADO.NET and DotnetMicroOrm operations.</returns>
         public static async Task<(TimeSpan Raw, TimeSpan Orm)> CompareGetByIdAsync(this ComparisonBenchmarks benchmarks)
         {
+            ArgumentNullException.ThrowIfNull(benchmarks);
+
             var swRaw = Stopwatch.StartNew();
             await benchmarks.RawADO_GetById();
             swRaw.Stop();
@@ -76,8 +84,13 @@ namespace DotnetMicroOrm.Benchmarks
         /// Measures and returns the elapsed time for adding a range of entities using
         /// raw ADO.NET versus using DotnetMicroOrm.
         /// </summary>
+        /// <param name="benchmarks">The benchmark instance.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="benchmarks"/> is <see langword="null"/>.</exception>
+        /// <returns>A tuple containing the elapsed times for raw ADO.NET and DotnetMicroOrm operations.</returns>
         public static async Task<(TimeSpan Raw, TimeSpan Orm)> CompareAddRangeAsync(this ComparisonBenchmarks benchmarks)
         {
+            ArgumentNullException.ThrowIfNull(benchmarks);
+
             var swRaw = Stopwatch.StartNew();
             await benchmarks.RawADO_AddRange();
             swRaw.Stop();
