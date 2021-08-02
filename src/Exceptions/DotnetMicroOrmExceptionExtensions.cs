@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DotnetMicroOrm.Exceptions
 {
@@ -11,15 +12,16 @@ namespace DotnetMicroOrm.Exceptions
         /// <summary>
         /// Adds multiple key/value pairs to the exception's error context.
         /// </summary>
-        /// <param name="ex">The exception to enrich.</param>
-        /// <param name="contexts">A collection of context entries to add.</param>
+        /// <param name="ex">The exception to enrich. Cannot be <see langword="null"/>.</param>
+        /// <param name="contexts">A collection of context entries to add. Cannot be <see langword="null"/>.</param>
         /// <returns>The same exception instance, allowing method chaining.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="ex"/> or <paramref name="contexts"/> is <see langword="null"/>.</exception>
         public static DotnetMicroOrmException WithContexts(
             this DotnetMicroOrmException ex,
             IDictionary<string, object> contexts)
         {
-            if (ex == null) throw new ArgumentNullException(nameof(ex));
-            if (contexts == null) throw new ArgumentNullException(nameof(contexts));
+            ArgumentNullException.ThrowIfNull(ex);
+            ArgumentNullException.ThrowIfNull(contexts);
 
             foreach (var kvp in contexts)
             {
@@ -34,49 +36,38 @@ namespace DotnetMicroOrm.Exceptions
         /// Retrieves a value from the exception's error context, cast to the requested type.
         /// </summary>
         /// <typeparam name="T">The type to cast the value to.</typeparam>
-        /// <param name="ex">The exception containing the context.</param>
-        /// <param name="key">The key of the context entry.</param>
-        /// <returns>The value cast to <typeparamref name="T"/>, or <c>default</c> if the key is missing or the cast fails.</returns>
+        /// <param name="ex">The exception containing the context. Cannot be <see langword="null"/>.</param>
+        /// <param name="key">The key of the context entry. Cannot be <see langword="null"/>, empty, or whitespace.</param>
+        /// <returns>The value cast to <typeparamref name="T"/>, or <see langword="default"/> if the key is missing or the cast fails.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="ex"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="key"/> is <see langword="null"/>, empty, or whitespace.</exception>
         public static T? GetContextValue<T>(this DotnetMicroOrmException ex, string key)
         {
-            if (ex == null) throw new ArgumentNullException(nameof(ex));
-            if (string.IsNullOrEmpty(key)) throw new ArgumentException("Key cannot be null or empty.", nameof(key));
+            ArgumentNullException.ThrowIfNull(ex);
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
 
-            if (ex.ErrorContext != null &&
-                ex.ErrorContext.TryGetValue(key, out var value) &&
-                value is T typedValue)
-            {
-                return typedValue;
-            }
-
-            return default;
+            return ex.ErrorContext?.TryGetValue(key, out var value) == true &&
+                   value is T typedValue
+                ? typedValue
+                : default;
         }
 
         /// <summary>
         /// Produces a detailed string representation that includes the base <c>ToString()</c>
         /// output and all error‑context entries.
         /// </summary>
-        /// <param name="ex">The exception to format.</param>
+        /// <param name="ex">The exception to format. Cannot be <see langword="null"/>.</param>
         /// <returns>A string containing the exception message and its context.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="ex"/> is <see langword="null"/>.</exception>
         public static string ToDetailedString(this DotnetMicroOrmException ex)
         {
-            if (ex == null) throw new ArgumentNullException(nameof(ex));
+            ArgumentNullException.ThrowIfNull(ex);
 
             var baseString = ex.ToString();
 
-            if (ex.ErrorContext == null || ex.ErrorContext.Count == 0)
-            {
-                return baseString;
-            }
-
-            var parts = new List<string>(ex.ErrorContext.Count);
-            foreach (var kvp in ex.ErrorContext)
-            {
-                parts.Add($"{kvp.Key}={kvp.Value}");
-            }
-
-            var contextString = string.Join(", ", parts);
-            return $"{baseString} | Context: {{ {contextString} }}";
+            return ex.ErrorContext is { Count: > 0 }
+                ? $"{baseString} | Context: {{ {string.Join(", ", ex.ErrorContext.Select(kvp => $"{kvp.Key}={kvp.Value}"))} }}"
+                : baseString;
         }
     }
 }
