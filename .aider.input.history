@@ -4686,3 +4686,121 @@
 +- chore: apply workspace updates
 +- chore: apply workspace updates
 +- chore: apply workspace updates
+
+# 2026-07-11 10:35:42.047237
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Domain/Models/InventoryExtensions.cs`.
++
++It must contain `public static class InventoryExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `Inventory` (same namespace as the original file `src/Domain/Models/Inventory.cs`).
++
++The REAL public members of `Inventory` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public int Id
++public int ProductId
++public string WarehouseLocation
++public int CurrentStock
++public int ReservedStock
++public int MinimumThreshold
++public DateTime? LastRestockDate
++public DateTime? LastCountDate
++public DateTime CreatedDate
++public DateTime? ModifiedDate
++public virtual Product? Product
++public Inventory()
++public Inventory
++public override bool Validate
++public void Restock
++public void Withdraw
++public void Reserve
++public void ReleaseReservation
++public void PerformStockCount
++public bool IsLowStock
++```
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Every method solves its problem COMPLETELY. If you cannot implement something for real, OMIT that method entirely - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application". A smaller honest class beats a padded fake one.
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit on one line, pattern matching over if-chains, target-typed new.
++- Return IReadOnlyList<T>/IEnumerable<T> from queries, not List<T>. Use CultureInfo.InvariantCulture for machine-facing parsing/formatting of numbers/dates.
++- XML doc comments on every public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 277s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Domain/Models/InventoryExtensions.cs(15,67): error CS0246: The type or namespace name 'Inventory' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Domain/Models/InventoryExtensions.cs(15,33): error CS0246: The type or namespace name 'Product' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Domain/Models/InventoryExtensions.cs(32,75): error CS0246: The type or namespace name 'Inventory' could not be fou
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- refactor(events): tighten guard clauses and docs in EventBusExtensions
++- refactor(events): tighten guard clauses and docs in OrderCreatedEventHandlerJsonExtensions
++- refactor(exceptions): tighten guard clauses and docs in DotnetMicroOrmExceptionExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in ComparisonBenchmarksJsonExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in ExpressionAndCachingBenchmarksExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in ComparisonBenchmarksExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in RepositoryBenchmarksExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in BatchOperationsBenchmarksExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in AuditServiceBenchmarksExtensions
++- feat(pipeline): add PipelineBuilder extension helpers
+
+# 2026-07-11 10:35:42.047830
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Domain/Models/InventoryExtensions.cs`.
++
++It must contain `public static class InventoryExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `Inventory` (same namespace as the original file `src/Domain/Models/Inventory.cs`).
++
++The REAL public members of `Inventory` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public int Id
++public int ProductId
++public string WarehouseLocation
++public int CurrentStock
++public int ReservedStock
++public int MinimumThreshold
++public DateTime? LastRestockDate
++public DateTime? LastCountDate
++public DateTime CreatedDate
++public DateTime? ModifiedDate
++public virtual Product? Product
++public Inventory()
++public Inventory
++public override bool Validate
++public void Restock
++public void Withdraw
++public void Reserve
++public void ReleaseReservation
++public void PerformStockCount
++public bool IsLowStock
++```
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Every method solves its problem COMPLETELY. If you cannot implement something for real, OMIT that method entirely - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application". A smaller honest class beats a padded fake one.
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit on one line, pattern matching over if-chains, target-typed new.
++- Return IReadOnlyList<T>/IEnumerable<T> from queries, not List<T>. Use CultureInfo.InvariantCulture for machine-facing parsing/formatting of numbers/dates.
++- XML doc comments on every public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 277s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Domain/Models/InventoryExtensions.cs(15,67): error CS0246: The type or namespace name 'Inventory' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Domain/Models/InventoryExtensions.cs(15,33): error CS0246: The type or namespace name 'Product' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Domain/Models/InventoryExtensions.cs(32,75): error CS0246: The type or namespace name 'Inventory' could not be fou
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- refactor(events): tighten guard clauses and docs in EventBusExtensions
++- refactor(events): tighten guard clauses and docs in OrderCreatedEventHandlerJsonExtensions
++- refactor(exceptions): tighten guard clauses and docs in DotnetMicroOrmExceptionExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in ComparisonBenchmarksJsonExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in ExpressionAndCachingBenchmarksExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in ComparisonBenchmarksExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in RepositoryBenchmarksExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in BatchOperationsBenchmarksExtensions
++- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in AuditServiceBenchmarksExtensions
++- feat(pipeline): add PipelineBuilder extension helpers
