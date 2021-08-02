@@ -5,7 +5,7 @@ using System.Text.Json.Serialization.Metadata;
 namespace DotnetMicroOrm.Benchmarks;
 
 /// <summary>
-/// Provides System.Text.Json serialization helpers for ComparisonBenchmarks
+/// Provides System.Text.Json serialization helpers for <see cref="ComparisonBenchmarks"/>.
 /// </summary>
 public static class ComparisonBenchmarksJsonExtensions
 {
@@ -19,17 +19,15 @@ public static class ComparisonBenchmarksJsonExtensions
     };
 
     /// <summary>
-    /// Serializes ComparisonBenchmarks to JSON string
+    /// Serializes <see cref="ComparisonBenchmarks"/> to JSON string.
     /// </summary>
-    /// <param name="value">The ComparisonBenchmarks instance to serialize</param>
-    /// <param name="indented">Whether to format the JSON with indentation</param>
-    /// <returns>JSON string representation</returns>
+    /// <param name="value">The <see cref="ComparisonBenchmarks"/> instance to serialize.</param>
+    /// <param name="indented">Whether to format the JSON with indentation.</param>
+    /// <returns>JSON string representation.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
     public static string ToJson(this ComparisonBenchmarks value, bool indented = false)
     {
-        if (value is null)
-        {
-            return "{}";
-        }
+        ArgumentNullException.ThrowIfNull(value);
 
         var options = indented
             ? new JsonSerializerOptions(_jsonOptions)
@@ -42,33 +40,23 @@ public static class ComparisonBenchmarksJsonExtensions
     }
 
     /// <summary>
-    /// Deserializes ComparisonBenchmarks from JSON string
+    /// Deserializes <see cref="ComparisonBenchmarks"/> from JSON string.
     /// </summary>
-    /// <param name="json">JSON string to deserialize</param>
-    /// <returns>Deserialized ComparisonBenchmarks instance or null if JSON is invalid</returns>
-    public static ComparisonBenchmarks? FromJson(string json)
-    {
-        if (string.IsNullOrWhiteSpace(json))
-        {
-            return null;
-        }
-
-        try
-        {
-            return JsonSerializer.Deserialize<ComparisonBenchmarks>(json, _jsonOptions);
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
-    }
+    /// <param name="json">JSON string to deserialize.</param>
+    /// <returns>Deserialized <see cref="ComparisonBenchmarks"/> instance or <see langword="null"/> if JSON is invalid.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/>.</exception>
+    public static ComparisonBenchmarks? FromJson(string json) =>
+        string.IsNullOrWhiteSpace(json)
+            ? throw new ArgumentNullException(nameof(json))
+            : JsonSerializer.Deserialize<ComparisonBenchmarks>(json, _jsonOptions);
 
     /// <summary>
-    /// Attempts to deserialize ComparisonBenchmarks from JSON string
+    /// Attempts to deserialize <see cref="ComparisonBenchmarks"/> from JSON string.
     /// </summary>
-    /// <param name="json">JSON string to deserialize</param>
-    /// <param name="value">Output parameter for deserialized value</param>
-    /// <returns>True if deserialization succeeded, false otherwise</returns>
+    /// <param name="json">JSON string to deserialize.</param>
+    /// <param name="value">Output parameter for deserialized value.</param>
+    /// <returns>True if deserialization succeeded, false otherwise.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/>.</exception>
     public static bool TryFromJson(string json, out ComparisonBenchmarks? value)
     {
         value = null;
