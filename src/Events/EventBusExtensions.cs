@@ -5,14 +5,11 @@
 // CTO & Software Architect
 // =============================================================================
 
-using System.Collections.Concurrent;
-
 namespace DotnetMicroOrm.Events;
 
 /// <summary>
 /// Extension methods for <see cref="EventBus"/> providing additional convenience functionality
-/// for event bus operations including bulk operations, conditional subscriptions,
-/// and diagnostic utilities.
+/// for event bus operations including bulk operations and diagnostic utilities.
 /// </summary>
 public static class EventBusExtensions
 {
@@ -20,20 +17,18 @@ public static class EventBusExtensions
     /// Subscribes multiple handlers at once for the same event type.
     /// </summary>
     /// <typeparam name="TEvent">The event type to subscribe to</typeparam>
-    /// <typeparam name="THandler">The handler type implementing IEventHandler&lt;TEvent&gt;</typeparam>
+    /// <typeparam name="THandler">The handler type implementing <see cref="IEventHandler{TEvent}"/></typeparam>
     /// <param name="bus">The event bus instance</param>
     /// <param name="handlers">Collection of handlers to subscribe</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="bus"/> or <paramref name="handlers"/> is null</exception>
     public static void SubscribeRange<TEvent, THandler>(
         this EventBus bus,
         IEnumerable<THandler> handlers)
         where TEvent : IEvent
         where THandler : IEventHandler<TEvent>
     {
-        if (bus is null)
-            throw new ArgumentNullException(nameof(bus));
-
-        if (handlers is null)
-            throw new ArgumentNullException(nameof(handlers));
+        ArgumentNullException.ThrowIfNull(bus);
+        ArgumentNullException.ThrowIfNull(handlers);
 
         foreach (var handler in handlers)
         {
@@ -43,43 +38,21 @@ public static class EventBusExtensions
 
     /// <summary>
     /// Publishes an event synchronously and waits for all handlers to complete.
-    /// This is a convenience method that calls PublishAsync and awaits the result.
+    /// This is a convenience method that calls <see cref="EventBus.PublishAsync{TEvent}"/> and awaits the result.
     /// </summary>
     /// <typeparam name="TEvent">The event type</typeparam>
     /// <param name="bus">The event bus instance</param>
     /// <param name="event">The event to publish</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="bus"/> or <paramref name="event"/> is null</exception>
     public static async Task PublishSyncAsync<TEvent>(
         this EventBus bus,
         TEvent @event)
         where TEvent : IEvent
     {
-        if (bus is null)
-            throw new ArgumentNullException(nameof(bus));
+        ArgumentNullException.ThrowIfNull(bus);
+        ArgumentNullException.ThrowIfNull(@event);
 
         await bus.PublishAsync(@event).ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// Gets all subscribers for a specific event type as a strongly-typed collection.
-    /// </summary>
-    /// <typeparam name="TEvent">The event type</typeparam>
-    /// <param name="bus">The event bus instance</param>
-    /// <returns>Collection of subscribers for the event type</returns>
-    public static IEnumerable<object> GetSubscribers<TEvent>(this EventBus bus)
-        where TEvent : IEvent
-    {
-        if (bus is null)
-            throw new ArgumentNullException(nameof(bus));
-
-        var eventType = typeof(TEvent);
-        var subscribersField = bus.GetType()
-            .GetField("_subscribers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-        var subscribersDict = subscribersField?.GetValue(bus) as ConcurrentDictionary<Type, List<object>>;
-
-        return subscribersDict?.TryGetValue(eventType, out var handlers) == true
-            ? handlers.AsReadOnly()
-            : Enumerable.Empty<object>();
     }
 
     /// <summary>
@@ -87,17 +60,16 @@ public static class EventBusExtensions
     /// </summary>
     /// <param name="bus">The event bus instance</param>
     /// <returns>Total subscriber count</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="bus"/> is null</exception>
     public static int GetTotalSubscriberCount(this EventBus bus)
     {
-        if (bus is null)
-            throw new ArgumentNullException(nameof(bus));
+        ArgumentNullException.ThrowIfNull(bus);
 
-        var subscribersField = bus.GetType()
-            .GetField("_subscribers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-        var subscribersDict = subscribersField?.GetValue(bus) as ConcurrentDictionary<Type, List<object>>;
-
-        return subscribersDict?.Values.Sum(list => list.Count) ?? 0;
+        return bus.GetType()
+            .GetProperty("Subscribers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.GetValue(bus) is System.Collections.Concurrent.ConcurrentDictionary<Type, List<object>> subscribersDict
+            ? subscribersDict.Values.Sum(list => list.Count)
+            : 0;
     }
 
     /// <summary>
@@ -106,12 +78,13 @@ public static class EventBusExtensions
     /// <typeparam name="TEvent">The event type to check</typeparam>
     /// <param name="bus">The event bus instance</param>
     /// <returns>True if there are subscribers, false otherwise</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="bus"/> is null</exception>
     public static bool HasSubscribers<TEvent>(this EventBus bus)
         where TEvent : IEvent
     {
-        if (bus is null)
-            throw new ArgumentNullException(nameof(bus));
+        ArgumentNullException.ThrowIfNull(bus);
 
         return bus.GetSubscriberCount<TEvent>() > 0;
     }
+
 }
