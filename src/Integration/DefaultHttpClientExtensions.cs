@@ -8,27 +8,34 @@
 // and functionality while maintaining the same namespace.
 // =============================================================================
 
+using System.Net.Http;
+
 namespace DotnetMicroOrm.Integration;
 
 /// <summary>
-/// Extension methods for DefaultHttpClient providing additional HTTP operation utilities.
+/// Extension methods for <see cref="DefaultHttpClient"/> providing additional HTTP operation utilities.
 /// </summary>
 public static class DefaultHttpClientExtensions
 {
     /// <summary>
     /// Sends a GET request with the specified query parameters.
     /// </summary>
-    /// <param name="client">The HTTP client instance</param>
-    /// <param name="url">The request URL</param>
-    /// <param name="queryParameters">Dictionary of query parameters to append to the URL</param>
-    /// <param name="headers">Optional request headers</param>
-    /// <returns>HTTP response data</returns>
+    /// <param name="client">The HTTP client instance. Cannot be null.</param>
+    /// <param name="url">The request URL. Cannot be null or empty.</param>
+    /// <param name="queryParameters">Dictionary of query parameters to append to the URL. Can be null or empty.</param>
+    /// <param name="headers">Optional request headers. Can be null.</param>
+    /// <returns>HTTP response data.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="client"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="url"/> is null or empty.</exception>
     public static async Task<HttpResponseData> GetAsync(
         this DefaultHttpClient client,
         string url,
         Dictionary<string, string>? queryParameters,
         Dictionary<string, string>? headers = null)
     {
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentException.ThrowIfNullOrEmpty(url);
+
         if (queryParameters is null || queryParameters.Count == 0)
         {
             return await client.GetAsync(url, headers);
@@ -44,20 +51,26 @@ public static class DefaultHttpClientExtensions
     /// <summary>
     /// Sends a POST request with form data (application/x-www-form-urlencoded).
     /// </summary>
-    /// <param name="client">The HTTP client instance</param>
-    /// <param name="url">The request URL</param>
-    /// <param name="formData">Dictionary of form data fields</param>
-    /// <param name="headers">Optional request headers</param>
-    /// <returns>HTTP response data</returns>
+    /// <param name="client">The HTTP client instance. Cannot be null.</param>
+    /// <param name="url">The request URL. Cannot be null or empty.</param>
+    /// <param name="formData">Dictionary of form data fields. Cannot be null.</param>
+    /// <param name="headers">Optional request headers. Can be null.</param>
+    /// <returns>HTTP response data.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="client"/> or <paramref name="formData"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="url"/> is null or empty.</exception>
     public static async Task<HttpResponseData> PostFormAsync(
         this DefaultHttpClient client,
         string url,
         Dictionary<string, string> formData,
         Dictionary<string, string>? headers = null)
     {
-        if (formData is null || formData.Count == 0)
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentException.ThrowIfNullOrEmpty(url);
+        ArgumentNullException.ThrowIfNull(formData);
+
+        if (formData.Count == 0)
         {
-            throw new ArgumentException("Form data cannot be empty", nameof(formData));
+            return await client.PostAsync(url, string.Empty, "application/x-www-form-urlencoded", headers);
         }
 
         var formUrlEncoded = string.Join("&",
@@ -70,12 +83,15 @@ public static class DefaultHttpClientExtensions
     /// Sends a request with JSON content and automatically deserializes the response body.
     /// </summary>
     /// <typeparam name="TResponse">Type to deserialize the response to</typeparam>
-    /// <param name="client">The HTTP client instance</param>
-    /// <param name="url">The request URL</param>
-    /// <param name="method">HTTP method to use</param>
-    /// <param name="requestBody">Optional request body</param>
-    /// <param name="headers">Optional request headers</param>
-    /// <returns>Deserialized response object</returns>
+    /// <param name="client">The HTTP client instance. Cannot be null.</param>
+    /// <param name="url">The request URL. Cannot be null or empty.</param>
+    /// <param name="method">HTTP method to use.</param>
+    /// <param name="requestBody">Optional request body.</param>
+    /// <param name="headers">Optional request headers. Can be null.</param>
+    /// <returns>Deserialized response object.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="client"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="url"/> is null or empty.</exception>
+    /// <exception cref="NotSupportedException">Thrown if the HTTP method is not supported.</exception>
     public static async Task<TResponse?> GetFromJsonAsync<TResponse>(
         this DefaultHttpClient client,
         string url,
@@ -84,20 +100,24 @@ public static class DefaultHttpClientExtensions
         Dictionary<string, string>? headers = null)
         where TResponse : class
     {
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentException.ThrowIfNullOrEmpty(url);
+        ArgumentNullException.ThrowIfNull(method);
+
         HttpResponseData response;
 
-        switch (method.Method.ToUpperInvariant())
+        switch (method.Method)
         {
-            case "GET":
+            case "GET" when method == HttpMethod.Get:
                 response = await client.GetAsync(url, headers);
                 break;
-            case "POST":
+            case "POST" when method == HttpMethod.Post:
                 response = await client.PostAsync(url, requestBody ?? "{}", headers: headers);
                 break;
-            case "PUT":
+            case "PUT" when method == HttpMethod.Put:
                 response = await client.PutAsync(url, requestBody ?? "{}", headers: headers);
                 break;
-            case "DELETE":
+            case "DELETE" when method == HttpMethod.Delete:
                 response = await client.DeleteAsync(url, headers);
                 break;
             default:
@@ -115,11 +135,15 @@ public static class DefaultHttpClientExtensions
     /// <summary>
     /// Sends a request with automatic retry logic using the existing GetWithRetryAsync method.
     /// </summary>
-    /// <param name="client">The HTTP client instance</param>
-    /// <param name="url">The request URL</param>
-    /// <param name="maxRetries">Maximum number of retry attempts</param>
-    /// <param name="retryDelay">Optional custom retry delay</param>
-    /// <returns>HTTP response data</returns>
+    /// <param name="client">The HTTP client instance. Cannot be null.</param>
+    /// <param name="url">The request URL. Cannot be null or empty.</param>
+    /// <param name="method">HTTP method to use.</param>
+    /// <param name="requestBody">Optional request body.</param>
+    /// <param name="maxRetries">Maximum number of retry attempts.</param>
+    /// <param name="retryDelay">Optional custom retry delay.</param>
+    /// <returns>HTTP response data.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="client"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="url"/> is null or empty.</exception>
     public static async Task<HttpResponseData> SendWithRetryAsync(
         this DefaultHttpClient client,
         string url,
@@ -128,8 +152,12 @@ public static class DefaultHttpClientExtensions
         int maxRetries = 3,
         TimeSpan? retryDelay = null)
     {
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentException.ThrowIfNullOrEmpty(url);
+        ArgumentNullException.ThrowIfNull(method);
+
         // Use the existing GetWithRetryAsync for GET requests
-        if (method.Method.Equals("GET", StringComparison.OrdinalIgnoreCase))
+        if (method == HttpMethod.Get)
         {
             return await client.GetWithRetryAsync(url, maxRetries, retryDelay);
         }
@@ -137,13 +165,13 @@ public static class DefaultHttpClientExtensions
         // For other methods, implement retry logic
         int attempt = 0;
 
-        while (attempt <= maxRetries)
+        while (attempt < maxRetries)
         {
             HttpResponseData response;
 
             try
             {
-                switch (method.Method.ToUpperInvariant())
+                switch (method.Method)
                 {
                     case "POST":
                         response = await client.PostAsync(url, requestBody ?? "{}");
@@ -162,7 +190,7 @@ public static class DefaultHttpClientExtensions
             {
                 attempt++;
 
-                if (attempt <= maxRetries)
+                if (attempt < maxRetries)
                 {
                     var delay = retryDelay ?? TimeSpan.FromSeconds(1);
                     await Task.Delay(delay);
@@ -179,11 +207,11 @@ public static class DefaultHttpClientExtensions
             }
 
             // Retry on server errors (5xx) but not client errors (4xx)
-            if (response.StatusCode >= 500 && response.StatusCode < 600)
+            if (response.IsServerError)
             {
                 attempt++;
 
-                if (attempt <= maxRetries)
+                if (attempt < maxRetries)
                 {
                     var delay = retryDelay ?? TimeSpan.FromSeconds(1);
                     await Task.Delay(delay);
@@ -194,20 +222,23 @@ public static class DefaultHttpClientExtensions
             return response;
         }
 
-        // Should never reach here, but provide a fallback
-        return await client.SendAsync(method, url, requestBody);
+        // This line is unreachable but kept for completeness
+        throw new InvalidOperationException("Retry loop completed without returning a response");
     }
 
     /// <summary>
     /// Sends an HTTP request using the specified method and returns the response.
     /// </summary>
-    /// <param name="client">The HTTP client instance</param>
-    /// <param name="method">HTTP method to use</param>
-    /// <param name="url">The request URL</param>
-    /// <param name="body">Optional request body</param>
-    /// <param name="contentType">Content type for the request</param>
-    /// <param name="headers">Optional request headers</param>
-    /// <returns>HTTP response data</returns>
+    /// <param name="client">The HTTP client instance. Cannot be null.</param>
+    /// <param name="method">HTTP method to use. Cannot be null.</param>
+    /// <param name="url">The request URL. Cannot be null or empty.</param>
+    /// <param name="body">Optional request body.</param>
+    /// <param name="contentType">Content type for the request.</param>
+    /// <param name="headers">Optional request headers. Can be null.</param>
+    /// <returns>HTTP response data.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="client"/> or <paramref name="method"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="url"/> is null or empty.</exception>
+    /// <exception cref="NotSupportedException">Thrown if the HTTP method is not supported.</exception>
     public static async Task<HttpResponseData> SendAsync(
         this DefaultHttpClient client,
         HttpMethod method,
@@ -216,7 +247,11 @@ public static class DefaultHttpClientExtensions
         string contentType = "application/json",
         Dictionary<string, string>? headers = null)
     {
-        return method.Method.ToUpperInvariant() switch
+        ArgumentNullException.ThrowIfNull(client);
+        ArgumentNullException.ThrowIfNull(method);
+        ArgumentException.ThrowIfNullOrEmpty(url);
+
+        return method.Method switch
         {
             "GET" => await client.GetAsync(url, headers),
             "POST" => await client.PostAsync(url, body ?? "{}", contentType, headers),
