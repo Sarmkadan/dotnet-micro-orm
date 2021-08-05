@@ -5,6 +5,7 @@
 // CTO & Software Architect
 // =====================================================================
 
+using System;
 using System.Linq;
 
 namespace DotnetMicroOrm.Domain.Models;
@@ -17,15 +18,22 @@ public static class OrderExtensions
     /// <summary>
     /// Calculates the total weight of all items in the order based on product weights
     /// </summary>
+    /// <remarks>
+    /// This is a simplified calculation that assumes a default weight per item.
+    /// In a production application, this would use the actual Product.Weight property.
+    /// </remarks>
     /// <param name="order">The order to calculate weight for</param>
-    /// <returns>Total weight in kilograms, or 0 if no items or products</returns>
+    /// <returns>Total weight in kilograms, or 0 if order or items are null</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="order"/> is null</exception>
     public static decimal GetTotalWeight(this Order order)
     {
-        if (order?.Items == null || order.Items.Count == 0)
+        ArgumentNullException.ThrowIfNull(order);
+
+        if (order.Items is null || order.Items.Count == 0)
             return 0;
 
-        // Assuming each product has a weight of 0.5kg for calculation purposes
-        // In a real application, this would come from the Product entity
+        // Default weight per item in kilograms
+        // Note: In a real application, this should use Product.Weight property
         const decimal defaultProductWeightKg = 0.5m;
 
         return order.Items.Sum(item => item.Quantity * defaultProductWeightKg);
@@ -37,15 +45,15 @@ public static class OrderExtensions
     /// <param name="order">The order to check</param>
     /// <param name="urgentDaysThreshold">Number of days to consider urgent (default: 2)</param>
     /// <returns>True if order is urgent, false otherwise</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="order"/> is null</exception>
     public static bool IsUrgent(this Order order, int urgentDaysThreshold = 2)
     {
-        if (order == null)
-            return false;
+        ArgumentNullException.ThrowIfNull(order);
 
         var daysSinceOrder = DateTime.UtcNow - order.OrderDate;
 
         return daysSinceOrder.TotalDays <= urgentDaysThreshold &&
-               (order.Status == "Pending" || order.Status == "Confirmed");
+               (order.Status is "Pending" or "Confirmed");
     }
 
     /// <summary>
@@ -53,12 +61,12 @@ public static class OrderExtensions
     /// </summary>
     /// <param name="order">The order to format</param>
     /// <returns>Formatted string with order details</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="order"/> is null</exception>
     public static string ToDisplayString(this Order order)
     {
-        if (order == null)
-            return "Order: null";
+        ArgumentNullException.ThrowIfNull(order);
 
-        var shippingAddress = order.ShippingAddress != null && order.ShippingAddress.Length > 30
+        var shippingAddress = order.ShippingAddress?.Length > 30
             ? order.ShippingAddress.Substring(0, 30)
             : order.ShippingAddress ?? "N/A";
 
@@ -84,25 +92,19 @@ public static class OrderExtensions
     /// <param name="order">The order to calculate delivery date for</param>
     /// <param name="defaultDeliveryDays">Default days for delivery (default: 5)</param>
     /// <returns>Estimated delivery date, or null if not estimable</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="order"/> is null</exception>
     public static DateTime? GetEstimatedDeliveryDate(this Order order, int defaultDeliveryDays = 5)
     {
-        if (order == null)
-            return null;
+        ArgumentNullException.ThrowIfNull(order);
 
-        switch (order.Status)
+        return order.Status switch
         {
-            case "Shipped" when order.ShippingDate.HasValue:
-                return order.ShippingDate.Value.AddDays(defaultDeliveryDays);
-            case "Confirmed" when !order.ShippingDate.HasValue:
-                return order.OrderDate.AddDays(defaultDeliveryDays);
-            case "Pending":
-                return order.OrderDate.AddDays(defaultDeliveryDays);
-            case "Delivered":
-                return order.DeliveryDate;
-            case "Cancelled":
-                return null;
-            default:
-                return null;
-        }
+            "Shipped" when order.ShippingDate.HasValue => order.ShippingDate.Value.AddDays(defaultDeliveryDays),
+            "Confirmed" when !order.ShippingDate.HasValue => order.OrderDate.AddDays(defaultDeliveryDays),
+            "Pending" => order.OrderDate.AddDays(defaultDeliveryDays),
+            "Delivered" => order.DeliveryDate,
+            "Cancelled" => null,
+            _ => null
+        };
     }
 }
