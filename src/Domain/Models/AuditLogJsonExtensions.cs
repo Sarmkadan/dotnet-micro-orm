@@ -7,7 +7,7 @@ using System.Text.Json.Serialization.Metadata;
 namespace DotnetMicroOrm.Domain.Models;
 
 /// <summary>
-/// Provides System.Text.Json serialization helpers for AuditLog type
+/// Provides System.Text.Json serialization helpers for <see cref="AuditLog"/> type
 /// </summary>
 public static class AuditLogJsonExtensions
 {
@@ -20,47 +20,41 @@ public static class AuditLogJsonExtensions
     };
 
     /// <summary>
-    /// Serializes an AuditLog instance to a JSON string
+    /// Serializes an <see cref="AuditLog"/> instance to a JSON string
     /// </summary>
-    /// <param name="value">The AuditLog instance to serialize</param>
+    /// <param name="value">The <see cref="AuditLog"/> instance to serialize</param>
     /// <param name="indented">Whether to format the JSON with indentation</param>
-    /// <returns>A JSON string representation of the AuditLog</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/></exception>
+    /// <returns>A JSON string representation of the <see cref="AuditLog"/></returns>
     public static string ToJson(this AuditLog value, bool indented = false)
     {
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
+        ArgumentNullException.ThrowIfNull(value);
 
-        var options = indented ? new JsonSerializerOptions(_options)
-        {
-            WriteIndented = true
-        } : _options;
+        var options = indented
+            ? new JsonSerializerOptions(_options) { WriteIndented = true }
+            : _options;
 
         return JsonSerializer.Serialize(value, options);
     }
 
     /// <summary>
-    /// Deserializes an AuditLog instance from a JSON string
+    /// Deserializes an <see cref="AuditLog"/> instance from a JSON string
     /// </summary>
     /// <param name="json">The JSON string to deserialize</param>
-    /// <returns>The deserialized AuditLog instance, or null if JSON is null/empty</returns>
+    /// <returns>The deserialized <see cref="AuditLog"/> instance, or <see langword="null"/> if JSON is null/empty</returns>
     public static AuditLog? FromJson(string json)
     {
-        if (string.IsNullOrWhiteSpace(json))
-        {
-            return null;
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(json);
 
         return JsonSerializer.Deserialize<AuditLog>(json, _options);
     }
 
     /// <summary>
-    /// Attempts to deserialize an AuditLog instance from a JSON string
+    /// Attempts to deserialize an <see cref="AuditLog"/> instance from a JSON string
     /// </summary>
     /// <param name="json">The JSON string to deserialize</param>
-    /// <param name="value">Receives the deserialized AuditLog if successful</param>
-    /// <returns>True if deserialization succeeded; otherwise, false</returns>
+    /// <param name="value">Receives the deserialized <see cref="AuditLog"/> if successful</param>
+    /// <returns><see langword="true"/> if deserialization succeeded; otherwise, <see langword="false"/></returns>
     public static bool TryFromJson(string json, out AuditLog? value)
     {
         value = default;
