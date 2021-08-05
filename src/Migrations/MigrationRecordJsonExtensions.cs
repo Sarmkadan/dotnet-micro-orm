@@ -28,37 +28,24 @@ public static class MigrationRecordJsonExtensions
     /// <param name="value">The migration record to serialize.</param>
     /// <param name="indented">Whether to format the JSON with indentation for readability.</param>
     /// <returns>A JSON string representation of the migration record.</returns>
-    public static string ToJson(this MigrationRecord value, bool indented = false)
-    {
-        if (value is null)
-        {
-            throw new ArgumentNullException(nameof(value));
-        }
-
-        var options = indented
-            ? new JsonSerializerOptions(_jsonOptions)
-            {
-                WriteIndented = true
-            }
-            : _jsonOptions;
-
-        return JsonSerializer.Serialize(value, options);
-    }
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
+    public static string ToJson(this MigrationRecord value, bool indented = false) =>
+        value is null
+            ? throw new ArgumentNullException(nameof(value))
+            : JsonSerializer.Serialize(value, indented
+                ? new JsonSerializerOptions(_jsonOptions) { WriteIndented = true }
+                : _jsonOptions);
 
     /// <summary>
     /// Deserializes a JSON string into a <see cref="MigrationRecord"/> instance.
     /// </summary>
     /// <param name="json">The JSON string to deserialize.</param>
-    /// <returns>The deserialized migration record, or <c>null</c> if the JSON is null or empty.</returns>
-    public static MigrationRecord? FromJson(string json)
-    {
-        if (string.IsNullOrWhiteSpace(json))
-        {
-            return null;
-        }
-
-        return JsonSerializer.Deserialize<MigrationRecord>(json, _jsonOptions);
-    }
+    /// <returns>The deserialized migration record, or <c>null</c> if the JSON is <c>null</c> or whitespace.</returns>
+    /// <exception cref="JsonException">Thrown when the JSON is not valid for deserialization.</exception>
+    public static MigrationRecord? FromJson(string json) =>
+        string.IsNullOrWhiteSpace(json)
+            ? null
+            : JsonSerializer.Deserialize<MigrationRecord>(json, _jsonOptions);
 
     /// <summary>
     /// Attempts to deserialize a JSON string into a <see cref="MigrationRecord"/> instance.
