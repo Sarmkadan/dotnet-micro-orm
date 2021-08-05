@@ -22,13 +22,11 @@ public static class JobSchedulerExtensions
     /// <param name="interval">The interval at which the job should execute</param>
     /// <param name="enabled">Whether the job is enabled</param>
     /// <param name="runOnStartup">Whether to run the job immediately on startup</param>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="job"/> is null</exception>
     public static void Register(this JobScheduler scheduler, IBackgroundJob job, TimeSpan interval, bool enabled = true, bool runOnStartup = false)
     {
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
-
-        if (job is null)
-            throw new ArgumentNullException(nameof(job));
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentNullException.ThrowIfNull(job);
 
         var config = new JobScheduleConfig
         {
@@ -50,16 +48,13 @@ public static class JobSchedulerExtensions
     /// <param name="job">The background job to register</param>
     /// <param name="cronExpression">Cron expression (e.g., "0 * * * *" for every hour)</param>
     /// <param name="enabled">Whether the job is enabled</param>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> or <paramref name="job"/> is null</exception>
+    /// <exception cref="ArgumentException"><paramref name="cronExpression"/> is null or whitespace</exception>
     public static void Register(this JobScheduler scheduler, IBackgroundJob job, string cronExpression, bool enabled = true)
     {
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
-
-        if (job is null)
-            throw new ArgumentNullException(nameof(job));
-
-        if (string.IsNullOrWhiteSpace(cronExpression))
-            throw new ArgumentException("Cron expression cannot be null or empty", nameof(cronExpression));
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentNullException.ThrowIfNull(job);
+        ArgumentException.ThrowIfNullOrWhiteSpace(cronExpression, nameof(cronExpression));
 
         var config = new JobScheduleConfig
         {
@@ -79,13 +74,12 @@ public static class JobSchedulerExtensions
     /// <param name="scheduler">The job scheduler instance</param>
     /// <param name="jobId">The ID of the job to execute</param>
     /// <returns>Execution result with success status and error details</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null</exception>
+    /// <exception cref="ArgumentException"><paramref name="jobId"/> is null or whitespace</exception>
     public static async Task<JobExecutionResult> ExecuteJobAsync(this JobScheduler scheduler, string jobId)
     {
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
-
-        if (string.IsNullOrWhiteSpace(jobId))
-            throw new ArgumentException("Job ID cannot be null or empty", nameof(jobId));
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentException.ThrowIfNullOrWhiteSpace(jobId, nameof(jobId));
 
         if (!scheduler.TryGetJobConfig(jobId, out var job, out var config))
         {
@@ -107,13 +101,12 @@ public static class JobSchedulerExtensions
     /// <param name="jobId">The job ID to filter by</param>
     /// <param name="successfulOnly">Whether to return only successful executions</param>
     /// <returns>Filtered execution history</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null</exception>
+    /// <exception cref="ArgumentException"><paramref name="jobId"/> is null or whitespace</exception>
     public static IEnumerable<JobExecutionResult> GetExecutionHistory(this JobScheduler scheduler, string jobId, bool successfulOnly)
     {
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
-
-        if (string.IsNullOrWhiteSpace(jobId))
-            throw new ArgumentException("Job ID cannot be null or empty", nameof(jobId));
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentException.ThrowIfNullOrWhiteSpace(jobId, nameof(jobId));
 
         return scheduler.GetExecutionHistory(jobId)
             .Where(h => successfulOnly ? h.Success : true)
@@ -126,13 +119,12 @@ public static class JobSchedulerExtensions
     /// <param name="scheduler">The job scheduler instance</param>
     /// <param name="jobId">The job ID to check</param>
     /// <returns>The most recent successful execution or null if none found</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null</exception>
+    /// <exception cref="ArgumentException"><paramref name="jobId"/> is null or whitespace</exception>
     public static JobExecutionResult? GetLastSuccessfulExecution(this JobScheduler scheduler, string jobId)
     {
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
-
-        if (string.IsNullOrWhiteSpace(jobId))
-            throw new ArgumentException("Job ID cannot be null or empty", nameof(jobId));
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentException.ThrowIfNullOrWhiteSpace(jobId, nameof(jobId));
 
         return scheduler.GetExecutionHistory(jobId)
             .Where(h => h.Success)
@@ -146,13 +138,12 @@ public static class JobSchedulerExtensions
     /// <param name="scheduler">The job scheduler instance</param>
     /// <param name="jobId">The job ID to check</param>
     /// <returns>The most recent failed execution or null if none found</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null</exception>
+    /// <exception cref="ArgumentException"><paramref name="jobId"/> is null or whitespace</exception>
     public static JobExecutionResult? GetLastFailedExecution(this JobScheduler scheduler, string jobId)
     {
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
-
-        if (string.IsNullOrWhiteSpace(jobId))
-            throw new ArgumentException("Job ID cannot be null or empty", nameof(jobId));
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentException.ThrowIfNullOrWhiteSpace(jobId, nameof(jobId));
 
         return scheduler.GetExecutionHistory(jobId)
             .Where(h => !h.Success)
@@ -166,13 +157,12 @@ public static class JobSchedulerExtensions
     /// <param name="scheduler">The job scheduler instance</param>
     /// <param name="jobId">The job ID to check</param>
     /// <returns>True if the job has successful executions, false otherwise</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null</exception>
+    /// <exception cref="ArgumentException"><paramref name="jobId"/> is null or whitespace</exception>
     public static bool HasSuccessfulExecutions(this JobScheduler scheduler, string jobId)
     {
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
-
-        if (string.IsNullOrWhiteSpace(jobId))
-            throw new ArgumentException("Job ID cannot be null or empty", nameof(jobId));
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentException.ThrowIfNullOrWhiteSpace(jobId, nameof(jobId));
 
         return scheduler.GetExecutionHistory(jobId)
             .Any(h => h.Success);
@@ -183,10 +173,10 @@ public static class JobSchedulerExtensions
     /// </summary>
     /// <param name="scheduler">The job scheduler instance</param>
     /// <returns>Job execution statistics</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null</exception>
     public static JobStatistics GetStatistics(this JobScheduler scheduler)
     {
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
+        ArgumentNullException.ThrowIfNull(scheduler);
 
         var allExecutions = scheduler.GetRecentExecutions(int.MaxValue).ToList();
         var successful = allExecutions.Count(h => h.Success);
@@ -211,10 +201,10 @@ public static class JobSchedulerExtensions
     /// </summary>
     /// <param name="scheduler">The job scheduler instance</param>
     /// <returns>Number of registered jobs</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null</exception>
     public static int GetRegisteredJobsCount(this JobScheduler scheduler)
     {
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
+        ArgumentNullException.ThrowIfNull(scheduler);
 
         // Using reflection to access the private _jobs field since we can't modify the original class
         var field = typeof(JobScheduler).GetField("_jobs", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
@@ -234,16 +224,15 @@ public static class JobSchedulerExtensions
     /// <param name="job">Outputs the job if found</param>
     /// <param name="config">Outputs the job configuration if found</param>
     /// <returns>True if the job was found, false otherwise</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="scheduler"/> is null</exception>
+    /// <exception cref="ArgumentException"><paramref name="jobId"/> is null or whitespace</exception>
     private static bool TryGetJobConfig(this JobScheduler scheduler, string jobId, out IBackgroundJob job, out JobScheduleConfig config)
     {
         job = null!;
         config = null!;
 
-        if (scheduler is null)
-            throw new ArgumentNullException(nameof(scheduler));
-
-        if (string.IsNullOrWhiteSpace(jobId))
-            throw new ArgumentException("Job ID cannot be null or empty", nameof(jobId));
+        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentException.ThrowIfNullOrWhiteSpace(jobId, nameof(jobId));
 
         var field = typeof(JobScheduler).GetField("_jobs", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (field?.GetValue(scheduler) is Dictionary<string, (IBackgroundJob job, JobScheduleConfig config)> jobs)
