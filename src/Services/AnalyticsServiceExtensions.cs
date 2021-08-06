@@ -52,28 +52,32 @@ public static class AnalyticsServiceExtensions
     /// <summary>
     /// Gets events by type with pagination support
     /// </summary>
+    /// <param name="service">The analytics service instance</param>
+    /// <param name="eventType">Type of events to retrieve</param>
+    /// <param name="skip">Number of events to skip</param>
+    /// <param name="take">Number of events to return</param>
+    /// <returns>List of events matching the criteria</returns>
+    /// <exception cref="ArgumentNullException">Thrown when service or eventType is null</exception>
+    /// <exception cref="ArgumentException">Thrown when eventType is empty or whitespace</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when skip or take is negative</exception>
     public static List<Event> GetEvents(this AnalyticsService service, string eventType, int skip, int take)
     {
         ArgumentNullException.ThrowIfNull(service);
         ArgumentException.ThrowIfNullOrWhiteSpace(eventType);
+        ArgumentOutOfRangeException.ThrowIfNegative(skip);
+        ArgumentOutOfRangeException.ThrowIfNegative(take);
 
-        return service.GetEvents(eventType, skip + take)
-            .Skip(skip)
-            .Take(take)
+        return service.GetEvents(eventType, skip, take)
             .ToList();
     }
 
     private static double GetMedian(List<double> values)
-    {
-        var sorted = values.OrderBy(x => x).ToList();
-        var count = sorted.Count;
+        => values.Count == 0
+            ? 0
+            : GetMedianInternal(values.OrderBy(x => x).ToList());
 
-        if (count == 0)
-            return 0;
-
-        if (count % 2 == 0)
-            return (sorted[count / 2 - 1] + sorted[count / 2]) / 2;
-
-        return sorted[count / 2];
-    }
+    private static double GetMedianInternal(IReadOnlyList<double> sorted)
+        => sorted.Count % 2 == 0
+            ? (sorted[sorted.Count / 2 - 1] + sorted[sorted.Count / 2]) / 2
+            : sorted[sorted.Count / 2];
 }
