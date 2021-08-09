@@ -21,6 +21,7 @@ public static class PreparedStatementPoolOptionsExtensions
     /// </summary>
     /// <param name="options">The pool options to configure.</param>
     /// <param name="maxPoolSize">The maximum number of statements to hold in the pool.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> is <see langword="null"/></exception>
     /// <returns>The same <see cref="PreparedStatementPoolOptions"/> for method chaining.</returns>
     public static PreparedStatementPoolOptions WithMaxPoolSize(this PreparedStatementPoolOptions options, int maxPoolSize)
     {
@@ -31,10 +32,12 @@ public static class PreparedStatementPoolOptionsExtensions
 
     /// <summary>
     /// Sets the maximum pool size to a value based on the available memory.
-    /// Uses a heuristic that reserves approximately 1MB per statement in the pool.
+    /// Uses a heuristic that reserves approximately 1KB per statement in the pool.
     /// </summary>
     /// <param name="options">The pool options to configure.</param>
     /// <param name="reservedMemoryMb">The amount of memory in megabytes to reserve for the pool.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="reservedMemoryMb"/> is not positive</exception>
     /// <returns>The same <see cref="PreparedStatementPoolOptions"/> for method chaining.</returns>
     public static PreparedStatementPoolOptions WithMemoryBasedMaxPoolSize(this PreparedStatementPoolOptions options, int reservedMemoryMb)
     {
@@ -44,9 +47,9 @@ public static class PreparedStatementPoolOptionsExtensions
             throw new ArgumentOutOfRangeException(nameof(reservedMemoryMb), "Reserved memory must be positive");
         }
 
-        // Heuristic: ~1MB per statement in the pool
+        // Heuristic: ~1KB per statement in the pool
         // This accounts for statement metadata, parameter information, and some overhead
-        options.MaxPoolSize = Math.Max(10, reservedMemoryMb * 1024 / 1024); // 1:1 ratio for simplicity
+        options.MaxPoolSize = Math.Max(10, reservedMemoryMb * 1024); // Convert MB to statement count (1KB per statement)
         return options;
     }
 
@@ -55,6 +58,7 @@ public static class PreparedStatementPoolOptionsExtensions
     /// Instead, new statements will be rejected when the pool is full.
     /// </summary>
     /// <param name="options">The pool options to configure.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> is <see langword="null"/></exception>
     /// <returns>The same <see cref="PreparedStatementPoolOptions"/> for method chaining.</returns>
     public static PreparedStatementPoolOptions WithNoEviction(this PreparedStatementPoolOptions options)
     {
@@ -69,6 +73,7 @@ public static class PreparedStatementPoolOptionsExtensions
     /// Configures the pool with a default conservative size suitable for most applications.
     /// </summary>
     /// <param name="options">The pool options to configure.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="options"/> is <see langword="null"/></exception>
     /// <returns>The same <see cref="PreparedStatementPoolOptions"/> for method chaining.</returns>
     public static PreparedStatementPoolOptions WithDefaultSize(this PreparedStatementPoolOptions options)
     {
