@@ -9,7 +9,8 @@ namespace DotnetMicroOrm.Data;
 using DotnetMicroOrm.Constants;
 
 /// <summary>
-/// Extension methods for UnitOfWork to provide common transaction patterns
+/// Extension methods for <see cref="UnitOfWork"/> to provide common transaction patterns
+/// and change tracking capabilities.
 /// </summary>
 public static class UnitOfWorkExtensions
 {
@@ -25,11 +26,8 @@ public static class UnitOfWorkExtensions
         Func<UnitOfWork, Task<bool>> operation,
         TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.ReadCommitted)
     {
-        if (unitOfWork == null)
-            throw new ArgumentNullException(nameof(unitOfWork));
-
-        if (operation == null)
-            throw new ArgumentNullException(nameof(operation));
+        ArgumentNullException.ThrowIfNull(unitOfWork);
+        ArgumentNullException.ThrowIfNull(operation);
 
         await unitOfWork.BeginTransactionAsync(isolationLevel);
 
@@ -53,16 +51,15 @@ public static class UnitOfWorkExtensions
     /// <param name="operations">Collection of operations to execute within the transaction</param>
     /// <param name="isolationLevel">Optional transaction isolation level</param>
     /// <returns>True if all operations succeeded, false otherwise</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="unitOfWork"/> or <paramref name="operations"/> is null.</exception>
     public static async Task<bool> ExecuteInTransactionAsync(
         this UnitOfWork unitOfWork,
         IEnumerable<Func<UnitOfWork, Task<bool>>> operations,
         TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.ReadCommitted)
     {
-        if (unitOfWork == null)
-            throw new ArgumentNullException(nameof(unitOfWork));
+        ArgumentNullException.ThrowIfNull(unitOfWork);
 
-        if (operations == null)
-            throw new ArgumentNullException(nameof(operations));
+        ArgumentNullException.ThrowIfNull(operations);
 
         await unitOfWork.BeginTransactionAsync(isolationLevel);
 
@@ -73,7 +70,10 @@ public static class UnitOfWorkExtensions
             {
                 var result = await operation(unitOfWork);
                 if (!result)
+                {
                     allSucceeded = false;
+                    break;
+                }
             }
 
             if (allSucceeded)
@@ -81,11 +81,9 @@ public static class UnitOfWorkExtensions
                 await unitOfWork.CommitAsync();
                 return true;
             }
-            else
-            {
-                await unitOfWork.RollbackAsync();
-                return false;
-            }
+
+            await unitOfWork.RollbackAsync();
+            return false;
         }
         catch
         {
@@ -100,15 +98,13 @@ public static class UnitOfWorkExtensions
     /// <param name="unitOfWork">The unit of work instance</param>
     /// <param name="operation">The operation to execute</param>
     /// <returns>Tuple containing operation result and change count</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="unitOfWork"/> or <paramref name="operation"/> is null.</exception>
     public static async Task<(bool Success, int Changes)> ExecuteWithTrackingAsync(
         this UnitOfWork unitOfWork,
         Func<UnitOfWork, Task<bool>> operation)
     {
-        if (unitOfWork == null)
-            throw new ArgumentNullException(nameof(unitOfWork));
-
-        if (operation == null)
-            throw new ArgumentNullException(nameof(operation));
+        ArgumentNullException.ThrowIfNull(unitOfWork);
+        ArgumentNullException.ThrowIfNull(operation);
 
         var originalHasChanges = unitOfWork.HasChanges();
         var result = await operation(unitOfWork);
