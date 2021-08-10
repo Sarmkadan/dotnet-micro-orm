@@ -3,7 +3,7 @@
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
-// =============================================================================
+// =====================================================================
 
 namespace DotnetMicroOrm.Data;
 
@@ -16,7 +16,7 @@ using DotnetMicroOrm.Domain.Models;
 /// </summary>
 public static class QueryBuilderJsonExtensions
 {
-    private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+    private static readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented = false,
@@ -31,16 +31,13 @@ public static class QueryBuilderJsonExtensions
     /// <param name="value">The QueryBuilder instance to serialize</param>
     /// <param name="indented">Whether to format the JSON with indentation</param>
     /// <returns>A JSON string representation of the QueryBuilder</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null</exception>
     public static string ToJson<T>(this QueryBuilder<T> value, bool indented = false) where T : BaseEntity
     {
-        if (value == null)
-            throw new ArgumentNullException(nameof(value));
+        ArgumentNullException.ThrowIfNull(value);
 
         var options = indented
-            ? new JsonSerializerOptions(_jsonOptions)
-            {
-                WriteIndented = true
-            }
+            ? new JsonSerializerOptions(_jsonOptions) { WriteIndented = true }
             : _jsonOptions;
 
         return JsonSerializer.Serialize(value, options);
@@ -52,10 +49,11 @@ public static class QueryBuilderJsonExtensions
     /// <typeparam name="T">The entity type</typeparam>
     /// <param name="json">The JSON string to deserialize</param>
     /// <returns>A QueryBuilder{T} instance, or null if the JSON represents a null value</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="json"/> is null or whitespace</exception>
+    /// <exception cref="JsonException">Thrown when deserialization fails</exception>
     public static QueryBuilder<T>? FromJson<T>(string json) where T : BaseEntity
     {
-        if (string.IsNullOrWhiteSpace(json))
-            throw new ArgumentException("JSON string cannot be null or whitespace", nameof(json));
+        ArgumentException.ThrowIfNullOrEmpty(json);
 
         try
         {
@@ -74,12 +72,12 @@ public static class QueryBuilderJsonExtensions
     /// <param name="json">The JSON string to deserialize</param>
     /// <param name="value">The resulting QueryBuilder{T} instance, or null if deserialization failed</param>
     /// <returns>True if deserialization succeeded; false otherwise</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="json"/> is null or whitespace</exception>
     public static bool TryFromJson<T>(string json, out QueryBuilder<T>? value) where T : BaseEntity
     {
-        value = null;
+        ArgumentException.ThrowIfNullOrEmpty(json);
 
-        if (string.IsNullOrWhiteSpace(json))
-            return false;
+        value = null;
 
         try
         {
