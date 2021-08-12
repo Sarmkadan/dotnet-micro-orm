@@ -1,4 +1,5 @@
 #nullable enable
+
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -19,88 +20,102 @@ using Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-    /// <summary>
-    /// Registers all ORM services and repositories
-    /// </summary>
-    public static IServiceCollection AddDotnetMicroOrm(
-        this IServiceCollection services,
-        string connectionString,
-        DatabaseProvider provider = DatabaseProvider.SqlServer,
-        Action<OrmConfiguration>? configureOptions = null)
-    {
-        if (services is null)
-            throw new ArgumentNullException(nameof(services));
-        if (string.IsNullOrWhiteSpace(connectionString))
-            throw new ConfigurationException("Connection string cannot be null or empty.");
+	/// <summary>
+	/// Registers all ORM services and repositories
+	/// </summary>
+	/// <param name="services">The service collection</param>
+	/// <param name="connectionString">Database connection string</param>
+	/// <param name="provider">Database provider type</param>
+	/// <param name="configureOptions">Optional configuration action</param>
+	/// <exception cref="ArgumentNullException">Thrown when services or connectionString is null or whitespace</exception>
+	public static IServiceCollection AddDotnetMicroOrm(
+		this IServiceCollection services,
+		string connectionString,
+		DatabaseProvider provider = DatabaseProvider.SqlServer,
+		Action<OrmConfiguration>? configureOptions = null)
+	{
+		ArgumentNullException.ThrowIfNull(services);
+		ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
-        var config = new OrmConfiguration();
-        configureOptions?.Invoke(config);
+		var config = new OrmConfiguration();
+		configureOptions?.Invoke(config);
 
-        // Register database context
-        services.AddSingleton<IDatabaseContext>(sp =>
-            new DatabaseContext(connectionString, provider));
+		// Register database context
+		services.AddSingleton<IDatabaseContext>(_ =>
+			new DatabaseContext(connectionString, provider));
 
-        // Register unit of work
-        services.AddScoped<IUnitOfWork>(sp =>
-            new UnitOfWork(Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<IDatabaseContext>(sp)));
+		// Register unit of work
+		services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        // Register repositories
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+		// Register repositories
+		services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-        // Register batch upsert
-        services.AddScoped(typeof(IBatchUpsertOperation<>), typeof(BatchUpsertOperation<>));
+		// Register batch upsert
+		services.AddScoped(typeof(IBatchUpsertOperation<>), typeof(BatchUpsertOperation<>));
 
-        // Register query profiler
-        services.AddSingleton<IQueryProfiler, QueryProfiler>();
+		// Register query profiler
+		services.AddSingleton<IQueryProfiler, QueryProfiler>();
 
-        // Register migration runner
-        services.AddScoped<IMigrationRunner>(sp =>
-            new MigrationRunner(
-                Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<IDatabaseContext>(sp),
-                sp.GetServices<IMigration>()));
+		// Register migration runner
+		services.AddScoped<IMigrationRunner, MigrationRunner>();
 
-        // Register services
-        services.AddScoped<UserService>();
-        services.AddScoped<ProductService>();
-        services.AddScoped<OrderService>();
-        services.AddScoped<IAuditService, AuditService>();
-        services.AddScoped<AuditService>();
+		// Register services
+		services.AddScoped<UserService>();
+		services.AddScoped<ProductService>();
+		services.AddScoped<OrderService>();
+		services.AddScoped<IAuditService, AuditService>();
+		services.AddScoped<AuditService>();
 
-        return services;
-    }
+		return services;
+	}
 
-    /// <summary>
-    /// Registers a migration implementation so it is discovered by <see cref="IMigrationRunner"/>.
-    /// </summary>
-    public static IServiceCollection AddMigration<TMigration>(this IServiceCollection services)
-        where TMigration : class, IMigration
-    {
-        services.AddTransient<IMigration, TMigration>();
-        return services;
-    }
+	/// <summary>
+	/// Registers a migration implementation so it is discovered by <see cref="IMigrationRunner"/>
+	/// </summary>
+	/// <param name="services">The service collection</param>
+	/// <typeparam name="TMigration">The migration type to register</typeparam>
+	/// <exception cref="ArgumentNullException">Thrown when services is null</exception>
+	public static IServiceCollection AddMigration<TMigration>(this IServiceCollection services)
+	where TMigration : class, IMigration
+	{
+		ArgumentNullException.ThrowIfNull(services);
 
-    /// <summary>
-    /// Registers a specific repository implementation
-    /// </summary>
-    public static IServiceCollection AddRepository<TEntity, TRepository>(
-        this IServiceCollection services)
-        where TEntity : Domain.Models.BaseEntity
-        where TRepository : class, IRepository<TEntity>
-    {
-        services.AddScoped<IRepository<TEntity>, TRepository>();
-        return services;
-    }
+		services.AddTransient<IMigration, TMigration>();
+		return services;
+	}
 
-    /// <summary>
-    /// Registers a service factory
-    /// </summary>
-    public static IServiceCollection AddOrmService<TService>(
-        this IServiceCollection services)
-        where TService : class
-    {
-        services.AddScoped<TService>();
-        return services;
-    }
+	/// <summary>
+	/// Registers a specific repository implementation
+	/// </summary>
+	/// <param name="services">The service collection</param>
+	/// <typeparam name="TEntity">The entity type</typeparam>
+	/// <typeparam name="TRepository">The repository implementation type</typeparam>
+	/// <exception cref="ArgumentNullException">Thrown when services is null</exception>
+	public static IServiceCollection AddRepository<TEntity, TRepository>(
+		this IServiceCollection services)
+	where TEntity : Domain.Models.BaseEntity
+	where TRepository : class, IRepository<TEntity>
+	{
+		ArgumentNullException.ThrowIfNull(services);
+
+		services.AddScoped<IRepository<TEntity>, TRepository>();
+		return services;
+	}
+
+	/// <summary>
+	/// Registers a service factory
+	/// </summary>
+	/// <param name="services">The service collection</param>
+	/// <typeparam name="TService">The service type to register</typeparam>
+	/// <exception cref="ArgumentNullException">Thrown when services is null</exception>
+	public static IServiceCollection AddOrmService<TService>(this IServiceCollection services)
+	where TService : class
+	{
+		ArgumentNullException.ThrowIfNull(services);
+
+		services.AddScoped<TService>();
+		return services;
+	}
 }
 
 /// <summary>
@@ -108,43 +123,43 @@ public static class ServiceCollectionExtensions
 /// </summary>
 public sealed class OrmConfiguration
 {
-    /// <summary>
-    /// Default command timeout in seconds
-    /// </summary>
-    public int CommandTimeout { get; set; } = Constants.OrmConstants.DefaultCommandTimeout;
+	/// <summary>
+	/// Default command timeout in seconds
+	/// </summary>
+	public int CommandTimeout { get; set; } = Constants.OrmConstants.DefaultCommandTimeout;
 
-    /// <summary>
-    /// Default batch size for bulk operations
-    /// </summary>
-    public int DefaultBatchSize { get; set; } = Constants.OrmConstants.DefaultBatchSize;
+	/// <summary>
+	/// Default batch size for bulk operations
+	/// </summary>
+	public int DefaultBatchSize { get; set; } = Constants.OrmConstants.DefaultBatchSize;
 
-    /// <summary>
-    /// Enable change tracking
-    /// </summary>
-    public bool EnableChangeTracking { get; set; } = true;
+	/// <summary>
+	/// Enable change tracking
+	/// </summary>
+	public bool EnableChangeTracking { get; set; } = true;
 
-    /// <summary>
-    /// Enable audit logging
-    /// </summary>
-    public bool EnableAuditLogging { get; set; } = true;
+	/// <summary>
+	/// Enable audit logging
+	/// </summary>
+	public bool EnableAuditLogging { get; set; } = true;
 
-    /// <summary>
-    /// Enable compiled expression caching
-    /// </summary>
-    public bool EnableExpressionCaching { get; set; } = true;
+	/// <summary>
+	/// Enable compiled expression caching
+	/// </summary>
+	public bool EnableExpressionCaching { get; set; } = true;
 
-    /// <summary>
-    /// Maximum cached expressions
-    /// </summary>
-    public int MaxCachedExpressions { get; set; } = 1000;
+	/// <summary>
+	/// Maximum cached expressions
+	/// </summary>
+	public int MaxCachedExpressions { get; set; } = 1000;
 
-    /// <summary>
-    /// Connection retry attempts
-    /// </summary>
-    public int ConnectionRetryAttempts { get; set; } = 3;
+	/// <summary>
+	/// Connection retry attempts
+	/// </summary>
+	public int ConnectionRetryAttempts { get; set; } = 3;
 
-    /// <summary>
-    /// Connection retry delay in milliseconds
-    /// </summary>
-    public int ConnectionRetryDelayMs { get; set; } = 1000;
+	/// <summary>
+	/// Connection retry delay in milliseconds
+	/// </summary>
+	public int ConnectionRetryDelayMs { get; set; } = 1000;
 }
