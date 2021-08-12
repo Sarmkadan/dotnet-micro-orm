@@ -28,43 +28,29 @@ public static class ProductRepositoryJsonExtensions
     /// <param name="value">The repository instance to serialize</param>
     /// <param name="indented">Whether to format the JSON with indentation</param>
     /// <returns>JSON representation of the repository</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/></exception>
     public static string ToJson(this ProductRepository value, bool indented = false)
-    {
-        if (value is null)
-        {
-            return "null";
-        }
-
-        var options = indented
-            ? new JsonSerializerOptions(_jsonOptions)
-            {
-                WriteIndented = true
-            }
-            : _jsonOptions;
-
-        return JsonSerializer.Serialize(value, options);
-    }
+        => value is null
+            ? throw new ArgumentNullException(nameof(value))
+            : JsonSerializer.Serialize(value, indented
+                ? new JsonSerializerOptions(_jsonOptions) { WriteIndented = true }
+                : _jsonOptions);
 
     /// <summary>
     /// Deserializes a JSON string to a ProductRepository instance
     /// </summary>
     /// <param name="json">JSON string to deserialize</param>
-    /// <returns>Deserialized ProductRepository instance or null if JSON is null/empty</returns>
+    /// <returns>Deserialized ProductRepository instance or null if JSON is null/empty or deserialization fails</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/></exception>
     public static ProductRepository? FromJson(string json)
     {
-        if (string.IsNullOrWhiteSpace(json) || json == "null")
-        {
-            return null;
-        }
+        ArgumentNullException.ThrowIfNull(json);
 
-        try
-        {
-            return JsonSerializer.Deserialize<ProductRepository>(json, _jsonOptions);
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
+        return string.IsNullOrWhiteSpace(json) || json == "null"
+            ? null
+            : TryFromJson(json, out var result)
+                ? result
+                : null;
     }
 
     /// <summary>
@@ -73,8 +59,11 @@ public static class ProductRepositoryJsonExtensions
     /// <param name="json">JSON string to deserialize</param>
     /// <param name="value">Output parameter for the deserialized instance</param>
     /// <returns>True if deserialization succeeded, false otherwise</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/></exception>
     public static bool TryFromJson(string json, out ProductRepository? value)
     {
+        ArgumentNullException.ThrowIfNull(json);
+
         value = null;
 
         if (string.IsNullOrWhiteSpace(json) || json == "null")
@@ -85,7 +74,7 @@ public static class ProductRepositoryJsonExtensions
         try
         {
             value = JsonSerializer.Deserialize<ProductRepository>(json, _jsonOptions);
-            return true;
+            return value is not null;
         }
         catch (JsonException)
         {
