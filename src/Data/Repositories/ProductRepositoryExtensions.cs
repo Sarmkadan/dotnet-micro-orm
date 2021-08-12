@@ -20,12 +20,14 @@ public static class ProductRepositoryExtensions
     /// <param name="repository">The product repository</param>
     /// <param name="skus">List of SKUs to retrieve</param>
     /// <returns>List of matching products</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="repository"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentNullException"><paramref name="skus"/> is <see langword="null"/></exception>
     public static async Task<List<Product>> GetBySkusAsync(this ProductRepository repository, IEnumerable<string> skus)
     {
-        if (repository is null)
-            throw new ArgumentNullException(nameof(repository));
+        ArgumentNullException.ThrowIfNull(repository);
+        ArgumentNullException.ThrowIfNull(skus);
 
-        if (skus is null || !skus.Any())
+        if (!skus.Any())
             return [];
 
         var products = await repository.GetAllAsync();
@@ -39,12 +41,14 @@ public static class ProductRepositoryExtensions
     /// <param name="repository">The product repository</param>
     /// <param name="ids">List of product IDs to retrieve</param>
     /// <returns>List of matching products</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="repository"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentNullException"><paramref name="ids"/> is <see langword="null"/></exception>
     public static async Task<List<Product>> GetByIdsAsync(this ProductRepository repository, IEnumerable<int> ids)
     {
-        if (repository is null)
-            throw new ArgumentNullException(nameof(repository));
+        ArgumentNullException.ThrowIfNull(repository);
+        ArgumentNullException.ThrowIfNull(ids);
 
-        if (ids is null || !ids.Any())
+        if (!ids.Any())
             return [];
 
         var products = await repository.GetAllAsync();
@@ -61,6 +65,9 @@ public static class ProductRepositoryExtensions
     /// <param name="sortBy">Sorting option: PriceAsc, PriceDesc, Name, ProfitDesc</param>
     /// <param name="includeInactive">Whether to include inactive products</param>
     /// <returns>List of products matching criteria</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="repository"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="minPrice"/> is negative</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="maxPrice"/> is less than <paramref name="minPrice"/></exception>
     public static async Task<List<Product>> GetByPriceRangeAsync(
         this ProductRepository repository,
         decimal minPrice,
@@ -68,11 +75,10 @@ public static class ProductRepositoryExtensions
         string sortBy = "PriceAsc",
         bool includeInactive = false)
     {
-        if (repository is null)
-            throw new ArgumentNullException(nameof(repository));
+        ArgumentNullException.ThrowIfNull(repository);
 
         if (minPrice < 0)
-            minPrice = 0;
+            throw new ArgumentOutOfRangeException(nameof(minPrice), "Minimum price cannot be negative");
 
         if (maxPrice <= minPrice)
             return [];
@@ -107,6 +113,10 @@ public static class ProductRepositoryExtensions
     /// <param name="pageSize">Number of items per page</param>
     /// <param name="sortBy">Sorting option: Name, PriceAsc, PriceDesc, StockAsc, StockDesc</param>
     /// <returns>Paginated list of products with total count</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="repository"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="categoryId"/> is not positive</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="pageNumber"/> is less than 1</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="pageSize"/> is less than 1 or greater than 100</exception>
     public static async Task<(List<Product> Items, int TotalCount)> GetByCategoryPagedAsync(
         this ProductRepository repository,
         int categoryId,
@@ -114,17 +124,16 @@ public static class ProductRepositoryExtensions
         int pageSize = 20,
         string sortBy = "Name")
     {
-        if (repository is null)
-            throw new ArgumentNullException(nameof(repository));
+        ArgumentNullException.ThrowIfNull(repository);
 
         if (categoryId <= 0)
-            return ([], 0);
+            throw new ArgumentOutOfRangeException(nameof(categoryId), "Category ID must be positive");
 
         if (pageNumber < 1)
-            pageNumber = 1;
+            throw new ArgumentOutOfRangeException(nameof(pageNumber), "Page number must be 1 or greater");
 
         if (pageSize < 1 || pageSize > 100)
-            pageSize = 20;
+            throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be between 1 and 100");
 
         var allProducts = await repository.GetActiveProductsAsync();
         var categoryProducts = allProducts.Where(p => p.CategoryId == categoryId).ToList();
@@ -135,28 +144,16 @@ public static class ProductRepositoryExtensions
         if (pageNumber > totalPages && totalPages > 0)
             pageNumber = totalPages;
 
-        IOrderedQueryable<Product>? orderedQuery = null;
-
         var query = categoryProducts.AsQueryable();
 
-        switch (sortBy.ToLowerInvariant())
+        var orderedQuery = sortBy.ToLowerInvariant() switch
         {
-            case "priceasc":
-                orderedQuery = query.OrderBy(p => p.Price);
-                break;
-            case "pricedesc":
-                orderedQuery = query.OrderByDescending(p => p.Price);
-                break;
-            case "stockasc":
-                orderedQuery = query.OrderBy(p => p.StockQuantity);
-                break;
-            case "stockdesc":
-                orderedQuery = query.OrderByDescending(p => p.StockQuantity);
-                break;
-            default:
-                orderedQuery = query.OrderBy(p => p.Name);
-                break;
-        }
+            "priceasc" => query.OrderBy(p => p.Price),
+            "pricedesc" => query.OrderByDescending(p => p.Price),
+            "stockasc" => query.OrderBy(p => p.StockQuantity),
+            "stockdesc" => query.OrderByDescending(p => p.StockQuantity),
+            _ => query.OrderBy(p => p.Name)
+        };
 
         var pagedProducts = orderedQuery
             .Skip((pageNumber - 1) * pageSize)
@@ -173,16 +170,17 @@ public static class ProductRepositoryExtensions
     /// <param name="threshold">Stock threshold (default: 10)</param>
     /// <param name="includeOutOfStock">Whether to include products with zero stock</param>
     /// <returns>List of low stock products</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="repository"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="threshold"/> is negative</exception>
     public static async Task<List<Product>> GetLowStockProductsAsync(
         this ProductRepository repository,
         int threshold = 10,
         bool includeOutOfStock = true)
     {
-        if (repository is null)
-            throw new ArgumentNullException(nameof(repository));
+        ArgumentNullException.ThrowIfNull(repository);
 
         if (threshold < 0)
-            threshold = 0;
+            throw new ArgumentOutOfRangeException(nameof(threshold), "Threshold cannot be negative");
 
         var activeProducts = await repository.GetActiveProductsAsync();
         var result = activeProducts
@@ -202,28 +200,27 @@ public static class ProductRepositoryExtensions
     /// <param name="topCount">Number of top products to return</param>
     /// <param name="minProfitMargin">Minimum profit margin percentage (0-100)</param>
     /// <returns>List of most profitable products</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="repository"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="topCount"/> is less than 1</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="minProfitMargin"/> is less than 0 or greater than 100</exception>
     public static async Task<List<Product>> GetMostProfitableAsync(
         this ProductRepository repository,
         int topCount = 10,
         decimal minProfitMargin = 0)
     {
-        if (repository is null)
-            throw new ArgumentNullException(nameof(repository));
+        ArgumentNullException.ThrowIfNull(repository);
 
         if (topCount < 1)
-            topCount = 10;
+            throw new ArgumentOutOfRangeException(nameof(topCount), "Top count must be 1 or greater");
 
-        if (minProfitMargin < 0)
-            minProfitMargin = 0;
-
-        if (minProfitMargin > 100)
-            minProfitMargin = 100;
+        if (minProfitMargin < 0 || minProfitMargin > 100)
+            throw new ArgumentOutOfRangeException(nameof(minProfitMargin), "Profit margin must be between 0 and 100");
 
         var activeProducts = await repository.GetActiveProductsAsync();
 
         var profitableProducts = activeProducts
             .Where(p => p.CostPrice.HasValue && p.CostPrice > 0)
-            .Where(p => (p.Price - p.CostPrice.Value) / p.Price * 100 >= minProfitMargin)
+            .Where(p => p.Price > 0 && (p.Price - p.CostPrice.Value) / p.Price * 100 >= minProfitMargin)
             .OrderByDescending(p => p.GetProfit())
             .Take(topCount)
             .ToList();
@@ -237,12 +234,14 @@ public static class ProductRepositoryExtensions
     /// <param name="repository">The product repository</param>
     /// <param name="categoryIds">List of category IDs to filter by</param>
     /// <returns>List of products in specified categories</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="repository"/> is <see langword="null"/></exception>
+    /// <exception cref="ArgumentNullException"><paramref name="categoryIds"/> is <see langword="null"/></exception>
     public static async Task<List<Product>> GetByCategoryIdsAsync(this ProductRepository repository, IEnumerable<int> categoryIds)
     {
-        if (repository is null)
-            throw new ArgumentNullException(nameof(repository));
+        ArgumentNullException.ThrowIfNull(repository);
+        ArgumentNullException.ThrowIfNull(categoryIds);
 
-        if (categoryIds is null || !categoryIds.Any())
+        if (!categoryIds.Any())
             return [];
 
         var activeProducts = await repository.GetActiveProductsAsync();
