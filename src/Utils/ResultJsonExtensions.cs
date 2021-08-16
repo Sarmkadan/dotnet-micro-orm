@@ -2,10 +2,11 @@
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
-// =====================================================================
+// ===================================================================
 
 namespace DotnetMicroOrm.Utils;
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -28,12 +29,10 @@ public static class ResultJsonExtensions
     /// <param name="value">The result instance to serialize</param>
     /// <param name="indented">Whether to format the JSON with indentation</param>
     /// <returns>JSON representation of the result</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/></exception>
     public static string ToJson(this Result value, bool indented = false)
     {
-        if (value is null)
-        {
-            return "null";
-        }
+        ArgumentNullException.ThrowIfNull(value);
 
         var options = indented
             ? new JsonSerializerOptions(_jsonOptions)
@@ -48,8 +47,11 @@ public static class ResultJsonExtensions
     /// </summary>
     /// <param name="json">JSON string to deserialize</param>
     /// <returns>Deserialized Result instance or null if JSON is null/empty</returns>
-    public static Result? FromJson(string json)
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/></exception>
+    public static Result? FromJson([NotNullWhen(true)] string? json)
     {
+        ArgumentNullException.ThrowIfNull(json);
+
         if (string.IsNullOrWhiteSpace(json) || json == "null")
         {
             return null;
@@ -71,9 +73,11 @@ public static class ResultJsonExtensions
     /// <param name="json">JSON string to deserialize</param>
     /// <param name="value">Output parameter for the deserialized instance</param>
     /// <returns>True if deserialization succeeded, false otherwise</returns>
-    public static bool TryFromJson(string json, out Result? value)
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/></exception>
+    public static bool TryFromJson([NotNullWhen(true)] string? json, out Result? value)
     {
         value = null;
+        ArgumentNullException.ThrowIfNull(json);
 
         if (string.IsNullOrWhiteSpace(json) || json == "null")
         {
