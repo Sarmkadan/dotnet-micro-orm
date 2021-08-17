@@ -5,6 +5,7 @@
 // CTO & Software Architect
 // =============================================================================
 
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -28,21 +29,14 @@ public static class MigrationRunnerTestsJsonExtensions
     /// <param name="value">The MigrationRunnerTests instance to serialize.</param>
     /// <param name="indented">Whether to format the JSON with indentation.</param>
     /// <returns>A JSON string representation of the MigrationRunnerTests instance.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
     public static string ToJson(this MigrationRunnerTests value, bool indented = false)
     {
-        if (value is null)
-        {
-            return "null";
-        }
-
-        var options = indented
-            ? new JsonSerializerOptions(_jsonOptions)
-            {
-                WriteIndented = true
-            }
-            : _jsonOptions;
-
-        return JsonSerializer.Serialize(value, options);
+        return value is null
+            ? throw new ArgumentNullException(nameof(value))
+            : JsonSerializer.Serialize(value, indented
+                ? new JsonSerializerOptions(_jsonOptions) { WriteIndented = true }
+                : _jsonOptions);
     }
 
     /// <summary>
@@ -50,14 +44,14 @@ public static class MigrationRunnerTestsJsonExtensions
     /// </summary>
     /// <param name="json">The JSON string to deserialize.</param>
     /// <returns>The deserialized MigrationRunnerTests instance, or null if the JSON is null or empty.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/>.</exception>
     public static MigrationRunnerTests? FromJson(string json)
     {
-        if (string.IsNullOrWhiteSpace(json) || json == "null")
-        {
-            return null;
-        }
+        ArgumentNullException.ThrowIfNull(json);
 
-        return JsonSerializer.Deserialize<MigrationRunnerTests>(json, _jsonOptions);
+        return string.IsNullOrWhiteSpace(json) || json == "null"
+            ? null
+            : JsonSerializer.Deserialize<MigrationRunnerTests>(json, _jsonOptions);
     }
 
     /// <summary>
@@ -66,8 +60,11 @@ public static class MigrationRunnerTestsJsonExtensions
     /// <param name="json">The JSON string to deserialize.</param>
     /// <param name="value">Receives the deserialized MigrationRunnerTests instance if successful.</param>
     /// <returns>True if deserialization succeeded; otherwise, false.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/>.</exception>
     public static bool TryFromJson(string json, out MigrationRunnerTests? value)
     {
+        ArgumentNullException.ThrowIfNull(json);
+
         value = null;
 
         if (string.IsNullOrWhiteSpace(json) || json == "null")
