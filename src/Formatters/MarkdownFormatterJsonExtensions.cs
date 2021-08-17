@@ -16,18 +16,14 @@ public static class MarkdownFormatterJsonExtensions
     /// <param name="value">The <see cref="MarkdownFormatter"/> instance to serialize.</param>
     /// <param name="indented">Whether to format the JSON with indentation for readability.</param>
     /// <returns>A JSON string representation of the <see cref="MarkdownFormatter"/>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="value"/> is <see langword="null"/>.</exception>
     public static string ToJson(this MarkdownFormatter value, bool indented = false)
     {
-        if (value is null)
-        {
-            return "null";
-        }
+        ArgumentNullException.ThrowIfNull(value);
 
         var options = indented
             ? new JsonSerializerOptions(_jsonOptions)
-            {
-                WriteIndented = true,
-            }
+            { WriteIndented = true, }
             : _jsonOptions;
 
         return JsonSerializer.Serialize(value, options);
@@ -36,22 +32,25 @@ public static class MarkdownFormatterJsonExtensions
     /// <summary>Deserializes a JSON string to a <see cref="MarkdownFormatter"/> instance.</summary>
     /// <param name="json">The JSON string to deserialize.</param>
     /// <returns>The deserialized <see cref="MarkdownFormatter"/> instance, or null if the JSON is null or whitespace.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/>.</exception>
     public static MarkdownFormatter? FromJson(string json)
     {
-        if (string.IsNullOrWhiteSpace(json))
-        {
-            return null;
-        }
+        ArgumentNullException.ThrowIfNull(json);
 
-        return JsonSerializer.Deserialize<MarkdownFormatter>(json, _jsonOptions);
+        return string.IsNullOrWhiteSpace(json)
+            ? null
+            : JsonSerializer.Deserialize<MarkdownFormatter>(json, _jsonOptions);
     }
 
     /// <summary>Attempts to deserialize a JSON string to a <see cref="MarkdownFormatter"/> instance.</summary>
     /// <param name="json">The JSON string to deserialize.</param>
     /// <param name="value">Receives the deserialized <see cref="MarkdownFormatter"/> instance if successful, otherwise null.</param>
     /// <returns>True if deserialization succeeded; false if the JSON is null, whitespace, or invalid.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="json"/> is <see langword="null"/>.</exception>
     public static bool TryFromJson(string json, out MarkdownFormatter? value)
     {
+        ArgumentNullException.ThrowIfNull(json);
+
         value = null;
 
         if (string.IsNullOrWhiteSpace(json))
