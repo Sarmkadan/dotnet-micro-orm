@@ -20,32 +20,27 @@ public static class CsvFormatterExtensions
 {
     /// <summary>
     /// Formats a dictionary as CSV with keys as column headers and values as rows.
+    /// Each key-value pair becomes a row with "Key" and "Value" columns.
     /// </summary>
     /// <param name="formatter">The CSV formatter instance</param>
     /// <param name="dictionary">Dictionary to format</param>
-    /// <returns>CSV formatted string</returns>
-    public static string FormatDictionary(this CsvFormatter formatter, IDictionary dictionary)
+    /// <returns>CSV formatted string with "Key" and "Value" columns</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="formatter"/> is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="dictionary"/> is null</exception>
+    public static string FormatDictionary(this CsvFormatter formatter, IDictionary? dictionary)
     {
-        if (formatter is null)
-            throw new ArgumentNullException(nameof(formatter));
+        ArgumentNullException.ThrowIfNull(formatter);
 
         if (dictionary is null || dictionary.Count == 0)
             return string.Empty;
 
-        var sb = new System.Text.StringBuilder();
-        var keys = new List<string>();
-        var values = new List<object?>();
-
-        foreach (var key in dictionary.Keys)
+        var rows = new List<DictionaryEntry>();
+        foreach (DictionaryEntry entry in dictionary!)
         {
-            keys.Add(EscapeKey(key?.ToString()));
-            values.Add(dictionary[key]);
+            rows.Add(new DictionaryEntry(entry.Key?.ToString(), entry.Value));
         }
 
-        // Create a simple anonymous object for each row
-        var row = new { Key = string.Join(",", keys), Value = string.Join(",", values.Select(v => v?.ToString() ?? string.Empty)) };
-
-        return formatter.Format(row);
+        return formatter.FormatCollection(rows);
     }
 
     /// <summary>
@@ -55,10 +50,11 @@ public static class CsvFormatterExtensions
     /// <param name="formatter">The CSV formatter instance</param>
     /// <param name="items">Collection of dynamic objects</param>
     /// <returns>CSV formatted string</returns>
-    public static string FormatDynamicCollection(this CsvFormatter formatter, IEnumerable<dynamic> items)
+    /// <exception cref="ArgumentNullException"><paramref name="formatter"/> is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="items"/> is null</exception>
+    public static string FormatDynamicCollection(this CsvFormatter formatter, IEnumerable<dynamic>? items)
     {
-        if (formatter is null)
-            throw new ArgumentNullException(nameof(formatter));
+        ArgumentNullException.ThrowIfNull(formatter);
 
         if (items is null)
             return string.Empty;
@@ -67,7 +63,6 @@ public static class CsvFormatterExtensions
         if (itemList.Count == 0)
             return string.Empty;
 
-        var sb = new System.Text.StringBuilder();
         var allPropertyNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         // Collect all unique property names from all dynamic objects
@@ -117,12 +112,14 @@ public static class CsvFormatterExtensions
     /// <param name="data">Object to format</param>
     /// <param name="propertyNames">Names of properties to include</param>
     /// <returns>CSV formatted string with only specified properties</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="formatter"/> is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="propertyNames"/> is null</exception>
     public static string FormatWithProperties(this CsvFormatter formatter, object? data, params string[] propertyNames)
     {
-        if (formatter is null)
-            throw new ArgumentNullException(nameof(formatter));
+        ArgumentNullException.ThrowIfNull(formatter);
+        ArgumentNullException.ThrowIfNull(propertyNames);
 
-        if (data is null || propertyNames is null || propertyNames.Length == 0)
+        if (data is null || propertyNames.Length == 0)
             return string.Empty;
 
         var type = data.GetType();
@@ -135,7 +132,6 @@ public static class CsvFormatterExtensions
             return string.Empty;
 
         // Create an anonymous object with only the specified properties
-        var anonObject = new { };
         var expando = new ExpandoObject() as IDictionary<string, object?>;
 
         foreach (var prop in properties)
@@ -143,15 +139,15 @@ public static class CsvFormatterExtensions
             try
             {
                 var value = prop.GetValue(data);
-                expando[prop.Name] = value;
+                expando![prop.Name] = value;
             }
             catch
             {
-                expando[prop.Name] = null;
+                expando![prop.Name] = null;
             }
         }
 
-        return formatter.Format(expando);
+        return formatter.Format(expando!);
     }
 
     /// <summary>
@@ -162,13 +158,14 @@ public static class CsvFormatterExtensions
     /// <param name="items">Collection to format</param>
     /// <param name="customDelimiter">Custom delimiter to use for this formatting</param>
     /// <returns>CSV formatted string with custom delimiter</returns>
-    public static string FormatWithDelimiter<T>(this CsvFormatter formatter, IEnumerable<T> items, string customDelimiter)
+    /// <exception cref="ArgumentNullException"><paramref name="formatter"/> is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="items"/> is null</exception>
+    /// <exception cref="ArgumentException"><paramref name="customDelimiter"/> is null or empty</exception>
+    public static string FormatWithDelimiter<T>(this CsvFormatter formatter, IEnumerable<T>? items, string customDelimiter)
     {
-        if (formatter is null)
-            throw new ArgumentNullException(nameof(formatter));
-
-        if (items is null || string.IsNullOrEmpty(customDelimiter))
-            return string.Empty;
+        ArgumentNullException.ThrowIfNull(formatter);
+        ArgumentNullException.ThrowIfNull(items);
+        ArgumentException.ThrowIfNullOrEmpty(customDelimiter);
 
         // Create a new formatter with the custom delimiter
         var customFormatter = new CsvFormatter(
@@ -184,8 +181,13 @@ public static class CsvFormatterExtensions
     /// <param name="formatter">The CSV formatter instance</param>
     /// <param name="items">Collection to format</param>
     /// <returns>Tab-separated values formatted string</returns>
-    public static string FormatAsTsv<T>(this CsvFormatter formatter, IEnumerable<T> items)
+    /// <exception cref="ArgumentNullException"><paramref name="formatter"/> is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="items"/> is null</exception>
+    public static string FormatAsTsv<T>(this CsvFormatter formatter, IEnumerable<T>? items)
     {
+        ArgumentNullException.ThrowIfNull(formatter);
+        ArgumentNullException.ThrowIfNull(items);
+
         return formatter.FormatWithDelimiter(items, "\t");
     }
 
@@ -195,8 +197,13 @@ public static class CsvFormatterExtensions
     /// <param name="formatter">The CSV formatter instance</param>
     /// <param name="items">Collection to format</param>
     /// <returns>Pipe-delimited formatted string</returns>
-    public static string FormatAsPsv<T>(this CsvFormatter formatter, IEnumerable<T> items)
+    /// <exception cref="ArgumentNullException"><paramref name="formatter"/> is null</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="items"/> is null</exception>
+    public static string FormatAsPsv<T>(this CsvFormatter formatter, IEnumerable<T>? items)
     {
+        ArgumentNullException.ThrowIfNull(formatter);
+        ArgumentNullException.ThrowIfNull(items);
+
         return formatter.FormatWithDelimiter(items, "|");
     }
 
