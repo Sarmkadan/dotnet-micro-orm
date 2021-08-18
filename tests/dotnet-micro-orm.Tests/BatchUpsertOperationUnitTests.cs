@@ -9,16 +9,25 @@ using Xunit;
 
 namespace DotnetMicroOrm.Tests;
 
+/// <summary>
+/// Unit tests for the BatchUpsertOperation class.
+/// </summary>
 public sealed class BatchUpsertOperationUnitTests
 {
     private readonly Mock<IDatabaseContext> _contextMock = new();
     private readonly BatchUpsertOperation<User> _batchUpsert;
 
+    /// <summary>
+    /// Initializes a new instance of the BatchUpsertOperationUnitTests class.
+    /// </summary>
     public BatchUpsertOperationUnitTests()
     {
         _batchUpsert = new BatchUpsertOperation<User>(_contextMock.Object);
     }
 
+    /// <summary>
+    /// Tests that the constructor throws an ArgumentNullException when the context is null.
+    /// </summary>
     [Fact]
     public void Constructor_WithNullContext_ThrowsArgumentNullException()
     {
@@ -27,6 +36,10 @@ public sealed class BatchUpsertOperationUnitTests
         act.Should().Throw<ArgumentNullException>().WithParameterName("context");
     }
 
+    /// <summary>
+    /// Tests that the UpsertAsync method throws an ArgumentNullException when the entity is null.
+    /// </summary>
+    /// <param name="entity">The entity to upsert.</param>
     [Fact]
     public async Task UpsertAsync_WithNullEntity_ThrowsArgumentNullException()
     {
@@ -35,6 +48,10 @@ public sealed class BatchUpsertOperationUnitTests
         await act.Should().ThrowAsync<ArgumentNullException>().WithParameterName("entity");
     }
 
+    /// <summary>
+    /// Tests that the UpsertAsync method throws an ArgumentNullException when the key selector is null.
+    /// </summary>
+    /// <param name="keySelector">The key selector.</param>
     [Fact]
     public async Task UpsertAsync_WithNullKeySelector_ThrowsArgumentNullException()
     {
@@ -44,6 +61,9 @@ public sealed class BatchUpsertOperationUnitTests
         await act.Should().ThrowAsync<ArgumentNullException>().WithParameterName("keySelector");
     }
 
+    /// <summary>
+    /// Tests that the UpsertAsync method throws an EntityValidationException when the entity is invalid.
+    /// </summary>
     [Fact]
     public async Task UpsertAsync_WithInvalidEntity_ThrowsEntityValidationException()
     {
@@ -53,6 +73,10 @@ public sealed class BatchUpsertOperationUnitTests
         await act.Should().ThrowAsync<EntityValidationException>();
     }
 
+    /// <summary>
+    /// Tests that the UpsertAsync method returns an upsert result when the entity is valid.
+    /// </summary>
+    /// <returns>The upsert result.</returns>
     [Fact]
     public async Task UpsertAsync_WithValidEntity_ReturnsUpsertResult()
     {
@@ -71,6 +95,10 @@ public sealed class BatchUpsertOperationUnitTests
         result.WasInserted.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that the UpsertRangeAsync method throws an ArgumentNullException when the entities are null.
+    /// </summary>
+    /// <param name="entities">The entities to upsert.</param>
     [Fact]
     public async Task UpsertRangeAsync_WithNullEntities_ThrowsArgumentNullException()
     {
@@ -79,6 +107,10 @@ public sealed class BatchUpsertOperationUnitTests
         await act.Should().ThrowAsync<ArgumentNullException>().WithParameterName("entities");
     }
 
+    /// <summary>
+    /// Tests that the UpsertRangeAsync method throws an ArgumentNullException when the key selector is null.
+    /// </summary>
+    /// <param name="keySelector">The key selector.</param>
     [Fact]
     public async Task UpsertRangeAsync_WithNullKeySelector_ThrowsArgumentNullException()
     {
@@ -88,6 +120,9 @@ public sealed class BatchUpsertOperationUnitTests
         await act.Should().ThrowAsync<ArgumentNullException>().WithParameterName("keySelector");
     }
 
+    /// <summary>
+    /// Tests that the UpsertRangeAsync method throws an ArgumentOutOfRangeException when the batch size is invalid.
+    /// </summary>
     [Fact]
     public async Task UpsertRangeAsync_WithInvalidBatchSize_ThrowsArgumentOutOfRangeException()
     {
@@ -97,6 +132,9 @@ public sealed class BatchUpsertOperationUnitTests
         await act.Should().ThrowAsync<ArgumentOutOfRangeException>();
     }
 
+    /// <summary>
+    /// Tests that the UpsertRangeAsync method throws an ArgumentOutOfRangeException when the batch size is too large.
+    /// </summary>
     [Fact]
     public async Task UpsertRangeAsync_WithTooLargeBatchSize_ThrowsArgumentOutOfRangeException()
     {
@@ -106,6 +144,10 @@ public sealed class BatchUpsertOperationUnitTests
         await act.Should().ThrowAsync<ArgumentOutOfRangeException>();
     }
 
+    /// <summary>
+    /// Tests that the UpsertRangeAsync method returns an empty list when the input list is empty.
+    /// </summary>
+    /// <returns>The list of upsert results.</returns>
     [Fact]
     public async Task UpsertRangeAsync_WithEmptyList_ReturnsEmptyList()
     {
@@ -114,6 +156,9 @@ public sealed class BatchUpsertOperationUnitTests
         result.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that the UpsertRangeAsync method throws an EntityValidationException when the entity is invalid.
+    /// </summary>
     [Fact]
     public async Task UpsertRangeAsync_WithInvalidEntity_ThrowsEntityValidationException()
     {
@@ -123,6 +168,10 @@ public sealed class BatchUpsertOperationUnitTests
         await act.Should().ThrowAsync<EntityValidationException>();
     }
 
+    /// <summary>
+    /// Tests that the UpsertRangeAsync method returns multiple upsert results when the entities are valid.
+    /// </summary>
+    /// <returns>The list of upsert results.</returns>
     [Fact]
     public async Task UpsertRangeAsync_WithValidEntities_ReturnsMultipleResults()
     {
@@ -146,6 +195,11 @@ public sealed class BatchUpsertOperationUnitTests
         results[1].WasInserted.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that the UpsertRangeAsync method returns the correct number of results when the batch size is specified.
+    /// </summary>
+    /// <param name="batchSize">The batch size.</param>
+    /// <returns>The list of upsert results.</returns>
     [Fact]
     public async Task UpsertRangeAsync_WithBatchSize_ReturnsCorrectNumberOfResults()
     {
@@ -169,6 +223,10 @@ public sealed class BatchUpsertOperationUnitTests
         results.Should().HaveCount(3);
     }
 
+    /// <summary>
+    /// Tests that the GetTableName method returns the correct table name.
+    /// </summary>
+    /// <returns>The table name.</returns>
     [Fact]
     public void GetTableName_ReturnsCorrectTableName()
     {
@@ -177,6 +235,10 @@ public sealed class BatchUpsertOperationUnitTests
         tableName.Should().Be("Users");
     }
 
+    /// <summary>
+    /// Tests that the GetTableSchema method returns the correct schema.
+    /// </summary>
+    /// <returns>The schema.</returns>
     [Fact]
     public void GetTableSchema_ReturnsCorrectSchema()
     {
