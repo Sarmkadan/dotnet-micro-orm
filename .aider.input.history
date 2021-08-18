@@ -4804,3 +4804,95 @@
 +- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in BatchOperationsBenchmarksExtensions
 +- refactor(dotnet-micro-orm.benchmarks): tighten guard clauses and docs in AuditServiceBenchmarksExtensions
 +- feat(pipeline): add PipelineBuilder extension helpers
+
+# 2026-07-12 19:28:32.531667
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/UserCreatedEventHandlerExtensions.cs`.
++
++It must contain `public static class UserCreatedEventHandlerExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `UserCreatedEventHandler` (same namespace as the original file `src/Events/UserEventHandler.cs`).
++
++The REAL public members of `UserCreatedEventHandler` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public UserCreatedEventHandler
++public async Task HandleAsync
++public UserUpdatedEventHandler
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++NOTE: three previous attempts at this task were reverted because the build broke. The exact compiler errors were:
++[after 295s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(6,63): error CS0246: The type or namespace name 'UserCreatedEventHandler' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(11,72): error CS0246: The type or namespace name 'UserCreatedEventHandler' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(32,74): error CS0246: The t
++
++Re-do the task from scratch avoiding these errors. If the error references a type that does not exist, use only types that actually exist in the repo.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 94s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(6,58): error CS0246: The type or namespace name 'UserCreatedEventHandler' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(18,56): error CS0246: The type or namespace name 'UserCreatedEventHandler' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(43,58): error CS0246: The t
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in BatchUpsertOperationUnitTestsExtensions
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in BatchUpsertOperationTestsExtensions
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in MigrationRunnerTestsJsonExtensions
++- refactor(formatters): tighten guard clauses and docs in CsvFormatterExtensions
++- refactor(formatters): tighten guard clauses and docs in MarkdownFormatterJsonExtensions
++- refactor(controllers): tighten guard clauses and docs in HealthControllerJsonExtensions
++- refactor(utils): tighten guard clauses and docs in ResultJsonExtensions
++- refactor(utils): enhance guard clauses and XML documentation in ApiResponseExtensions
++- refactor(configuration): tighten guard clauses and docs in ServiceCollectionExtensions
++- refactor(repositories): tighten guard clauses and docs in ProductRepositoryJsonExtensions
+
+# 2026-07-12 19:28:32.532711
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Events/UserCreatedEventHandlerExtensions.cs`.
++
++It must contain `public static class UserCreatedEventHandlerExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `UserCreatedEventHandler` (same namespace as the original file `src/Events/UserEventHandler.cs`).
++
++The REAL public members of `UserCreatedEventHandler` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public UserCreatedEventHandler
++public async Task HandleAsync
++public UserUpdatedEventHandler
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Every method fully implemented: NO NotImplementedException, NO TODO, no empty bodies.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++NOTE: three previous attempts at this task were reverted because the build broke. The exact compiler errors were:
++[after 295s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(6,63): error CS0246: The type or namespace name 'UserCreatedEventHandler' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(11,72): error CS0246: The type or namespace name 'UserCreatedEventHandler' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(32,74): error CS0246: The t
++
++Re-do the task from scratch avoiding these errors. If the error references a type that does not exist, use only types that actually exist in the repo.
++
++IMPORTANT: a previous attempt at this exact task FAILED with these compiler errors and was reverted. Do it differently and make sure these do not happen again:
++[after 94s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(6,58): error CS0246: The type or namespace name 'UserCreatedEventHandler' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(18,56): error CS0246: The type or namespace name 'UserCreatedEventHandler' could not be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Events/UserCreatedEventHandlerExtensions.cs(43,58): error CS0246: The t
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in BatchUpsertOperationUnitTestsExtensions
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in BatchUpsertOperationTestsExtensions
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in MigrationRunnerTestsJsonExtensions
++- refactor(formatters): tighten guard clauses and docs in CsvFormatterExtensions
++- refactor(formatters): tighten guard clauses and docs in MarkdownFormatterJsonExtensions
++- refactor(controllers): tighten guard clauses and docs in HealthControllerJsonExtensions
++- refactor(utils): tighten guard clauses and docs in ResultJsonExtensions
++- refactor(utils): enhance guard clauses and XML documentation in ApiResponseExtensions
++- refactor(configuration): tighten guard clauses and docs in ServiceCollectionExtensions
++- refactor(repositories): tighten guard clauses and docs in ProductRepositoryJsonExtensions
