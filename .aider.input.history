@@ -4896,3 +4896,115 @@
 +- refactor(utils): enhance guard clauses and XML documentation in ApiResponseExtensions
 +- refactor(configuration): tighten guard clauses and docs in ServiceCollectionExtensions
 +- refactor(repositories): tighten guard clauses and docs in ProductRepositoryJsonExtensions
+
+# 2026-07-12 19:37:36.109791
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Profiling/QueryProfileExtensions.cs`.
++
++It must contain `public static class QueryProfileExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `QueryProfile` (same namespace as the original file `src/Profiling/QueryProfile.cs`).
++
++The REAL public members of `QueryProfile` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public Guid Id
++public string Query
++public Dictionary<string, object>? Parameters
++public TimeSpan Duration
++public DateTime ExecutedAt
++public bool Succeeded
++public string? ErrorMessage
++public string? CallerMemberName
++public int? RowsAffected
++public int TotalQueries
++public TimeSpan TotalDuration
++public TimeSpan AverageDuration
++public TimeSpan MaxDuration
++public TimeSpan MinDuration
++public int FailedQueries
++public QueryProfile? SlowestQuery
++```
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Every method solves its problem COMPLETELY. If you cannot implement something for real, OMIT that method entirely - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application". A smaller honest class beats a padded fake one.
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit on one line, pattern matching over if-chains, target-typed new.
++- Return IReadOnlyList<T>/IEnumerable<T> from queries, not List<T>. Use CultureInfo.InvariantCulture for machine-facing parsing/formatting of numbers/dates.
++- XML doc comments on every public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++NOTE: three previous attempts at this task were reverted because the build broke. The exact compiler errors were:
++[after 227s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Profiling/QueryProfileExtensions.cs(58,40): error CS1061: 'QueryProfile' does not contain a definition for 'TotalQueries' and no accessible extension method 'TotalQueries' accepting a first argument of type 'QueryProfile' could be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Profiling/QueryProfileExtensions.cs(59,44): error CS1061: 'QueryProfile' does not contain a definition for 'TotalDuration' and no accessible extension method 'TotalDuration' accepting a first argument of type 'QueryProfile' could be found (are you missing a using directive or an assembly reference?) [/home
++
++Re-do the task from scratch avoiding these errors. If the error references a type that does not exist, use only types that actually exist in the repo.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- fix: resolve build errors in .aider.chat.history
++- (no commit message provided)
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in BatchUpsertOperationUnitTestsExtensions
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in BatchUpsertOperationTestsExtensions
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in MigrationRunnerTestsJsonExtensions
++- refactor(formatters): tighten guard clauses and docs in CsvFormatterExtensions
++- refactor(formatters): tighten guard clauses and docs in MarkdownFormatterJsonExtensions
++- refactor(controllers): tighten guard clauses and docs in HealthControllerJsonExtensions
++- refactor(utils): tighten guard clauses and docs in ResultJsonExtensions
++- refactor(utils): enhance guard clauses and XML documentation in ApiResponseExtensions
+
+# 2026-07-12 19:37:36.110241
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, create ONE new C# file: `src/Profiling/QueryProfileExtensions.cs`.
++
++It must contain `public static class QueryProfileExtensions` with 2-4 genuinely useful, fully implemented extension methods for the existing type `QueryProfile` (same namespace as the original file `src/Profiling/QueryProfile.cs`).
++
++The REAL public members of `QueryProfile` are (use ONLY these plus the .NET BCL, do not invent members):
++```
++public Guid Id
++public string Query
++public Dictionary<string, object>? Parameters
++public TimeSpan Duration
++public DateTime ExecutedAt
++public bool Succeeded
++public string? ErrorMessage
++public string? CallerMemberName
++public int? RowsAffected
++public int TotalQueries
++public TimeSpan TotalDuration
++public TimeSpan AverageDuration
++public TimeSpan MaxDuration
++public TimeSpan MinDuration
++public int FailedQueries
++public QueryProfile? SlowestQuery
++```
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Every method solves its problem COMPLETELY. If you cannot implement something for real, OMIT that method entirely - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application". A smaller honest class beats a padded fake one.
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit on one line, pattern matching over if-chains, target-typed new.
++- Return IReadOnlyList<T>/IEnumerable<T> from queries, not List<T>. Use CultureInfo.InvariantCulture for machine-facing parsing/formatting of numbers/dates.
++- XML doc comments on every public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++NOTE: three previous attempts at this task were reverted because the build broke. The exact compiler errors were:
++[after 227s] [auto-committed] [build-failed-reverted] /home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Profiling/QueryProfileExtensions.cs(58,40): error CS1061: 'QueryProfile' does not contain a definition for 'TotalQueries' and no accessible extension method 'TotalQueries' accepting a first argument of type 'QueryProfile' could be found (are you missing a using directive or an assembly reference?) [/home/redrocket/task-factory/workdir/dotnet-micro-orm/DotnetMicroOrm.csproj]
++/home/redrocket/task-factory/workdir/dotnet-micro-orm/src/Profiling/QueryProfileExtensions.cs(59,44): error CS1061: 'QueryProfile' does not contain a definition for 'TotalDuration' and no accessible extension method 'TotalDuration' accepting a first argument of type 'QueryProfile' could be found (are you missing a using directive or an assembly reference?) [/home
++
++Re-do the task from scratch avoiding these errors. If the error references a type that does not exist, use only types that actually exist in the repo.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- fix: resolve build errors in .aider.chat.history
++- (no commit message provided)
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in BatchUpsertOperationUnitTestsExtensions
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in BatchUpsertOperationTestsExtensions
++- refactor(dotnet-micro-orm.tests): tighten guard clauses and docs in MigrationRunnerTestsJsonExtensions
++- refactor(formatters): tighten guard clauses and docs in CsvFormatterExtensions
++- refactor(formatters): tighten guard clauses and docs in MarkdownFormatterJsonExtensions
++- refactor(controllers): tighten guard clauses and docs in HealthControllerJsonExtensions
++- refactor(utils): tighten guard clauses and docs in ResultJsonExtensions
++- refactor(utils): enhance guard clauses and XML documentation in ApiResponseExtensions
