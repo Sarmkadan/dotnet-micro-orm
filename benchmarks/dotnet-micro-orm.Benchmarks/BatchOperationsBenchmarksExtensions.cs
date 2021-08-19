@@ -11,12 +11,13 @@ namespace DotnetMicroOrm.Benchmarks
     public static class BatchOperationsBenchmarksExtensions
     {
         /// <summary>
-        /// Executes a warmup sequence for batch operations to stabilize measurements.
-        /// This should be called before actual benchmark measurements to account for JIT compilation and cache warming.
+        /// Executes a warm‑up sequence for batch operations to stabilize measurements.
+        /// This method runs a small (1,000 entities) and a larger (5,000 entities) add‑range benchmark
+        /// to trigger JIT compilation and warm up any relevant caches before the actual measurements.
         /// </summary>
-        /// <param name="benchmarks">The <see cref="BatchOperationsBenchmarks"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="benchmarks"/> is <see langword="null"/>.</exception>
-        /// <returns>Task representing the warmup operation.</returns>
+        /// <param name="benchmarks">The <see cref="BatchOperationsBenchmarks"/> instance on which the warm‑up operations are performed.</param>
+        /// <returns>A <see cref="Task"/> that completes when both warm‑up operations have finished.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="benchmarks"/> is <c>null</c>.</exception>
         public static async Task WarmupCache(this BatchOperationsBenchmarks benchmarks)
         {
             ArgumentNullException.ThrowIfNull(benchmarks);
@@ -26,12 +27,13 @@ namespace DotnetMicroOrm.Benchmarks
         }
 
         /// <summary>
-        /// Executes all benchmark methods on the provided <see cref="BatchOperationsBenchmarks"/> instance.
-        /// This runs the complete suite of batch operation benchmarks including setup, execution, and cleanup.
+        /// Executes the full suite of batch‑operation benchmarks on the supplied <see cref="BatchOperationsBenchmarks"/> instance.
+        /// The sequence includes global setup, a variety of add, update, delete, bulk‑insert and batch‑operation
+        /// scenarios, and finally global cleanup. This method is intended for a single, comprehensive benchmark run.
         /// </summary>
-        /// <param name="benchmarks">The <see cref="BatchOperationsBenchmarks"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="benchmarks"/> is <see langword="null"/>.</exception>
-        /// <returns>Task representing the complete benchmark run.</returns>
+        /// <param name="benchmarks">The <see cref="BatchOperationsBenchmarks"/> instance whose benchmark methods will be invoked.</param>
+        /// <returns>A <see cref="Task"/> that completes when the entire benchmark run (including cleanup) has finished.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="benchmarks"/> is <c>null</c>.</exception>
         public static async Task RunAllBenchmarks(this BatchOperationsBenchmarks benchmarks)
         {
             ArgumentNullException.ThrowIfNull(benchmarks);
@@ -52,12 +54,13 @@ namespace DotnetMicroOrm.Benchmarks
         }
 
         /// <summary>
-        /// Measures memory allocation during batch insert operations by executing a standard batch insert
-        /// and comparing memory usage before and after the operation.
+        /// Measures the amount of memory allocated by a standard batch insert of 1,000 entities.
+        /// It records the total managed memory before and after the operation and writes the
+        /// difference to the console.
         /// </summary>
-        /// <param name="benchmarks">The <see cref="BatchOperationsBenchmarks"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="benchmarks"/> is <see langword="null"/>.</exception>
-        /// <returns>Task representing the memory measurement operation.</returns>
+        /// <param name="benchmarks">The <see cref="BatchOperationsBenchmarks"/> instance used to perform the insert operation.</param>
+        /// <returns>A <see cref="Task"/> that completes after the memory measurement and console output are finished.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="benchmarks"/> is <c>null</c>.</exception>
         public static async Task MeasureMemoryUsage(this BatchOperationsBenchmarks benchmarks)
         {
             ArgumentNullException.ThrowIfNull(benchmarks);
