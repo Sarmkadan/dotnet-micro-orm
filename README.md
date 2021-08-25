@@ -538,6 +538,29 @@ public class ProductExportService
 public enum ExportFormat { Csv, Json, Xml }
 ```
 
+## DefaultHttpClientExtensions
+
+The `DefaultHttpClientExtensions` class provides extension methods for `HttpClient` that simplify making HTTP requests and handling responses. These extensions handle common scenarios like automatic JSON deserialization, form posting, retry logic, and response validation, making it easier to work with `HttpClient` in a type-safe manner.
+
+```csharp
+var client = new HttpClient();
+
+// Simple GET request with JSON deserialization
+var product = await client.GetFromJsonAsync<Product>("https://api.example.com/products/1");
+
+// POST form data
+var formData = new Dictionary<string, string> { { "username", "test" }, { "password", "secret123" } };
+var response = await client.PostFormAsync("https://api.example.com/auth/login", formData);
+
+// GET with retry logic
+var retryResponse = await client.SendWithRetryAsync(
+    HttpMethod.Get, 
+    "https://api.example.com/data", 
+    maxRetries: 3,
+    delay: TimeSpan.FromSeconds(1)
+);
+```
+
 ## API Reference
 
 ### IRepository<T> Interface
