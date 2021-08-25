@@ -538,9 +538,42 @@ public class ProductExportService
 public enum ExportFormat { Csv, Json, Xml }
 ```
 
-## DefaultHttpClientExtensions
+## CommandParserExtensions
 
-The `DefaultHttpClientExtensions` class provides extension methods for `HttpClient` that simplify making HTTP requests and handling responses. These extensions handle common scenarios like automatic JSON deserialization, form posting, retry logic, and response validation, making it easier to work with `HttpClient` in a type-safe manner.
+The `CommandParserExtensions` class provides extension methods for `CommandParser` and `CommandContext` that simplify command-line argument parsing, option handling, and help text generation. These extensions make it easier to work with the CLI framework in a fluent and type-safe manner.
+
+```csharp
+// Create a command parser
+var parser = new CommandParser();
+
+// Register commands and options
+parser.RegisterCommand("import", "Import data from CSV file", context => 
+{
+    var filePath = context.GetArgument("file");
+    Console.WriteLine($"Importing from: {filePath}");
+});
+
+parser.AddOption("import", "file", "Path to CSV file (required)", isRequired: true);
+parser.AddOption("import", "verbose", "Enable verbose output");
+
+// Parse command-line arguments
+var context = parser.Parse(args);
+
+if (context.ShowHelp)
+{
+    Console.WriteLine(parser.GetHelpText());
+    return;
+}
+
+// Check if option exists and get its value
+if (context.HasArgument("verbose"))
+{
+    Console.WriteLine("Verbose mode enabled");
+}
+
+// Invoke the command handler
+context.Handler?.Invoke(context);
+```
 
 ```csharp
 var client = new HttpClient();
