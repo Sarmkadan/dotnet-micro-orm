@@ -94,4 +94,28 @@ var stats = await UserServiceExtensions.GetUserStatisticsAsync();
 Console.WriteLine($"Active: {stats.ActiveCount}, Inactive: {stats.InactiveCount}, Total: {stats.TotalCount}");
 ```
 
+## ProductServiceExtensions
+
+The `ProductServiceExtensions` class provides a set of extensions for managing product-related operations, including creating products, retrieving products by SKU, updating product prices and names, and searching products. It allows you to perform bulk operations, such as creating multiple products at once, and retrieve product statistics.
+
+### Example Usage
+
+```csharp
+// Create a new product
+var product = await ProductServiceExtensions.CreateProductAsync(new Product { Name = "Example Product", Price = 10.99m, Sku = "EX-001" });
+
+// Retrieve a product by SKU
+var retrievedProduct = await ProductServiceExtensions.GetProductBySkuAsync("EX-001");
+
+// Update a product's price
+var updatedProduct = await ProductServiceExtensions.UpdateProductPriceAsync(product, 12.99m);
+
+// Search for products by name
+var searchResults = await ProductServiceExtensions.SearchProductsCaseInsensitiveAsync("example");
+
+// Get the total inventory value
+var totalInventoryValue = await ProductServiceExtensions.GetTotalInventoryValueAsync();
+Console.WriteLine($"Total inventory value: {totalInventoryValue:C}");
+```
+
 // ... (rest of the README content remains the same)
