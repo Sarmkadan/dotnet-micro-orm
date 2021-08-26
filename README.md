@@ -67,4 +67,31 @@ if (EventBusExtensions.HasSubscribers<MessageSentEvent>(eventBus))
 }
 ```
 
+## UserServiceExtensions
+
+The `UserServiceExtensions` class provides utility methods for managing user-related operations, including checking user existence, retrieving user data, updating user details, and generating user statistics.
+
+### Example Usage
+
+```csharp
+// Check if user exists
+var userExists = await UserServiceExtensions.UserExistsAsync(user.Id);
+
+// Retrieve user by email
+var user = await UserServiceExtensions.GetUserByEmailAsync("user@example.com");
+
+// Update user email
+var updatedUser = await UserServiceExtensions.UpdateEmailAsync(user.Id, "newemail@example.com");
+
+// Get active users
+var activeUsers = await UserServiceExtensions.GetActiveUsersAsync();
+
+// Authenticate user with details
+var (authenticatedUser, success) = await UserServiceExtensions.AuthenticateWithDetailsAsync("username", "password");
+
+// Get user statistics
+var stats = await UserServiceExtensions.GetUserStatisticsAsync();
+Console.WriteLine($"Active: {stats.ActiveCount}, Inactive: {stats.InactiveCount}, Total: {stats.TotalCount}");
+```
+
 // ... (rest of the README content remains the same)
