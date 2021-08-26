@@ -5982,3 +5982,71 @@
 +- docs: add XML documentation comments to HealthControllerJsonExtensions
 +- docs: document .aider.chat.history public API
 +- docs: add XML docs for BatchOperationsBenchmarksExtensions methods
+
+# 2026-07-13 07:20:36.169615
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `UserServiceExtensions` (defined in `src/Services/UserServiceExtensions.cs`).
++
++Add a "## UserServiceExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<bool> UserExistsAsync
++public static async Task<User?> GetUserByEmailAsync
++public static async Task<User> UpdateEmailAsync
++public static async Task<List<User>> GetActiveUsersAsync
++public static async Task<(User? User, bool Success)> AuthenticateWithDetailsAsync
++public static async Task<bool> HasNotLoggedInDaysAsync
++public static async Task<(int ActiveCount, int InactiveCount, int TotalCount)> GetUserStatisticsAsync
++public static async Task<List<User>> GetUsersByUsernamePatternAsync
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
++- docs: document .aider.chat.history public API
++- docs: document .aider.chat.history public API
++- docs: document .aider.chat.history public API
++- docs: add XML documentation comments to HealthControllerJsonExtensions
+
+# 2026-07-13 07:20:36.169699
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `UserServiceExtensions` (defined in `src/Services/UserServiceExtensions.cs`).
++
++Add a "## UserServiceExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<bool> UserExistsAsync
++public static async Task<User?> GetUserByEmailAsync
++public static async Task<User> UpdateEmailAsync
++public static async Task<List<User>> GetActiveUsersAsync
++public static async Task<(User? User, bool Success)> AuthenticateWithDetailsAsync
++public static async Task<bool> HasNotLoggedInDaysAsync
++public static async Task<(int ActiveCount, int InactiveCount, int TotalCount)> GetUserStatisticsAsync
++public static async Task<List<User>> GetUsersByUsernamePatternAsync
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
++- docs: document .aider.chat.history public API
++- docs: document .aider.chat.history public API
++- docs: document .aider.chat.history public API
++- docs: add XML documentation comments to HealthControllerJsonExtensions
