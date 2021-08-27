@@ -6126,3 +6126,201 @@
 +- docs: describe .aider.chat.history usage in README
 +- docs: document .aider.chat.history public API
 +- docs: document .aider.chat.history public API
+
+# 2026-07-13 08:29:25.171314
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ProductRepositoryExtensions` (defined in `src/Data/Repositories/ProductRepositoryExtensions.cs`).
++
++Add a "## ProductRepositoryExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<List<Product>> GetBySkusAsync
++public static async Task<List<Product>> GetByIdsAsync
++public static async Task<List<Product>> GetByPriceRangeAsync
++public static async Task<(List<Product> Items, int TotalCount)> GetByCategoryPagedAsync
++public static async Task<List<Product>> GetLowStockProductsAsync
++public static async Task<List<Product>> GetMostProfitableAsync
++public static async Task<List<Product>> GetByCategoryIdsAsync
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-13 08:29:25.171428
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ProductRepositoryExtensions` (defined in `src/Data/Repositories/ProductRepositoryExtensions.cs`).
++
++Add a "## ProductRepositoryExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<List<Product>> GetBySkusAsync
++public static async Task<List<Product>> GetByIdsAsync
++public static async Task<List<Product>> GetByPriceRangeAsync
++public static async Task<(List<Product> Items, int TotalCount)> GetByCategoryPagedAsync
++public static async Task<List<Product>> GetLowStockProductsAsync
++public static async Task<List<Product>> GetMostProfitableAsync
++public static async Task<List<Product>> GetByCategoryIdsAsync
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-13 08:30:32.391082
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ProductRepositoryExtensions` (defined in `src/Data/Repositories/ProductRepositoryExtensions.cs`).
++
++Add a "## ProductRepositoryExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<List<Product>> GetBySkusAsync
++public static async Task<List<Product>> GetByIdsAsync
++public static async Task<List<Product>> GetByPriceRangeAsync
++public static async Task<(List<Product> Items, int TotalCount)> GetByCategoryPagedAsync
++public static async Task<List<Product>> GetLowStockProductsAsync
++public static async Task<List<Product>> GetMostProfitableAsync
++public static async Task<List<Product>> GetByCategoryIdsAsync
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-13 08:30:32.391141
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ProductRepositoryExtensions` (defined in `src/Data/Repositories/ProductRepositoryExtensions.cs`).
++
++Add a "## ProductRepositoryExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<List<Product>> GetBySkusAsync
++public static async Task<List<Product>> GetByIdsAsync
++public static async Task<List<Product>> GetByPriceRangeAsync
++public static async Task<(List<Product> Items, int TotalCount)> GetByCategoryPagedAsync
++public static async Task<List<Product>> GetLowStockProductsAsync
++public static async Task<List<Product>> GetMostProfitableAsync
++public static async Task<List<Product>> GetByCategoryIdsAsync
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-13 08:31:41.270409
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ProductRepositoryExtensions` (defined in `src/Data/Repositories/ProductRepositoryExtensions.cs`).
++
++Add a "## ProductRepositoryExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<List<Product>> GetBySkusAsync
++public static async Task<List<Product>> GetByIdsAsync
++public static async Task<List<Product>> GetByPriceRangeAsync
++public static async Task<(List<Product> Items, int TotalCount)> GetByCategoryPagedAsync
++public static async Task<List<Product>> GetLowStockProductsAsync
++public static async Task<List<Product>> GetMostProfitableAsync
++public static async Task<List<Product>> GetByCategoryIdsAsync
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-13 08:31:41.270735
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ProductRepositoryExtensions` (defined in `src/Data/Repositories/ProductRepositoryExtensions.cs`).
++
++Add a "## ProductRepositoryExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<List<Product>> GetBySkusAsync
++public static async Task<List<Product>> GetByIdsAsync
++public static async Task<List<Product>> GetByPriceRangeAsync
++public static async Task<(List<Product> Items, int TotalCount)> GetByCategoryPagedAsync
++public static async Task<List<Product>> GetLowStockProductsAsync
++public static async Task<List<Product>> GetMostProfitableAsync
++public static async Task<List<Product>> GetByCategoryIdsAsync
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
