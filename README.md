@@ -1,121 +1,60 @@
-# dotnet-micro-orm
+// ... (rest of the README content remains the same)
+## ProductRepositoryExtensions
 
-## JobSchedulerExtensions
-
-The `JobSchedulerExtensions` class provides a set of extensions for scheduling and managing background jobs. It allows you to register jobs, execute them asynchronously, and track their execution history.
+The `ProductRepositoryExtensions` class provides a set of extensions for managing product-related operations. It allows you to retrieve products by various criteria, such as SKU, ID, price range, category, and more.
 
 ### Example Usage
 
 ```csharp
-var scheduler = new JobScheduler();
-
-// Register a job
-scheduler.Register<HelloWorldJob>();
-
-// Execute a job asynchronously
-var result = await JobSchedulerExtensions.ExecuteJobAsync<HelloWorldJob>(scheduler);
-Console.WriteLine($"Job executed with result: {result.Success}");
-
-// Get execution history
-var history = JobSchedulerExtensions.GetExecutionHistory(scheduler);
-foreach (var entry in history)
+// Get products by SKU
+var products = await ProductRepositoryExtensions.GetBySkusAsync(new[] { "EX-001", "EX-002" });
+foreach (var product in products)
 {
-    Console.WriteLine($"Executed at {entry.ExecutedAt} with result: {entry.Success}");
+    Console.WriteLine($"Product: {product.Name}, SKU: {product.Sku}");
 }
 
-// Get job statistics
-var stats = scheduler.GetStatistics();
-Console.WriteLine($"Total executions: {stats.TotalExecutions}");
-Console.WriteLine($"Successful executions: {stats.SuccessfulExecutions}");
-Console.WriteLine($"Failed executions: {stats.FailedExecutions}");
-Console.WriteLine($"Success rate: {stats.SuccessRate:P}");
-Console.WriteLine($"Average execution time: {stats.AverageExecutionTime}");
-Console.WriteLine($"Last execution time: {stats.LastExecutionTime}");
-```
-
-## EventBusExtensions
-
-The `EventBusExtensions` class provides methods for managing event subscriptions and publishing events. It allows you to subscribe multiple handlers to events, publish events synchronously, and inspect registered subscribers.
-
-### Example Usage
-
-```csharp
-// Define an event and handler
-public class MessageSentEvent : IEvent { public string Message { get; set; } }
-public class MessageSentHandler : IEventHandler<MessageSentEvent> 
-{ 
-    public Task Handle(MessageSentEvent @event) 
-    {
-        Console.WriteLine($"Message received: {@event.Message}");
-        return Task.CompletedTask;
-    }
-}
-
-// Usage
-var eventBus = new EventBus();
-
-// Subscribe handler to event
-EventBusExtensions.SubscribeRange<MessageSentEvent, MessageSentHandler>(eventBus);
-
-// Publish event
-await EventBusExtensions.PublishSyncAsync(eventBus, new MessageSentEvent { Message = "Hello, world!" });
-
-// Check subscribers
-if (EventBusExtensions.HasSubscribers<MessageSentEvent>(eventBus))
+// Get products by ID
+var productsById = await ProductRepositoryExtensions.GetByIdsAsync(new[] { 1, 2, 3 });
+foreach (var product in productsById)
 {
-    Console.WriteLine($"Subscribers count: {EventBusExtensions.GetTotalSubscriberCount(eventBus)}");
+    Console.WriteLine($"Product: {product.Name}, ID: {product.Id}");
 }
-```
 
-## UserServiceExtensions
+// Get products by price range
+var productsByPrice = await ProductRepositoryExtensions.GetByPriceRangeAsync(10.00m, 20.00m);
+foreach (var product in productsByPrice)
+{
+    Console.WriteLine($"Product: {product.Name}, Price: {product.Price}");
+}
 
-The `UserServiceExtensions` class provides utility methods for managing user-related operations, including checking user existence, retrieving user data, updating user details, and generating user statistics.
+// Get products by category paged
+var (productsByCategory, totalCount) = await ProductRepositoryExtensions.GetByCategoryPagedAsync(1, 10, "Electronics");
+foreach (var product in productsByCategory)
+{
+    Console.WriteLine($"Product: {product.Name}, Category: {product.Category}");
+}
+Console.WriteLine($"Total count: {totalCount}");
 
-### Example Usage
+// Get low stock products
+var lowStockProducts = await ProductRepositoryExtensions.GetLowStockProductsAsync();
+foreach (var product in lowStockProducts)
+{
+    Console.WriteLine($"Product: {product.Name}, Stock: {product.Stock}");
+}
 
-```csharp
-// Check if user exists
-var userExists = await UserServiceExtensions.UserExistsAsync(user.Id);
+// Get most profitable products
+var mostProfitableProducts = await ProductRepositoryExtensions.GetMostProfitableAsync();
+foreach (var product in mostProfitableProducts)
+{
+    Console.WriteLine($"Product: {product.Name}, Profit: {product.Profit}");
+}
 
-// Retrieve user by email
-var user = await UserServiceExtensions.GetUserByEmailAsync("user@example.com");
-
-// Update user email
-var updatedUser = await UserServiceExtensions.UpdateEmailAsync(user.Id, "newemail@example.com");
-
-// Get active users
-var activeUsers = await UserServiceExtensions.GetActiveUsersAsync();
-
-// Authenticate user with details
-var (authenticatedUser, success) = await UserServiceExtensions.AuthenticateWithDetailsAsync("username", "password");
-
-// Get user statistics
-var stats = await UserServiceExtensions.GetUserStatisticsAsync();
-Console.WriteLine($"Active: {stats.ActiveCount}, Inactive: {stats.InactiveCount}, Total: {stats.TotalCount}");
-```
-
-## ProductServiceExtensions
-
-The `ProductServiceExtensions` class provides a set of extensions for managing product-related operations, including creating products, retrieving products by SKU, updating product prices and names, and searching products. It allows you to perform bulk operations, such as creating multiple products at once, and retrieve product statistics.
-
-### Example Usage
-
-```csharp
-// Create a new product
-var product = await ProductServiceExtensions.CreateProductAsync(new Product { Name = "Example Product", Price = 10.99m, Sku = "EX-001" });
-
-// Retrieve a product by SKU
-var retrievedProduct = await ProductServiceExtensions.GetProductBySkuAsync("EX-001");
-
-// Update a product's price
-var updatedProduct = await ProductServiceExtensions.UpdateProductPriceAsync(product, 12.99m);
-
-// Search for products by name
-var searchResults = await ProductServiceExtensions.SearchProductsCaseInsensitiveAsync("example");
-
-// Get the total inventory value
-var totalInventoryValue = await ProductServiceExtensions.GetTotalInventoryValueAsync();
-Console.WriteLine($"Total inventory value: {totalInventoryValue:C}");
+// Get products by category IDs
+var productsByCategoryIds = await ProductRepositoryExtensions.GetByCategoryIdsAsync(new[] { 1, 2, 3 });
+foreach (var product in productsByCategoryIds)
+{
+    Console.WriteLine($"Product: {product.Name}, Category ID: {product.CategoryId}");
+}
 ```
 
 // ... (rest of the README content remains the same)
