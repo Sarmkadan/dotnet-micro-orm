@@ -6324,3 +6324,91 @@
 +- (no commit message provided)
 +- docs: describe .aider.chat.history usage in README
 +- docs: describe .aider.chat.history usage in README
+
+# 2026-07-13 09:35:29.134114
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ApiResponseExtensions` (defined in `src/Utils/ApiResponseExtensions.cs`).
++
++Add a "## ApiResponseExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static ApiResponse WithRequestId
++public static ApiResponse<T> WithRequestId<T>
++public static ApiPagedResponse<T> WithRequestId<T>
++public static ApiResponse WithContext
++public static ApiResponse<T> WithContext<T>
++public static ApiPagedResponse<T> WithContext<T>
++public static string ToJson
++public static string ToJson<T>
++public static string ToJson<T>
++public static ApiResponse ToSuccessResponse
++public static ApiResponse<T> ToSuccessResponse<T>
++public static ApiResponse ToErrorResponse
++public static ApiResponse<T> ToErrorResponse<T>
++public static ApiPagedResponse<T> ToPagedResponse<T>
++public static List<T> ToItemList<T>
++public static bool HasMoreItems<T>
++public static bool IsFirstPage<T>
++public static bool IsLastPage<T>
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- docs: add ProductRepositoryExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
+
+# 2026-07-13 09:35:29.134611
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ApiResponseExtensions` (defined in `src/Utils/ApiResponseExtensions.cs`).
++
++Add a "## ApiResponseExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static ApiResponse WithRequestId
++public static ApiResponse<T> WithRequestId<T>
++public static ApiPagedResponse<T> WithRequestId<T>
++public static ApiResponse WithContext
++public static ApiResponse<T> WithContext<T>
++public static ApiPagedResponse<T> WithContext<T>
++public static string ToJson
++public static string ToJson<T>
++public static string ToJson<T>
++public static ApiResponse ToSuccessResponse
++public static ApiResponse<T> ToSuccessResponse<T>
++public static ApiResponse ToErrorResponse
++public static ApiResponse<T> ToErrorResponse<T>
++public static ApiPagedResponse<T> ToPagedResponse<T>
++public static List<T> ToItemList<T>
++public static bool HasMoreItems<T>
++public static bool IsFirstPage<T>
++public static bool IsLastPage<T>
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- docs: add ProductRepositoryExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
