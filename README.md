@@ -1,29 +1,35 @@
 // ... (rest of the README content remains the same)
 
-## ApiResponseExtensions
+## CsvFormatterExtensions
 
-The `ApiResponseExtensions` class provides a set of extensions for working with API responses. It allows you to easily add request IDs and context to responses, convert responses to JSON, and create success and error responses.
+The `CsvFormatterExtensions` class provides a set of extensions for formatting data into CSV strings. It allows you to easily format dictionaries, dynamic collections, and objects with specific properties.
 
 ### Example Usage
 
 ```csharp
-var response = new ApiResponse();
-var responseWithRequestId = response.WithRequestId("12345");
-var json = responseWithRequestId.ToJson();
+var person = new { Name = "John Doe", Age = 30 };
+var formatted = CsvFormatterExtensions.FormatWithProperties(person);
+Console.WriteLine(formatted); // Output: Name,Age
+                              //          John Doe,30
 
-var successResponse = ApiResponse.ToSuccessResponse("Hello, World!");
-var errorResponse = ApiResponse.ToErrorResponse("Error message");
+var data = new List<dynamic> { new { Name = "John Doe", Age = 30 }, new { Name = "Jane Doe", Age = 25 } };
+var formattedCollection = CsvFormatterExtensions.FormatDynamicCollection(data);
+Console.WriteLine(formattedCollection); // Output: Name,Age
+                                        //          John Doe,30
+                                        //          Jane Doe,25
 
-var pagedResponse = new ApiPagedResponse<string>
-{
-    Items = new List<string> { "Item1", "Item2" },
-    PageNumber = 1,
-    PageSize = 10,
-    TotalCount = 20
-};
+var dictionary = new Dictionary<string, string> { { "Name", "John Doe" }, { "Age", "30" } };
+var formattedDictionary = CsvFormatterExtensions.FormatDictionary(dictionary);
+Console.WriteLine(formattedDictionary); // Output: Name,Age
+                                        //          John Doe,30
 
-var pagedResponseWithRequestId = pagedResponse.WithRequestId("67890");
-var pagedJson = pagedResponseWithRequestId.ToJson();
+var tsv = CsvFormatterExtensions.FormatAsTsv(person);
+Console.WriteLine(tsv); // Output: Name    Age
+                       //          John Doe    30
+
+var psv = CsvFormatterExtensions.FormatAsPsv(person);
+Console.WriteLine(psv); // Output: Name|Age
+                       //          John Doe|30
 ```
 
 // ... (rest of the README content remains the same)
