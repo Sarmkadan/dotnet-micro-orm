@@ -22,6 +22,8 @@ public sealed class DataCleanupJob : IBackgroundJob
     public string Name => "Data Cleanup Job";
     public string Description => "Removes old audit logs, expired sessions, and archived records";
 
+    private static string Schema => Constants.OrmConstants.DefaultSchema;
+
     public DataCleanupJob(IDatabaseContext dbContext, DataCleanupConfig? config = null)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
@@ -35,25 +37,30 @@ public sealed class DataCleanupJob : IBackgroundJob
         return currentHour >= 2 && currentHour < 4; // 2-4 AM UTC
     }
 
+    /// <summary>
+    /// Runs every enabled cleanup step. Failures propagate so the scheduler can retry
+    /// and record the failure.
+    /// </summary>
     public async Task ExecuteAsync()
     {
         var tasksRun = 0;
+        var rowsAffected = 0;
 
         if (_config.CleanupAuditLogs)
         {
-            await CleanupAuditLogsAsync();
+            rowsAffected += await CleanupAuditLogsAsync();
             tasksRun++;
         }
 
         if (_config.CleanupSoftDeletedRecords)
         {
-            await CleanupSoftDeletedRecordsAsync();
+            rowsAffected += await CleanupSoftDeletedRecordsAsync();
             tasksRun++;
         }
 
         if (_config.CleanupTemporaryData)
         {
-            await CleanupTemporaryDataAsync();
+            rowsAffected += await CleanupTemporaryDataAsync();
             tasksRun++;
         }
 
@@ -63,74 +70,91 @@ public sealed class DataCleanupJob : IBackgroundJob
             tasksRun++;
         }
 
-        Console.WriteLine($"Data cleanup job completed. Tasks run: {tasksRun}");
+        Console.WriteLine($"Data cleanup job completed. Tasks run: {tasksRun}, rows affected: {rowsAffected}");
     }
 
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="ex"/> is null</exception>
     public async Task OnFailureAsync(Exception ex)
     {
-        Console.WriteLine($"Data cleanup job failed: {ex.Message}");
-        // In production, would log to monitoring system or alert admins
+        ArgumentNullException.ThrowIfNull(ex);
+
+        Console.Error.WriteLine($"Data cleanup job failed: {ex}");
         await Task.CompletedTask;
     }
 
-    private async Task CleanupAuditLogsAsync()
+    private async Task<int> CleanupAuditLogsAsync()
     {
         var cutoffDate = DateTime.UtcNow.AddDays(-_config.AuditLogRetentionDays);
 
-        try
-        {
-            // This would use the actual repository to delete old audit logs
-            Console.WriteLine($"Removing audit logs older than {cutoffDate:G}");
-            await Task.Delay(100); // Simulate work
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to cleanup audit logs: {ex.Message}");
-        }
+        var deleted = await DeleteBatchedAsync(
+            $"DELETE TOP (@batchSize) FROM [{Schema}].[AuditLogs] WHERE [Timestamp] < @cutoff",
+            cutoffDate);
+
+        Console.WriteLine($"Removed {deleted} audit log(s) older than {cutoffDate:u}");
+        return deleted;
     }
 
-    private async Task CleanupSoftDeletedRecordsAsync()
+    private async Task<int> CleanupSoftDeletedRecordsAsync()
     {
         var cutoffDate = DateTime.UtcNow.AddDays(-_config.DeletedRecordRetentionDays);
 
-        try
-        {
-            // Soft-deleted records older than retention period are permanently deleted
-            Console.WriteLine($"Removing soft-deleted records older than {cutoffDate:G}");
-            await Task.Delay(100); // Simulate work
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to cleanup soft-deleted records: {ex.Message}");
-        }
+        var deleted = await DeleteBatchedAsync(
+            $"DELETE TOP (@batchSize) FROM [{Schema}].[Products] WHERE [IsActive] = 0 AND [ModifiedDate] < @cutoff",
+            cutoffDate);
+
+        Console.WriteLine($"Removed {deleted} soft-deleted record(s) older than {cutoffDate:u}");
+        return deleted;
     }
 
-    private async Task CleanupTemporaryDataAsync()
+    private async Task<int> CleanupTemporaryDataAsync()
     {
-        try
-        {
-            // Remove expired temporary data, sessions, tokens, etc
-            Console.WriteLine("Cleaning up temporary and expired data");
-            await Task.Delay(100); // Simulate work
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to cleanup temporary data: {ex.Message}");
-        }
+        var cutoffDate = DateTime.UtcNow;
+
+        var deleted = await DeleteBatchedAsync(
+            $"DELETE TOP (@batchSize) FROM [{Schema}].[TemporaryData] WHERE [ExpiresAt] < @cutoff",
+            cutoffDate);
+
+        Console.WriteLine($"Removed {deleted} expired temporary record(s)");
+        return deleted;
     }
 
-    private async Task RebuildIndexesAsync()
+    private async Task<int> RebuildIndexesAsync()
     {
-        try
+        var affected = await _dbContext.ExecuteNonQueryAsync(
+            $"ALTER INDEX ALL ON [{Schema}].[AuditLogs] REBUILD");
+
+        Console.WriteLine("Rebuilt indexes on the audit log table");
+        return affected;
+    }
+
+    /// <summary>
+    /// Deletes rows in batches of <see cref="DataCleanupConfig.BatchSize"/> until the
+    /// statement stops affecting rows, keeping transaction log growth bounded.
+    /// </summary>
+    private async Task<int> DeleteBatchedAsync(string statement, DateTime cutoff)
+    {
+        var total = 0;
+
+        while (true)
         {
-            // Rebuild fragmented indexes for performance
-            Console.WriteLine("Rebuilding database indexes");
-            await Task.Delay(100); // Simulate work
+            var parameters = new Dictionary<string, object>
+            {
+                ["batchSize"] = _config.BatchSize,
+                ["cutoff"] = cutoff
+            };
+
+            var affected = await _dbContext.ExecuteNonQueryAsync(statement, parameters);
+
+            if (affected <= 0)
+                break;
+
+            total += affected;
+
+            if (affected < _config.BatchSize)
+                break;
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to rebuild indexes: {ex.Message}");
-        }
+
+        return total;
     }
 }
 

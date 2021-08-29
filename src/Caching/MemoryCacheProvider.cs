@@ -72,7 +72,7 @@ public sealed class MemoryCacheProvider : ICacheProvider
             }
 
             var timer = new Timer(
-                _ => RemoveAsync(key).GetAwaiter().GetResult(),
+                _ => Evict(key),
                 null,
                 expiration!.Value,
                 Timeout.InfiniteTimeSpan);
@@ -96,6 +96,16 @@ public sealed class MemoryCacheProvider : ICacheProvider
         }
 
         return value!;
+    }
+
+    private void Evict(string key)
+    {
+        _cache.TryRemove(key, out _);
+
+        if (_timers.TryRemove(key, out var timer))
+        {
+            timer?.Dispose();
+        }
     }
 
     public async Task RemoveAsync(string key)
