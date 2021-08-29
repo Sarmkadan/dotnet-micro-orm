@@ -5,6 +5,7 @@
 // =============================================================================
 
 using System.Collections.Concurrent;
+using System.Globalization;
 
 namespace DotnetMicroOrm.BackgroundJobs;
 
@@ -17,6 +18,7 @@ public sealed class JobScheduler : IAsyncDisposable
     private readonly Dictionary<string, (IBackgroundJob job, JobScheduleConfig config)> _jobs = [];
     private readonly ConcurrentDictionary<string, Timer?> _timers = [];
     private readonly List<JobExecutionResult> _executionHistory = [];
+    private readonly object _historyLock = new();
     private readonly SemaphoreSlim _executionLock = new(1);
     private readonly int _maxHistoryEntries = 1000;
 
@@ -46,7 +48,7 @@ public sealed class JobScheduler : IAsyncDisposable
 
             if (config.RunOnStartup && job.CanExecute())
             {
-                _ = ExecuteJobAsync(job, config);
+                await ExecuteJobAsync(job, config);
             }
 
             if (config.Interval.HasValue)
@@ -102,13 +104,12 @@ public sealed class JobScheduler : IAsyncDisposable
                     {
                         result.Success = false;
                         result.ErrorMessage = "Job cannot execute in current context";
+                        result.Duration = DateTime.UtcNow - result.StartTime;
+                        RecordExecution(result);
                         return result;
                     }
 
-                    using (var cts = new CancellationTokenSource(config.ExecutionTimeout))
-                    {
-                        await job.ExecuteAsync();
-                    }
+                    await job.ExecuteAsync().WaitAsync(config.ExecutionTimeout);
 
                     result.Success = true;
                     result.Duration = DateTime.UtcNow - result.StartTime;
@@ -152,10 +153,13 @@ public sealed class JobScheduler : IAsyncDisposable
     /// </summary>
     public IEnumerable<JobExecutionResult> GetExecutionHistory(string jobId)
     {
-        return _executionHistory
-            .Where(h => h.JobId == jobId)
-            .OrderByDescending(h => h.StartTime)
-            .ToList();
+        lock (_historyLock)
+        {
+            return _executionHistory
+                .Where(h => h.JobId == jobId)
+                .OrderByDescending(h => h.StartTime)
+                .ToList();
+        }
     }
 
     /// <summary>
@@ -163,10 +167,13 @@ public sealed class JobScheduler : IAsyncDisposable
     /// </summary>
     public IEnumerable<JobExecutionResult> GetRecentExecutions(int count = 100)
     {
-        return _executionHistory
-            .OrderByDescending(h => h.StartTime)
-            .Take(count)
-            .ToList();
+        lock (_historyLock)
+        {
+            return _executionHistory
+                .OrderByDescending(h => h.StartTime)
+                .Take(count)
+                .ToList();
+        }
     }
 
     /// <summary>
@@ -174,7 +181,10 @@ public sealed class JobScheduler : IAsyncDisposable
     /// </summary>
     public void ClearHistory()
     {
-        _executionHistory.Clear();
+        lock (_historyLock)
+        {
+            _executionHistory.Clear();
+        }
     }
 
     private void ScheduleInterval(string jobId, IBackgroundJob job, JobScheduleConfig config)
@@ -183,74 +193,214 @@ public sealed class JobScheduler : IAsyncDisposable
             return;
 
         var timer = new Timer(
-            async _ => await ExecuteJobAsync(job, config),
+            _ => RunJobSafely(job, config),
             null,
             config.Interval.Value,
             config.Interval.Value);
 
-        _timers[jobId] = timer;
+        SetTimer(jobId, timer);
     }
 
     private void ScheduleCron(string jobId, IBackgroundJob job, JobScheduleConfig config)
     {
-        // Simplified cron implementation - in production, use Hangfire or Quartz.NET
         if (string.IsNullOrEmpty(config.CronExpression))
             return;
 
-        // Parse cron expression and schedule accordingly
-        var nextRunTime = ParseCronExpression(config.CronExpression);
+        var now = DateTime.UtcNow;
+        var nextRunTime = GetNextOccurrence(config.CronExpression, now);
 
-        if (nextRunTime > DateTime.UtcNow)
-        {
-            var delay = nextRunTime - DateTime.UtcNow;
+        if (nextRunTime is null)
+            return;
 
-            var timer = new Timer(
-                async _ =>
-                {
-                    await ExecuteJobAsync(job, config);
-                    // Reschedule
-                    ScheduleCron(jobId, job, config);
-                },
-                null,
-                delay,
-                Timeout.InfiniteTimeSpan);
+        var delay = nextRunTime.Value - now;
+        if (delay < TimeSpan.Zero)
+            delay = TimeSpan.Zero;
 
-            _timers[jobId] = timer;
-        }
+        var timer = new Timer(
+            _ =>
+            {
+                RunJobSafely(job, config, () => ScheduleCron(jobId, job, config));
+            },
+            null,
+            delay,
+            Timeout.InfiniteTimeSpan);
+
+        SetTimer(jobId, timer);
     }
 
-    private DateTime ParseCronExpression(string cronExpression)
+    private void SetTimer(string jobId, Timer timer)
     {
-        // Simplified: only handle basic patterns
-        // Format: minute hour day month dayOfWeek
-        var parts = cronExpression.Split(' ');
+        _timers.AddOrUpdate(
+            jobId,
+            timer,
+            (_, existing) =>
+            {
+                existing?.Dispose();
+                return timer;
+            });
+    }
 
-        if (parts.Length != 5)
-            return DateTime.UtcNow.AddHours(1);
-
-        // Extract hour and minute (simple parsing)
-        if (int.TryParse(parts[1], out var hour) && int.TryParse(parts[0], out var minute))
+    private void RunJobSafely(IBackgroundJob job, JobScheduleConfig config, Action? continuation = null)
+    {
+        _ = Task.Run(async () =>
         {
-            var now = DateTime.UtcNow;
-            var nextRun = new DateTime(now.Year, now.Month, now.Day, hour, minute, 0);
+            try
+            {
+                await ExecuteJobAsync(job, config);
+            }
+            catch (Exception ex)
+            {
+                RecordExecution(new JobExecutionResult
+                {
+                    JobId = job.JobId,
+                    StartTime = DateTime.UtcNow,
+                    Success = false,
+                    ErrorMessage = ex.Message,
+                    StackTrace = ex.StackTrace
+                });
+            }
+            finally
+            {
+                continuation?.Invoke();
+            }
+        });
+    }
 
-            if (nextRun <= now)
-                nextRun = nextRun.AddDays(1);
+    /// <summary>
+    /// Computes the next UTC occurrence of a five field cron expression
+    /// (minute hour day-of-month month day-of-week) strictly after <paramref name="after"/>.
+    /// Each field supports <c>*</c>, single values, comma separated lists,
+    /// <c>a-b</c> ranges and <c>*/step</c> or <c>a-b/step</c> increments.
+    /// </summary>
+    /// <param name="cronExpression">The cron expression to evaluate</param>
+    /// <param name="after">The instant to search from (exclusive)</param>
+    /// <returns>The next matching UTC instant, or null when the expression is invalid or never matches</returns>
+    public static DateTime? GetNextOccurrence(string cronExpression, DateTime after)
+    {
+        if (string.IsNullOrWhiteSpace(cronExpression))
+            return null;
 
-            return nextRun;
+        var parts = cronExpression.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length != 5)
+            return null;
+
+        var minutes = ParseField(parts[0], 0, 59);
+        var hours = ParseField(parts[1], 0, 23);
+        var daysOfMonth = ParseField(parts[2], 1, 31);
+        var months = ParseField(parts[3], 1, 12);
+        var daysOfWeek = ParseField(parts[4], 0, 6);
+
+        if (minutes is null || hours is null || daysOfMonth is null || months is null || daysOfWeek is null)
+            return null;
+
+        // Start from the next whole minute after the reference instant.
+        var candidate = new DateTime(after.Year, after.Month, after.Day, after.Hour, after.Minute, 0, DateTimeKind.Utc)
+            .AddMinutes(1);
+
+        // Four years of minutes is enough to cover any leap year pattern.
+        var limit = candidate.AddYears(4);
+
+        while (candidate < limit)
+        {
+            if (!months.Contains(candidate.Month))
+            {
+                candidate = new DateTime(candidate.Year, candidate.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(1);
+                continue;
+            }
+
+            if (!daysOfMonth.Contains(candidate.Day) || !daysOfWeek.Contains((int)candidate.DayOfWeek))
+            {
+                candidate = candidate.Date.AddDays(1);
+                continue;
+            }
+
+            if (!hours.Contains(candidate.Hour))
+            {
+                candidate = candidate.Date.AddHours(candidate.Hour + 1);
+                continue;
+            }
+
+            if (!minutes.Contains(candidate.Minute))
+            {
+                candidate = candidate.AddMinutes(1);
+                continue;
+            }
+
+            return candidate;
         }
 
-        return DateTime.UtcNow.AddHours(1);
+        return null;
+    }
+
+    private static HashSet<int>? ParseField(string field, int min, int max)
+    {
+        if (string.IsNullOrWhiteSpace(field))
+            return null;
+
+        var values = new HashSet<int>();
+
+        foreach (var part in field.Split(',', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var step = 1;
+            var range = part;
+
+            var slash = part.IndexOf('/');
+            if (slash >= 0)
+            {
+                range = part[..slash];
+                if (!int.TryParse(part[(slash + 1)..], NumberStyles.Integer, CultureInfo.InvariantCulture, out step) || step <= 0)
+                    return null;
+            }
+
+            int rangeStart;
+            int rangeEnd;
+
+            if (range is "*")
+            {
+                rangeStart = min;
+                rangeEnd = max;
+            }
+            else if (range.Contains('-'))
+            {
+                var bounds = range.Split('-');
+                if (bounds.Length != 2
+                    || !int.TryParse(bounds[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out rangeStart)
+                    || !int.TryParse(bounds[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out rangeEnd))
+                    return null;
+            }
+            else if (int.TryParse(range, NumberStyles.Integer, CultureInfo.InvariantCulture, out var single))
+            {
+                rangeStart = single;
+                rangeEnd = slash >= 0 ? max : single;
+            }
+            else
+            {
+                return null;
+            }
+
+            if (rangeStart < min || rangeEnd > max || rangeStart > rangeEnd)
+                return null;
+
+            for (var value = rangeStart; value <= rangeEnd; value += step)
+            {
+                values.Add(value);
+            }
+        }
+
+        return values.Count > 0 ? values : null;
     }
 
     private void RecordExecution(JobExecutionResult result)
     {
-        _executionHistory.Add(result);
-
-        // Keep only recent history
-        if (_executionHistory.Count > _maxHistoryEntries)
+        lock (_historyLock)
         {
-            _executionHistory.RemoveRange(0, _executionHistory.Count - _maxHistoryEntries);
+            _executionHistory.Add(result);
+
+            // Keep only recent history
+            if (_executionHistory.Count > _maxHistoryEntries)
+            {
+                _executionHistory.RemoveRange(0, _executionHistory.Count - _maxHistoryEntries);
+            }
         }
     }
 

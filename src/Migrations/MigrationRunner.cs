@@ -6,6 +6,7 @@
 
 namespace DotnetMicroOrm.Migrations;
 
+using System.Globalization;
 using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Exceptions;
 
@@ -198,11 +199,11 @@ public sealed class MigrationRunner : IMigrationRunner
 
     private static MigrationRecord MapRow(Dictionary<string, object> row) => new()
     {
-        Id          = Convert.ToInt32(row["Id"]),
+        Id          = Convert.ToInt32(row["Id"], CultureInfo.InvariantCulture),
         Version     = row["Version"]?.ToString() ?? string.Empty,
         Description = row["Description"]?.ToString() ?? string.Empty,
-        AppliedAt   = Convert.ToDateTime(row["AppliedAt"]),
-        Success     = Convert.ToBoolean(row["Success"]),
+        AppliedAt   = Convert.ToDateTime(row["AppliedAt"], CultureInfo.InvariantCulture),
+        Success     = Convert.ToBoolean(row["Success"], CultureInfo.InvariantCulture),
         ErrorMessage = row.TryGetValue("ErrorMessage", out var err) && err != DBNull.Value
                        ? err?.ToString()
                        : null

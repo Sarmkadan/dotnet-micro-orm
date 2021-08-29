@@ -153,7 +153,7 @@ public sealed class AuthorizationMiddleware : IMiddleware
         // Check if operation requires authorization
         if (_operationRoles.TryGetValue(context.Operation, out var requiredRoles))
         {
-            if (context.User is null || !requiredRoles.Contains(context.User.Role))
+            if (context.User is null || !requiredRoles.Contains(context.User.Role, StringComparer.OrdinalIgnoreCase))
             {
                 context.Exception = new UnauthorizedAccessException("Insufficient permissions");
                 context.ResponseData = new ErrorResponse
