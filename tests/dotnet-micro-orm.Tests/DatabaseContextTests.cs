@@ -38,7 +38,7 @@ public sealed class DatabaseContextTests
     [Fact]
     public async Task OpenAsync_WithValidConnection_OpensSuccessfully()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
 
         var result = await context.OpenAsync();
 
@@ -58,7 +58,7 @@ public sealed class DatabaseContextTests
     [Fact]
     public async Task CloseAsync_WithOpenConnection_ClosesSuccessfully()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
         await context.OpenAsync();
 
         var result = await context.CloseAsync();
@@ -69,7 +69,7 @@ public sealed class DatabaseContextTests
     [Fact]
     public async Task TestConnectionAsync_WithValidConnection_ReturnsTrue()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
 
         var result = await context.TestConnectionAsync();
 
@@ -89,7 +89,7 @@ public sealed class DatabaseContextTests
     [Fact]
     public async Task ExecuteScalarAsync_WithValidQuery_ReturnsResult()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
         await context.OpenAsync();
 
         var result = await context.ExecuteScalarAsync("SELECT 1");
@@ -100,7 +100,7 @@ public sealed class DatabaseContextTests
     [Fact]
     public async Task ExecuteScalarAsync_WithParameters_ReturnsCorrectResult()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
         await context.OpenAsync();
 
         var parameters = new Dictionary<string, object> { { "@value", 42 } };
@@ -112,7 +112,7 @@ public sealed class DatabaseContextTests
     [Fact]
     public async Task ExecuteScalarAsync_WithInvalidQuery_ThrowsQueryExecutionException()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
         await context.OpenAsync();
 
         var act = () => context.ExecuteScalarAsync("INVALID SQL");
@@ -123,18 +123,22 @@ public sealed class DatabaseContextTests
     [Fact]
     public async Task ExecuteNonQueryAsync_WithValidQuery_ExecutesSuccessfully()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
         await context.OpenAsync();
 
         var result = await context.ExecuteNonQueryAsync("CREATE TABLE Test (Id INTEGER PRIMARY KEY, Name TEXT)");
 
-        result.Should().BeGreaterThan(0);
+        // DDL statements report zero rows affected; success is verified by the table being usable afterwards.
+        result.Should().Be(0);
+
+        var insertResult = await context.ExecuteNonQueryAsync("INSERT INTO Test (Id, Name) VALUES (1, 'Test')");
+        insertResult.Should().BeGreaterThan(0);
     }
 
     [Fact]
     public async Task ExecuteNonQueryAsync_WithParameters_ExecutesSuccessfully()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
         await context.OpenAsync();
         await context.ExecuteNonQueryAsync("CREATE TABLE Test (Id INTEGER PRIMARY KEY, Name TEXT)");
 
@@ -147,7 +151,7 @@ public sealed class DatabaseContextTests
     [Fact]
     public async Task ExecuteQueryAsync_WithValidQuery_ReturnsResults()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
         await context.OpenAsync();
         await context.ExecuteNonQueryAsync("CREATE TABLE Test (Id INTEGER PRIMARY KEY, Name TEXT)");
         await context.ExecuteNonQueryAsync("INSERT INTO Test (Id, Name) VALUES (1, 'Test')");
@@ -162,7 +166,7 @@ public sealed class DatabaseContextTests
     [Fact]
     public async Task ExecuteQueryAsync_WithParameters_ReturnsFilteredResults()
     {
-        var context = new DatabaseContext("Data Source=:memory:");
+        var context = new DatabaseContext("Data Source=:memory:", DatabaseProvider.Sqlite);
         await context.OpenAsync();
         await context.ExecuteNonQueryAsync("CREATE TABLE Test (Id INTEGER PRIMARY KEY, Name TEXT, Value INTEGER)");
         await context.ExecuteNonQueryAsync("INSERT INTO Test (Id, Name, Value) VALUES (1, 'Test1', 10)");

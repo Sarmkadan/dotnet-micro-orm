@@ -132,7 +132,7 @@ public sealed class EndToEndWorkflowTests
     [Fact]
     public async Task UserManagement_CompleteLifecycle()
     {
-        var user = new User("john_doe", "john@example.com", "securehashedpassword123456")
+        var user = new User("john_doe", "john@example.com", "securehashedpassword123456789012")
         {
             FirstName = "John",
             LastName = "Doe",
@@ -169,7 +169,7 @@ public sealed class EndToEndWorkflowTests
         activeProducts.Should().HaveCount(2);
 
         var expensiveProducts = products.Where(p => p.Price > 200 && p.IsActive).ToList();
-        expensiveProducts.Should().HaveCount(1);
+        expensiveProducts.Should().HaveCount(2);
     }
 
     [Fact]
@@ -241,7 +241,7 @@ public sealed class EndToEndWorkflowTests
     [Fact]
     public async Task OrderManagement_Scenario()
     {
-        var user = new User("customer123", "customer@example.com", "hashedpassword123456789");
+        var user = new User("customer123", "customer@example.com", "hashedpassword123456789012345678");
         var product1 = new Product("SKU-001", "Item A", 29.99m, 1) { StockQuantity = 100 };
         var product2 = new Product("SKU-002", "Item B", 59.99m, 1) { StockQuantity = 50 };
 

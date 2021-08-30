@@ -10,6 +10,7 @@ using System.Data;
 using System.Data.Common;
 using DotnetMicroOrm.Constants;
 using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;
 using DotnetMicroOrm.Exceptions;
 
 /// <summary>
@@ -25,7 +26,12 @@ public sealed class DatabaseContext : IDatabaseContext
 
     public DatabaseContext(string connectionString, DatabaseProvider provider = DatabaseProvider.SqlServer)
     {
-        _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+        if (connectionString is null)
+            throw new ArgumentNullException(nameof(connectionString));
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new ArgumentException("Connection string cannot be empty or whitespace.", nameof(connectionString));
+
+        _connectionString = connectionString;
         _provider = provider;
     }
 
@@ -267,6 +273,7 @@ public sealed class DatabaseContext : IDatabaseContext
     private DbConnection CreateConnection() => _provider switch
     {
         DatabaseProvider.SqlServer => new SqlConnection(_connectionString),
+        DatabaseProvider.Sqlite => new SqliteConnection(_connectionString),
         _ => throw new NotSupportedException($"Database provider {_provider} is not yet supported")
     };
 
