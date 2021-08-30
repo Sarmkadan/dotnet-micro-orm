@@ -6632,3 +6632,95 @@
 +- docs: describe .aider.chat.history usage in README
 +- docs: add ProductRepositoryExtensions documentation to README
 +- docs: describe .aider.chat.history usage in README
+
+# 2026-07-14 08:25:34.712361
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/QueryProfilerTests.cs`.
++
++Document the type `QueryProfilerTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/QueryProfilerTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: document .aider.chat.history public API
++- (no commit message provided)
++- fix: add SQLite provider support and validate empty connection strings
++- fix: implement query, pipeline and cleanup members that were stubs
++- fix: correct scheduler timeouts, timer leaks and cache eviction
++- docs: describe .aider.chat.history usage in README
++- docs: add CsvFormatterExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
++- docs: add ApiResponseExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-14 08:25:34.712979
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/QueryProfilerTests.cs`.
++
++Document the type `QueryProfilerTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/QueryProfilerTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: document .aider.chat.history public API
++- (no commit message provided)
++- fix: add SQLite provider support and validate empty connection strings
++- fix: implement query, pipeline and cleanup members that were stubs
++- fix: correct scheduler timeouts, timer leaks and cache eviction
++- docs: describe .aider.chat.history usage in README
++- docs: add CsvFormatterExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
++- docs: add ApiResponseExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-14 08:26:42.384369
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/QueryProfilerTests.cs`.
++
++Document the type `QueryProfilerTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/QueryProfilerTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: document .aider.chat.history public API
++- (no commit message provided)
++- fix: add SQLite provider support and validate empty connection strings
++- fix: implement query, pipeline and cleanup members that were stubs
++- fix: correct scheduler timeouts, timer leaks and cache eviction
++- docs: describe .aider.chat.history usage in README
++- docs: add CsvFormatterExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
++- docs: add ApiResponseExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-14 08:26:42.384421
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, add XML documentation comments (///) to the file `tests/dotnet-micro-orm.Tests/QueryProfilerTests.cs`.
++
++Document the type `QueryProfilerTests` and every public member with /// <summary>, <param>, <returns> where applicable. Descriptions must be specific to what the code actually does - read the method bodies first. Do NOT change any code, signature, whitespace of code lines, or behavior - ONLY add /// comment lines to `tests/dotnet-micro-orm.Tests/QueryProfilerTests.cs`.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: document .aider.chat.history public API
++- (no commit message provided)
++- fix: add SQLite provider support and validate empty connection strings
++- fix: implement query, pipeline and cleanup members that were stubs
++- fix: correct scheduler timeouts, timer leaks and cache eviction
++- docs: describe .aider.chat.history usage in README
++- docs: add CsvFormatterExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
++- docs: add ApiResponseExtensions documentation to README
++- docs: describe .aider.chat.history usage in README
