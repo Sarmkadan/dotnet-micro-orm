@@ -35,6 +35,8 @@ public sealed class BatchUpsertOperation<T> : IBatchUpsertOperation<T>
     /// <inheritdoc/>
     public async Task<UpsertResult<T>> UpsertAsync(T entity, Expression<Func<T, object>> keySelector)
     {
+        if (entity is null) throw new ArgumentNullException(nameof(entity));
+
         var results = await UpsertRangeAsync([entity], keySelector, 1);
         return results[0];
     }
@@ -91,14 +93,22 @@ public sealed class BatchUpsertOperation<T> : IBatchUpsertOperation<T>
 
         var actionColumn = "__action";
         var rows = await _context.ExecuteQueryAsync(sql, parameters);
+        var pkColumn = allColumns.FirstOrDefault(c => c.IsPrimaryKey);
+        var pkProperty = pkColumn is not null ? typeof(T).GetProperty(pkColumn.PropertyName) : null;
 
-        // Map the $action output column back to each entity by position
+        // Map the $action output column, and the generated primary key if present, back to each entity by position
         var results = new List<UpsertResult<T>>(batch.Count);
         for (int i = 0; i < batch.Count; i++)
         {
             bool wasInserted = true;
             if (i < rows.Count && rows[i].TryGetValue(actionColumn, out var action))
                 wasInserted = action?.ToString()?.Equals("INSERT", StringComparison.OrdinalIgnoreCase) == true;
+
+            if (pkColumn is not null && pkProperty is not null && i < rows.Count &&
+                rows[i].TryGetValue(pkColumn.ColumnName, out var pkValue) && pkValue is not null && pkValue != DBNull.Value)
+            {
+                pkProperty.SetValue(batch[i], Convert.ChangeType(pkValue, pkProperty.PropertyType));
+            }
 
             results.Add(new UpsertResult<T> { Entity = batch[i], WasInserted = wasInserted });
         }
@@ -152,6 +162,11 @@ public sealed class BatchUpsertOperation<T> : IBatchUpsertOperation<T>
         var insertColumns = string.Join(", ", nonKeyColumns.Select(c => $"[{c.ColumnName}]"));
         var insertValues = string.Join(", ", nonKeyColumns.Select(c => $"[{sourceAlias}].[{c.ColumnName}]"));
 
+        var pkColumn = allColumns.FirstOrDefault(c => c.IsPrimaryKey);
+        var outputClause = pkColumn is not null
+            ? $"OUTPUT $action AS [__action], inserted.[{pkColumn.ColumnName}] AS [{pkColumn.ColumnName}]"
+            : "OUTPUT $action AS [__action]";
+
         var sql = $"""
             MERGE [{_schema}].[{_tableName}] AS [{targetAlias}]
             USING (
@@ -163,7 +178,7 @@ public sealed class BatchUpsertOperation<T> : IBatchUpsertOperation<T>
             WHEN NOT MATCHED THEN
                 INSERT ({insertColumns})
                 VALUES ({insertValues})
-            OUTPUT $action AS [__action];
+            {outputClause};
             """;
 
         return (sql, parameters);

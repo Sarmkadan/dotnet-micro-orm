@@ -55,7 +55,7 @@ public sealed class BatchUpsertOperationUnitTests
     [Fact]
     public async Task UpsertAsync_WithNullKeySelector_ThrowsArgumentNullException()
     {
-        var user = new User("test", "test@example.com", "hashedpassword1234567890");
+        var user = new User("test", "test@example.com", "hashedpassword1234567890123456789012");
         var act = () => _batchUpsert.UpsertAsync(user, null!);
 
         await act.Should().ThrowAsync<ArgumentNullException>().WithParameterName("keySelector");
@@ -80,7 +80,7 @@ public sealed class BatchUpsertOperationUnitTests
     [Fact]
     public async Task UpsertAsync_WithValidEntity_ReturnsUpsertResult()
     {
-        var user = new User("test", "test@example.com", "hashedpassword1234567890");
+        var user = new User("test", "test@example.com", "hashedpassword1234567890123456789012");
 
         _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
             .ReturnsAsync(new List<Dictionary<string, object>>
@@ -114,7 +114,7 @@ public sealed class BatchUpsertOperationUnitTests
     [Fact]
     public async Task UpsertRangeAsync_WithNullKeySelector_ThrowsArgumentNullException()
     {
-        var users = new List<User> { new User("test", "test@example.com", "hashedpassword1234567890") };
+        var users = new List<User> { new User("test", "test@example.com", "hashedpassword1234567890123456789012") };
         var act = () => _batchUpsert.UpsertRangeAsync(users, null!);
 
         await act.Should().ThrowAsync<ArgumentNullException>().WithParameterName("keySelector");
@@ -126,7 +126,7 @@ public sealed class BatchUpsertOperationUnitTests
     [Fact]
     public async Task UpsertRangeAsync_WithInvalidBatchSize_ThrowsArgumentOutOfRangeException()
     {
-        var users = new List<User> { new User("test", "test@example.com", "hashedpassword1234567890") };
+        var users = new List<User> { new User("test", "test@example.com", "hashedpassword1234567890123456789012") };
         var act = () => _batchUpsert.UpsertRangeAsync(users, u => u.Id, 0);
 
         await act.Should().ThrowAsync<ArgumentOutOfRangeException>();
@@ -138,7 +138,7 @@ public sealed class BatchUpsertOperationUnitTests
     [Fact]
     public async Task UpsertRangeAsync_WithTooLargeBatchSize_ThrowsArgumentOutOfRangeException()
     {
-        var users = new List<User> { new User("test", "test@example.com", "hashedpassword1234567890") };
+        var users = new List<User> { new User("test", "test@example.com", "hashedpassword1234567890123456789012") };
         var act = () => _batchUpsert.UpsertRangeAsync(users, u => u.Id, 10001);
 
         await act.Should().ThrowAsync<ArgumentOutOfRangeException>();
@@ -177,8 +177,8 @@ public sealed class BatchUpsertOperationUnitTests
     {
         var users = new List<User>
         {
-            new User("user1", "user1@example.com", "hashedpassword1234567890"),
-            new User("user2", "user2@example.com", "hashedpassword1234567890")
+            new User("user1", "user1@example.com", "hashedpassword1234567890123456789012"),
+            new User("user2", "user2@example.com", "hashedpassword1234567890123456789012")
         };
 
         _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
@@ -205,9 +205,9 @@ public sealed class BatchUpsertOperationUnitTests
     {
         var users = new List<User>
         {
-            new User("user1", "user1@example.com", "hashedpassword1234567890"),
-            new User("user2", "user2@example.com", "hashedpassword1234567890"),
-            new User("user3", "user3@example.com", "hashedpassword1234567890")
+            new User("user1", "user1@example.com", "hashedpassword1234567890123456789012"),
+            new User("user2", "user2@example.com", "hashedpassword1234567890123456789012"),
+            new User("user3", "user3@example.com", "hashedpassword1234567890123456789012")
         };
 
         _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))

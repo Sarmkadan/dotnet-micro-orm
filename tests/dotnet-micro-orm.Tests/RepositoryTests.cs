@@ -237,7 +237,7 @@ public sealed class RepositoryTests
     [Fact]
     public async Task AddAsync_WithValidEntity_AddsSuccessfully()
     {
-        var user = new User("newuser", "new@example.com", "hashedpassword1234567890");
+        var user = new User("newuser", "new@example.com", "hashedpassword1234567890123456789012") { Id = 1 };
 
         _contextMock.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
             .ReturnsAsync(1);
@@ -245,7 +245,7 @@ public sealed class RepositoryTests
         var result = await _repository.AddAsync(user);
 
         result.Should().NotBeNull();
-        result.Id.Should().BeGreaterThan(0);
+        result.Id.Should().Be(1);
         _contextMock.Verify(c => c.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()), Times.Once);
     }
 
@@ -270,7 +270,7 @@ public sealed class RepositoryTests
     [Fact]
     public async Task UpdateAsync_WithValidEntity_UpdatesSuccessfully()
     {
-        var user = new User("updateduser", "updated@example.com", "hashedpassword1234567890") { Id = 1 };
+        var user = new User("updateduser", "updated@example.com", "hashedpassword1234567890123456789012") { Id = 1 };
 
         _contextMock.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
             .ReturnsAsync(1);
@@ -302,6 +302,13 @@ public sealed class RepositoryTests
     [Fact]
     public async Task DeleteAsync_WithValidId_DeletesSuccessfully()
     {
+        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
+            .ReturnsAsync(new List<Dictionary<string, object>>
+            {
+                new() { { "Id", 1 }, { "Username", "testuser" }, { "Email", "test@example.com" },
+                        { "PasswordHash", "hashedpassword1234567890123456789012" }, { "IsActive", true },
+                        { "IsEmailVerified", false }, { "Version", 1 }, { "CreatedDate", DateTime.UtcNow } }
+            });
         _contextMock.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
             .ReturnsAsync(1);
 
@@ -318,6 +325,8 @@ public sealed class RepositoryTests
     [Fact]
     public async Task DeleteAsync_WithNonExistingId_ReturnsFalse()
     {
+        _contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
+            .ReturnsAsync(new List<Dictionary<string, object>>());
         _contextMock.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
             .ReturnsAsync(0);
 

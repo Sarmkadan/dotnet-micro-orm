@@ -202,6 +202,12 @@ public sealed class CoreRepositoryTests
 	public async Task DeleteAsync_WithExistingId_DeletesSuccessfully()
 	{
 		// Arrange
+		_contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
+			.ReturnsAsync(new List<Dictionary<string, object>>
+			{
+				new() { { "Id", 1 }, { "Sku", "SKU-1" }, { "Name", "Widget" }, { "Price", 9.99m },
+						{ "CategoryId", 1 }, { "StockQuantity", 5 }, { "IsActive", true }, { "CreatedDate", DateTime.UtcNow } }
+			});
 		_contextMock.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
 			.ReturnsAsync(1);
 
@@ -220,6 +226,8 @@ public sealed class CoreRepositoryTests
 	public async Task DeleteAsync_WithNonExistingId_ReturnsFalse()
 	{
 		// Arrange
+		_contextMock.Setup(c => c.ExecuteQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
+			.ReturnsAsync(new List<Dictionary<string, object>>());
 		_contextMock.Setup(c => c.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
 			.ReturnsAsync(0);
 

@@ -23,7 +23,7 @@ public sealed class UserModelTests
     [Fact]
     public void Validate_WithValidUser_ReturnsTrue()
     {
-        var user = new User("johndoe", "john@example.com", "hashedpassword1234567890");
+        var user = new User("johndoe", "john@example.com", "hashedpassword1234567890123456789012");
 
         var isValid = user.Validate(out var errors);
 
@@ -185,7 +185,7 @@ public sealed class UserModelTests
     [Fact]
     public void Validate_WithValidFirstAndLastNames_IncludesInValidation()
     {
-        var user = new User("johndoe", "john@example.com", "hashedpassword1234567890")
+        var user = new User("johndoe", "john@example.com", "hashedpassword1234567890123456789012")
         {
             FirstName = "John",
             LastName = "Doe"
