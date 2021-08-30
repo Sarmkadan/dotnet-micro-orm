@@ -8,10 +8,14 @@ using DotnetMicroOrm.Profiling;
 using FluentAssertions;
 using Xunit;
 
-namespace DotnetMicroOrm.Tests;
-
+/// <summary>
+/// Tests for the QueryProfiler class.
+/// </summary>
 public sealed class QueryProfilerTests
 {
+    /// <summary>
+    /// Tests that a successful operation records a profile with the correct duration.
+    /// </summary>
     [Fact]
     public async Task ProfileAsync_SuccessfulOperation_RecordsProfileWithCorrectDuration()
     {
@@ -33,6 +37,9 @@ public sealed class QueryProfilerTests
         profiles[0].Duration.Should().BeGreaterThan(TimeSpan.Zero);
     }
 
+    /// <summary>
+    /// Tests that when profiling is disabled, no profiles are recorded.
+    /// </summary>
     [Fact]
     public async Task ProfileAsync_WhenDisabled_DoesNotRecordProfiles()
     {
@@ -43,6 +50,9 @@ public sealed class QueryProfilerTests
         profiler.GetProfiles().Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that a failing operation records a failed profile and rethrows the exception.
+    /// </summary>
     [Fact]
     public async Task ProfileAsync_FailingOperation_RecordsFailedProfileAndRethrows()
     {
@@ -59,6 +69,9 @@ public sealed class QueryProfilerTests
         profiles[0].ErrorMessage.Should().Contain("forced failure");
     }
 
+    /// <summary>
+    /// Tests that GetSummary returns the correct aggregates for multiple queries.
+    /// </summary>
     [Fact]
     public async Task GetSummary_MultipleQueries_ReturnsCorrectAggregates()
     {
@@ -75,6 +88,9 @@ public sealed class QueryProfilerTests
         summary.SlowestQuery.Should().NotBeNull();
     }
 
+    /// <summary>
+    /// Tests that Clear removes all profiles.
+    /// </summary>
     [Fact]
     public async Task Clear_RemovesAllProfiles()
     {
@@ -87,6 +103,9 @@ public sealed class QueryProfilerTests
         profiler.GetSummary().TotalQueries.Should().Be(0);
     }
 
+    /// <summary>
+    /// Tests that the constructor with maxProfiles exceeded evicts old entries.
+    /// </summary>
     [Fact]
     public async Task Constructor_MaxProfilesExceeded_EvictsOldEntries()
     {
