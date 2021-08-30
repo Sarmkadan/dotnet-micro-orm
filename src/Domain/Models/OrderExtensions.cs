@@ -15,28 +15,43 @@ namespace DotnetMicroOrm.Domain.Models;
 /// </summary>
 public static class OrderExtensions
 {
+    /// <summary>Default weight in kilograms applied to a product with no known weight</summary>
+    public const decimal DefaultProductWeightKg = 0.5m;
+
     /// <summary>
-    /// Calculates the total weight of all items in the order based on product weights
+    /// Calculates the total weight of all items in the order, using
+    /// <see cref="DefaultProductWeightKg"/> for every unit.
     /// </summary>
-    /// <remarks>
-    /// This is a simplified calculation that assumes a default weight per item.
-    /// In a production application, this would use the actual Product.Weight property.
-    /// </remarks>
     /// <param name="order">The order to calculate weight for</param>
-    /// <returns>Total weight in kilograms, or 0 if order or items are null</returns>
+    /// <returns>Total weight in kilograms, or 0 when the order has no items</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="order"/> is null</exception>
-    public static decimal GetTotalWeight(this Order order)
+    public static decimal GetTotalWeight(this Order order) => order.GetTotalWeight(null);
+
+    /// <summary>
+    /// Calculates the total weight of all items in the order using per-product weights.
+    /// Products missing from <paramref name="productWeightsKg"/> fall back to
+    /// <see cref="DefaultProductWeightKg"/>.
+    /// </summary>
+    /// <param name="order">The order to calculate weight for</param>
+    /// <param name="productWeightsKg">Weight in kilograms per product id, or null to use the default for every product</param>
+    /// <returns>Total weight in kilograms, or 0 when the order has no items</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="order"/> is null</exception>
+    public static decimal GetTotalWeight(this Order order, IReadOnlyDictionary<int, decimal>? productWeightsKg)
     {
         ArgumentNullException.ThrowIfNull(order);
 
         if (order.Items is null || order.Items.Count == 0)
             return 0;
 
-        // Default weight per item in kilograms
-        // Note: In a real application, this should use Product.Weight property
-        const decimal defaultProductWeightKg = 0.5m;
+        return order.Items.Sum(item =>
+        {
+            var unitWeight = productWeightsKg is not null
+                             && productWeightsKg.TryGetValue(item.ProductId, out var weight)
+                ? weight
+                : DefaultProductWeightKg;
 
-        return order.Items.Sum(item => item.Quantity * defaultProductWeightKg);
+            return item.Quantity * unitWeight;
+        });
     }
 
     /// <summary>
