@@ -3,7 +3,9 @@
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
 // =============================================================================
-
+/// <summary>
+/// Tests for the Product model.
+/// </summary>
 using DotnetMicroOrm.Domain.Models;
 using FluentAssertions;
 using Xunit;
@@ -12,6 +14,9 @@ namespace DotnetMicroOrm.Tests;
 
 public sealed class ProductModelTests
 {
+    /// <summary>
+    /// Tests that a valid product returns true when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithValidProduct_ReturnsTrue()
     {
@@ -23,6 +28,9 @@ public sealed class ProductModelTests
         errors.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Tests that a product with an empty SKU returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithEmptySku_ReturnsFalseWithError()
     {
@@ -34,6 +42,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("SKU"));
     }
 
+    /// <summary>
+    /// Tests that a product with a short SKU returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithShortSku_ReturnsFalseWithError()
     {
@@ -45,6 +56,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("SKU") && e.Contains("3 characters"));
     }
 
+    /// <summary>
+    /// Tests that a product with a null SKU returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithNullSku_ReturnsFalseWithError()
     {
@@ -56,6 +70,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("SKU"));
     }
 
+    /// <summary>
+    /// Tests that a product with an empty name returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithEmptyName_ReturnsFalseWithError()
     {
@@ -67,6 +84,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("name"));
     }
 
+    /// <summary>
+    /// Tests that a product with a short name returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithShortName_ReturnsFalseWithError()
     {
@@ -78,6 +98,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("name") && e.Contains("2 characters"));
     }
 
+    /// <summary>
+    /// Tests that a product with a zero price returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithZeroPrice_ReturnsFalseWithError()
     {
@@ -89,6 +112,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("Price"));
     }
 
+    /// <summary>
+    /// Tests that a product with a negative price returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithNegativePrice_ReturnsFalseWithError()
     {
@@ -100,6 +126,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("Price"));
     }
 
+    /// <summary>
+    /// Tests that a product with a negative cost price returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithNegativeCostPrice_ReturnsFalseWithError()
     {
@@ -111,6 +140,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("Cost price"));
     }
 
+    /// <summary>
+    /// Tests that a product with a negative stock quantity returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithNegativeStockQuantity_ReturnsFalseWithError()
     {
@@ -122,6 +154,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("Stock quantity"));
     }
 
+    /// <summary>
+    /// Tests that a product with a zero category ID returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithZeroCategoryId_ReturnsFalseWithError()
     {
@@ -133,6 +168,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("category"));
     }
 
+    /// <summary>
+    /// Tests that a product with a negative category ID returns false with an error when validated.
+    /// </summary>
     [Fact]
     public void Validate_WithNegativeCategoryId_ReturnsFalseWithError()
     {
@@ -144,6 +182,9 @@ public sealed class ProductModelTests
         errors.Should().Contain(e => e.Contains("category"));
     }
 
+    /// <summary>
+    /// Tests that a product with multiple validation errors returns all errors.
+    /// </summary>
     [Fact]
     public void Validate_WithMultipleValidationErrors_ReturnsAllErrors()
     {
@@ -155,6 +196,9 @@ public sealed class ProductModelTests
         errors.Should().HaveCountGreaterThanOrEqualTo(4);
     }
 
+    /// <summary>
+    /// Tests that increasing the stock quantity with a positive quantity increases the stock correctly.
+    /// </summary>
     [Fact]
     public void IncreaseStock_WithPositiveQuantity_IncreasesStockCorrectly()
     {
@@ -165,6 +209,9 @@ public sealed class ProductModelTests
         product.StockQuantity.Should().Be(15);
     }
 
+    /// <summary>
+    /// Tests that increasing the stock quantity with a zero quantity throws an ArgumentException.
+    /// </summary>
     [Fact]
     public void IncreaseStock_WithZeroQuantity_ThrowsArgumentException()
     {
@@ -175,6 +222,9 @@ public sealed class ProductModelTests
         act.Should().Throw<ArgumentException>();
     }
 
+    /// <summary>
+    /// Tests that increasing the stock quantity with a negative quantity throws an ArgumentException.
+    /// </summary>
     [Fact]
     public void IncreaseStock_WithNegativeQuantity_ThrowsArgumentException()
     {
@@ -185,6 +235,9 @@ public sealed class ProductModelTests
         act.Should().Throw<ArgumentException>();
     }
 
+    /// <summary>
+    /// Tests that decreasing the stock quantity with a valid quantity decreases the stock correctly.
+    /// </summary>
     [Fact]
     public void DecreaseStock_WithValidQuantity_DecreasesStockCorrectly()
     {
@@ -195,6 +248,9 @@ public sealed class ProductModelTests
         product.StockQuantity.Should().Be(15);
     }
 
+    /// <summary>
+    /// Tests that decreasing the stock quantity with a zero quantity throws an ArgumentException.
+    /// </summary>
     [Fact]
     public void DecreaseStock_WithZeroQuantity_ThrowsArgumentException()
     {
@@ -205,6 +261,9 @@ public sealed class ProductModelTests
         act.Should().Throw<ArgumentException>();
     }
 
+    /// <summary>
+    /// Tests that decreasing the stock quantity with a negative quantity throws an ArgumentException.
+    /// </summary>
     [Fact]
     public void DecreaseStock_WithNegativeQuantity_ThrowsArgumentException()
     {
@@ -215,6 +274,9 @@ public sealed class ProductModelTests
         act.Should().Throw<ArgumentException>();
     }
 
+    /// <summary>
+    /// Tests that decreasing the stock quantity with more than the available quantity throws an InvalidOperationException.
+    /// </summary>
     [Fact]
     public void DecreaseStock_WithMoreThanAvailable_ThrowsInvalidOperationException()
     {
@@ -225,6 +287,9 @@ public sealed class ProductModelTests
         act.Should().Throw<InvalidOperationException>().WithMessage("*Insufficient stock*");
     }
 
+    /// <summary>
+    /// Tests that decreasing the stock quantity with exactly the available quantity decreases to zero.
+    /// </summary>
     [Fact]
     public void DecreaseStock_WithExactlyAvailableQuantity_DecreasesToZero()
     {
@@ -235,6 +300,9 @@ public sealed class ProductModelTests
         product.StockQuantity.Should().Be(0);
     }
 
+    /// <summary>
+    /// Tests that getting the profit with a cost price calculates the profit correctly.
+    /// </summary>
     [Fact]
     public void GetProfit_WithCostPrice_CalculatesProfit()
     {
@@ -245,6 +313,9 @@ public sealed class ProductModelTests
         profit.Should().Be(40m);
     }
 
+    /// <summary>
+    /// Tests that getting the profit without a cost price returns the sell price.
+    /// </summary>
     [Fact]
     public void GetProfit_WithoutCostPrice_ReturnsSellPrice()
     {
@@ -255,6 +326,9 @@ public sealed class ProductModelTests
         profit.Should().Be(100m);
     }
 
+    /// <summary>
+    /// Tests that getting the profit with a zero cost price returns the sell price.
+    /// </summary>
     [Fact]
     public void GetProfit_WithZeroCostPrice_ReturnsSellPrice()
     {
@@ -265,6 +339,10 @@ public sealed class ProductModelTests
         profit.Should().Be(100m);
     }
 
+    /// <summary>
+    /// Tests that checking if the stock is low with a stock below the threshold returns true.
+    /// </summary>
+    /// <param name="threshold">The threshold to check against.</param>
     [Fact]
     public void IsLowStock_WithStockBelowThreshold_ReturnsTrue()
     {
@@ -275,6 +353,9 @@ public sealed class ProductModelTests
         isLow.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that checking if the stock is low with a stock equal to the threshold returns true.
+    /// </summary>
     [Fact]
     public void IsLowStock_WithStockEqualToThreshold_ReturnsTrue()
     {
@@ -285,6 +366,9 @@ public sealed class ProductModelTests
         isLow.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that checking if the stock is low with a stock above the threshold returns false.
+    /// </summary>
     [Fact]
     public void IsLowStock_WithStockAboveThreshold_ReturnsFalse()
     {
@@ -295,6 +379,9 @@ public sealed class ProductModelTests
         isLow.Should().BeFalse();
     }
 
+    /// <summary>
+    /// Tests that checking if the stock is low with the default threshold uses 10 as the default.
+    /// </summary>
     [Fact]
     public void IsLowStock_WithDefaultThreshold_Uses10AsDefault()
     {
@@ -305,6 +392,9 @@ public sealed class ProductModelTests
         isLow.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that checking if the stock is low with a zero stock returns true.
+    /// </summary>
     [Fact]
     public void IsLowStock_WithZeroStock_ReturnsTrue()
     {
@@ -315,6 +405,9 @@ public sealed class ProductModelTests
         isLow.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that the constructor with parameters initializes the fields correctly.
+    /// </summary>
     [Fact]
     public void Constructor_WithParameters_InitializesFieldsCorrectly()
     {
