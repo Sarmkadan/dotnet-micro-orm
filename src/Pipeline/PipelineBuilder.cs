@@ -95,6 +95,19 @@ public sealed class PipelineBuilder
     }
 
     /// <summary>
+    /// Removes every middleware matching the predicate from the pipeline
+    /// </summary>
+    /// <param name="predicate">Predicate selecting the middleware to remove</param>
+    /// <returns>The number of middleware removed</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="predicate"/> is null</exception>
+    public int RemoveWhere(Func<IMiddleware, bool> predicate)
+    {
+        ArgumentNullException.ThrowIfNull(predicate);
+
+        return _middlewares.RemoveAll(m => predicate(m));
+    }
+
+    /// <summary>
     /// Gets a list of middleware in execution order
     /// </summary>
     public IEnumerable<IMiddleware> GetOrdered()

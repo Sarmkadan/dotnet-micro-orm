@@ -122,16 +122,7 @@ public static class PipelineBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        var middlewaresToRemove = builder.GetOrdered()
-            .Where(m => m is TMiddleware)
-            .ToList();
-
-        foreach (var middleware in middlewaresToRemove)
-        {
-            // Note: PipelineBuilder doesn't have Remove method, so we clear and rebuild
-            // This is a limitation of the current API that would need to be addressed
-            // For now, we provide this as a convenience method that documents the intent
-        }
+        builder.RemoveWhere(m => m is TMiddleware);
 
         return builder;
     }

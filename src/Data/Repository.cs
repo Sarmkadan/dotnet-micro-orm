@@ -316,8 +316,12 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
         return (entities, totalCount);
     }
 
-    // Query builder
-    public IQueryable<T> Query() => throw new NotImplementedException("Use QueryBuilder for complex queries");
+    /// <summary>
+    /// Materializes the whole table and exposes it as an in-memory queryable source.
+    /// Intended as the backing source for <see cref="QueryBuilder{T}"/>; prefer the
+    /// async members for large tables.
+    /// </summary>
+    public IQueryable<T> Query() => GetAllAsync().GetAwaiter().GetResult().AsQueryable();
 
     public async IAsyncEnumerable<T> QueryStreamAsync(string query, Dictionary<string, object>? parameters = null)
     {
