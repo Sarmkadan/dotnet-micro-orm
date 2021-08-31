@@ -10,10 +10,17 @@ using Xunit;
 
 namespace DotnetMicroOrm.Tests;
 
+/// <summary>
+/// Tests for the MemoryCacheProvider class.
+/// </summary>
 public sealed class MemoryCacheProviderTests
 {
     private readonly MemoryCacheProvider _cache = new();
 
+    /// <summary>
+    /// Tests that GetAsync returns null when the key does not exist in the cache.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task GetAsync_WithNonExistentKey_ReturnsNull()
     {
@@ -22,6 +29,10 @@ public sealed class MemoryCacheProviderTests
         result.Should().BeNull();
     }
 
+    /// <summary>
+    /// Tests that SetAsync stores a value in the cache.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task SetAsync_WithValidKeyValue_StoresInCache()
     {
@@ -33,6 +44,10 @@ public sealed class MemoryCacheProviderTests
         retrieved.Should().Be(value);
     }
 
+    /// <summary>
+    /// Tests that SetAsync throws an ArgumentException when the key is null.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task SetAsync_WithNullKey_ThrowsArgumentException()
     {
@@ -41,6 +56,10 @@ public sealed class MemoryCacheProviderTests
         await act.Should().ThrowAsync<ArgumentException>();
     }
 
+    /// <summary>
+    /// Tests that SetAsync throws an ArgumentException when the key is empty.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task SetAsync_WithEmptyKey_ThrowsArgumentException()
     {
@@ -49,6 +68,10 @@ public sealed class MemoryCacheProviderTests
         await act.Should().ThrowAsync<ArgumentException>();
     }
 
+    /// <summary>
+    /// Tests that SetAsync removes a key from the cache when the value is null.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task SetAsync_WithNullValue_RemovesKey()
     {
@@ -60,6 +83,10 @@ public sealed class MemoryCacheProviderTests
         result.Should().BeNull();
     }
 
+    /// <summary>
+    /// Tests that GetAsync returns null when the entry has expired.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task GetAsync_WithExpiredEntry_ReturnsNull()
     {
@@ -72,6 +99,10 @@ public sealed class MemoryCacheProviderTests
         result.Should().BeNull();
     }
 
+    /// <summary>
+    /// Tests that RemoveAsync deletes a key from the cache.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task RemoveAsync_WithValidKey_DeletesFromCache()
     {
@@ -83,6 +114,10 @@ public sealed class MemoryCacheProviderTests
         result.Should().BeNull();
     }
 
+    /// <summary>
+    /// Tests that RemoveAsync does not throw when the key is null.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task RemoveAsync_WithNullKey_DoesNotThrow()
     {
@@ -91,6 +126,10 @@ public sealed class MemoryCacheProviderTests
         await act.Should().NotThrowAsync();
     }
 
+    /// <summary>
+    /// Tests that RemoveByPatternAsync removes keys that match the pattern.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task RemoveByPatternAsync_WithWildcardPattern_RemovesMatchingKeys()
     {
@@ -112,6 +151,10 @@ public sealed class MemoryCacheProviderTests
         product.Should().Be("Laptop");
     }
 
+    /// <summary>
+    /// Tests that RemoveByPatternAsync does not throw when the pattern is empty.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task RemoveByPatternAsync_WithEmptyPattern_DoesNotThrow()
     {
@@ -122,6 +165,10 @@ public sealed class MemoryCacheProviderTests
         await act.Should().NotThrowAsync();
     }
 
+    /// <summary>
+    /// Tests that ClearAsync removes all entries from the cache.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task ClearAsync_RemovesAllEntries()
     {
@@ -135,6 +182,10 @@ public sealed class MemoryCacheProviderTests
         count.Should().Be(0);
     }
 
+    /// <summary>
+    /// Tests that ExistsAsync returns true when the key exists in the cache.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task ExistsAsync_WithExistingKey_ReturnsTrue()
     {
@@ -145,6 +196,10 @@ public sealed class MemoryCacheProviderTests
         result.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that ExistsAsync returns false when the key does not exist in the cache.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task ExistsAsync_WithNonExistentKey_ReturnsFalse()
     {
@@ -153,6 +208,10 @@ public sealed class MemoryCacheProviderTests
         result.Should().BeFalse();
     }
 
+    /// <summary>
+    /// Tests that ExistsAsync returns false when the entry has expired.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task ExistsAsync_WithExpiredKey_ReturnsFalse()
     {
@@ -164,6 +223,12 @@ public sealed class MemoryCacheProviderTests
         result.Should().BeFalse();
     }
 
+    /// <summary>
+    /// Tests that GetOrSetAsync returns the cached value when it exists.
+    /// </summary>
+    /// <param name="key">The key to retrieve or set.</param>
+    /// <param name="factory">The factory to use to set the value if it does not exist.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task GetOrSetAsync_WithCachedValue_ReturnsCached()
     {
@@ -182,6 +247,12 @@ public sealed class MemoryCacheProviderTests
         callCount.Should().Be(0);
     }
 
+    /// <summary>
+    /// Tests that GetOrSetAsync calls the factory when the value does not exist.
+    /// </summary>
+    /// <param name="key">The key to retrieve or set.</param>
+    /// <param name="factory">The factory to use to set the value if it does not exist.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task GetOrSetAsync_WithMissingValue_CallsFactory()
     {
@@ -199,6 +270,13 @@ public sealed class MemoryCacheProviderTests
         callCount.Should().Be(1);
     }
 
+    /// <summary>
+    /// Tests that GetOrSetAsync stores the value with the specified expiration time.
+    /// </summary>
+    /// <param name="key">The key to retrieve or set.</param>
+    /// <param name="factory">The factory to use to set the value if it does not exist.</param>
+    /// <param name="expiration">The expiration time for the value.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task GetOrSetAsync_WithExpiration_StoresWithTTL()
     {
@@ -217,6 +295,10 @@ public sealed class MemoryCacheProviderTests
         afterExpiry.Should().BeNull();
     }
 
+    /// <summary>
+    /// Tests that GetCountAsync returns the number of entries in the cache.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task GetCountAsync_ReturnsAccurateCount()
     {
@@ -230,6 +312,10 @@ public sealed class MemoryCacheProviderTests
         count.Should().Be(3);
     }
 
+    /// <summary>
+    /// Tests that GetCountAsync excludes expired entries from the count.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task GetCountAsync_WithExpiredEntries_ExcludesExpired()
     {
@@ -243,6 +329,10 @@ public sealed class MemoryCacheProviderTests
         count.Should().Be(1);
     }
 
+    /// <summary>
+    /// Tests that CleanupAsync removes expired entries from the cache.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task CleanupAsync_RemovesExpiredEntries()
     {
@@ -257,6 +347,10 @@ public sealed class MemoryCacheProviderTests
         count.Should().Be(1);
     }
 
+    /// <summary>
+    /// Tests that SetAsync overwrites the value when the key already exists.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task SetAsync_WithUpdatingExistingKey_OverwritesValue()
     {
@@ -268,6 +362,10 @@ public sealed class MemoryCacheProviderTests
         result.Should().Be("updated");
     }
 
+    /// <summary>
+    /// Tests that SetAsync stores and retrieves complex objects correctly.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task SetAsync_WithComplexObject_StoresAndRetrievesCorrectly()
     {
@@ -281,6 +379,10 @@ public sealed class MemoryCacheProviderTests
         retrieved.Name.Should().Be("Test");
     }
 
+    /// <summary>
+    /// Tests that RemoveByPatternAsync does not throw when no keys match the pattern.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     [Fact]
     public async Task RemoveByPatternAsync_WithNoMatches_DoesNotThrow()
     {
@@ -291,9 +393,18 @@ public sealed class MemoryCacheProviderTests
         await act.Should().NotThrowAsync();
     }
 
+    /// <summary>
+    /// A test object used for testing complex object storage and retrieval.
+    /// </summary>
     private class TestObject
     {
+        /// <summary>
+        /// Gets or sets the ID of the test object.
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// Gets or sets the name of the test object.
+        /// </summary>
         public string Name { get; set; } = string.Empty;
     }
 }
