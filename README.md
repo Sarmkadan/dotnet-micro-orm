@@ -1,18 +1,25 @@
 // ... (rest of the README content remains the same)
 
-## BenchmarkSetup
+## ExpressionAndCachingBenchmarks
 
-The `BenchmarkSetup` class provides a set of static methods for initializing and cleaning up the database used for benchmarks. It also provides a method for creating test entities.
+The `ExpressionAndCachingBenchmarks` class provides a set of benchmarks for measuring the performance of expression compilation and caching, as well as query performance with different predicates. 
 
 ### Example Usage
 
 ```csharp
-var serviceProvider = BenchmarkSetup.GetServiceProvider();
-await BenchmarkSetup.InitializeDatabaseAsync();
-var repository = serviceProvider.GetService<IRepository<BenchmarkTestEntity>>();
-var entity = await BenchmarkSetup.CreateTestEntityAsync(repository);
-Console.WriteLine(entity.Name);
-await BenchmarkSetup.CleanupDatabaseAsync();
+var benchmark = new ExpressionAndCachingBenchmarks();
+await benchmark.GlobalSetup();
+
+// Run benchmarks
+await benchmark.ExpressionCompile_FirstCall();
+await benchmark.ExpressionCompile_SubsequentCall();
+await benchmark.ComplexExpression_FirstCall();
+await benchmark.SimplePredicateQuery();
+await benchmark.CountAll();
+await benchmark.FirstOrDefaultWithPredicate();
+
+// Clean up
+await benchmark.GlobalCleanup();
 ```
 
 // ... (rest of the README content remains the same)
