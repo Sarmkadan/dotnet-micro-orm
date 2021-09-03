@@ -7224,3 +7224,89 @@
 +- docs: document .aider.chat.history public API
 +- docs: add XML documentation comments to QueryProfilerTests class.
 +- docs: document .aider.chat.history public API
+
+# 2026-07-14 19:58:10.746012
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ComparisonBenchmarks` (defined in `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++Add a "## ComparisonBenchmarks" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- docs: add documentation for RepositoryBenchmarks class and usage example.
++- docs: describe .aider.chat.history usage in README
++- docs: add documentation for ExpressionAndCachingBenchmarks class
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
++- docs: document BenchmarkSetup class and usage example.
++- docs: document .aider.chat.history public API
++- (no commit message provided)
++- docs: document .aider.chat.history public API
+
+# 2026-07-14 19:58:10.746088
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ComparisonBenchmarks` (defined in `benchmarks/dotnet-micro-orm.Benchmarks/ComparisonBenchmarks.cs`).
++
++Add a "## ComparisonBenchmarks" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task GlobalSetup
++public async Task GlobalCleanup
++public async Task RawADO_GetById
++public async Task RawADO_GetAll
++public async Task RawADO_Add
++public async Task RawADO_AddRange
++public async Task DotnetMicroOrm_GetById
++public async Task DotnetMicroOrm_GetAll
++public async Task DotnetMicroOrm_Add
++public async Task DotnetMicroOrm_AddRange
++public async Task Query_GetByValueGreaterThan
++public async Task Query_GetWithOrdering
++public async Task Query_Count
++public async Task Query_Any
++public async Task BatchInsert_100_Entities
++public async Task BatchUpdate_100_Entities
++public async Task BatchDelete_100_Entities
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- docs: add documentation for RepositoryBenchmarks class and usage example.
++- docs: describe .aider.chat.history usage in README
++- docs: add documentation for ExpressionAndCachingBenchmarks class
++- docs: describe .aider.chat.history usage in README
++- docs: describe .aider.chat.history usage in README
++- docs: document BenchmarkSetup class and usage example.
++- docs: document .aider.chat.history public API
++- (no commit message provided)
++- docs: document .aider.chat.history public API
