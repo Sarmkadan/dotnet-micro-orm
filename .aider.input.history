@@ -7378,3 +7378,67 @@
 +- docs: describe .aider.chat.history usage in README
 +- docs: document BenchmarkSetup class and usage example.
 +- docs: document .aider.chat.history public API
+
+# 2026-07-14 22:37:59.133274
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `EventBus` (defined in `src/Events/EventBus.cs`).
++
++Add a "## EventBus" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe README usage in README
++- docs: describe .aider.chat.history usage in README
++- docs: add OrmException documentation and usage example.
++- docs: describe .aider.chat.history usage in README
++- docs: add ComparisonBenchmarks docs
++- docs: describe .aider.chat.history usage in README
++- docs: add documentation for RepositoryBenchmarks class and usage example.
++- docs: describe .aider.chat.history usage in README
++- docs: add documentation for ExpressionAndCachingBenchmarks class
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-14 22:37:59.133841
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `EventBus` (defined in `src/Events/EventBus.cs`).
++
++Add a "## EventBus" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public EventBus
++public async Task PublishAsync<TEvent>
++public void Subscribe<TEvent, THandler>
++public void Unsubscribe<TEvent, THandler>
++public int GetSubscriberCount<TEvent>
++public void ClearSubscribers
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe README usage in README
++- docs: describe .aider.chat.history usage in README
++- docs: add OrmException documentation and usage example.
++- docs: describe .aider.chat.history usage in README
++- docs: add ComparisonBenchmarks docs
++- docs: describe .aider.chat.history usage in README
++- docs: add documentation for RepositoryBenchmarks class and usage example.
++- docs: describe .aider.chat.history usage in README
++- docs: add documentation for ExpressionAndCachingBenchmarks class
++- docs: describe .aider.chat.history usage in README
