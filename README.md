@@ -41,4 +41,61 @@ public class Program
 }
 ```
 
-// ... (rest of the README content remains the same)
+## WebhookHandler
+
+The `WebhookHandler` class is responsible for receiving webhook payloads, verifying their HMAC‑SHA256 signatures, and dispatching them to registered handlers based on the event type. It allows multiple handlers per event and provides a simple API for generating signatures for testing.
+
+Example usage:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using DotnetMicroOrm.Integration;
+
+class Program
+{
+    static async Task Main()
+    {
+        // Secret shared with the webhook provider
+        var secret = "super-secret-key";
+
+        // Create the handler
+        var handler = new WebhookHandler(secret);
+
+        // Register a handler for the "order.created" event
+        handler.Subscribe(WebhookEvents.OrderCreated, async payload =>
+        {
+            Console.WriteLine($"Received order created event: {payload.Id}");
+            // Process payload.Data as needed
+            await Task.CompletedTask;
+        });
+
+        // Build a sample payload
+        var payload = new WebhookPayload
+        {
+            EventType = WebhookEvents.OrderCreated,
+            Data = new Dictionary<string, object>
+            {
+                { "OrderId", 123 },
+                { "Amount", 49.99 }
+            }
+        };
+
+        // Generate a signature for the payload (for testing)
+        var signature = handler.GenerateSignature(payload);
+
+        // Process the webhook
+        var result = await handler.ProcessAsync(payload, signature);
+
+        if (result.Success)
+        {
+            Console.WriteLine("Webhook processed successfully.");
+        }
+        else
+        {
+            Console.WriteLine($"Error processing webhook: {result.Error}");
+        }
+    }
+}
+```
