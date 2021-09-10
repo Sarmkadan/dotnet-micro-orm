@@ -7674,3 +7674,75 @@
 +- docs: describe .aider.chat.history usage in README
 +- docs: add OrmException documentation and usage example.
 +- docs: describe .aider.chat.history usage in README
+
+# 2026-07-15 03:35:52.167143
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `DefaultHttpClient` (defined in `src/Integration/DefaultHttpClient.cs`).
++
++Add a "## DefaultHttpClient" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public DefaultHttpClient
++public async Task<HttpResponseData> GetAsync
++public async Task<HttpResponseData> PostAsync
++public async Task<HttpResponseData> PutAsync
++public async Task<HttpResponseData> DeleteAsync
++public async Task<HttpResponseData> GetWithRetryAsync
++public async ValueTask DisposeAsync
++public TimeSpan GetDelay
++public LinearRetryPolicy
++public TimeSpan GetDelay
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: add IEvent documentation and usage example
++- docs: describe .aider.chat.history usage in README
++- docs: add UserCreatedEventHandler documentation and usage example.
++- docs: describe .aider.chat.history usage in README
++- docs: add EventBus documentation and usage example.
++- docs: describe README usage in README
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-15 03:35:52.167202
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `DefaultHttpClient` (defined in `src/Integration/DefaultHttpClient.cs`).
++
++Add a "## DefaultHttpClient" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public DefaultHttpClient
++public async Task<HttpResponseData> GetAsync
++public async Task<HttpResponseData> PostAsync
++public async Task<HttpResponseData> PutAsync
++public async Task<HttpResponseData> DeleteAsync
++public async Task<HttpResponseData> GetWithRetryAsync
++public async ValueTask DisposeAsync
++public TimeSpan GetDelay
++public LinearRetryPolicy
++public TimeSpan GetDelay
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
++- docs: add IEvent documentation and usage example
++- docs: describe .aider.chat.history usage in README
++- docs: add UserCreatedEventHandler documentation and usage example.
++- docs: describe .aider.chat.history usage in README
++- docs: add EventBus documentation and usage example.
++- docs: describe README usage in README
++- docs: describe .aider.chat.history usage in README
