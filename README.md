@@ -1,8 +1,8 @@
 // ... (rest of the README content remains the same)
 
-## DefaultHttpClient
+## IHttpClient
 
-The `DefaultHttpClient` class is a reusable HTTP client implementation that provides retry logic, timeout handling, and logging capabilities. It is designed to be thread-safe and can be used across multiple requests.
+The `IHttpClient` interface provides a contract for HTTP client operations with built-in retry support, timeout handling, and request/response logging.
 
 ### Example Usage
 
@@ -15,9 +15,10 @@ public class Program
 
         var response = await client.GetAsync("https://example.com/api/data");
         Console.WriteLine($"Status code: {response.StatusCode}");
-
-        var body = await response.Body.ReadAsStringAsync();
-        Console.WriteLine($"Response body: {body}");
+        Console.WriteLine($"Response body: {response.Body}");
+        Console.WriteLine($"Response headers: {string.Join(", ", response.Headers.Select(x => $"{x.Key}: {x.Value}"))}");
+        Console.WriteLine($"Request duration: {response.Duration}");
+        Console.WriteLine($"Exception: {response.Exception?.Message}");
 
         await client.DisposeAsync();
     }
@@ -35,9 +36,10 @@ public class Program
 
         var response = await client.GetWithRetryAsync("https://example.com/api/data", maxRetries: 3);
         Console.WriteLine($"Status code: {response.StatusCode}");
-
-        var body = await response.Body.ReadAsStringAsync();
-        Console.WriteLine($"Response body: {body}");
+        Console.WriteLine($"Response body: {response.Body}");
+        Console.WriteLine($"Response headers: {string.Join(", ", response.Headers.Select(x => $"{x.Key}: {x.Value}"))}");
+        Console.WriteLine($"Request duration: {response.Duration}");
+        Console.WriteLine($"Exception: {response.Exception?.Message}");
 
         await client.DisposeAsync();
     }
@@ -56,9 +58,10 @@ public class Program
 
         var response = await client.GetWithRetryAsync("https://example.com/api/data", maxRetries: 3);
         Console.WriteLine($"Status code: {response.StatusCode}");
-
-        var body = await response.Body.ReadAsStringAsync();
-        Console.WriteLine($"Response body: {body}");
+        Console.WriteLine($"Response body: {response.Body}");
+        Console.WriteLine($"Response headers: {string.Join(", ", response.Headers.Select(x => $"{x.Key}: {x.Value}"))}");
+        Console.WriteLine($"Request duration: {response.Duration}");
+        Console.WriteLine($"Exception: {response.Exception?.Message}");
 
         await client.DisposeAsync();
     }
@@ -76,11 +79,13 @@ public class Program
 
         var response = await client.GetAsync("https://example.com/api/data");
         Console.WriteLine($"Status code: {response.StatusCode}");
-
-        var body = await response.Body.ReadAsStringAsync();
-        Console.WriteLine($"Response body: {body}");
+        Console.WriteLine($"Response body: {response.Body}");
+        Console.WriteLine($"Response headers: {string.Join(", ", response.Headers.Select(x => $"{x.Key}: {x.Value}"))}");
+        Console.WriteLine($"Request duration: {response.Duration}");
+        Console.WriteLine($"Exception: {response.Exception?.Message}");
 
         await client.DisposeAsync();
     }
 }
+```
 ```
