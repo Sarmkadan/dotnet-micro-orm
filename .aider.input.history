@@ -7818,3 +7818,67 @@
 +- docs: describe .aider.chat.history usage in README
 +- docs: add UserCreatedEventHandler documentation and usage example.
 +- docs: describe .aider.chat.history usage in README
+
+# 2026-07-15 06:19:21.908578
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `QueryProfiler` (defined in `src/Profiling/QueryProfiler.cs`).
++
++Add a "## QueryProfiler" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public bool IsEnabled
++public QueryProfiler
++public async Task<T> ProfileAsync<T>
++public IReadOnlyList<QueryProfile> GetProfiles
++public QueryProfilerSummary GetSummary
++public void Clear
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe README usage in README
++- docs: describe .aider.chat.history usage in README
++- fix: Format code block in README.md.
++- docs: add IHttpClient documentation and usage example.
++- docs: describe .aider.chat.history usage in README
++- fix: format code block in README.md.
++- docs: add DefaultHttpClient documentation and usage example.
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
+
+# 2026-07-15 06:19:21.908654
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `QueryProfiler` (defined in `src/Profiling/QueryProfiler.cs`).
++
++Add a "## QueryProfiler" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public bool IsEnabled
++public QueryProfiler
++public async Task<T> ProfileAsync<T>
++public IReadOnlyList<QueryProfile> GetProfiles
++public QueryProfilerSummary GetSummary
++public void Clear
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: describe README usage in README
++- docs: describe .aider.chat.history usage in README
++- fix: Format code block in README.md.
++- docs: add IHttpClient documentation and usage example.
++- docs: describe .aider.chat.history usage in README
++- fix: format code block in README.md.
++- docs: add DefaultHttpClient documentation and usage example.
++- docs: describe .aider.chat.history usage in README
++- (no commit message provided)
++- docs: describe .aider.chat.history usage in README
