@@ -1,8 +1,43 @@
 // ... (rest of the README content remains the same)
 
-## IHttpClient
+## CommandParser
 
-The `IHttpClient` interface provides a contract for HTTP client operations with built-in retry support, timeout handling, and request/response logging.
+The `CommandParser` class provides a fluent API for parsing command-line arguments and options, enabling easy construction of command-line interfaces with strongly-typed configuration.
+
+### Example Usage
+
+```csharp
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var parser = new CommandParser("myapp");
+        
+        parser.RegisterCommand("greet", "Prints a greeting message", ctx => 
+        {
+            var name = ctx.GetArgument("name");
+            Console.WriteLine($"Hello, {name ?? "World"}!");
+        });
+        
+        parser.AddOption("verbose", "Enables verbose output", false);
+        
+        var context = parser.Parse(args);
+        
+        if (context.ShowHelp)
+        {
+            Console.WriteLine(parser.GetHelpText());
+            return;
+        }
+        
+        if (context.HasArgument("verbose"))
+        {
+            Console.WriteLine("Verbose mode enabled");
+        }
+        
+        context.Handler?.Invoke(context);
+    }
+}
+```
 
 ### Example Usage
 
