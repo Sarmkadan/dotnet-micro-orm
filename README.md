@@ -132,7 +132,87 @@ var config = new JobScheduleConfig
 await job.ExecuteAsync();
 ```
 
-// ... (rest of the README content remains the same)
+## JobScheduler
+
+The `JobScheduler` class provides a thread-safe scheduler for executing and managing background jobs with support for both interval-based and cron-based scheduling. It handles job registration, execution with retry logic, execution history tracking, and graceful shutdown. The scheduler is designed for distributed scenarios and maintains bounded execution history to prevent memory leaks.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.BackgroundJobs;
+
+// Create a job
+public class ReportGenerationJob : IBackgroundJob
+{
+public string JobId => "report_generation";
+public string Name => "Report Generation";
+public string Description => "Generates daily reports";
+
+public async Task ExecuteAsync()
+{
+Console.WriteLine("Generating reports...");
+// Report generation logic
+await Task.Delay(100);
+}
+
+public bool CanExecute() => true;
+public Task OnFailureAsync(Exception ex) => Task.CompletedTask;
+}
+
+// Configure the scheduler
+var scheduler = new JobScheduler();
+
+// Register jobs with different scheduling strategies
+scheduler.Register(
+new ReportGenerationJob(),
+new JobScheduleConfig
+{
+RunOnStartup = true,
+Interval = TimeSpan.FromHours(1),
+MaxRetries = 3,
+RetryDelay = TimeSpan.FromSeconds(30),
+ExecutionTimeout = TimeSpan.FromMinutes(10),
+Enabled = true
+}
+);
+
+scheduler.Register(
+new CleanupJob(),
+new JobScheduleConfig
+{
+RunOnStartup = false,
+CronExpression = "0 2 * * *", // Run at 2 AM daily
+MaxRetries = 2,
+RetryDelay = TimeSpan.FromMinutes(2),
+ExecutionTimeout = TimeSpan.FromMinutes(5),
+Enabled = true
+}
+);
+
+// Start the scheduler
+await scheduler.StartAsync();
+
+// Monitor execution history
+var recentExecutions = scheduler.GetRecentExecutions(50);
+foreach (var execution in recentExecutions)
+{
+Console.WriteLine($"Job {execution.JobId} executed at {execution.StartTime}: {(execution.Success ? "SUCCESS" : "FAILED")}");
+}
+
+// Get history for a specific job
+var jobHistory = scheduler.GetExecutionHistory("report_generation");
+
+// Execute a job manually
+var result = await scheduler.ExecuteJobAsync(
+new ReportGenerationJob(),
+new JobScheduleConfig { MaxRetries = 3 }
+);
+
+Console.WriteLine($"Execution result: {result.Success}, Duration: {result.Duration}");
+
+// Stop the scheduler when application shuts down
+await scheduler.StopAsync();
+```
 
 ## QueryProfile
 
