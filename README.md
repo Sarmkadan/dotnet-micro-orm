@@ -183,3 +183,45 @@ public class UserRepository
     }
 }
 ```
+
+## DataCleanupJob
+
+The `DataCleanupJob` is a background job that maintains database health by removing old audit logs, expired sessions, and soft-deleted records. It operates on a configurable schedule, allowing for fine-tuned control over retention periods, batch sizes for cleanup, and optional database index rebuilding.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.BackgroundJobs;
+using DotnetMicroOrm.Data;
+
+public class CleanupTask
+{
+    public async Task RunCleanupAsync(IDatabaseContext dbContext)
+    {
+        var config = new DataCleanupConfig
+        {
+            AuditLogRetentionDays = 30,
+            DeletedRecordRetentionDays = 15,
+            CleanupAuditLogs = true,
+            CleanupSoftDeletedRecords = true,
+            CleanupTemporaryData = true,
+            RebuildIndexes = false,
+            BatchSize = 500
+        };
+
+        var job = new DataCleanupJob(dbContext, config);
+
+        if (job.CanExecute())
+        {
+            try
+            {
+                await job.ExecuteAsync();
+            }
+            catch (Exception ex)
+            {
+                await job.OnFailureAsync(ex);
+            }
+        }
+    }
+}
+```
