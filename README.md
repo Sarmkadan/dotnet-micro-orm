@@ -81,6 +81,57 @@ public class Program
 }
 ```
 
+## IBackgroundJob
+
+The `IBackgroundJob` interface defines a contract for background job execution with support for scheduling, execution tracking, and error handling. It enables asynchronous processing outside the request pipeline with configurable retry logic, timeouts, and execution constraints.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.BackgroundJobs;
+
+public class CleanupJob : IBackgroundJob
+{
+    public string JobId => "cleanup_job";
+    public string Name => "Database Cleanup";
+    public string Description => "Removes old records from the database";
+
+    public Task ExecuteAsync()
+    {
+        Console.WriteLine("Cleaning up old records...");
+        // Your cleanup logic here
+        return Task.CompletedTask;
+    }
+
+    public bool CanExecute()
+    {
+        // Only run if database is available
+        return true;
+    }
+
+    public Task OnFailureAsync(Exception ex)
+    {
+        Console.WriteLine($"Cleanup job failed: {ex.Message}");
+        return Task.CompletedTask;
+    }
+}
+
+// Usage with JobScheduleConfig
+var job = new CleanupJob();
+var config = new JobScheduleConfig
+{
+    RunOnStartup = false,
+    Interval = TimeSpan.FromHours(1),
+    MaxRetries = 3,
+    RetryDelay = TimeSpan.FromMinutes(5),
+    ExecutionTimeout = TimeSpan.FromMinutes(30),
+    Enabled = true
+};
+
+// Execute the job
+await job.ExecuteAsync();
+```
+
 // ... (rest of the README content remains the same)
 
 ## QueryProfile
