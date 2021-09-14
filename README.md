@@ -1,5 +1,34 @@
 // ... (rest of the README content remains the same)
 
+## MigrationRecord
+
+The `MigrationRecord` class represents a persisted record of a migration that has been applied to the database. It stores metadata about the migration, including its version, description, application timestamp, success status, and error message if applicable.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Migrations;
+
+public class MigrationRunner
+{
+    public async Task ApplyMigrationAsync(string migrationVersion)
+    {
+        var migrationRecord = new MigrationRecord
+        {
+            Version = migrationVersion,
+            Description = "Applied migration to update user table",
+            AppliedAt = DateTime.UtcNow,
+            Success = true
+        };
+
+        // Save the migration record to the database
+        await using var dbContext = new DatabaseContext();
+        dbContext.MigrationRecords.Add(migrationRecord);
+        await dbContext.SaveChangesAsync();
+    }
+}
+```
+
 ## QueryProfile
 
 The `QueryProfile` class represents a single captured profiling record for a database query execution. It contains metadata about the query including the SQL statement, execution parameters, timing information, success status, and caller context. This type is typically consumed through the `QueryProfiler` class which aggregates multiple profiles into a `QueryProfilerSummary`.
@@ -304,4 +333,5 @@ public class CleanupTask
         }
     }
 }
+```
 ```
