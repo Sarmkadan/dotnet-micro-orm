@@ -1,0 +1,117 @@
+# =============================================================================
+# Author: Vladyslav Zaiets | https://sarmkadan.com
+# CTO & Software Architect
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # .NET Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dotnet-micro-orm
+    ports:
+      - "5000:80"
+    environment:
+      Database__ConnectionString: "Server=db;Database=DotnetMicroOrmDb;User Id=sa;Password=YourPassword@123;"
+      Database__DatabaseType: "SqlServer"
+      Database__EnableChangeTracking: "true"
+      Database__EnableCaching: "true"
+      Database__CacheTTLSeconds: "300"
+      Logging__LogLevel: "Information"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - dotnet-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+
+  # SQL Server Database
+  db:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: dotnet-micro-orm-db
+    environment:
+      SA_PASSWORD: "YourPassword@123"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - dotnet-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourPassword@123", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+
+  # Optional: PostgreSQL Database
+  postgres:
+    image: postgres:16
+    container_name: dotnet-micro-orm-postgres
+    environment:
+      POSTGRES_DB: "dotnet_micro_orm"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - dotnet-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - postgres
+
+  # Optional: MySQL Database
+  mysql:
+    image: mysql:8
+    container_name: dotnet-micro-orm-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "dotnet_micro_orm"
+      MYSQL_USER: "app"
+      MYSQL_PASSWORD: "password"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - dotnet-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - mysql
+
+volumes:
+  sqldata:
+    driver: local
+  pgdata:
+    driver: local
+  mysqldata:
+    driver: local
+
+networks:
+  dotnet-network:
+    driver: bridge
