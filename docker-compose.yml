@@ -3,8 +3,6 @@
 # CTO & Software Architect
 # =============================================================================
 
-version: '3.8'
-
 services:
   # .NET Application
   app:
@@ -13,7 +11,7 @@ services:
       dockerfile: Dockerfile
     container_name: dotnet-micro-orm
     ports:
-      - "5000:80"
+      - "8080:8080"
     environment:
       Database__ConnectionString: "Server=db;Database=DotnetMicroOrmDb;User Id=sa;Password=YourPassword@123;"
       Database__DatabaseType: "SqlServer"
@@ -28,11 +26,11 @@ services:
       - dotnet-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
-      timeout: 3s
+      timeout: 5s
       retries: 3
-      start_period: 40s
+      start_period: 15s
 
   # SQL Server Database
   db:
