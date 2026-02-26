@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.Formatters;
 /// JSON formatter using System.Text.Json for efficient serialization.
 /// Provides configurable indentation and property naming conventions.
 /// </summary>
-public class JsonFormatter : IOutputFormatter
+public class sealed JsonFormatter : IOutputFormatter
 {
     private readonly JsonSerializerOptions _options;
 

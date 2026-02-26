@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.Events;
 /// Responds to user creation, updates, and deletion with appropriate actions
 /// like logging, cache invalidation, and notification sending.
 /// </summary>
-public class UserCreatedEventHandler : IEventHandler<UserCreatedEvent>
+public class sealed UserCreatedEventHandler : IEventHandler<UserCreatedEvent>
 {
     private readonly IAuditService _auditService;
 
@@ -56,7 +57,7 @@ public class UserCreatedEventHandler : IEventHandler<UserCreatedEvent>
 /// <summary>
 /// Handles user update events with logging and cache invalidation
 /// </summary>
-public class UserUpdatedEventHandler : IEventHandler<UserUpdatedEvent>
+public class sealed UserUpdatedEventHandler : IEventHandler<UserUpdatedEvent>
 {
     private readonly IAuditService _auditService;
 
@@ -101,7 +102,7 @@ public class UserUpdatedEventHandler : IEventHandler<UserUpdatedEvent>
 /// <summary>
 /// Handles user deletion events with cleanup
 /// </summary>
-public class UserDeletedEventHandler : IEventHandler<UserDeletedEvent>
+public class sealed UserDeletedEventHandler : IEventHandler<UserDeletedEvent>
 {
     public int Priority => 50; // Lower priority - execute last
 

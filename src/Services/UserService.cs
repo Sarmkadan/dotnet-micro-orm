@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -15,7 +16,7 @@ using DotnetMicroOrm.Exceptions;
 /// <summary>
 /// User service for authentication and user management
 /// </summary>
-public class UserService : IAsyncDisposable
+public class sealed UserService : IAsyncDisposable
 {
     private readonly UserRepository _userRepository;
     private readonly IDatabaseContext _context;
@@ -39,11 +40,11 @@ public class UserService : IAsyncDisposable
             throw new ArgumentException("Password must be at least 6 characters");
 
         var existingUser = await _userRepository.GetByUsernameAsync(username);
-        if (existingUser != null)
+        if (existingUser is not null)
             throw new InvalidOperationException("Username already exists");
 
         var existingEmail = await _userRepository.GetByEmailAsync(email);
-        if (existingEmail != null)
+        if (existingEmail is not null)
             throw new InvalidOperationException("Email already registered");
 
         var passwordHash = HashPassword(password);
@@ -59,7 +60,7 @@ public class UserService : IAsyncDisposable
     public async Task<User?> AuthenticateAsync(string username, string password)
     {
         var user = await _userRepository.GetByUsernameAsync(username);
-        if (user == null || !user.IsActive)
+        if (user is null || !user.IsActive)
             return null;
 
         if (!VerifyPassword(password, user.PasswordHash))
@@ -80,7 +81,7 @@ public class UserService : IAsyncDisposable
     public async Task<User> UpdateProfileAsync(int userId, string? firstName, string? lastName, string? phoneNumber)
     {
         var user = await _userRepository.GetByIdAsync(userId);
-        if (user == null)
+        if (user is null)
             throw new InvalidOperationException("User not found");
 
         if (!string.IsNullOrWhiteSpace(firstName))
@@ -100,7 +101,7 @@ public class UserService : IAsyncDisposable
     public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
     {
         var user = await _userRepository.GetByIdAsync(userId);
-        if (user == null)
+        if (user is null)
             throw new InvalidOperationException("User not found");
 
         if (!VerifyPassword(currentPassword, user.PasswordHash))
@@ -119,7 +120,7 @@ public class UserService : IAsyncDisposable
     public async Task<bool> VerifyEmailAsync(int userId)
     {
         var user = await _userRepository.GetByIdAsync(userId);
-        if (user == null)
+        if (user is null)
             throw new InvalidOperationException("User not found");
 
         user.MarkAsEmailVerified();
@@ -144,7 +145,7 @@ public class UserService : IAsyncDisposable
     public async Task<bool> DeactivateUserAsync(int userId)
     {
         var user = await _userRepository.GetByIdAsync(userId);
-        if (user == null)
+        if (user is null)
             throw new InvalidOperationException("User not found");
 
         user.Deactivate();

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -9,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Tracks inventory movements and stock levels for products
 /// </summary>
 [Table("Inventory")]
-public class Inventory : BaseEntity
+public class sealed Inventory : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }

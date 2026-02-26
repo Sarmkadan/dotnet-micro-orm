@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -17,7 +18,7 @@ namespace DotnetMicroOrm.Examples
     /// <summary>
     /// Demonstrates advanced query patterns and filtering strategies.
     /// </summary>
-    public class AdvancedQueriesExample
+    public class sealed AdvancedQueriesExample
     {
         private readonly IServiceProvider _serviceProvider;
 
@@ -184,7 +185,7 @@ namespace DotnetMicroOrm.Examples
                     .Where(p => p.Price > 500)
                     .OrderByDescending(p => p.Price));
 
-            if (firstExpensive != null)
+            if (firstExpensive is not null)
             {
                 Console.WriteLine($"✓ First expensive product: {firstExpensive.Name}");
             }

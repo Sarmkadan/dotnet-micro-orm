@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -73,7 +74,7 @@ public abstract class Specification<T> where T : class
 /// <summary>
 /// User specification for common user queries
 /// </summary>
-public class ActiveUsersSpecification : Specification<User>
+public class sealed ActiveUsersSpecification : Specification<User>
 {
     public ActiveUsersSpecification()
     {
@@ -82,7 +83,7 @@ public class ActiveUsersSpecification : Specification<User>
     }
 }
 
-public class UserByIdSpecification : Specification<User>
+public class sealed UserByIdSpecification : Specification<User>
 {
     public UserByIdSpecification(int userId)
     {
@@ -91,7 +92,7 @@ public class UserByIdSpecification : Specification<User>
     }
 }
 
-public class UsersByEmailSpecification : Specification<User>
+public class sealed UsersByEmailSpecification : Specification<User>
 {
     public UsersByEmailSpecification(string email)
     {
@@ -102,7 +103,7 @@ public class UsersByEmailSpecification : Specification<User>
 /// <summary>
 /// Product specifications
 /// </summary>
-public class ActiveProductsSpecification : Specification<Product>
+public class sealed ActiveProductsSpecification : Specification<Product>
 {
     public ActiveProductsSpecification()
     {
@@ -111,7 +112,7 @@ public class ActiveProductsSpecification : Specification<Product>
     }
 }
 
-public class ProductsByPriceRangeSpecification : Specification<Product>
+public class sealed ProductsByPriceRangeSpecification : Specification<Product>
 {
     public ProductsByPriceRangeSpecification(decimal minPrice, decimal maxPrice)
     {
@@ -120,7 +121,7 @@ public class ProductsByPriceRangeSpecification : Specification<Product>
     }
 }
 
-public class LowStockProductsSpecification : Specification<Product>
+public class sealed LowStockProductsSpecification : Specification<Product>
 {
     public LowStockProductsSpecification(int lowStockThreshold)
     {
@@ -133,7 +134,7 @@ public class LowStockProductsSpecification : Specification<Product>
 /// <summary>
 /// Order specifications
 /// </summary>
-public class UserOrdersSpecification : Specification<Order>
+public class sealed UserOrdersSpecification : Specification<Order>
 {
     public UserOrdersSpecification(int userId)
     {
@@ -143,7 +144,7 @@ public class UserOrdersSpecification : Specification<Order>
     }
 }
 
-public class PendingOrdersSpecification : Specification<Order>
+public class sealed PendingOrdersSpecification : Specification<Order>
 {
     public PendingOrdersSpecification()
     {
@@ -154,7 +155,7 @@ public class PendingOrdersSpecification : Specification<Order>
     }
 }
 
-public class RecentOrdersSpecification : Specification<Order>
+public class sealed RecentOrdersSpecification : Specification<Order>
 {
     public RecentOrdersSpecification(int daysBefore = 30)
     {

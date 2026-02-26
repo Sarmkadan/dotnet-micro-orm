@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.Middleware;
 /// Supports API key authentication, bearer token validation, and role-based access.
 /// Populates AuthenticationInfo in middleware context for downstream handlers.
 /// </summary>
-public class AuthenticationMiddleware : IMiddleware
+public class sealed AuthenticationMiddleware : IMiddleware
 {
     private readonly Dictionary<string, (int userId, string role)> _apiKeys = [];
 
@@ -133,7 +134,7 @@ public class AuthenticationMiddleware : IMiddleware
 /// Middleware for role-based authorization
 /// Ensures user has required role before allowing operation
 /// </summary>
-public class AuthorizationMiddleware : IMiddleware
+public class sealed AuthorizationMiddleware : IMiddleware
 {
     private readonly Dictionary<string, string[]> _operationRoles = [];
 

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -8,7 +9,7 @@ using FluentAssertions;
 
 namespace DotnetMicroOrm.Tests;
 
-public class ValidationHelperTests
+public class sealed ValidationHelperTests
 {
     [Fact]
     public void ValidatePassword_StrongPassword_ReturnsSuccess()

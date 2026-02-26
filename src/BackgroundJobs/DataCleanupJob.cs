@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ namespace DotnetMicroOrm.BackgroundJobs;
 /// Runs on a schedule (typically nightly) to maintain database health and performance.
 /// Configurable retention periods for different data types.
 /// </summary>
-public class DataCleanupJob : IBackgroundJob
+public class sealed DataCleanupJob : IBackgroundJob
 {
     private readonly IDatabaseContext _dbContext;
     private readonly DataCleanupConfig _config;
@@ -136,7 +137,7 @@ public class DataCleanupJob : IBackgroundJob
 /// <summary>
 /// Configuration for data cleanup behavior
 /// </summary>
-public class DataCleanupConfig
+public class sealed DataCleanupConfig
 {
     /// <summary>Number of days to retain audit logs</summary>
     public int AuditLogRetentionDays { get; set; } = 90;

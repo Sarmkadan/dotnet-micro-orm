@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -9,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Records audit trail for entity changes and system operations
 /// </summary>
 [Table("AuditLogs")]
-public class AuditLog : BaseEntity
+public class sealed AuditLog : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }

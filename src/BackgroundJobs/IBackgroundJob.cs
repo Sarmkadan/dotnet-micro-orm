@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -33,7 +34,7 @@ public interface IBackgroundJob
 /// <summary>
 /// Job execution result with timing and status information
 /// </summary>
-public class JobExecutionResult
+public class sealed JobExecutionResult
 {
     /// <summary>Job identifier</summary>
     public string JobId { get; set; } = string.Empty;
@@ -60,7 +61,7 @@ public class JobExecutionResult
 /// <summary>
 /// Configuration for job scheduling
 /// </summary>
-public class JobScheduleConfig
+public class sealed JobScheduleConfig
 {
     /// <summary>Run immediately on startup</summary>
     public bool RunOnStartup { get; set; }

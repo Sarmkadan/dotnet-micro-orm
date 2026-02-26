@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -9,7 +10,7 @@ namespace DotnetMicroOrm.Data;
 /// Represents a paginated result set with metadata for navigation.
 /// Used for list endpoints to provide efficient data retrieval and pagination.
 /// </summary>
-public class PagedResult<T>
+public class sealed PagedResult<T>
 {
     /// <summary>The items in the current page</summary>
     public List<T> Items { get; set; } = [];
@@ -136,7 +137,7 @@ public class PagedResult<T>
 /// <summary>
 /// Pagination information for requesting specific pages
 /// </summary>
-public class PaginationInfo
+public class sealed PaginationInfo
 {
     /// <summary>Page number (1-based)</summary>
     public int PageNumber { get; set; } = 1;
@@ -170,7 +171,7 @@ public class PaginationInfo
 /// <summary>
 /// Pagination request from API
 /// </summary>
-public class PaginationRequest
+public class sealed PaginationRequest
 {
     /// <summary>Page number (1-based), defaults to 1</summary>
     public int Page { get; set; } = 1;
