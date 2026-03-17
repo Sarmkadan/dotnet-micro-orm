@@ -228,6 +228,15 @@ public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Query builder
     public IQueryable<T> Query() => throw new NotImplementedException("Use QueryBuilder for complex queries");
 
+    public async IAsyncEnumerable<T> QueryStreamAsync(string query, Dictionary<string, object>? parameters = null)
+    {
+        var results = _context.ExecuteStreamAsync(query, parameters);
+        await foreach (var row in results)
+        {
+            yield return MapToEntity(row);
+        }
+    }
+
     private string GetTableName()
     {
         var attr = typeof(T).GetCustomAttribute<TableAttribute>();
