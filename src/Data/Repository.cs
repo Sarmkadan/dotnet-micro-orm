@@ -104,7 +104,7 @@ public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
         entity.PreSave();
         var columns = GetMappedColumns().Where(c => !c.IsPrimaryKey).ToList();
         var setClause = string.Join(", ", columns.Select(c => $"[{c.ColumnName}] = @{c.PropertyName}"));
-        var idProperty = typeof(T).GetProperty("Id")!;
+        var idProperty = typeof(T).GetProperty("Id") ?? throw new OrmException("Entity must have Id property for Update operations");
         var idValue = idProperty.GetValue(entity);
 
         var query = $"UPDATE [{_schema}].[{_tableName}] SET {setClause} WHERE [Id] = @Id";
@@ -112,27 +112,97 @@ public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
         var parameters = BuildParameters(entity, columns);
         parameters["Id"] = idValue!;
 
-        await _context.ExecuteNonQueryAsync(query, parameters);
+        // Concurrency token handling
+        var concurrencyTokenInfo = GetConcurrencyTokenColumn();
+        if (concurrencyTokenInfo.PropertyName is not null)
+        {
+            var concurrencyProperty = typeof(T).GetProperty(concurrencyTokenInfo.PropertyName);
+            if (concurrencyProperty is null)
+                throw new OrmException($"Concurrency token property '{concurrencyTokenInfo.PropertyName}' not found on entity.");
+            
+            var originalConcurrencyValue = concurrencyProperty.GetValue(entity);
+            if (originalConcurrencyValue is null)
+                throw new OrmException($"Concurrency token '{concurrencyTokenInfo.PropertyName}' cannot be null for entity with Id {idValue}.");
+
+            query += $" AND [{concurrencyTokenInfo.ColumnName}] = @OriginalConcurrencyValue";
+            parameters["OriginalConcurrencyValue"] = originalConcurrencyValue;
+        }
+
+        var rowsAffected = await _context.ExecuteNonQueryAsync(query, parameters);
+
+        if (rowsAffected == 0)
+        {
+            if (concurrencyTokenInfo.PropertyName is not null)
+            {
+                throw new ConcurrencyException($"Concurrency conflict detected for entity {typeof(T).Name} with Id {idValue}. The entity may have been modified or deleted by another user.")
+                    .WithContext("EntityType", typeof(T).Name)
+                    .WithContext("EntityId", idValue);
+            }
+            throw new OrmException($"Entity {typeof(T).Name} with Id {idValue} not found for update.");
+        }
+        
+        // Update the concurrency token value on the entity after successful update
+        if (concurrencyTokenInfo.PropertyName is not null && concurrencyTokenInfo.PropertyType != typeof(byte[])) // Only update if not a rowversion type
+        {
+            // For timestamp/rowversion, the database updates it automatically.
+            // For other types, like a version counter, we might need to increment it here or re-fetch.
+            // For simplicity, we'll re-fetch if it's not a byte[] (SQL Server timestamp)
+            var newConcurrencyValue = await GetConcurrencyTokenValueAsync(idValue!, concurrencyTokenInfo.ColumnName!);
+            typeof(T).GetProperty(concurrencyTokenInfo.PropertyName!)?.SetValue(entity, newConcurrencyValue);
+        }
+
         return entity;
     }
 
     // Deletes entity by id
     public async Task<bool> DeleteAsync(int id)
     {
-        var entity = await GetByIdAsync(id);
-        return entity is not null && await DeleteAsync(entity);
+        var entityToDelete = await GetByIdAsync(id);
+        if (entityToDelete is null)
+            return false;
+        return await DeleteAsync(entityToDelete);
     }
 
     // Deletes entity
     public async Task<bool> DeleteAsync(T entity)
     {
-        var idProperty = typeof(T).GetProperty("Id")!;
+        var idProperty = typeof(T).GetProperty("Id") ?? throw new OrmException("Entity must have Id property for Delete operations");
         var idValue = idProperty.GetValue(entity);
         var query = $"DELETE FROM [{_schema}].[{_tableName}] WHERE [Id] = @Id";
 
-        var rows = await _context.ExecuteNonQueryAsync(query, new Dictionary<string, object> { { "Id", idValue! } });
+        var parameters = new Dictionary<string, object> { { "Id", idValue! } };
+
+        // Concurrency token handling
+        var concurrencyTokenInfo = GetConcurrencyTokenColumn();
+        if (concurrencyTokenInfo.PropertyName is not null)
+        {
+            var concurrencyProperty = typeof(T).GetProperty(concurrencyTokenInfo.PropertyName);
+            if (concurrencyProperty is null)
+                throw new OrmException($"Concurrency token property '{concurrencyTokenInfo.PropertyName}' not found on entity.");
+            
+            var originalConcurrencyValue = concurrencyProperty.GetValue(entity);
+            if (originalConcurrencyValue is null)
+                throw new OrmException($"Concurrency token '{concurrencyTokenInfo.PropertyName}' cannot be null for entity with Id {idValue}.");
+
+            query += $" AND [{concurrencyTokenInfo.ColumnName}] = @OriginalConcurrencyValue";
+            parameters["OriginalConcurrencyValue"] = originalConcurrencyValue;
+        }
+
+        var rowsAffected = await _context.ExecuteNonQueryAsync(query, parameters);
+
+        if (rowsAffected == 0)
+        {
+            if (concurrencyTokenInfo.PropertyName is not null)
+            {
+                throw new ConcurrencyException($"Concurrency conflict detected for entity {typeof(T).Name} with Id {idValue}. The entity may have been modified or deleted by another user.")
+                    .WithContext("EntityType", typeof(T).Name)
+                    .WithContext("EntityId", idValue);
+            }
+            return false; // Entity not found for delete
+        }
+        
         _changeTracking.Remove(entity);
-        return rows > 0;
+        return true;
     }
 
     // Bulk insert
@@ -165,11 +235,6 @@ public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
         var maxEntitiesPerBatch = MAX_SQL_PARAMS_PER_BATCH / parametersPerEntity;
         if (maxEntitiesPerBatch == 0)
         {
-            // This scenario implies that even a single entity exceeds the parameter limit,
-            // which should ideally not happen if MAX_SQL_PARAMS_PER_BATCH is well-chosen.
-            // For safety, we can revert to single inserts or throw a more specific error.
-            // For now, let's assume parametersPerEntity < MAX_SQL_PARAMS_PER_BATCH
-            // and throw if it's not the case.
             throw new OrmException($"Single entity has {parametersPerEntity} parameters, exceeding MAX_SQL_PARAMS_PER_BATCH ({MAX_SQL_PARAMS_PER_BATCH}). Adjust MAX_SQL_PARAMS_PER_BATCH or mapped columns.");
         }
 
@@ -326,6 +391,44 @@ public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
 
         entity.PostLoad();
         return entity;
+    }
+
+    private ConcurrencyTokenInfo GetConcurrencyTokenColumn()
+    {
+        var properties = typeof(T).GetProperties();
+        foreach (var prop in properties)
+        {
+            var concurrencyAttr = prop.GetCustomAttribute<ConcurrencyTokenAttribute>();
+            if (concurrencyAttr is not null)
+            {
+                var columnAttr = prop.GetCustomAttribute<ColumnAttribute>();
+                if (columnAttr is null)
+                    throw new OrmException($"ConcurrencyToken property '{prop.Name}' must also have a ColumnAttribute.");
+                
+                return new ConcurrencyTokenInfo
+                {
+                    PropertyName = prop.Name,
+                    ColumnName = columnAttr.Name,
+                    PropertyType = prop.PropertyType
+                };
+            }
+        }
+        return new ConcurrencyTokenInfo(); // No concurrency token found
+    }
+
+    private async Task<object?> GetConcurrencyTokenValueAsync(object entityId, string concurrencyColumnName)
+    {
+        var idProperty = typeof(T).GetProperty("Id") ?? throw new OrmException("Entity must have Id property.");
+        var query = $"SELECT [{concurrencyColumnName}] FROM [{_schema}].[{_tableName}] WHERE [Id] = @Id";
+        var parameters = new Dictionary<string, object> { { "Id", entityId } };
+        return await _context.ExecuteScalarAsync(query, parameters);
+    }
+
+    private class ConcurrencyTokenInfo
+    {
+        public string? PropertyName { get; set; }
+        public string? ColumnName { get; set; }
+        public Type? PropertyType { get; set; }
     }
 
     private class ColumnMapping
