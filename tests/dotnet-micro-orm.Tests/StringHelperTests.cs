@@ -6,10 +6,11 @@
 
 using DotnetMicroOrm.Utils;
 using FluentAssertions;
+using Xunit;
 
 namespace DotnetMicroOrm.Tests;
 
-public class sealed StringHelperTests
+public sealed class StringHelperTests
 {
     [Fact]
     public void ToKebabCase_PascalCaseInput_ReturnsKebabCase()

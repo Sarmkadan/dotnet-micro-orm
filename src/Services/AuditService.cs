@@ -10,9 +10,27 @@ using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Domain.Models;
 
 /// <summary>
+/// Audit service contract for tracking entity changes and system operations.
+/// </summary>
+public interface IAuditService
+{
+    Task<AuditLog> LogInsertAsync(string entityType, int entityId, string? newValues = null, int? userId = null, string? username = null);
+    Task<AuditLog> LogUpdateAsync(string entityType, int entityId, string? oldValues = null, string? newValues = null, string? changedProperties = null, int? userId = null, string? username = null);
+    Task<AuditLog> LogDeleteAsync(string entityType, int entityId, string? oldValues = null, int? userId = null, string? username = null);
+    Task<AuditLog> LogFailureAsync(string entityType, int entityId, string action, string errorMessage, int? userId = null, string? username = null);
+    Task<List<AuditLog>> GetAuditLogsAsync(string entityType, int entityId);
+    Task<List<AuditLog>> GetUserActivityAsync(int userId);
+    Task<List<AuditLog>> GetLogsByActionAsync(string action);
+    Task<List<AuditLog>> GetFailedOperationsAsync(int daysBack = 7);
+    Task<List<AuditLog>> GetLogsByDateRangeAsync(DateTime startDate, DateTime endDate);
+    Task<int> PurgeOldLogsAsync(int daysToKeep = 90);
+    Task<AuditSummary> GetSummaryAsync();
+}
+
+/// <summary>
 /// Audit service for tracking entity changes and system operations
 /// </summary>
-public class sealed AuditService : IAsyncDisposable
+public sealed class AuditService : IAuditService, IAsyncDisposable
 {
     private readonly IRepository<AuditLog> _auditRepository;
     private readonly IDatabaseContext _context;
@@ -148,7 +166,7 @@ public class sealed AuditService : IAsyncDisposable
 /// <summary>
 /// Audit summary statistics
 /// </summary>
-public class sealed AuditSummary
+public sealed class AuditSummary
 {
     public int TotalOperations { get; set; }
     public int SuccessfulOperations { get; set; }

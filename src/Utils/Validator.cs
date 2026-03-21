@@ -12,7 +12,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Fluent validation builder for entities
 /// </summary>
-public class sealed ValidationBuilder
+public sealed class ValidationBuilder
 {
     private readonly List<string> _errors = [];
 
@@ -51,7 +51,7 @@ public class sealed ValidationBuilder
             return this;
 
         var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-        return When(!Regex.IsMatch(value, emailPattern),
+        return When(!System.Text.RegularExpressions.Regex.IsMatch(value, emailPattern),
             $"{propertyName} is not a valid email address");
     }
 
@@ -61,7 +61,7 @@ public class sealed ValidationBuilder
             return this;
 
         var urlPattern = @"^https?://";
-        return When(!Regex.IsMatch(value, urlPattern),
+        return When(!System.Text.RegularExpressions.Regex.IsMatch(value, urlPattern),
             $"{propertyName} is not a valid URL");
     }
 
@@ -71,7 +71,7 @@ public class sealed ValidationBuilder
             return this;
 
         var phonePattern = @"^\d{10,}$";
-        return When(!Regex.IsMatch(value.Replace("-", "").Replace(" ", ""), phonePattern),
+        return When(!System.Text.RegularExpressions.Regex.IsMatch(value.Replace("-", "").Replace(" ", ""), phonePattern),
             $"{propertyName} is not a valid phone number");
     }
 

@@ -7,13 +7,14 @@
 namespace DotnetMicroOrm.Data;
 
 using System.Collections.Concurrent;
+using DotnetMicroOrm.Constants;
 using DotnetMicroOrm.Domain.Models;
 using DotnetMicroOrm.Exceptions;
 
 /// <summary>
 /// Unit of work pattern implementation for transaction management
 /// </summary>
-public class sealed UnitOfWork : IUnitOfWork
+public sealed class UnitOfWork : IUnitOfWork
 {
     private readonly IDatabaseContext _context;
     private readonly ConcurrentDictionary<Type, object> _repositories = [];
@@ -27,7 +28,7 @@ public class sealed UnitOfWork : IUnitOfWork
     }
 
     // Gets or creates repository for entity type
-    public IRepository<T> Repository<T>() where T : BaseEntity
+    public IRepository<T> Repository<T>() where T : BaseEntity, new()
     {
         var type = typeof(T);
         var key = $"{type.FullName}_Repository";
@@ -65,7 +66,7 @@ public class sealed UnitOfWork : IUnitOfWork
             _changeSet.Clear();
             return result;
         }
-        catch (Exception ex)
+        catch
         {
             await RollbackAsync();
             throw;

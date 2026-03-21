@@ -4,12 +4,14 @@
 // CTO & Software Architect
 // =============================================================================
 
+using DotnetMicroOrm.Constants;
+
 namespace DotnetMicroOrm.Configuration;
 
 /// <summary>
 /// Application settings configuration
 /// </summary>
-public class sealed AppSettings
+public sealed class AppSettings
 {
     public DatabaseSettings Database { get; set; } = new();
     public OrmSettings Orm { get; set; } = new();
@@ -19,7 +21,7 @@ public class sealed AppSettings
 /// <summary>
 /// Database configuration settings
 /// </summary>
-public class sealed DatabaseSettings
+public sealed class DatabaseSettings
 {
     /// <summary>
     /// Database connection string
@@ -70,7 +72,7 @@ public class sealed DatabaseSettings
 /// <summary>
 /// ORM-specific configuration settings
 /// </summary>
-public class sealed OrmSettings
+public sealed class OrmSettings
 {
     /// <summary>
     /// Enable change tracking
@@ -121,7 +123,7 @@ public class sealed OrmSettings
 /// <summary>
 /// Logging configuration settings
 /// </summary>
-public class sealed LoggingSettings
+public sealed class LoggingSettings
 {
     /// <summary>
     /// Minimum log level

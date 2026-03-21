@@ -74,7 +74,7 @@ public sealed class QueryPlanCache : IQueryPlanCache
 
         entry.LastAccessedAt = DateTime.UtcNow;
         Interlocked.Increment(ref _hits);
-        Interlocked.Increment(ref entry.Plan.HitCount);
+        entry.Plan.HitCount++;
 
         _logger.LogDebug("Query plan cache hit for fingerprint {Fingerprint}", fingerprint);
         return Task.FromResult<QueryPlan?>(entry.Plan);

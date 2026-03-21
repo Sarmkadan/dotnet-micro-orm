@@ -10,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Represents a system user entity with authentication and profile information
 /// </summary>
 [Table("Users")]
-public class sealed User : BaseEntity
+public class User : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }
