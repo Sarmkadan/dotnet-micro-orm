@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -62,7 +63,7 @@ public abstract class DomainEvent : IEvent
 /// <summary>
 /// User-related domain events
 /// </summary>
-public class UserCreatedEvent : DomainEvent
+public class sealed UserCreatedEvent : DomainEvent
 {
     public int UserId { get; set; }
     public string Username { get; set; } = string.Empty;
@@ -73,7 +74,7 @@ public class UserCreatedEvent : DomainEvent
     public override string EventType => "user.created";
 }
 
-public class UserUpdatedEvent : DomainEvent
+public class sealed UserUpdatedEvent : DomainEvent
 {
     public int UserId { get; set; }
     public string ChangedFields { get; set; } = string.Empty;
@@ -83,7 +84,7 @@ public class UserUpdatedEvent : DomainEvent
     public override string EventType => "user.updated";
 }
 
-public class UserDeletedEvent : DomainEvent
+public class sealed UserDeletedEvent : DomainEvent
 {
     public int UserId { get; set; }
 
@@ -95,7 +96,7 @@ public class UserDeletedEvent : DomainEvent
 /// <summary>
 /// Product-related domain events
 /// </summary>
-public class ProductCreatedEvent : DomainEvent
+public class sealed ProductCreatedEvent : DomainEvent
 {
     public int ProductId { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -106,7 +107,7 @@ public class ProductCreatedEvent : DomainEvent
     public override string EventType => "product.created";
 }
 
-public class ProductStockChangedEvent : DomainEvent
+public class sealed ProductStockChangedEvent : DomainEvent
 {
     public int ProductId { get; set; }
     public int OldStock { get; set; }
@@ -120,7 +121,7 @@ public class ProductStockChangedEvent : DomainEvent
 /// <summary>
 /// Order-related domain events
 /// </summary>
-public class OrderCreatedEvent : DomainEvent
+public class sealed OrderCreatedEvent : DomainEvent
 {
     public int OrderId { get; set; }
     public int UserId { get; set; }
@@ -131,7 +132,7 @@ public class OrderCreatedEvent : DomainEvent
     public override string EventType => "order.created";
 }
 
-public class OrderShippedEvent : DomainEvent
+public class sealed OrderShippedEvent : DomainEvent
 {
     public int OrderId { get; set; }
     public string TrackingNumber { get; set; } = string.Empty;
@@ -141,7 +142,7 @@ public class OrderShippedEvent : DomainEvent
     public override string EventType => "order.shipped";
 }
 
-public class OrderCancelledEvent : DomainEvent
+public class sealed OrderCancelledEvent : DomainEvent
 {
     public int OrderId { get; set; }
     public string Reason { get; set; } = string.Empty;

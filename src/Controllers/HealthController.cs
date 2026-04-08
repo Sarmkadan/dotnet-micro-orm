@@ -1,3 +1,4 @@
+#nullable enable
 using Microsoft.AspNetCore.Mvc;
 using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Domain.Models;
@@ -7,7 +8,7 @@ namespace DotnetMicroOrm.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class HealthController : ControllerBase
+    public class sealed HealthController : ControllerBase
     {
         private readonly IDatabaseContext _dbContext;
 

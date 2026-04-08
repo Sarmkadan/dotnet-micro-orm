@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -19,7 +20,7 @@ namespace DotnetMicroOrm.Examples
     /// Demonstrates batch operations (bulk insert, update, delete) for high performance.
     /// Batch operations are 10-20x faster than individual operations.
     /// </summary>
-    public class BatchOperationsExample
+    public class sealed BatchOperationsExample
     {
         private readonly IServiceProvider _serviceProvider;
 

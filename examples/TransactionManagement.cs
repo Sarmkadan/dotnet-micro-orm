@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -17,7 +18,7 @@ namespace DotnetMicroOrm.Examples
     /// Demonstrates transaction management and ACID compliance.
     /// Shows how to handle rollback and maintain data integrity.
     /// </summary>
-    public class TransactionManagementExample
+    public class sealed TransactionManagementExample
     {
         private readonly IServiceProvider _serviceProvider;
 

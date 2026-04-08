@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -72,7 +73,7 @@ public static class ServiceCollectionExtensions
 /// <summary>
 /// ORM configuration options
 /// </summary>
-public class OrmConfiguration
+public class sealed OrmConfiguration
 {
     /// <summary>
     /// Default command timeout in seconds

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -13,7 +14,7 @@ using DotnetMicroOrm.Exceptions;
 /// <summary>
 /// Database context managing connections and command execution
 /// </summary>
-public class DatabaseContext : IDatabaseContext
+public class sealed DatabaseContext : IDatabaseContext
 {
     private readonly string _connectionString;
     private readonly DatabaseProvider _provider;
@@ -70,7 +71,7 @@ public class DatabaseContext : IDatabaseContext
             command.CommandText = "SELECT 1";
             command.CommandTimeout = Constants.OrmConstants.DefaultCommandTimeout;
             var result = await command.ExecuteScalarAsync();
-            return result != null && result != DBNull.Value;
+            return result is not null && result != DBNull.Value;
         }
         catch
         {
@@ -155,7 +156,7 @@ public class DatabaseContext : IDatabaseContext
     public async Task<bool> BeginTransactionAsync(TransactionIsolationLevel isolationLevel)
     {
         await OpenAsync();
-        if (_transaction != null)
+        if (_transaction is not null)
             throw new InvalidOperationException("Transaction already active");
 
         var dbIsolationLevel = isolationLevel switch
@@ -175,7 +176,7 @@ public class DatabaseContext : IDatabaseContext
     // Commits transaction
     public async Task<bool> CommitAsync()
     {
-        if (_transaction == null)
+        if (_transaction is null)
             throw new InvalidOperationException("No active transaction to commit");
 
         try
@@ -194,7 +195,7 @@ public class DatabaseContext : IDatabaseContext
     // Rollbacks transaction
     public async Task<bool> RollbackAsync()
     {
-        if (_transaction == null)
+        if (_transaction is null)
             throw new InvalidOperationException("No active transaction to rollback");
 
         try
@@ -222,7 +223,7 @@ public class DatabaseContext : IDatabaseContext
 
     private void ApplyParameters(DbCommand command, Dictionary<string, object>? parameters)
     {
-        if (parameters == null || parameters.Count == 0)
+        if (parameters is null || parameters.Count == 0)
             return;
 
         foreach (var param in parameters)

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -13,7 +14,7 @@ namespace DotnetMicroOrm.Caching;
 /// Suitable for single-server applications. Includes automatic expiration
 /// and pattern-based removal for cache invalidation.
 /// </summary>
-public class MemoryCacheProvider : ICacheProvider
+public class sealed MemoryCacheProvider : ICacheProvider
 {
     private readonly ConcurrentDictionary<string, CacheEntry> _cache = [];
     private readonly ConcurrentDictionary<string, Timer> _timers = [];

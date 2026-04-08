@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -52,7 +53,7 @@ class Program
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
-            if (ex.InnerException != null)
+            if (ex.InnerException is not null)
                 Console.WriteLine($"Inner: {ex.InnerException.Message}");
         }
         finally
@@ -77,12 +78,12 @@ class Program
 
             // Get user
             var retrievedUser = await userService.GetUserByIdAsync(user.Id);
-            if (retrievedUser != null)
+            if (retrievedUser is not null)
                 Console.WriteLine($"✓ Retrieved user: {retrievedUser.GetFullName()}");
 
             // Authenticate
             var authenticated = await userService.AuthenticateAsync("john_doe", "SecurePassword123");
-            if (authenticated != null)
+            if (authenticated is not null)
                 Console.WriteLine($"✓ User authenticated successfully");
 
             // Update profile
@@ -117,7 +118,7 @@ class Program
 
             // Get product
             var retrieved = await productService.GetProductAsync(product.Id);
-            if (retrieved != null)
+            if (retrieved is not null)
                 Console.WriteLine($"✓ Retrieved product: {retrieved.Sku}");
 
             // Update stock

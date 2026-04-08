@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -11,7 +12,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Audit service for tracking entity changes and system operations
 /// </summary>
-public class AuditService : IAsyncDisposable
+public class sealed AuditService : IAsyncDisposable
 {
     private readonly IRepository<AuditLog> _auditRepository;
     private readonly IDatabaseContext _context;
@@ -147,7 +148,7 @@ public class AuditService : IAsyncDisposable
 /// <summary>
 /// Audit summary statistics
 /// </summary>
-public class AuditSummary
+public class sealed AuditSummary
 {
     public int TotalOperations { get; set; }
     public int SuccessfulOperations { get; set; }

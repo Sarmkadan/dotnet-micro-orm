@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -10,7 +11,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// User-specific repository with extended operations
 /// </summary>
-public class UserRepository : Repository<User>
+public class sealed UserRepository : Repository<User>
 {
     public UserRepository(IDatabaseContext context) : base(context) { }
 

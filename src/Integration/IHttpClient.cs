@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -40,7 +41,7 @@ public interface IHttpClient : IAsyncDisposable
 /// <summary>
 /// Response data from HTTP requests
 /// </summary>
-public class HttpResponseData
+public class sealed HttpResponseData
 {
     /// <summary>HTTP status code</summary>
     public int StatusCode { get; set; }
@@ -70,7 +71,7 @@ public class HttpResponseData
 /// <summary>
 /// Configuration for HTTP client behavior
 /// </summary>
-public class HttpClientConfig
+public class sealed HttpClientConfig
 {
     /// <summary>Default request timeout</summary>
     public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(30);
