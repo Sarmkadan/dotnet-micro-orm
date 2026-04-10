@@ -134,11 +134,11 @@ public static class DateTimeHelper
         if (diff.TotalSeconds < 60)
             return "a moment ago";
         if (diff.TotalMinutes < 60)
-            return $"{(int)diff.TotalMinutes} minute{(int)diff.TotalMinutes != 1 ? "s" : ""} ago";
+            return $"{(int)diff.TotalMinutes} minute{((int)diff.TotalMinutes != 1 ? "s" : "")} ago";
         if (diff.TotalHours < 24)
-            return $"{(int)diff.TotalHours} hour{(int)diff.TotalHours != 1 ? "s" : ""} ago";
+            return $"{(int)diff.TotalHours} hour{((int)diff.TotalHours != 1 ? "s" : "")} ago";
         if (diff.TotalDays < 30)
-            return $"{(int)diff.TotalDays} day{(int)diff.TotalDays != 1 ? "s" : ""} ago";
+            return $"{(int)diff.TotalDays} day{((int)diff.TotalDays != 1 ? "s" : "")} ago";
 
         return dateTime.ToString("G");
     }
