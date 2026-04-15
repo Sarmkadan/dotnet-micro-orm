@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -9,7 +10,7 @@ namespace DotnetMicroOrm.Domain.Models;
 /// Represents a customer order entity
 /// </summary>
 [Table("Orders")]
-public class Order : BaseEntity
+public class sealed Order : BaseEntity
 {
     [Column("Id", IsPrimaryKey = true)]
     public int Id { get; set; }
@@ -101,7 +102,7 @@ public class Order : BaseEntity
 
     public void AddItem(OrderItem item)
     {
-        if (item == null)
+        if (item is null)
             throw new ArgumentNullException(nameof(item));
         Items.Add(item);
         RecalculateTotals();

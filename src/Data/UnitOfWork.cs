@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -12,7 +13,7 @@ using DotnetMicroOrm.Exceptions;
 /// <summary>
 /// Unit of work pattern implementation for transaction management
 /// </summary>
-public class UnitOfWork : IUnitOfWork
+public class sealed UnitOfWork : IUnitOfWork
 {
     private readonly IDatabaseContext _context;
     private readonly ConcurrentDictionary<Type, object> _repositories = [];

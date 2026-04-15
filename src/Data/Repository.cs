@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -13,7 +14,7 @@ using DotnetMicroOrm.Exceptions;
 /// <summary>
 /// Generic base repository with CRUD and query operations
 /// </summary>
-public class Repository<T> : IRepository<T> where T : BaseEntity, new()
+public class sealed Repository<T> : IRepository<T> where T : BaseEntity, new()
 {
     private readonly IDatabaseContext _context;
     private readonly List<T> _changeTracking = [];
@@ -61,7 +62,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     {
         var query = $"SELECT COUNT(*) FROM [{_schema}].[{_tableName}]";
         var count = await _context.ExecuteScalarAsync(query);
-        return count != null ? (int)(long)count : 0;
+        return count is not null ? (int)(long)count : 0;
     }
 
     // Checks if entity exists
@@ -119,7 +120,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     public async Task<bool> DeleteAsync(int id)
     {
         var entity = await GetByIdAsync(id);
-        return entity != null && await DeleteAsync(entity);
+        return entity is not null && await DeleteAsync(entity);
     }
 
     // Deletes entity
@@ -170,7 +171,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
         var results = await _context.ExecuteQueryAsync(query);
         var entities = results.Select(MapToEntity).ToList();
 
-        if (predicate != null)
+        if (predicate is not null)
             entities = entities.AsQueryable().Where(predicate).ToList();
 
         return (entities, totalCount);
@@ -198,11 +199,11 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
 
         foreach (var prop in properties)
         {
-            if (prop.GetCustomAttribute<NotMappedAttribute>() != null)
+            if (prop.GetCustomAttribute<NotMappedAttribute>() is not null)
                 continue;
 
             var columnAttr = prop.GetCustomAttribute<ColumnAttribute>();
-            if (columnAttr == null)
+            if (columnAttr is null)
                 continue;
 
             columns.Add(new ColumnMapping
@@ -236,7 +237,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
         foreach (var prop in properties)
         {
             var columnAttr = prop.GetCustomAttribute<ColumnAttribute>();
-            if (columnAttr == null) continue;
+            if (columnAttr is null) continue;
 
             if (row.TryGetValue(columnAttr.Name, out var value) && value != DBNull.Value)
                 prop.SetValue(entity, Convert.ChangeType(value, prop.PropertyType));

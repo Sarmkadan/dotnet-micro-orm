@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -16,7 +17,7 @@ namespace DotnetMicroOrm.Configuration;
 /// Sets up database connections, middleware pipeline, caching, integration services,
 /// and other components in a composable manner.
 /// </summary>
-public class ApplicationBuilder
+public class sealed ApplicationBuilder
 {
     private IDatabaseContext? _dbContext;
     private readonly PipelineBuilder _pipelineBuilder = new();
@@ -143,7 +144,7 @@ public class ApplicationBuilder
 /// <summary>
 /// Complete application configuration
 /// </summary>
-public class ApplicationConfiguration
+public class sealed ApplicationConfiguration
 {
     /// <summary>Database context</summary>
     public required IDatabaseContext DatabaseContext { get; set; }
@@ -175,7 +176,7 @@ public class ApplicationConfiguration
 /// <summary>
 /// Dummy logger implementation for compilation
 /// </summary>
-public class ConsoleLogger<T> : ILogger<T>
+public class sealed ConsoleLogger<T> : ILogger<T>
 {
     public void LogInformation(string message, params object?[] args) => Console.WriteLine(message, args);
     public void LogDebug(string message, params object?[] args) { } // Suppress debug

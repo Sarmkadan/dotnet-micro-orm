@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -44,7 +45,7 @@ public abstract class BaseEntity
         var thisKey = GetType().GetProperty("Id")?.GetValue(this);
         var otherKey = obj.GetType().GetProperty("Id")?.GetValue(other);
 
-        return thisKey != null && thisKey.Equals(otherKey);
+        return thisKey is not null && thisKey.Equals(otherKey);
     }
 
     public override int GetHashCode()

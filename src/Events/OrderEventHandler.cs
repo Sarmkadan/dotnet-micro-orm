@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -10,7 +11,7 @@ namespace DotnetMicroOrm.Events;
 /// Responds to order creation, shipping, and cancellation with appropriate actions.
 /// Coordinates with inventory, notifications, and billing systems.
 /// </summary>
-public class OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
+public class sealed OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
 {
     public int Priority => 10;
 
@@ -43,7 +44,7 @@ public class OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
 /// <summary>
 /// Handles order shipped events with notification
 /// </summary>
-public class OrderShippedEventHandler : IEventHandler<OrderShippedEvent>
+public class sealed OrderShippedEventHandler : IEventHandler<OrderShippedEvent>
 {
     public int Priority => 15;
 
@@ -75,7 +76,7 @@ public class OrderShippedEventHandler : IEventHandler<OrderShippedEvent>
 /// <summary>
 /// Handles order cancellation events
 /// </summary>
-public class OrderCancelledEventHandler : IEventHandler<OrderCancelledEvent>
+public class sealed OrderCancelledEventHandler : IEventHandler<OrderCancelledEvent>
 {
     public int Priority => 20;
 

@@ -1,3 +1,4 @@
+#nullable enable
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
@@ -8,7 +9,7 @@ using FluentAssertions;
 
 namespace DotnetMicroOrm.Tests;
 
-public class StringHelperTests
+public class sealed StringHelperTests
 {
     [Fact]
     public void ToKebabCase_PascalCaseInput_ReturnsKebabCase()
