@@ -10,7 +10,7 @@
     <AssemblyName>DotnetMicroOrm</AssemblyName>
     <RootNamespace>DotnetMicroOrm</RootNamespace>
     <PackageId>Zaiets.dotnet.micro.orm</PackageId>
-    <Version>2.0.0</Version>
+    <Version>2.0.2</Version>
     <Authors>Vladyslav Zaiets</Authors>
     <Description>High-performance micro-ORM for .NET - compiled expressions, batch operations, change tracking, multi-DB support</Description>
     <PackageTags>orm micro-orm database sql dotnet</PackageTags>
