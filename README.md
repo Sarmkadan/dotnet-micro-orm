@@ -50,6 +50,9 @@ A lightning-fast, lightweight ORM for .NET that prioritizes performance, simplic
 - **Rate Limiting**: Built-in rate limiting middleware
 - **Export Formats**: CSV, JSON, and XML output formatters
 - **Webhook Support**: External system integration and event delivery
+- **Query Profiler**: Measure and inspect every SQL query with zero config
+- **Migration Support**: Versioned schema migrations with up/down rollback
+- **Batch Upsert**: INSERT-or-UPDATE entire lists in a single SQL MERGE
 
 ## Why DotnetMicroOrm?
 
@@ -678,6 +681,122 @@ public interface IUnitOfWork : IDisposable
 ```
 
 ## Advanced Features
+
+### Query Profiler
+
+Wrap any database call with `IQueryProfiler` to measure execution time and capture diagnostics without changing business logic. The profiler is registered as a singleton and stores up to 1 000 recent profiles in a thread-safe ring buffer.
+
+```csharp
+// Registration (automatic when using AddDotnetMicroOrm)
+services.AddSingleton<IQueryProfiler, QueryProfiler>();
+
+// Usage inside a service
+public class ProductService
+{
+    private readonly IRepository<Product> _repo;
+    private readonly IQueryProfiler _profiler;
+
+    public async Task<List<Product>> GetActiveAsync()
+    {
+        return await _profiler.ProfileAsync(
+            "SELECT active products",
+            () => _repo.GetAsync(p => p.IsActive));
+    }
+}
+
+// Retrieve statistics
+var summary = profiler.GetSummary();
+Console.WriteLine($"Total queries:   {summary.TotalQueries}");
+Console.WriteLine($"Average latency: {summary.AverageDuration.TotalMilliseconds:F1} ms");
+Console.WriteLine($"Slowest query:   {summary.SlowestQuery?.Query}");
+
+// Inspect individual profiles
+foreach (var profile in profiler.GetProfiles().Take(10))
+{
+    Console.WriteLine($"{profile.ExecutedAt:HH:mm:ss}  {profile.Duration.TotalMilliseconds:F1} ms  {profile.Query}");
+}
+
+// Temporarily disable (e.g. in benchmarks)
+profiler.IsEnabled = false;
+```
+
+### Migration Support
+
+`IMigration` / `IMigrationRunner` provide versioned, forward/backward schema migrations backed by a `_MigrationHistory` table that is created automatically on first use.
+
+```csharp
+// 1. Implement one class per migration
+public class AddProductTagsColumn : IMigration
+{
+    public string Version     => "20240315_001";
+    public string Description => "Add Tags column to Products";
+
+    public async Task UpAsync(IDatabaseContext ctx)
+    {
+        await ctx.ExecuteNonQueryAsync(
+            "ALTER TABLE [dbo].[Products] ADD [Tags] NVARCHAR(500) NULL");
+    }
+
+    public async Task DownAsync(IDatabaseContext ctx)
+    {
+        await ctx.ExecuteNonQueryAsync(
+            "ALTER TABLE [dbo].[Products] DROP COLUMN [Tags]");
+    }
+}
+
+// 2. Register during startup
+services.AddMigration<AddProductTagsColumn>();
+
+// 3. Apply at startup
+var runner = app.Services.GetRequiredService<IMigrationRunner>();
+await runner.MigrateAsync();                      // apply all pending
+await runner.MigrateToAsync("20240315_001");      // apply up to a specific version
+await runner.RollbackToAsync("20240201_001");     // roll back to a specific version
+
+// 4. Inspect state
+var pending = await runner.GetPendingMigrationsAsync();
+var applied = await runner.GetAppliedMigrationsAsync();
+```
+
+### Batch Upsert Operations
+
+`IBatchUpsertOperation<T>` inserts new rows and updates existing ones in a single SQL MERGE round-trip (INSERT-or-UPDATE). The key columns that determine uniqueness are selected via a lambda expression.
+
+```csharp
+// Registration (automatic when using AddDotnetMicroOrm)
+services.AddScoped(typeof(IBatchUpsertOperation<>), typeof(BatchUpsertOperation<>));
+
+// Usage
+public class ProductSyncService
+{
+    private readonly IBatchUpsertOperation<Product> _upsert;
+
+    public ProductSyncService(IBatchUpsertOperation<Product> upsert)
+        => _upsert = upsert;
+
+    public async Task SyncCatalogAsync(List<Product> incoming)
+    {
+        // Match on SKU; insert if not found, update if found
+        var results = await _upsert.UpsertRangeAsync(
+            incoming,
+            keySelector: p => p.Sku,
+            batchSize: 500);
+
+        int inserted = results.Count(r => r.WasInserted);
+        int updated  = results.Count(r => !r.WasInserted);
+        Console.WriteLine($"Synced {results.Count} products: {inserted} new, {updated} updated");
+    }
+}
+
+// Single-entity upsert
+var result = await upsert.UpsertAsync(product, p => p.Sku);
+Console.WriteLine(result.WasInserted ? "Created" : "Updated");
+
+// Composite key example
+await upsert.UpsertRangeAsync(
+    orderItems,
+    keySelector: i => new { i.OrderId, i.ProductId });
+```
 
 ### Compiled Expressions
 
