@@ -21,7 +21,7 @@ public sealed class QueryPlanCacheOptions
     /// Maximum number of plans held simultaneously before LRU eviction removes the oldest accessed entry.
     /// Defaults to <c>500</c>.
     /// </summary>
-    public int Capacity { get; set; } = 500;
+    public int Capacity { get; set; } = 1000;
 
     /// <summary>
     /// Default TTL applied when no explicit value is supplied to <see cref="IQueryPlanCache.StorePlanAsync"/>.
