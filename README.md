@@ -1,7 +1,7 @@
 [![Build](https://github.com/sarmkadan/dotnet-micro-orm/actions/workflows/build.yml/badge.svg)](https://github.com/sarmkadan/dotnet-micro-orm/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/)
-[![Latest Release](https://img.shields.io/badge/Version-2.0.0-brightgreen.svg)](https://github.com/Sarmkadan/dotnet-micro-orm/releases)
+[![Latest Release](https://img.shields.io/badge/Version-2.0.2-brightgreen.svg)](https://github.com/Sarmkadan/dotnet-micro-orm/releases)
 
 # DotnetMicroOrm - High-Performance Micro-ORM for .NET
 
@@ -113,14 +113,14 @@ Unlike Entity Framework Core which provides everything, DotnetMicroOrm is focuse
 ### Via NuGet Package Manager
 
 ```bash
-dotnet add package DotnetMicroOrm
+dotnet add package DotnetMicroOrm --version 2.0.2
 ```
 
 Or manually in your `.csproj`:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="DotnetMicroOrm" Version="1.2.0" />
+  <PackageReference Include="DotnetMicroOrm" Version="2.0.2" />
 </ItemGroup>
 ```
 
