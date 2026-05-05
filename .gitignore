@@ -45,3 +45,6 @@ coverage/
 *.sln.iml
 .env
 .env.local
+appsettings.Development.json
+packages/
+*.DotSettings.user
