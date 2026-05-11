@@ -42,7 +42,7 @@ jobs:
       run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
 
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: test-results
@@ -68,7 +68,7 @@ jobs:
       run: dotnet pack --configuration Release --output ./nupkg
 
     - name: Upload NuGet package
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: nuget-package
         path: ./nupkg/*.nupkg
