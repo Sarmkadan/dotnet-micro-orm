@@ -21,6 +21,7 @@ A lightning-fast, lightweight ORM for .NET that prioritizes performance, simplic
 - [Performance Benchmarks](#performance-benchmarks)
 - [Troubleshooting](#troubleshooting)
 - [Related Projects](#related-projects)
+- [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -811,6 +812,28 @@ else
     products = await cacheProvider.GetAsync<List<Product>>("products:all");
 }
 ```
+
+## Testing
+
+Run the full test suite:
+
+```bash
+dotnet test
+```
+
+Run with verbose output and code coverage:
+
+```bash
+dotnet test --verbosity normal --collect:"XPlat Code Coverage"
+```
+
+Run a specific test project:
+
+```bash
+dotnet test tests/dotnet-micro-orm.Tests/dotnet-micro-orm.Tests.csproj
+```
+
+The test suite covers `QueryBuilder` logic, `StringHelper` utilities, and `ValidationHelper` rules using xUnit and FluentAssertions. All tests must pass before opening a pull request.
 
 ## Contributing
 
