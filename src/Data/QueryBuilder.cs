@@ -12,7 +12,7 @@ using DotnetMicroOrm.Domain.Models;
 /// <summary>
 /// Fluent query builder for complex queries
 /// </summary>
-public class sealed QueryBuilder<T> : IQueryBuilder<T> where T : BaseEntity
+public sealed class QueryBuilder<T> : IQueryBuilder<T> where T : BaseEntity
 {
     private readonly IRepository<T> _repository;
     private Expression<Func<T, bool>>? _whereClause;
