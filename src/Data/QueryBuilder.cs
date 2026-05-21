@@ -10,8 +10,16 @@ using System.Linq.Expressions;
 using DotnetMicroOrm.Domain.Models;
 
 /// <summary>
-/// Fluent query builder for complex queries
+/// Fluent query builder that composes LINQ expressions for filtering, ordering,
+/// and paginating <typeparamref name="T"/> entities. Implements <see cref="IQueryBuilder{T}"/>.
 /// </summary>
+/// <typeparam name="T">The entity type being queried. Must derive from <see cref="BaseEntity"/>.</typeparam>
+/// <remarks>
+/// The builder is stateful - each method call modifies internal state and returns <c>this</c>.
+/// Terminal methods (<see cref="ToListAsync"/>, <see cref="FirstOrDefaultAsync"/>,
+/// <see cref="CountAsync"/>) materialize the query against the underlying repository.
+/// A single <see cref="QueryBuilder{T}"/> instance should not be reused across multiple queries.
+/// </remarks>
 public sealed class QueryBuilder<T> : IQueryBuilder<T> where T : BaseEntity
 {
     private readonly IRepository<T> _repository;
