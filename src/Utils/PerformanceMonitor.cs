@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.Utils;
 /// and database query metrics. Provides detailed performance reports and alerting
 /// when thresholds are exceeded.
 /// </summary>
-public class sealed PerformanceMonitor : IDisposable
+public sealed class PerformanceMonitor : IDisposable
 {
     private readonly Stopwatch _stopwatch;
     private readonly string _operationName;
@@ -127,7 +127,7 @@ public class sealed PerformanceMonitor : IDisposable
 /// <summary>
 /// Performance metrics report
 /// </summary>
-public class sealed PerformanceReport
+public sealed class PerformanceReport
 {
     /// <summary>Operation name</summary>
     public string OperationName { get; set; } = string.Empty;

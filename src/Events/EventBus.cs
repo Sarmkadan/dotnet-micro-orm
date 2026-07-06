@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.Events;
 /// Handlers are executed synchronously or asynchronously based on configuration.
 /// Thread-safe and designed for single-application use (for distributed use, consider message queues).
 /// </summary>
-public class sealed EventBus : IEventBus
+public sealed class EventBus : IEventBus
 {
     private readonly ConcurrentDictionary<Type, List<object>> _subscribers = [];
     private readonly bool _executeAsync;

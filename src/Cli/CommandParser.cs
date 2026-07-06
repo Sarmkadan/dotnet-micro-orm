@@ -13,7 +13,7 @@ namespace DotnetMicroOrm.Cli;
 /// Parses and validates command-line arguments with support for subcommands,
 /// options, and arguments. Provides help text and error handling.
 /// </summary>
-public class sealed CommandParser
+public sealed class CommandParser
 {
     private readonly Dictionary<string, CommandDefinition> _commands = [];
     private readonly StringBuilder _helpText = new();
@@ -166,7 +166,7 @@ public class sealed CommandParser
 /// <summary>
 /// Context passed to command handlers containing parsed arguments and options
 /// </summary>
-public class sealed CommandContext
+public sealed class CommandContext
 {
     public string CommandName { get; set; } = string.Empty;
     public Action<CommandContext>? Handler { get; set; }

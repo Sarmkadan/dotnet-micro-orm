@@ -11,7 +11,7 @@ namespace DotnetMicroOrm.Middleware;
 /// Captures method name, parameters, return values, and execution time.
 /// Used for debugging, performance monitoring, and audit trails.
 /// </summary>
-public class sealed LoggingMiddleware : IMiddleware
+public sealed class LoggingMiddleware : IMiddleware
 {
     private readonly ILogger<LoggingMiddleware> _logger;
 

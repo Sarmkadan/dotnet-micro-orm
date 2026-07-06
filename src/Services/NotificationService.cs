@@ -20,7 +20,7 @@ public interface INotificationService
 /// <summary>
 /// Default notification service implementation
 /// </summary>
-public class sealed NotificationService : INotificationService
+public sealed class NotificationService : INotificationService
 {
     private readonly Queue<Notification> _queue = new();
     private readonly Dictionary<string, string> _templates = [];
@@ -179,7 +179,7 @@ public enum NotificationStatus
 /// <summary>
 /// Represents a notification to be sent
 /// </summary>
-public class sealed Notification
+public sealed class Notification
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public NotificationType Type { get; set; }

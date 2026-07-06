@@ -18,7 +18,7 @@ namespace DotnetMicroOrm.Examples
     /// <summary>
     /// Demonstrates advanced query patterns and filtering strategies.
     /// </summary>
-    public class sealed AdvancedQueriesExample
+    public sealed class AdvancedQueriesExample
     {
         private readonly IServiceProvider _serviceProvider;
 

@@ -11,7 +11,7 @@ namespace DotnetMicroOrm.Events;
 /// Responds to order creation, shipping, and cancellation with appropriate actions.
 /// Coordinates with inventory, notifications, and billing systems.
 /// </summary>
-public class sealed OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
+public sealed class OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
 {
     public int Priority => 10;
 
@@ -44,7 +44,7 @@ public class sealed OrderCreatedEventHandler : IEventHandler<OrderCreatedEvent>
 /// <summary>
 /// Handles order shipped events with notification
 /// </summary>
-public class sealed OrderShippedEventHandler : IEventHandler<OrderShippedEvent>
+public sealed class OrderShippedEventHandler : IEventHandler<OrderShippedEvent>
 {
     public int Priority => 15;
 
@@ -76,7 +76,7 @@ public class sealed OrderShippedEventHandler : IEventHandler<OrderShippedEvent>
 /// <summary>
 /// Handles order cancellation events
 /// </summary>
-public class sealed OrderCancelledEventHandler : IEventHandler<OrderCancelledEvent>
+public sealed class OrderCancelledEventHandler : IEventHandler<OrderCancelledEvent>
 {
     public int Priority => 20;
 
