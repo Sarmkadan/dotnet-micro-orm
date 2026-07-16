@@ -8630,3 +8630,83 @@
 +- (no commit message provided)
 +- readme tweaks
 +- Readme tweaks
+
+# 2026-07-17 01:07:20.421063
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ReflectionHelper` (defined in `src/Utils/ReflectionHelper.cs`).
++
++Add a "## ReflectionHelper" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static PropertyInfo[] GetProperties
++public static PropertyInfo? GetProperty
++public static object? GetPropertyValue
++public static void SetPropertyValue
++public static bool IsNullableType
++public static bool IsSimpleType
++public static T[] GetAttributes<T>
++public static T? GetAttribute<T>
++public static bool ImplementsGenericInterface
++public static object? CreateInstance
++public static T? CreateInstance<T>
++public static Type[] GetGenericArguments
++public static Type? GetUnderlyingType
++public static void ClearCache
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: document .aider.chat.history in the readme
++- readme: .aider.chat.history usage
++- docs: add Extensions documentation section with usage examples
++- readme tweaks
++- explain .aider.chat.history in readme.
++- docs: add ApiResponse documentation section
++- Fix
++- docs: document .aider.chat.history in the readme
++- (no commit message provided)
++- readme tweaks
+
+# 2026-07-17 01:07:20.421577
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ReflectionHelper` (defined in `src/Utils/ReflectionHelper.cs`).
++
++Add a "## ReflectionHelper" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static PropertyInfo[] GetProperties
++public static PropertyInfo? GetProperty
++public static object? GetPropertyValue
++public static void SetPropertyValue
++public static bool IsNullableType
++public static bool IsSimpleType
++public static T[] GetAttributes<T>
++public static T? GetAttribute<T>
++public static bool ImplementsGenericInterface
++public static object? CreateInstance
++public static T? CreateInstance<T>
++public static Type[] GetGenericArguments
++public static Type? GetUnderlyingType
++public static void ClearCache
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: document .aider.chat.history in the readme
++- readme: .aider.chat.history usage
++- docs: add Extensions documentation section with usage examples
++- readme tweaks
++- explain .aider.chat.history in readme.
++- docs: add ApiResponse documentation section
++- Fix
++- docs: document .aider.chat.history in the readme
++- (no commit message provided)
++- readme tweaks
