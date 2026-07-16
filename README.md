@@ -1452,6 +1452,79 @@ The `Repository<T>` class provides a generic data access layer for performing CR
 ```csharp
 using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Domain.Models;
+
+// Create repository for a specific entity type
+var userRepository = new UserRepository(databaseContext);
+
+// Get all entities
+var allUsers = await userRepository.GetAllAsync();
+
+// Get entity by ID
+var user = await userRepository.GetByIdAsync(42);
+
+// Add new entity
+var newUser = new User { Username = "johndoe", Email = "john@example.com" };
+await userRepository.AddAsync(newUser);
+
+// Update entity
+user.Username = "johndoe_updated";
+await userRepository.UpdateAsync(user);
+
+// Delete entity
+await userRepository.DeleteAsync(user);
+```
+
+## UserRepository
+
+The `UserRepository` class provides specialized data access methods for managing user entities in the system. It extends the base `Repository<User>` class with user-specific query methods for common operations like username-based lookups, email-based searches, user status filtering (active/verified), date range queries, and user activity tracking. The repository handles all database operations through the `IDatabaseContext` and provides efficient, type-safe methods for working with user data.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data.Repositories;
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+// Create user repository with database context
+await using var dbContext = new DatabaseContext();
+var userRepository = new UserRepository(dbContext);
+
+// Get user by username
+var userByUsername = await userRepository.GetByUsernameAsync("johndoe");
+if (userByUsername is not null)
+{
+    Console.WriteLine($"Found user by username: {userByUsername.Email}");
+}
+
+// Get user by email
+var userByEmail = await userRepository.GetByEmailAsync("john.doe@example.com");
+if (userByEmail is not null)
+{
+    Console.WriteLine($"Found user by email: {userByEmail.Username}");
+}
+
+// Get all active users
+var activeUsers = await userRepository.GetActiveUsersAsync();
+Console.WriteLine($"Active users: {activeUsers.Count}");
+
+// Get all verified users
+var verifiedUsers = await userRepository.GetVerifiedUsersAsync();
+Console.WriteLine($"Verified users: {verifiedUsers.Count}");
+
+// Get users created within a specific date range
+var startDate = DateTime.UtcNow.AddDays(-30);
+var endDate = DateTime.UtcNow;
+var recentUsers = await userRepository.GetUsersByDateRangeAsync(startDate, endDate);
+Console.WriteLine($"Users created in last 30 days: {recentUsers.Count}");
+
+// Get inactive users (no login for 30+ days)
+var inactiveUsers = await userRepository.GetInactiveUsersAsync(daysInactive: 30);
+Console.WriteLine($"Inactive users: {inactiveUsers.Count}");
+
+// Count active users
+var activeUsersCount = await userRepository.CountActiveUsersAsync();
+Console.WriteLine($"Total active users: {activeUsersCount}");
+```
 ```
 
 ## DatabaseContext
