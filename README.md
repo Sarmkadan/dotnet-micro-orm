@@ -458,6 +458,65 @@ public class UserRepository
 }
 ```
 
+## Category
+
+The `Category` class represents a hierarchical product category entity used for organizing products in an e-commerce or inventory system. It supports nested categories through parent-child relationships, provides validation for category data, and includes methods for managing category display order and generating breadcrumb navigation paths.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Domain.Models;
+
+public class CategoryManager
+{
+    public void ManageCategories(Category category)
+    {
+        // Create a new category
+        var electronics = new Category("Electronics", "electronics")
+        {
+            Description = "Electronic devices and accessories",
+            DisplayOrder = 1,
+            IsActive = true
+        };
+
+        // Create a subcategory with parent relationship
+        var smartphones = new Category("Smartphones", "smartphones")
+        {
+            Description = "Mobile phones and smartphones",
+            DisplayOrder = 1,
+            ParentCategoryId = electronics.Id,
+            ParentCategory = electronics,
+            CreatedDate = DateTime.UtcNow
+        };
+
+        // Validate category data
+        if (electronics.Validate(out var errors))
+        {
+            Console.WriteLine("Category is valid");
+        }
+        else
+        {
+            Console.WriteLine("Validation errors: " + string.Join(", ", errors));
+        }
+
+        // Manage display order
+        smartphones.MoveUp(); // Decreases display order by 1
+        smartphones.MoveDown(); // Increases display order by 1
+
+        // Get breadcrumb navigation path
+        var breadcrumb = smartphones.GetBreadcrumb();
+        Console.WriteLine($"Category path: {breadcrumb}");
+
+        // Get product count (requires Products collection to be populated)
+        var productCount = smartphones.GetProductCount();
+        Console.WriteLine($"Products in category: {productCount}");
+
+        // Deactivate category and all subcategories
+        electronics.Deactivate();
+    }
+}
+```
+
 ## OrderItem
 
 The `OrderItem` class represents a line item within an order, containing product details, pricing information, quantities, and calculated totals. It provides methods for calculating line totals, applying discounts, and computing tax amounts, making it suitable for e-commerce and order management scenarios.
