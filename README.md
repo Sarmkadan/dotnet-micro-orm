@@ -173,6 +173,48 @@ await runner.MigrateToAsync("2.1.0");
 await runner.RollbackToAsync("1.0.0");
 ```
 
+## AuthenticationMiddleware
+
+The `AuthenticationMiddleware` provides API authentication and authorization functionality. It validates API keys, authenticates users, and populates `AuthenticationInfo` in the middleware context for downstream handlers. The middleware supports both API key authentication (via `Bearer` or `ApiKey` tokens) and role-based authorization checks.
+
+
+
+
+
+### Features
+- API key authentication with user ID and role mapping
+- Role-based access control methods (`HasRole`, `HasAnyRole`)
+- API key management (register and revoke)
+- Middleware pipeline integration with configurable execution order
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Middleware;
+
+// Create authentication middleware
+var authMiddleware = new AuthenticationMiddleware();
+
+// Register API keys for users
+// In production, load these from secure storage instead of hardcoding
+authMiddleware.RegisterApiKey("prod-key-xyz123", 1001, "admin");
+authMiddleware.RegisterApiKey("prod-key-abc456", 1002, "user");
+
+// Check user roles (static methods)
+var adminUser = new AuthenticationInfo { UserId = 1001, Role = "admin" };
+var regularUser = new AuthenticationInfo { UserId = 1002, Role = "user" };
+
+bool isAdmin = AuthenticationMiddleware.HasRole(adminUser, "admin"); // true
+bool hasPermission = AuthenticationMiddleware.HasAnyRole(regularUser, "admin", "user"); // true
+
+// Use in middleware pipeline
+var pipelineBuilder = new PipelineBuilder();
+pipelineBuilder.Use(authMiddleware);
+
+// Revoke API keys when needed
+authMiddleware.RevokeApiKey("demo-key-12345");
+```
+
 ## QueryProfile
 
 The `QueryProfile` class represents a single captured profiling record for a database query execution. It contains metadata about the query including the SQL statement, execution parameters, timing information, success status, and caller context. This type is typically consumed through the `QueryProfiler` class which aggregates multiple profiles into a `QueryProfilerSummary`.
@@ -937,5 +979,43 @@ Console.WriteLine($"Pipeline contains {builder.Count} middleware components");
 
 // Clear the pipeline when needed
 builder.Clear();
-```
+}
+
+The `AuthenticationMiddleware` provides API authentication and authorization functionality. It validates API keys, authenticates users, and populates `AuthenticationInfo` in the middleware context for downstream handlers. The middleware supports both API key authentication (via `Bearer` or `ApiKey` tokens) and role-based authorization checks.
+
+
+
+
+### Features
+- API key authentication with user ID and role mapping
+- Role-based access control methods (`HasRole`, `HasAnyRole`)
+- API key management (register and revoke)
+- Middleware pipeline integration with configurable execution order
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Middleware;
+
+// Create authentication middleware
+var authMiddleware = new AuthenticationMiddleware();
+
+// Register API keys for users
+// In production, load these from secure storage instead of hardcoding
+authMiddleware.RegisterApiKey("prod-key-xyz123", 1001, "admin");
+authMiddleware.RegisterApiKey("prod-key-abc456", 1002, "user");
+
+// Check user roles (static methods)
+var adminUser = new AuthenticationInfo { UserId = 1001, Role = "admin" };
+var regularUser = new AuthenticationInfo { UserId = 1002, Role = "user" };
+
+bool isAdmin = AuthenticationMiddleware.HasRole(adminUser, "admin"); // true
+bool hasPermission = AuthenticationMiddleware.HasAnyRole(regularUser, "admin", "user"); // true
+
+// Use in middleware pipeline
+var pipelineBuilder = new PipelineBuilder();
+pipelineBuilder.Use(authMiddleware);
+
+// Revoke API keys when needed
+authMiddleware.RevokeApiKey("demo-key-12345");
 ```
