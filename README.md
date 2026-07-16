@@ -322,6 +322,84 @@ catch (InvalidOperationException ex) when (ex.Message.Contains("Rate limit excee
 rateLimitMiddleware.CleanupExpiredBuckets();
 ```
 
+## UserService
+
+The `UserService` provides user authentication, registration, profile management, and account lifecycle operations. It handles user registration with validation, password hashing, authentication, profile updates, password changes, email verification, and user status management. The service integrates with the `UserRepository` for data persistence and implements `IAsyncDisposable` for proper resource cleanup.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Services;
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+// Create database context and user service
+await using var dbContext = new DatabaseContext();
+var userService = new UserService(dbContext);
+
+// Register a new user
+var newUser = await userService.RegisterUserAsync(
+    username: "johndoe",
+    email: "john.doe@example.com",
+    password: "SecurePassword123!"
+);
+Console.WriteLine($"User registered: {newUser.Username} (ID: {newUser.Id})");
+
+// Authenticate user
+var authenticatedUser = await userService.AuthenticateAsync(
+    username: "johndoe",
+    password: "SecurePassword123!"
+);
+if (authenticatedUser is not null)
+{
+    Console.WriteLine("Authentication successful");
+    Console.WriteLine($"Last login: {authenticatedUser.LastLoginDate?.ToString("yyyy-MM-dd HH:mm") ?? "Never"}");
+}
+
+// Get user by ID
+var user = await userService.GetUserByIdAsync(newUser.Id);
+if (user is not null)
+{
+    Console.WriteLine($"Found user: {user.Username}, Email: {user.Email}");
+}
+
+// Update user profile
+var updatedUser = await userService.UpdateProfileAsync(
+    userId: newUser.Id,
+    firstName: "John",
+    lastName: "Doe",
+    phoneNumber: "+1-555-123-4567"
+);
+Console.WriteLine($"Profile updated: {updatedUser.FirstName} {updatedUser.LastName}");
+
+// Change password
+var passwordChanged = await userService.ChangePasswordAsync(
+    userId: newUser.Id,
+    currentPassword: "SecurePassword123!",
+    newPassword: "NewSecurePassword456!"
+);
+Console.WriteLine($"Password changed: {passwordChanged}");
+
+// Verify email
+var emailVerified = await userService.VerifyEmailAsync(newUser.Id);
+Console.WriteLine($"Email verified: {emailVerified}");
+
+// Get active users count
+var activeUsersCount = await userService.GetActiveUsersCountAsync();
+Console.WriteLine($"Active users: {activeUsersCount}");
+
+// Get inactive users
+var inactiveUsers = await userService.GetInactiveUsersAsync(daysInactive: 30);
+Console.WriteLine($"Inactive users: {inactiveUsers.Count}");
+
+// Deactivate user
+var deactivated = await userService.DeactivateUserAsync(newUser.Id);
+Console.WriteLine($"User deactivated: {deactivated}");
+
+// Dispose the service when done
+await userService.DisposeAsync();
+```
+
 ## INotificationService
 
 The `INotificationService` interface provides a unified API for sending notifications through multiple channels including email, SMS, and push notifications. It supports asynchronous notification delivery, queuing for reliability, and template-based message composition. The service is designed for extensibility, allowing different notification providers to be plugged in without changing application code.
