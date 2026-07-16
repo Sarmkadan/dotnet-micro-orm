@@ -1423,6 +1423,54 @@ var productsByPrice = new ProductsByPriceRangeSpecification(100, 1000);
 var lowStockProducts = new LowStockProductsSpecification(5);
 ```
 
+## BatchUpsertOperation
+
+The `BatchUpsertOperation<T>` class provides an efficient batch upsert (INSERT or UPDATE) implementation that minimizes database round-trips. It generates optimized SQL statements (MERGE for SQL Server, or individual upserts for other providers) to perform bulk operations on entities while tracking whether each entity was inserted or updated.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+public class ProductService
+{
+    private readonly IDatabaseContext _dbContext;
+
+    public ProductService(IDatabaseContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task UpdateProductPricesAsync(List<Product> products)
+    {
+        // Create batch upsert operation
+        var upsertOperation = new BatchUpsertOperation<Product>(_dbContext);
+
+        // Upsert a single entity
+        var result = await upsertOperation.UpsertAsync(
+            new Product { Id = 1, Name = "Updated Product", Price = 99.99m, StockQuantity = 100 },
+            p => p.Id
+        );
+
+        Console.WriteLine($"Entity was inserted: {result.WasInserted}");
+
+        // Upsert multiple entities in batches
+        var batchResults = await upsertOperation.UpsertRangeAsync(
+            products,
+            p => p.Id,  // Primary key selector
+            batchSize: 50  // Optional: override default batch size
+        );
+
+        // Process results
+        foreach (var batchResult in batchResults)
+        {
+            Console.WriteLine($"Entity {batchResult.Entity.Id}: {(batchResult.WasInserted ? "Inserted" : "Updated")}");
+        }
+    }
+}
+```
+
 ## DataCleanupJob
 
 The `DataCleanupJob` is a background job that maintains database health by removing old audit logs, expired sessions, and soft-deleted records. It operates on a configurable schedule, allowing for fine-tuned control over retention periods, batch sizes for cleanup, and optional database index rebuilding.
