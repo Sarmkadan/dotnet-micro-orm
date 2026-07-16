@@ -580,6 +580,74 @@ public class OrderService
 }
 ```
 
+## Product
+
+The `Product` class represents a product entity in an e-commerce catalog. It tracks essential product information including SKU, pricing, stock levels, and category associations. The class provides inventory management methods, validation logic, and profit calculation capabilities, making it suitable for inventory and order management scenarios.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Domain.Models;
+
+public class ProductCatalog
+{
+    public void ManageProduct(Product product)
+    {
+        // Create a new product
+        var laptop = new Product("LAP-001", "Gaming Laptop", 1299.99m, 5)
+        {
+            Description = "High-performance gaming laptop with RTX graphics",
+            CostPrice = 950.00m,
+            StockQuantity = 25,
+            IsActive = true
+        };
+
+        // Validate product data
+        if (laptop.Validate(out var errors))
+        {
+            Console.WriteLine("Product is valid");
+        }
+        else
+        {
+            Console.WriteLine("Validation errors: " + string.Join(", ", errors));
+        }
+
+        // Manage inventory
+        laptop.IncreaseStock(10); // Add 10 units to stock
+        laptop.DecreaseStock(3); // Remove 3 units from stock
+
+        // Calculate profit
+        var profit = laptop.GetProfit();
+        Console.WriteLine($"Product profit per unit: {profit:C}");
+
+        // Check stock levels
+        if (laptop.IsLowStock(5))
+        {
+            Console.WriteLine("Low stock alert!");
+        }
+
+        // Update modified date
+        laptop.ModifiedDate = DateTime.UtcNow;
+    }
+
+    public void ProcessProductOrder(Product product, int quantity)
+    {
+        // Check stock availability
+        if (product.StockQuantity >= quantity)
+        {
+            // Decrease stock for order fulfillment
+            product.DecreaseStock(quantity);
+            
+            Console.WriteLine($"Order processed: {quantity} units of {product.Name}");
+        }
+        else
+        {
+            Console.WriteLine("Insufficient stock!");
+        }
+    }
+}
+```
+
 ## PipelineBuilder
 
 The `PipelineBuilder` class constructs a middleware pipeline for processing requests through a sequence of middleware components. It enables composing multiple middleware in a specific order, with support for both sequential execution and custom ordering via the `Order` property on middleware. The pipeline executes middleware in FIFO order, allowing for flexible request/response processing patterns.
