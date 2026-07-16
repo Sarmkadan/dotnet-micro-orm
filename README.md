@@ -1104,6 +1104,77 @@ public class UserRepository
 }
 ```
 
+## ServiceCollectionExtensions
+
+The `ServiceCollectionExtensions` class provides extension methods for configuring the DotnetMicroOrm library with Microsoft.Extensions.DependencyInjection. It simplifies the setup of database connections, ORM services, repositories, migrations, and configuration options through a fluent, dependency-injection-friendly API. The extension methods support both basic configuration with sensible defaults and advanced scenarios with custom repository implementations and service registrations.
+
+### Configuration Properties
+
+The `OrmConfiguration` class provides these configuration options:
+
+- **CommandTimeout**: Default command timeout in seconds (default: 30)
+- **DefaultBatchSize**: Default batch size for bulk operations (default: 1000)
+- **EnableChangeTracking**: Enable entity change tracking (default: true)
+- **EnableAuditLogging**: Enable audit logging for entity changes (default: true)
+- **EnableExpressionCaching**: Enable compiled expression caching (default: true)
+- **MaxCachedExpressions**: Maximum cached expressions (default: 1000)
+- **ConnectionRetryAttempts**: Connection retry attempts (default: 3)
+- **ConnectionRetryDelayMs**: Connection retry delay in milliseconds (default: 1000)
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Configuration;
+using DotnetMicroOrm.Constants;
+using DotnetMicroOrm.Domain.Models;
+using Microsoft.Extensions.DependencyInjection;
+
+// Configure services with basic setup
+var services = new ServiceCollection();
+
+services.AddDotnetMicroOrm(
+    connectionString: "Server=localhost;Database=MyApp;User Id=sa;Password=YourPassword123;",
+    provider: DatabaseProvider.SqlServer
+);
+
+// Optionally configure advanced ORM settings
+services.AddDotnetMicroOrm(
+    connectionString: "Server=localhost;Database=MyApp;User Id=sa;Password=YourPassword123;",
+    provider: DatabaseProvider.SqlServer,
+    configureOptions: options =>
+    {
+        options.CommandTimeout = 60;
+        options.DefaultBatchSize = 5000;
+        options.EnableChangeTracking = true;
+        options.EnableAuditLogging = true;
+        options.EnableExpressionCaching = true;
+        options.MaxCachedExpressions = 2000;
+        options.ConnectionRetryAttempts = 5;
+        options.ConnectionRetryDelayMs = 2000;
+    }
+);
+
+// Register a custom repository for a specific entity
+services.AddRepository<User, CustomUserRepository>();
+
+// Register a custom service
+services.AddOrmService<CustomAuditService>();
+
+// Register migrations for automatic discovery
+services.AddMigration<CreateUsersTableMigration>();
+services.AddMigration<AddEmailIndexMigration>();
+services.AddMigration<SeedInitialDataMigration>();
+
+// Build the service provider
+var serviceProvider = services.BuildServiceProvider();
+
+// Resolve services
+var dbContext = serviceProvider.GetRequiredService<IDatabaseContext>();
+var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+var userRepository = serviceProvider.GetRequiredService<IRepository<User>>();
+var migrationRunner = serviceProvider.GetRequiredService<IMigrationRunner>();
+```
+
 ## QueryPlan
 
 The `QueryPlan` class represents a cached query execution plan that stores metadata about SQL statements to avoid redundant parsing and optimization overhead. It tracks the normalized SQL fingerprint, original SQL text, estimated execution cost, query parameters, cache statistics, and timing information. Query plans are typically managed by the `IQueryPlanCache` interface for efficient plan reuse across identical queries.
