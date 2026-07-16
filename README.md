@@ -93,3 +93,62 @@ tests.EntityValidationException_WithMessageAndErrors_CreatesInstance();
 tests.ConcurrencyException_WithMessage_CreatesInstance();
 tests.ConcurrencyException_WithMessageAndEntityKey_CreatesInstance();
 ```
+
+## RepositoryIntegrationTests
+
+The `RepositoryIntegrationTests` class provides integration tests for the `Repository<TEntity>` class, verifying that repository operations work correctly with mocked database contexts. It tests constructor validation, CRUD operations, batch operations, existence checks, and pagination functionality, ensuring proper interaction patterns and exception handling across various scenarios.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+using DotnetMicroOrm.Exceptions;
+using Moq;
+
+// Instantiate the test class (it lives in the global namespace)
+var tests = new RepositoryIntegrationTests();
+
+// Test constructor validation
+tests.Constructor_WithNullContext_ThrowsArgumentNullException();
+
+// Test basic CRUD operations
+var mockContext = new Mock<IDatabaseContext>();
+var repository = new Repository<Product>(mockContext.Object);
+
+// Test adding a valid entity
+tests.AddAsync_WithValidProduct_InsertsSuccessfully();
+
+// Test adding an invalid entity (should throw validation exception)
+tests.AddAsync_WithInvalidProduct_ThrowsEntityValidationException();
+
+// Test updating an existing entity
+tests.UpdateAsync_WithValidProduct_UpdatesSuccessfully();
+
+// Test updating a non-existent entity (should throw exception)
+tests.UpdateAsync_WithNonExistentProduct_ThrowsOrmException();
+
+// Test getting by ID
+tests.GetByIdAsync_WithValidId_ReturnsProductWithMatchingId();
+
+// Test getting all entities
+tests.GetAllAsync_WithMultipleProducts_ReturnsAllProducts();
+
+// Test counting entities
+tests.CountAsync_WithData_ReturnsCorrectCount();
+tests.CountAsync_WithNoData_ReturnsZero();
+
+// Test existence checks
+tests.ExistsAsync_WithExistingEntity_ReturnsTrue();
+tests.ExistsAsync_WithNonExistentEntity_ReturnsFalse();
+
+// Test batch operations
+tests.AddRangeAsync_WithValidProducts_InsertsAll();
+tests.AddRangeAsync_WithEmptyList_ReturnsEmptyList();
+tests.DeleteRangeAsync_WithValidEntities_DeletesAll();
+
+// Test delete operations
+tests.DeleteAsync_WithValidId_DeletesSuccessfully();
+tests.DeleteAsync_WithNonExistentId_ReturnsFalse();
+tests.DeleteAsync_WithEntity_DeletesSuccessfully();
+```
