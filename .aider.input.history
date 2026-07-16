@@ -8468,3 +8468,87 @@
 +- docs: add MemoryCacheProvider documentation section with usage example
 +- readme: README usage
 +- docs: add AppSettings documentation section with usage example
+
+# 2026-07-17 00:36:22.413257
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `Extensions` (defined in `src/Utils/Extensions.cs`).
++
++Add a "## Extensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static string GetTableName
++public static string GetTableSchema
++public static string GetColumnName
++public static List<PropertyInfo> GetMappedProperties
++public static PropertyInfo? GetPrimaryKeyProperty
++public static T CloneWithNewId<T>(this T entity) where T : BaseEntity, new
++public static Dictionary<string, object> ToDictionary<T>
++public static bool HasPropertyChanged<T>
++public static string GetMemberName<T, TProperty>
++public static (List<T> Items, int TotalCount) Paginate<T>
++public static IQueryable<T> SafeWhere<T>
++public static IQueryable<T> ApplySort<T, TKey>
++public static string ToJsonString<T>
++public static bool IsNullOrEmpty
++public static int GetAgeInYears
++public static string FormatCurrency
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme tweaks
++- explain .aider.chat.history in readme.
++- docs: add ApiResponse documentation section
++- Fix
++- docs: document .aider.chat.history in the readme
++- (no commit message provided)
++- readme tweaks
++- Readme tweaks
++- docs: add MemoryCacheProvider documentation section with usage example
++- readme: README usage
+
+# 2026-07-17 00:36:22.413352
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `Extensions` (defined in `src/Utils/Extensions.cs`).
++
++Add a "## Extensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static string GetTableName
++public static string GetTableSchema
++public static string GetColumnName
++public static List<PropertyInfo> GetMappedProperties
++public static PropertyInfo? GetPrimaryKeyProperty
++public static T CloneWithNewId<T>(this T entity) where T : BaseEntity, new
++public static Dictionary<string, object> ToDictionary<T>
++public static bool HasPropertyChanged<T>
++public static string GetMemberName<T, TProperty>
++public static (List<T> Items, int TotalCount) Paginate<T>
++public static IQueryable<T> SafeWhere<T>
++public static IQueryable<T> ApplySort<T, TKey>
++public static string ToJsonString<T>
++public static bool IsNullOrEmpty
++public static int GetAgeInYears
++public static string FormatCurrency
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme tweaks
++- explain .aider.chat.history in readme.
++- docs: add ApiResponse documentation section
++- Fix
++- docs: document .aider.chat.history in the readme
++- (no commit message provided)
++- readme tweaks
++- Readme tweaks
++- docs: add MemoryCacheProvider documentation section with usage example
++- readme: README usage
