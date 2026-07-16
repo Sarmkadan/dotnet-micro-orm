@@ -1,177 +1,7 @@
-// ... (rest of the file remains the same)
 
-## CryptoHelper
+## ValidationHelper
 
-The `CryptoHelper` class provides cryptographic operations including password hashing, encryption, and secure token generation using modern algorithms like PBKDF2-SHA256 and AES-256-CBC. It's designed for secure password storage and sensitive data protection.
-
-### Example Usage
-
-```csharp
-// Password hashing and verification
-string password = "SecurePassword123!";
-string hashedPassword = CryptoHelper.HashPassword(password);
-
-bool isValid = CryptoHelper.VerifyPassword(password, hashedPassword);
-Console.WriteLine(isValid); // Output: True
-
-// Secure token generation for API keys
-string apiToken = CryptoHelper.GenerateSecureToken();
-Console.WriteLine(apiToken.Length); // Output: 44 (base64 encoded)
-
-// SHA256 hashing for data integrity
-string fileContent = "important data";
-string checksum = CryptoHelper.ComputeSha256(fileContent);
-Console.WriteLine(checksum); // Output: 64-character hex string
-
-// AES-256 encryption for sensitive data
-string secretKey = "ThisIsA32CharacterKeyForAES256Encryption!";
-string sensitiveData = "Credit card: 4111-1111-1111-1111";
-string encrypted = CryptoHelper.EncryptAes256(sensitiveData, secretKey);
-string decrypted = CryptoHelper.DecryptAes256(encrypted, secretKey);
-Console.WriteLine(decrypted); // Output: Credit card: 4111-1111-1111-1111
-```
-
-## Result
-
-The `Result` type provides a standardized way to represent operation outcomes, supporting both synchronous and asynchronous workflows. It allows you to handle success and failure cases explicitly, making your code more expressive and error-handling friendly. The `Result` type is often used in scenarios where you need to return a value or an error from a method.
-
-### Example Usage
-
-```csharp
-var result = Result.Ok("Operation successful");
-
-var data = result.Match(
-    onSuccess: value => value,
-    onFailure: error => throw new Exception(error)
-);
-
-var asyncResult = await Result.OkAsync(42).MapAsync(async value => 
-{
-    await Task.Delay(100);
-    return value * 2;
-});
-
-Console.WriteLine(asyncResult.IsSuccess); // Output: True
-Console.WriteLine(asyncResult.IsFailure); // Output: False
-```
-
-The `Result` type can also be used with generics to represent typed results:
-
-```csharp
-Result<int> intResult = Result.Ok(42);
-Result<string> stringResult = Result.Fail<string>("Something went wrong");
-
-int value = intResult.Match(
-    onSuccess: v => v,
-    onFailure: _ => 0
-);
-
-Console.WriteLine(value); // Output: 42
-
-string error = stringResult.Match(
-    onSuccess: _ => "",
-    onFailure: e => e
-);
-
-Console.WriteLine(error); // Output: Something went wrong
-```
-
-The `PagedResult<T>` type represents a paginated result set with metadata:
-
-```csharp
-var pagedResult = new PagedResult<Product>(
-    items: new List<Product> { new Product { Id = 1, Name = "Product 1" } },
-    pageNumber: 1,
-    pageSize: 10,
-    totalCount: 100
-);
-
-Console.WriteLine(pagedResult.TotalPages); // Output: 10
-Console.WriteLine(pagedResult.HasNextPage); // Output: True
-```
-
-The `BatchOperationResult` type represents the result of a batch operation:
-
-```csharp
-var batchResult = new BatchOperationResult(
-    totalProcessed: 100,
-    successCount: 90,
-    failureCount: 10,
-    failures: new List<(int, string)> { (1, "Error 1"), (2, "Error 2") }
-);
-
-Console.WriteLine(batchResult.SuccessRate); // Output: 90
-Console.WriteLine(batchResult.HasFailures); // Output: True
-```
-
-## PerformanceMonitor
-
-The `PerformanceMonitor` class provides a comprehensive way to track and analyze the performance characteristics of code execution. It measures execution time, memory allocation, and custom metrics, making it ideal for performance profiling, benchmarking, and identifying performance regressions in your application.
-
-### Example Usage
-
-```csharp
-using System;
-using System.Threading.Tasks;
-using DotnetMicroOrm.Utils;
-
-class Program
-{
-    static async Task Main()
-    {
-        // Basic performance monitoring
-        using var monitor = new PerformanceMonitor("Database Query");
-        
-        // Simulate work
-        await Task.Delay(150);
-        monitor.RecordMetric("RowsAffected", 1250);
-        monitor.RecordItemCount("UsersProcessed", 500);
-        monitor.Checkpoint("After query execution");
-        
-        // Get detailed performance report
-        var report = monitor.GetReport();
-        Console.WriteLine(report.GetSummary());
-        
-        // Check if performance thresholds were exceeded
-        if (monitor.ExceededTimeThreshold)
-        {
-            Console.WriteLine("Warning: Operation exceeded time threshold!");
-        }
-        
-        if (monitor.ExceededMemoryThreshold)
-        {
-            Console.WriteLine("Warning: Operation exceeded memory threshold!");
-        }
-        
-        // Log summary to console
-        monitor.LogSummary();
-        
-        // Measure async operations with built-in helper
-        var (result, elapsedMs) = await PerformanceMonitor.MeasureAsync(async () =>
-        {
-            await Task.Delay(200);
-            return "Operation completed";
-        });
-        
-        Console.WriteLine($"Async operation took {elapsedMs}ms");
-        
-        // Create child monitor for nested operations
-        using var parentMonitor = new PerformanceMonitor("Parent Operation");
-        using var childMonitor = parentMonitor.CreateChild("Child Operation");
-        
-        await Task.Delay(100);
-        childMonitor.RecordMetric("CacheHits", 42);
-        
-        // Get performance grade
-        char grade = parentMonitor.GetPerformanceGrade();
-        Console.WriteLine($"Performance grade: {grade}");
-    }
-}
-```
-
-## ApiResponse
-
-`ApiResponse<T>` and `ApiPagedResponse<T>` are lightweight wrappers that give every API endpoint a consistent shape. They expose status information (`Success`), payload (`Data` or `Items`), human‑readable messages, optional error codes, timestamps, request identifiers and versioning. Helper factories (`CreateSuccess`, `CreateError`, `CreateFromException`, `CreateValidationError`, and the paged equivalents) make constructing responses concise and error‑free.
+The `ValidationHelper` class provides utility methods for validating common data types and business rules. It helps ensure data integrity before database operations and API calls by returning detailed error messages for validation failures. Each validation method returns a tuple with a boolean indicating success/failure and an error message that can be used for user feedback.
 
 ### Example Usage
 
@@ -184,312 +14,73 @@ class Program
 {
     static void Main()
     {
-        // Simple success response with data
-        var success = ApiResponse<string>.CreateSuccess(
-            data: "Hello, world!",
-            message: "Request completed successfully");
-
-        Console.WriteLine($"Success: {success.Success}");
-        Console.WriteLine($"Data: {success.Data}");
-        Console.WriteLine($"Message: {success.Message}");
-        Console.WriteLine($"Timestamp: {success.Timestamp:u}");
-        Console.WriteLine($"Version: {success.Version}");
-
-        // Error response
-        var error = ApiResponse<string>.CreateError(
-            message: "Unable to process request",
-            errorCode: "ERR_INVALID_INPUT");
-
-        Console.WriteLine($"\nSuccess: {error.Success}");
-        Console.WriteLine($"ErrorCode: {error.ErrorCode}");
-        Console.WriteLine($"Message: {error.Message}");
-
-        // Exception‑based response
-        try
+        // Validate required fields
+        var (isValid, error) = ValidationHelper.ValidateRequired(null, "Username");
+        Console.WriteLine($"Required validation: isValid={isValid}, error='{error}'");
+        
+        // Validate string length
+        var lengthResult = ValidationHelper.ValidateLength("Hello", 3, 10, "Username");
+        Console.WriteLine($"Length validation: isValid={lengthResult.isValid}, error='{lengthResult.errorMessage}'");
+        
+        // Validate email format
+        var emailResult = ValidationHelper.ValidateEmail("user@example.com");
+        Console.WriteLine($"Email validation: isValid={emailResult.isValid}, error='{emailResult.errorMessage}'");
+        
+        // Validate password strength
+        var passwordResult = ValidationHelper.ValidatePassword("StrongPass123!");
+        Console.WriteLine($"Password validation: isValid={passwordResult.isValid}, error='{passwordResult.errorMessage}'");
+        
+        // Validate numeric range
+        var rangeResult = ValidationHelper.ValidateRange(42, 1, 100, "Age");
+        Console.WriteLine($"Range validation: isValid={rangeResult.isValid}, error='{rangeResult.errorMessage}'");
+        
+        // Validate decimal range
+        var decimalRangeResult = ValidationHelper.ValidateRange(99.99m, 0, 1000, "Price");
+        Console.WriteLine($"Decimal range validation: isValid={decimalRangeResult.isValid}, error='{decimalRangeResult.errorMessage}'");
+        
+        // Validate positive value
+        var positiveResult = ValidationHelper.ValidatePositive(10.5m, "Quantity");
+        Console.WriteLine($"Positive validation: isValid={positiveResult.isValid}, error='{positiveResult.errorMessage}'");
+        
+        // Validate non-negative value
+        var nonNegativeResult = ValidationHelper.ValidateNonNegative(0, "Discount");
+        Console.WriteLine($"Non-negative validation: isValid={nonNegativeResult.isValid}, error='{nonNegativeResult.errorMessage}'");
+        
+        // Validate phone number
+        var phoneResult = ValidationHelper.ValidatePhoneNumber("+1234567890");
+        Console.WriteLine($"Phone validation: isValid={phoneResult.isValid}, error='{phoneResult.errorMessage}'");
+        
+        // Validate URL
+        var urlResult = ValidationHelper.ValidateUrl("https://example.com");
+        Console.WriteLine($"URL validation: isValid={urlResult.isValid}, error='{urlResult.errorMessage}'");
+        
+        // Validate non-empty collection
+        var collectionResult = ValidationHelper.ValidateNotEmpty(new List<string> { "item1", "item2" }, "Items");
+        Console.WriteLine($"Collection validation: isValid={collectionResult.isValid}, error='{collectionResult.errorMessage}'");
+        
+        // Validate collection size
+        var collectionSizeResult = ValidationHelper.ValidateCollectionSize(new[] { 1, 2, 3 }, 2, 5, "Tags");
+        Console.WriteLine($"Collection size validation: isValid={collectionSizeResult.isValid}, error='{collectionSizeResult.errorMessage}'");
+        
+        // Validate future date
+        var futureDateResult = ValidationHelper.ValidateFutureDate(DateTime.UtcNow.AddDays(1), "EventDate");
+        Console.WriteLine($"Future date validation: isValid={futureDateResult.isValid}, error='{futureDateResult.errorMessage}'");
+        
+        // Validate past date
+        var pastDateResult = ValidationHelper.ValidatePastDate(DateTime.UtcNow.AddDays(-1), "BirthDate");
+        Console.WriteLine($"Past date validation: isValid={pastDateResult.isValid}, error='{pastDateResult.errorMessage}'");
+        
+        // Validate multiple rules with ValidateAll
+        var validations = new (bool isValid, string errorMessage)[
+        ]
         {
-            ThrowSomething();
-        }
-        catch (Exception ex)
-        {
-            var exResponse = ApiResponse<string>.CreateFromException(
-                ex,
-                requestId: "req-12345");
-
-            Console.WriteLine($"\nSuccess: {exResponse.Success}");
-            Console.WriteLine($"ErrorCode: {exResponse.ErrorCode}");
-            Console.WriteLine($"Message: {exResponse.Message}");
-            Console.WriteLine($"RequestId: {exResponse.RequestId}");
-        }
-
-        // Validation error response
-        var validationErrors = new Dictionary<string, string>
-        {
-            { "Email", "Invalid email format" },
-            { "Password", "Password must be at least 8 characters" }
-        };
-
-        var validation = ApiResponse<string>.CreateValidationError(validationErrors);
-        Console.WriteLine($"\nSuccess: {validation.Success}");
-        Console.WriteLine($"Message: {validation.Message}");
-        Console.WriteLine($"ErrorCode: {validation.ErrorCode}");
-
-        // Paginated response
-        var items = new[] { "Item1", "Item2", "Item3" };
-        var paged = ApiPagedResponse<string>.CreateSuccess(
-            items: items,
-            pageNumber: 1,
-            pageSize: 10,
-            totalCount: 3,
-            message: "Page retrieved successfully");
-
-        Console.WriteLine($"\nPaged Success: {paged.Success}");
-        Console.WriteLine($"Item count: {paged.Items.Count}");
-        Console.WriteLine($"Total pages: {paged.Pagination.TotalPages}");
-        Console.WriteLine($"Has next page: {paged.Pagination.HasNextPage}");
-    }
-
-    static void ThrowSomething()
-    {
-        throw new InvalidOperationException("Something went wrong");
-    }
-}
-```
-
-The snippet demonstrates creating successful, error, exception‑derived, validation‑error, and paginated responses using only the public members defined in `ApiResponse.cs`.
-
-
-## DateTimeHelper
-
-The `DateTimeHelper` class provides utility methods for common DateTime operations including Unix timestamp conversions, business day calculations, and datetime formatting with proper timezone handling.
-
-### Example Usage
-
-```csharp
-using System;
-using DotnetMicroOrm.Utils;
-
-class Program
-{
-    static void Main()
-    {
-        // Convert Unix timestamp to DateTime
-        DateTime fromTimestamp = DateTimeHelper.FromUnixTimestamp(1715616000);
-        Console.WriteLine($"From Unix: {fromTimestamp:O}");
-        
-        // Convert DateTime to Unix timestamp
-        long unixTimestamp = DateTime.UtcNow.ToUnixTimestamp();
-        Console.WriteLine($"Unix timestamp: {unixTimestamp}");
-        
-        // Calculate business days between dates
-        int businessDays = DateTimeHelper.GetBusinessDaysBetween(
-            new DateTime(2024, 1, 1),
-            new DateTime(2024, 1, 31)
-        );
-        Console.WriteLine($"Business days in January 2024: {businessDays}");
-        
-        // Get start/end of day
-        DateTime now = DateTime.UtcNow;
-        DateTime startOfDay = now.GetStartOfDay();
-        DateTime endOfDay = now.GetEndOfDay();
-        Console.WriteLine($"Start of day: {startOfDay:O}");
-        Console.WriteLine($"End of day: {endOfDay:O}");
-        
-        // Get start/end of week/month
-        DateTime startOfWeek = now.GetStartOfWeek();
-        DateTime startOfMonth = now.GetStartOfMonth();
-        DateTime endOfMonth = now.GetEndOfMonth();
-        Console.WriteLine($"Start of week: {startOfWeek:yyyy-MM-dd}");
-        Console.WriteLine($"Start of month: {startOfMonth:yyyy-MM-dd}");
-        Console.WriteLine($"End of month: {endOfMonth:yyyy-MM-dd}");
-        
-        // Format to ISO 8601
-        string iso8601 = now.ToIso8601();
-        Console.WriteLine($"ISO 8601: {iso8601}");
-        
-        // Parse ISO 8601
-        DateTime parsed = DateTimeHelper.ParseIso8601(iso8601);
-        Console.WriteLine($"Parsed back: {parsed:O}");
-        
-        // Human-readable relative time
-        string relative = now.AddHours(-2).ToRelativeTime();
-        Console.WriteLine($"Relative time: {relative}");
-        
-        // Add business days
-        DateTime nextBusinessDay = now.AddBusinessDays(5);
-        Console.WriteLine($"5 business days from now: {nextBusinessDay:yyyy-MM-dd}");
-        
-        // Check if business hours
-        bool isBusinessHours = now.IsBusinessHours();
-        Console.WriteLine($"Is business hours: {isBusinessHours}");
-    }
-}
-```
-
-## ReflectionHelper
-
-The `ReflectionHelper` class provides utility methods for common reflection operations including property retrieval, type checking, attribute access, and object instantiation. It simplifies reflection-based operations while maintaining type safety and performance through internal caching mechanisms.
-
-### Example Usage
-
-```csharp
-using System;
-using System.Reflection;
-using DotnetMicroOrm.Utils;
-
-class Program
-{
-    static void Main()
-    {
-        // Get all properties from a type
-        PropertyInfo[] properties = ReflectionHelper.GetProperties(typeof(User));
-        Console.WriteLine($"User has {properties.Length} properties");
-
-        // Get specific property by name
-        PropertyInfo nameProperty = ReflectionHelper.GetProperty(typeof(User), "Name");
-        Console.WriteLine($"Property type: {nameProperty?.PropertyType.Name}");
-
-        // Get and set property values dynamically
-        var user = new User { Id = 1, Name = "John Doe", Email = "john@example.com" };
-        object nameValue = ReflectionHelper.GetPropertyValue(user, "Name");
-        Console.WriteLine($"Name value: {nameValue}");
-
-        ReflectionHelper.SetPropertyValue(user, "Name", "Jane Smith");
-        Console.WriteLine($"Updated name: {user.Name}");
-
-        // Check if type is nullable
-        bool isNullable = ReflectionHelper.IsNullableType(typeof(int?));
-        Console.WriteLine($"int? is nullable: {isNullable}");
-
-        // Check if type is simple (primitive, string, decimal, DateTime, etc.)
-        bool isSimple = ReflectionHelper.IsSimpleType(typeof(int));
-        Console.WriteLine($"int is simple: {isSimple}");
-
-        // Get attributes from type or member
-        var obsoleteAttr = ReflectionHelper.GetAttribute<ObsoleteAttribute>(nameProperty);
-        Console.WriteLine($"Has Obsolete attribute: {obsoleteAttr != null}");
-
-        // Check if type implements a generic interface
-        bool implementsIList = ReflectionHelper.ImplementsGenericInterface(typeof(List<int>), typeof(IList<>));
-        Console.WriteLine($"List<int> implements IList<>: {implementsIList}");
-
-        // Create instances dynamically
-        object userInstance = ReflectionHelper.CreateInstance(typeof(User));
-        Console.WriteLine($"Created instance: {userInstance?.GetType().Name}");
-
-        User genericUser = ReflectionHelper.CreateInstance<User>();
-        Console.WriteLine($"Generic instance created: {genericUser != null}");
-
-        // Get generic type arguments
-        Type[] genericArgs = ReflectionHelper.GetGenericArguments(typeof(List<string>));
-        Console.WriteLine($"List<string> generic args: {genericArgs.Length}");
-
-        // Get underlying type from nullable or array type
-        Type underlyingType = ReflectionHelper.GetUnderlyingType(typeof(int?));
-        Console.WriteLine($"Underlying type of int?: {underlyingType.Name}");
-    }
-}
-
-public class User
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-}
-```
-
-## Extensions
-
-The `Extensions` static class provides a collection of extension methods for common operations including entity reflection, data conversion, pagination, filtering, sorting, and utility functions. These methods simplify working with entities, queryables, and collections while maintaining type safety and clean syntax.
-
-### Example Usage
-
-```csharp
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using DotnetMicroOrm.Utils;
-using DotnetMicroOrm.Domain.Models;
-
-class Program
-{
-    static void Main()
-    {
-        // Get table name and schema from entity type
-        var userType = typeof(User);
-        string tableName = userType.GetTableName();
-        string schemaName = userType.GetTableSchema();
-        Console.WriteLine($"Table: {schemaName}.{tableName}");
-
-        // Get column name from property
-        var nameProperty = typeof(User).GetProperty("Name");
-        string columnName = nameProperty.GetColumnName();
-        Console.WriteLine($"Column name for 'Name': {columnName}");
-
-        // Get mapped properties and primary key
-        var mappedProperties = typeof(User).GetMappedProperties();
-        var primaryKey = typeof(User).GetPrimaryKeyProperty();
-        Console.WriteLine($"Mapped properties: {mappedProperties.Count}");
-        Console.WriteLine($"Primary key: {primaryKey?.Name}");
-
-        // Clone entity with new ID
-        var originalUser = new User { Id = 1, Name = "John", Email = "john@example.com" };
-        var clonedUser = originalUser.CloneWithNewId();
-        Console.WriteLine($"Original ID: {originalUser.Id}, Cloned ID: {clonedUser.Id}");
-
-        // Convert entity to dictionary
-        var userDict = originalUser.ToDictionary();
-        Console.WriteLine($"Dictionary keys: {string.Join(", ", userDict.Keys)}");
-
-        // Check if property has changed
-        bool hasChanged = originalUser.HasPropertyChanged("Name", "Jane");
-        Console.WriteLine($"Name property changed: {hasChanged}");
-
-        // Get member name from expression
-        string memberName = Extensions.GetMemberName<User, string>(u => u.Name);
-        Console.WriteLine($"Member name: {memberName}");
-
-        // Paginate a list
-        var users = new List<User>
-        {
-            new User { Id = 1, Name = "User 1" },
-            new User { Id = 2, Name = "User 2" },
-            new User { Id = 3, Name = "User 3" },
-            new User { Id = 4, Name = "User 4" },
+            ValidationHelper.ValidateRequired("username", "Username"),
+            ValidationHelper.ValidateLength("username", 3, 50, "Username"),
+            ValidationHelper.ValidateEmail("user@example.com")
         };
         
-        var (paginatedItems, totalCount) = users.Paginate(pageNumber: 1, pageSize: 2);
-        Console.WriteLine($"Page items: {paginatedItems.Count}, Total: {totalCount}");
-
-        // Safely apply filter to IQueryable
-        var query = users.AsQueryable().SafeWhere(u => u.Id > 2);
-        Console.WriteLine($"Filtered count: {query.Count()}");
-
-        // Apply sorting to IQueryable
-        var sortedQuery = users.AsQueryable().ApplySort(u => u.Name, ascending: true);
-        Console.WriteLine($"First sorted: {sortedQuery.First().Name}");
-
-        // Convert entity to JSON string
-        string json = originalUser.ToJsonString();
-        Console.WriteLine($"JSON: {json}");
-
-        // Check if string is null or empty
-        bool isEmpty = "".IsNullOrEmpty();
-        Console.WriteLine($"Is empty: {isEmpty}");
-
-        // Calculate age from birth date
-        int age = new DateTime(1990, 5, 15).GetAgeInYears();
-        Console.WriteLine($"Age: {age}");
-
-        // Format currency
-        string formatted = 1234.56m.FormatCurrency("$");
-        Console.WriteLine($"Formatted: {formatted}");
+        var allValid = ValidationHelper.ValidateAll(validations);
+        Console.WriteLine($"All validations: isValid={allValid.isValid}, error='{allValid.errorMessage}'");
     }
-}
-
-// Example entity for demonstration
-public class User : BaseEntity
-{
-    public string Name { get; set; }
-    public string Email { get; set; }
 }
 ```
