@@ -8102,3 +8102,93 @@
 +- cleanup
 +- document .aider.chat.history
 +- nits
+
+# 2026-07-16 08:35:36.222478
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `Category` (defined in `src/Domain/Models/Category.cs`).
++
++Add a "## Category" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public int Id
++public string Name
++public string Slug
++public string? Description
++public int? ParentCategoryId
++public int DisplayOrder
++public bool IsActive
++public DateTime CreatedDate
++public virtual List<Product> Products
++public virtual Category? ParentCategory
++public virtual List<Category> SubCategories
++public Category()
++public Category
++public override bool Validate
++public void MoveUp
++public void MoveDown
++public string GetBreadcrumb
++public int GetProductCount
++public void Deactivate
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: readme: README usage
++- docs: readme tweaks.
++- Update readme
++- docs: add inventory documentation to README.md
++- readme: .aider.chat.history usage
++- Update reamde
++- finally pushing this out into the open
++- update redame
++- .
++- docs: explain README in readme
+
+# 2026-07-16 08:35:36.222568
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `Category` (defined in `src/Domain/Models/Category.cs`).
++
++Add a "## Category" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public int Id
++public string Name
++public string Slug
++public string? Description
++public int? ParentCategoryId
++public int DisplayOrder
++public bool IsActive
++public DateTime CreatedDate
++public virtual List<Product> Products
++public virtual Category? ParentCategory
++public virtual List<Category> SubCategories
++public Category()
++public Category
++public override bool Validate
++public void MoveUp
++public void MoveDown
++public string GetBreadcrumb
++public int GetProductCount
++public void Deactivate
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: readme: README usage
++- docs: readme tweaks.
++- Update readme
++- docs: add inventory documentation to README.md
++- readme: .aider.chat.history usage
++- Update reamde
++- finally pushing this out into the open
++- update redame
++- .
++- docs: explain README in readme
