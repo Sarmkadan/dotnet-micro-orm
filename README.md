@@ -1695,6 +1695,121 @@ var productsByPrice = new ProductsByPriceRangeSpecification(100, 1000);
 var lowStockProducts = new LowStockProductsSpecification(5);
 ```
 
+## PagedResult
+
+The `PagedResult<T>` class represents a paginated result set with metadata for navigation. It provides efficient data retrieval with pagination support, including total count, page information, and navigation methods. The class is commonly used for implementing list endpoints with pagination capabilities.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+public class ProductService
+{
+    private readonly IRepository<Product> _productRepository;
+
+    public ProductService(IRepository<Product> productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
+    public async Task<PagedResult<Product>> GetActiveProductsAsync(int pageNumber = 1, int pageSize = 10)
+    {
+        // Create paged result from queryable
+        var pagedResult = PagedResult<Product>.FromQueryable(
+            _productRepository.Query
+                .Where(p => p.IsActive)
+                .OrderBy(p => p.Name),
+            pageNumber, pageSize);
+
+        Console.WriteLine($"Page {pagedResult.PageNumber} of {pagedResult.TotalPages}");
+        Console.WriteLine($"Total products: {pagedResult.TotalCount}");
+        Console.WriteLine($"Items on this page: {pagedResult.Items.Count}");
+        Console.WriteLine($"Has next page: {pagedResult.HasNextPage}");
+        Console.WriteLine($"Has previous page: {pagedResult.HasPreviousPage}");
+
+        return pagedResult;
+    }
+
+    public async Task<PagedResult<Product>> SearchProductsAsync(string searchTerm, int pageNumber = 1, int pageSize = 10)
+    {
+        // Get paged results with custom ordering
+        var pagedResult = PagedResult<Product>.FromQueryable(
+            _productRepository.Query
+                .Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm))
+                .OrderByDescending(p => p.Price),
+            pageNumber, pageSize);
+
+        return pagedResult;
+    }
+
+    public async Task<PagedResult<ProductDto>> GetProductDtosAsync(int pageNumber = 1, int pageSize = 10)
+    {
+        // Get paged results and map to DTO
+        var pagedResult = PagedResult<Product>.FromQueryable(
+            _productRepository.Query
+                .Where(p => p.IsActive)
+                .OrderBy(p => p.Name),
+            pageNumber, pageSize);
+
+        // Map to DTO type while preserving pagination metadata
+        return pagedResult.Map(product => new ProductDto
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Price = product.Price,
+            StockQuantity = product.StockQuantity
+        });
+    }
+
+    public async Task NavigatePagesAsync(int currentPage, int pageSize = 10)
+    {
+        // Get first page
+        var firstPage = PagedResult<Product>.FromQueryable(
+            _productRepository.Query.Where(p => p.IsActive),
+            1, pageSize);
+
+        Console.WriteLine($"First page: {firstPage.PageNumber}");
+
+        // Navigate to next page if available
+        if (firstPage.HasNextPage)
+        {
+            var nextPageInfo = firstPage.GetNextPageInfo();
+            var nextPage = PagedResult<Product>.FromQueryable(
+                _productRepository.Query
+                    .Where(p => p.IsActive)
+                    .OrderBy(p => p.Name),
+                nextPageInfo.PageNumber, nextPageInfo.PageSize);
+
+            Console.WriteLine($"Next page: {nextPage.PageNumber}");
+        }
+
+        // Navigate to previous page if available
+        if (firstPage.HasPreviousPage)
+        {
+            var prevPageInfo = firstPage.GetPreviousPageInfo();
+            var prevPage = PagedResult<Product>.FromQueryable(
+                _productRepository.Query
+                    .Where(p => p.IsActive)
+                    .OrderBy(p => p.Name),
+                prevPageInfo.PageNumber, prevPageInfo.PageSize);
+
+            Console.WriteLine($"Previous page: {prevPage.PageNumber}");
+        }
+    }
+}
+
+// DTO for mapping
+public class ProductDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public int StockQuantity { get; set; }
+}
+```
+
 ## BatchUpsertOperation
 
 The `BatchUpsertOperation<T>` class provides an efficient batch upsert (INSERT or UPDATE) implementation that minimizes database round-trips. It generates optimized SQL statements (MERGE for SQL Server, or individual upserts for other providers) to perform bulk operations on entities while tracking whether each entity was inserted or updated.
