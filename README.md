@@ -104,6 +104,71 @@ Console.WriteLine(batchResult.SuccessRate); // Output: 90
 Console.WriteLine(batchResult.HasFailures); // Output: True
 ```
 
+## PerformanceMonitor
+
+The `PerformanceMonitor` class provides a comprehensive way to track and analyze the performance characteristics of code execution. It measures execution time, memory allocation, and custom metrics, making it ideal for performance profiling, benchmarking, and identifying performance regressions in your application.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using DotnetMicroOrm.Utils;
+
+class Program
+{
+    static async Task Main()
+    {
+        // Basic performance monitoring
+        using var monitor = new PerformanceMonitor("Database Query");
+        
+        // Simulate work
+        await Task.Delay(150);
+        monitor.RecordMetric("RowsAffected", 1250);
+        monitor.RecordItemCount("UsersProcessed", 500);
+        monitor.Checkpoint("After query execution");
+        
+        // Get detailed performance report
+        var report = monitor.GetReport();
+        Console.WriteLine(report.GetSummary());
+        
+        // Check if performance thresholds were exceeded
+        if (monitor.ExceededTimeThreshold)
+        {
+            Console.WriteLine("Warning: Operation exceeded time threshold!");
+        }
+        
+        if (monitor.ExceededMemoryThreshold)
+        {
+            Console.WriteLine("Warning: Operation exceeded memory threshold!");
+        }
+        
+        // Log summary to console
+        monitor.LogSummary();
+        
+        // Measure async operations with built-in helper
+        var (result, elapsedMs) = await PerformanceMonitor.MeasureAsync(async () =>
+        {
+            await Task.Delay(200);
+            return "Operation completed";
+        });
+        
+        Console.WriteLine($"Async operation took {elapsedMs}ms");
+        
+        // Create child monitor for nested operations
+        using var parentMonitor = new PerformanceMonitor("Parent Operation");
+        using var childMonitor = parentMonitor.CreateChild("Child Operation");
+        
+        await Task.Delay(100);
+        childMonitor.RecordMetric("CacheHits", 42);
+        
+        // Get performance grade
+        char grade = parentMonitor.GetPerformanceGrade();
+        Console.WriteLine($"Performance grade: {grade}");
+    }
+}
+```
+
 ## ApiResponse
 
 `ApiResponse<T>` and `ApiPagedResponse<T>` are lightweight wrappers that give every API endpoint a consistent shape. They expose status information (`Success`), payload (`Data` or `Items`), human‑readable messages, optional error codes, timestamps, request identifiers and versioning. Helper factories (`CreateSuccess`, `CreateError`, `CreateFromException`, `CreateValidationError`, and the paged equivalents) make constructing responses concise and error‑free.
