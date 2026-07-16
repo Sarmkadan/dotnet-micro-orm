@@ -1912,6 +1912,161 @@ public class ProductService
             .Where(nonElectronicsSpec.Criteria)
             .ToListAsync();
     }
+}
+```
+
+## UnitOfWork
+
+The `UnitOfWork` class implements the Unit of Work pattern for managing transactions and coordinating changes across multiple repositories. It provides transaction management (begin, commit, rollback), change tracking, and centralized repository access, ensuring that all operations within a transaction succeed or fail together. The class implements `IAsyncDisposable` for proper resource cleanup and supports concurrent repository access through a thread-safe repository cache.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+using DotnetMicroOrm.Constants;
+
+public class OrderProcessingService : IAsyncDisposable
+{
+    private readonly UnitOfWork _unitOfWork;
+    private readonly IRepository<Product> _productRepository;
+    private readonly IRepository<Order> _orderRepository;
+
+    public OrderProcessingService(DatabaseContext dbContext)
+    {
+        _unitOfWork = new UnitOfWork(dbContext);
+        _productRepository = _unitOfWork.Repository<Product>();
+        _orderRepository = _unitOfWork.Repository<Order>();
+    }
+
+    public async Task ProcessOrderAsync(int productId, int quantity, int userId, string shippingAddress)
+    {
+        // Begin transaction
+        var transactionStarted = await _unitOfWork.BeginTransactionAsync(TransactionIsolationLevel.ReadCommitted);
+        Console.WriteLine($"Transaction started: {transactionStarted}");
+
+        try
+        {
+            // Get product and check stock
+            var product = await _productRepository.GetByIdAsync(productId);
+            if (product is null || product.StockQuantity < quantity)
+            {
+                throw new InvalidOperationException("Product not available or insufficient stock");
+            }
+
+            // Create order
+            var order = new Order(userId, shippingAddress)
+            {
+                Status = "Pending"
+            };
+
+            // Add order items
+            order.AddItem(new OrderItem
+            {
+                ProductId = product.Id,
+                ProductName = product.Name,
+                Quantity = quantity,
+                UnitPrice = product.Price,
+                CreatedDate = DateTime.UtcNow
+            });
+
+            // Add to repository (tracked by UnitOfWork)
+            await _orderRepository.AddAsync(order);
+
+            // Decrease product stock
+            product.DecreaseStock(quantity);
+            await _productRepository.UpdateAsync(product);
+
+            // Save changes
+            var changesSaved = await _unitOfWork.SaveChangesAsync();
+            Console.WriteLine($"Changes saved: {changesSaved}");
+
+            // Commit transaction
+            var committed = await _unitOfWork.CommitAsync();
+            Console.WriteLine($"Transaction committed: {committed}");
+        }
+        catch (Exception ex)
+        {
+            // Rollback on error
+            Console.WriteLine($"Error processing order: {ex.Message}");
+            await _unitOfWork.RollbackAsync();
+            throw;
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _unitOfWork.DisposeAsync();
+    }
+}
+
+// Usage example
+await using var orderService = new OrderProcessingService(dbContext);
+await orderService.ProcessOrderAsync(
+    productId: 101,
+    quantity: 2,
+    userId: 42,
+    shippingAddress: "123 Main St, Springfield"
+);
+```
+
+public class ProductService
+{
+    private readonly IRepository<Product> _productRepository;
+
+    public ProductService(IRepository<Product> productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
+    public async Task<List<Product>> GetExpensiveElectronicsAsync()
+    {
+        // Create base specifications
+        var expensiveSpec = new Specification<Product>()
+            .Where(p => p.Price > 1000);
+
+        var electronicsSpec = new Specification<Product>()
+            .Where(p => p.Category.Name == "Electronics");
+
+        // Combine specifications using AND
+        var expensiveElectronicsSpec = expensiveSpec.And(electronicsSpec);
+
+        // Use the combined specification with repository
+        return await _productRepository.Query
+            .Where(expensiveElectronicsSpec.Criteria)
+            .ToListAsync();
+    }
+
+    public async Task<List<Product>> GetAffordableOrClearanceAsync()
+    {
+        // Create base specifications
+        var affordableSpec = new Specification<Product>()
+            .Where(p => p.Price <= 200);
+
+        var clearanceSpec = new Specification<Product>()
+            .Where(p => p.IsOnSale);
+
+        // Combine specifications using OR
+        var affordableOrClearanceSpec = affordableSpec.Or(clearanceSpec);
+
+        return await _productRepository.Query
+            .Where(affordableOrClearanceSpec.Criteria)
+            .ToListAsync();
+    }
+
+    public async Task<List<Product>> GetNonElectronicsAsync()
+    {
+        // Create base specification
+        var electronicsSpec = new Specification<Product>()
+            .Where(p => p.Category.Name == "Electronics");
+
+        // Negate the specification using NOT
+        var nonElectronicsSpec = electronicsSpec.Not();
+
+        return await _productRepository.Query
+            .Where(nonElectronicsSpec.Criteria)
+            .ToListAsync();
+    }
 
     public async Task<List<Product>> GetProductsByPriceRangeAsync(decimal minPrice, decimal maxPrice)
     {
