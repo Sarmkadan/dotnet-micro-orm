@@ -3,6 +3,67 @@
 
 See [docs/architecture.md](docs/architecture.md) for the full picture: project layout, core components (DatabaseContext, Repository, UnitOfWork, batch upsert, query plan cache), data flow, design decisions with their trade-offs, extension points, and known limitations.
 
+## AppSettings
+
+The `AppSettings` class provides centralized configuration for the DotnetMicroOrm library, including database connection settings, ORM behavior options, and logging configuration. It serves as the root configuration object that organizes related settings into logical groups (`Database`, `Orm`, and `Logging` sections) for easy access and maintainability.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Configuration;
+using DotnetMicroOrm.Constants;
+
+// Create and configure application settings
+var appSettings = new AppSettings
+{
+    Database = new DatabaseSettings
+    {
+        ConnectionString = "Server=localhost;Database=MyApp;User Id=sa;Password=YourPassword123;",
+        Provider = DatabaseProvider.SqlServer,
+        ConnectionTimeout = 30,
+        CommandTimeout = 30,
+        EnablePooling = true,
+        MinPoolSize = 5,
+        MaxPoolSize = 100,
+        DatabaseName = "MyApp",
+        DefaultSchema = "dbo"
+    },
+    Orm = new OrmSettings
+    {
+        ChangeTrackingEnabled = true,
+        AuditLoggingEnabled = true,
+        LazyLoadingEnabled = true,
+        ExpressionCachingEnabled = true,
+        DefaultBatchSize = 1000,
+        MaxBatchSize = 10000,
+        QueryOptimizationEnabled = true,
+        ProxyCreationEnabled = true,
+        ValidateOnSave = true
+    },
+    Logging = new LoggingSettings
+    {
+        LogLevel = "Information",
+        LogQueries = true,
+        LogSqlQueries = false,
+        LogParameterValues = false,
+        LogExecutionTime = true,
+        SlowQueryThresholdMs = 1000,
+        LogFilePath = "logs/application.log",
+        MaxLogFileSizeMb = 10,
+        RetainedLogFileCount = 5
+    }
+};
+
+// Access individual settings
+Console.WriteLine($"Using {appSettings.Database.Provider} database provider");
+Console.WriteLine($"Connection timeout: {appSettings.Database.ConnectionTimeout}s");
+Console.WriteLine($"Change tracking enabled: {appSettings.Orm.ChangeTrackingEnabled}");
+Console.WriteLine($"Log level: {appSettings.Logging.LogLevel}");
+
+// Use with DatabaseContext
+var dbContext = new DatabaseContext(appSettings);
+```
+
 ## ApplicationBuilder
 
 The `ApplicationBuilder` class provides a fluent interface for configuring and initializing the ORM application. It sets up database connections, middleware pipeline, caching, HTTP client, and other components in a composable manner. The builder pattern allows for clean, readable configuration of complex application setups.
