@@ -131,6 +131,144 @@ public class AuditService
 }
 ```
 
+## IAuditService
+
+The `IAuditService` interface provides a contract for auditing entity changes and system operations. It tracks insertions, updates, deletions, and failures across the application, enabling compliance tracking, debugging, and operational monitoring. The service integrates with the `AuditLog` entity to persist audit records and provides querying capabilities for analyzing historical operations.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Services;
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+public class AuditManager
+{
+    private readonly IAuditService _auditService;
+
+    public AuditManager(IAuditService auditService)
+    {
+        _auditService = auditService;
+    }
+
+    public async Task TrackUserRegistrationAsync(int userId, string username)
+    {
+        // Log user registration as an insert operation
+        await _auditService.LogInsertAsync(
+            entityType: "User",
+            entityId: userId,
+            newValues: $"Username: {username}",
+            userId: userId,
+            username: username
+        );
+    }
+
+    public async Task TrackProductUpdateAsync(Product product, int userId, string username)
+    {
+        // Log product update with before/after values
+        await _auditService.LogUpdateAsync(
+            entityType: "Product",
+            entityId: product.Id,
+            oldValues: $"Price: {product.CostPrice}, Stock: {product.StockQuantity}",
+            newValues: $"Price: {product.Price}, Stock: {product.StockQuantity}",
+            changedProperties: "Price,StockQuantity",
+            userId: userId,
+            username: username
+        );
+    }
+
+    public async Task TrackOrderDeletionAsync(int orderId, int userId, string username)
+    {
+        // Log order deletion with the deleted values
+        await _auditService.LogDeleteAsync(
+            entityType: "Order",
+            entityId: orderId,
+            oldValues: $"Order #{orderId} - Total: {orderId * 100:C}",
+            userId: userId,
+            username: username
+        );
+    }
+
+    public async Task TrackFailedOperationAsync(string entityType, int entityId, string action, string errorMessage, int? userId = null, string? username = null)
+    {
+        // Log failed operations for error tracking and debugging
+        await _auditService.LogFailureAsync(
+            entityType: entityType,
+            entityId: entityId,
+            action: action,
+            errorMessage: errorMessage,
+            userId: userId,
+            username: username
+        );
+    }
+
+    public async Task<List<AuditLog>> GetEntityHistoryAsync(string entityType, int entityId)
+    {
+        // Retrieve all audit logs for a specific entity
+        return await _auditService.GetAuditLogsAsync(entityType, entityId);
+    }
+
+    public async Task<List<AuditLog>> GetUserActivityAsync(int userId)
+    {
+        // Get all activity for a specific user
+        return await _auditService.GetUserActivityAsync(userId);
+    }
+
+    public async Task<List<AuditLog>> GetFailedOperationsAsync(int daysBack = 7)
+    {
+        // Get all failed operations in the last N days
+        return await _auditService.GetFailedOperationsAsync(daysBack);
+    }
+
+    public async Task<int> CleanupOldLogsAsync(int daysToKeep = 90)
+    {
+        // Purge old audit logs to maintain database size
+        return await _auditService.PurgeOldLogsAsync(daysToKeep);
+    }
+
+    public async Task<AuditSummary> GetSystemAuditSummaryAsync()
+    {
+        // Get summary statistics of all audit operations
+        return await _auditService.GetSummaryAsync();
+    }
+
+    public async Task DisplayAuditReportAsync()
+    {
+        // Generate a comprehensive audit report
+        var summary = await _auditService.GetSummaryAsync();
+        
+        Console.WriteLine("=== Audit System Report ===");
+        Console.WriteLine($"Total Operations: {summary.TotalOperations}");
+        Console.WriteLine($"Successful: {summary.SuccessfulOperations} ({summary.SuccessRate:F1}%)");
+        Console.WriteLine($"Failed: {summary.FailedOperations}");
+        Console.WriteLine($"Breakdown: Inserts={summary.Inserts}, Updates={summary.Updates}, Deletes={summary.Deletes}");
+        
+        var recentFailures = await _auditService.GetFailedOperationsAsync(7);
+        Console.WriteLine($"\nRecent Failures ({recentFailures.Count} in last 7 days):");
+        foreach (var failure in recentFailures.Take(5))
+        {
+            Console.WriteLine($"  - {failure.Timestamp:yyyy-MM-dd HH:mm} - {failure.EntityType}.{failure.EntityId}: {failure.ErrorMessage}");
+        }
+    }
+}
+
+// Usage with dependency injection
+var services = new ServiceCollection();
+services.AddSingleton<IAuditService, AuditService>();
+services.AddSingleton<AuditManager>();
+
+var serviceProvider = services.BuildServiceProvider();
+var auditManager = serviceProvider.GetRequiredService<AuditManager>();
+
+// Track operations throughout the application lifecycle
+await auditManager.TrackUserRegistrationAsync(42, "johndoe");
+await auditManager.TrackProductUpdateAsync(new Product { Id = 101, CostPrice = 500, Price = 799.99m, StockQuantity = 25 }, 42, "johndoe");
+await auditManager.TrackOrderDeletionAsync(1001, 42, "johndoe");
+
+// Generate audit report
+await auditManager.DisplayAuditReportAsync();
+```
+
 ## MigrationRunner
 
 The `MigrationRunner` class manages the execution of database migrations in version order. It automatically creates and maintains a `_MigrationHistory` table to track which migrations have been applied, enabling reliable migration management across environments and deployments.
