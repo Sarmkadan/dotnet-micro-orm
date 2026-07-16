@@ -631,6 +631,88 @@ Console.WriteLine($"Total active products: {productCount}");
 await productService.DisposeAsync();
 ```
 
+## OrderService
+
+The `OrderService` provides order processing and management functionality for an e-commerce system. It handles order creation, item management, status transitions (pending → confirmed → shipped → delivered), cancellations, and revenue analytics. The service integrates with the `OrderRepository` and `OrderItemRepository` for data persistence and implements `IAsyncDisposable` for proper resource cleanup.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Services;
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+// Create database context and order service
+await using var dbContext = new DatabaseContext();
+var orderService = new OrderService(dbContext);
+
+// Create a new order for a user
+var newOrder = await orderService.CreateOrderAsync(
+    userId: 42,
+    shippingAddress: "123 Main St, Springfield, IL 62704"
+);
+Console.WriteLine($"Order created: #{newOrder.OrderNumber} for user {newOrder.UserId}");
+
+// Add items to the order
+var addedItem = await orderService.AddOrderItemAsync(
+    orderId: newOrder.Id,
+    productId: 101,
+    productName: "Gaming Laptop",
+    quantity: 2,
+    unitPrice: 1299.99m
+);
+Console.WriteLine($"Added item to order: {addedItem.Items.Count} items total");
+
+// Confirm the order (transition from Pending to Confirmed)
+var confirmedOrder = await orderService.ConfirmOrderAsync(newOrder.Id);
+Console.WriteLine($"Order confirmed: Status = {confirmedOrder.Status}");
+
+// Ship the order
+var shippedOrder = await orderService.ShipOrderAsync(newOrder.Id);
+Console.WriteLine($"Order shipped: Shipped on {shippedOrder.ShippingDate?.ToString("yyyy-MM-dd")}");
+
+// Mark order as delivered
+var deliveredOrder = await orderService.DeliverOrderAsync(newOrder.Id);
+Console.WriteLine($"Order delivered: Delivered on {deliveredOrder.DeliveryDate?.ToString("yyyy-MM-dd")}");
+
+// Get order by ID
+var retrievedOrder = await orderService.GetOrderAsync(newOrder.Id);
+if (retrievedOrder is not null)
+{
+    Console.WriteLine($"Found order #{retrievedOrder.OrderNumber} - Total: {retrievedOrder.TotalAmount:C}");
+}
+
+// Get all orders for a specific user
+var userOrders = await orderService.GetUserOrdersAsync(42);
+Console.WriteLine($"User 42 has {userOrders.Count} orders");
+
+// Get orders by status
+var pendingOrders = await orderService.GetOrdersByStatusAsync("Pending");
+Console.WriteLine($"Pending orders: {pendingOrders.Count}");
+
+// Get pending orders (convenience method)
+var pending = await orderService.GetPendingOrdersAsync();
+Console.WriteLine($"Pending orders via convenience method: {pending.Count}");
+
+// Get orders within a date range
+var dateRangeOrders = await orderService.GetOrdersByDateRangeAsync(
+    startDate: DateTime.UtcNow.AddDays(-30),
+    endDate: DateTime.UtcNow
+);
+Console.WriteLine($"Orders in last 30 days: {dateRangeOrders.Count}");
+
+// Calculate total revenue from completed orders
+var totalRevenue = await orderService.GetTotalRevenueAsync();
+Console.WriteLine($"Total revenue: {totalRevenue:C}");
+
+// Cancel an order
+var cancelledOrder = await orderService.CancelOrderAsync(newOrder.Id);
+Console.WriteLine($"Order cancelled: Status = {cancelledOrder.Status}");
+
+// Dispose the service when done
+await orderService.DisposeAsync();
+```
+
 ### Example Usage
 
 ```csharp
