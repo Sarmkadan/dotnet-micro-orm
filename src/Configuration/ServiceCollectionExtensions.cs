@@ -40,6 +40,9 @@ public static class ServiceCollectionExtensions
 		var config = new OrmConfiguration();
 		configureOptions?.Invoke(config);
 
+		// Register configuration so consumers can resolve the effective options
+		services.AddSingleton(config);
+
 		// Register database context
 		services.AddSingleton<IDatabaseContext>(_ =>
 			new DatabaseContext(connectionString, provider));
@@ -55,6 +58,9 @@ public static class ServiceCollectionExtensions
 
 		// Register query profiler
 		services.AddSingleton<IQueryProfiler, QueryProfiler>();
+
+		// Register default in-memory cache provider
+		services.AddSingleton<Caching.ICacheProvider, Caching.MemoryCacheProvider>();
 
 		// Register migration runner
 		services.AddScoped<IMigrationRunner, MigrationRunner>();
