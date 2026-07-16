@@ -265,6 +265,63 @@ catch (OrmException ex)
 // app.UseMiddleware<AuthenticationMiddleware>();
 ```
 
+## RateLimitingMiddleware
+
+The `RateLimitingMiddleware` implements request rate limiting to prevent abuse and ensure fair resource usage across your application. It uses a token bucket algorithm to provide smooth rate limiting without sudden cutoffs, tracking requests per user or IP address and blocking excessive traffic based on configurable thresholds. The middleware integrates seamlessly with the middleware pipeline and can be disabled for testing purposes.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Middleware;
+
+// Configure rate limiting with 100 requests per minute
+var rateLimitConfig = new RateLimitConfig
+{
+    MaxRequests = 100,
+    WindowDuration = TimeSpan.FromMinutes(1),
+    Enabled = true
+};
+
+// Create rate limiting middleware
+var rateLimitMiddleware = new RateLimitingMiddleware(rateLimitConfig);
+
+// Build middleware pipeline with rate limiting
+var pipelineBuilder = new PipelineBuilder();
+pipelineBuilder.Use(new ErrorHandlingMiddleware());
+pipelineBuilder.Use(rateLimitMiddleware);
+pipelineBuilder.Use(new AuthenticationMiddleware());
+
+// Simulate authenticated user context
+var context = new MiddlewareContext
+{
+    RequestId = Guid.NewGuid().ToString(),
+    User = new AuthenticationInfo { UserId = 1001, Role = "admin" }
+};
+
+// Execute the pipeline
+try
+{
+    await pipelineBuilder.ExecuteAsync(context);
+    
+    if (context.ResponseData is null)
+    {
+        Console.WriteLine("Request processed successfully within rate limit");
+    }
+    else if (context.ResponseData is ErrorResponse errorResponse)
+    {
+        Console.WriteLine($"Rate limit exceeded: {errorResponse.Message}");
+    }
+}
+catch (InvalidOperationException ex) when (ex.Message.Contains("Rate limit exceeded"))
+{
+    Console.WriteLine($"Rate limit exceeded: {ex.Message}");
+}
+
+// Periodically clean up expired rate limit buckets
+// Typically called by a background service
+rateLimitMiddleware.CleanupExpiredBuckets();
+```
+
 ## QueryProfile
 
 The `QueryProfile` class represents a single captured profiling record for a database query execution. It contains metadata about the query including the SQL statement, execution parameters, timing information, success status, and caller context. This type is typically consumed through the `QueryProfiler` class which aggregates multiple profiles into a `QueryProfilerSummary`.
