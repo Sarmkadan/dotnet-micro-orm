@@ -29,6 +29,48 @@ public class MigrationRunner
 }
 ```
 
+## MigrationRunner
+
+The `MigrationRunner` class manages the execution of database migrations in version order. It automatically creates and maintains a `_MigrationHistory` table to track which migrations have been applied, enabling reliable migration management across environments and deployments.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Migrations;
+using DotnetMicroOrm.Data;
+
+// Discover and register your migrations (typically done via assembly scanning)
+var migrations = new List<IMigration> 
+{
+    new CreateUsersTableMigration(),
+    new AddEmailIndexMigration(),
+    new SeedInitialDataMigration()
+};
+
+// Create a database context (configured for your database provider)
+await using var dbContext = new DatabaseContext();
+
+// Initialize the migration runner
+var runner = new MigrationRunner(dbContext, migrations);
+
+// Apply all pending migrations
+await runner.MigrateAsync();
+
+// Check which migrations are pending
+var pendingMigrations = await runner.GetPendingMigrationsAsync();
+Console.WriteLine($"Pending migrations: {pendingMigrations.Count}");
+
+// Check which migrations have been applied
+var appliedMigrations = await runner.GetAppliedMigrationsAsync();
+Console.WriteLine($"Applied migrations: {appliedMigrations.Count}");
+
+// Migrate to a specific version
+await runner.MigrateToAsync("2.1.0");
+
+// Rollback to a previous version
+await runner.RollbackToAsync("1.0.0");
+```
+
 ## QueryProfile
 
 The `QueryProfile` class represents a single captured profiling record for a database query execution. It contains metadata about the query including the SQL statement, execution parameters, timing information, success status, and caller context. This type is typically consumed through the `QueryProfiler` class which aggregates multiple profiles into a `QueryProfilerSummary`.
