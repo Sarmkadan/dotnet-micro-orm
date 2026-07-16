@@ -145,6 +145,69 @@ public class InventoryManager
 ```
 
 
+
+## MemoryCacheProvider
+
+The `MemoryCacheProvider` class provides an in-memory caching implementation using `ConcurrentDictionary` for thread-safe operations. It supports automatic expiration, pattern-based removal for cache invalidation, and integrates seamlessly with the application's dependency injection system. The cache is suitable for single-server applications where distributed caching is not required.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Caching;
+using System;
+
+// Create cache provider instance
+var cacheProvider = new MemoryCacheProvider();
+
+// Set a value with expiration
+await cacheProvider.SetAsync("user:42", new User { Id = 42, Username = "johndoe", Email = "john@example.com" }, 
+    TimeSpan.FromMinutes(30));
+
+// Get a value from cache
+var user = await cacheProvider.GetAsync<User>("user:42");
+if (user is not null)
+{
+    Console.WriteLine($"Cached user: {user.Username}");
+}
+
+// Get or set with factory pattern (cache-aside pattern)
+var product = await cacheProvider.GetOrSetAsync(
+    key: "product:101",
+    factory: async () => await FetchProductFromDatabaseAsync(101),
+    expiration: TimeSpan.FromHours(1)
+);
+
+// Check if key exists
+var exists = await cacheProvider.ExistsAsync("user:42");
+Console.WriteLine($"Key exists: {exists}");
+
+// Remove a specific key
+await cacheProvider.RemoveAsync("user:42");
+
+// Remove keys by pattern (e.g., all user-related cache entries)
+await cacheProvider.RemoveByPatternAsync("user:*");
+
+// Get cache statistics
+var count = await cacheProvider.GetCountAsync();
+Console.WriteLine($"Cache entries: {count}");
+
+// Clear entire cache
+await cacheProvider.ClearAsync();
+
+// Manual cleanup of expired entries (useful for periodic maintenance)
+await cacheProvider.CleanupAsync();
+
+// Dispose when done
+await cacheProvider.DisposeAsync();
+
+async Task<Product> FetchProductFromDatabaseAsync(int productId)
+{
+    // Simulate database fetch
+    await Task.Delay(100);
+    return new Product { Id = productId, Name = "Sample Product", Price = 99.99m };
+}
+```
+
 ## MigrationRecord
 
 The `MigrationRecord` class represents a persisted record of a migration that has been applied to the database. It stores metadata about the migration, including its version, description, application timestamp, success status, and error message if applicable.
