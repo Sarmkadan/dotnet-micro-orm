@@ -413,6 +413,65 @@ public class CleanupTask
 }
 ```
 
+## OrderItem
+
+The `OrderItem` class represents a line item within an order, containing product details, pricing information, quantities, and calculated totals. It provides methods for calculating line totals, applying discounts, and computing tax amounts, making it suitable for e-commerce and order management scenarios.
+
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Domain.Models;
+
+public class OrderService
+{
+    public OrderItem CreateOrderItem(Product product, int quantity, decimal discount = 0)
+    {
+        var orderItem = new OrderItem
+        {
+            ProductId = product.Id,
+            ProductName = product.Name,
+            Quantity = quantity,
+            UnitPrice = product.Price,
+            Discount = discount,
+            TaxAmount = 0,
+            CreatedDate = DateTime.UtcNow
+        };
+
+        orderItem.CalculateLineTotal();
+        return orderItem;
+    }
+
+    public void ApplyDiscountToItem(OrderItem item, decimal discountPercentage)
+    {
+        var discountAmount = item.GetSubtotal() * discountPercentage / 100;
+        item.ApplyDiscount(discountAmount);
+        item.CalculateLineTotal();
+    }
+
+    public void ProcessOrderItems(Order order)
+    {
+        foreach (var item in order.Items)
+        {
+            // Calculate line total
+            item.CalculateLineTotal();
+
+            // Apply any discounts
+            if (item.Discount > 0)
+            {
+                item.ApplyDiscount(item.Discount);
+            }
+
+            // Calculate tax
+            item.TaxAmount = item.GetAfterDiscount() * 0.08m; // 8% tax
+
+            // Final calculation
+            item.CalculateLineTotal();
+        }
+    }
+}
+```
+
 ## PipelineBuilder
 
 The `PipelineBuilder` class constructs a middleware pipeline for processing requests through a sequence of middleware components. It enables composing multiple middleware in a specific order, with support for both sequential execution and custom ordering via the `Order` property on middleware. The pipeline executes middleware in FIFO order, allowing for flexible request/response processing patterns.
