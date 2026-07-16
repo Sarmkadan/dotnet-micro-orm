@@ -999,6 +999,93 @@ public class UserRepository
 }
 ```
 
+## QueryPlan
+
+The `QueryPlan` class represents a cached query execution plan that stores metadata about SQL statements to avoid redundant parsing and optimization overhead. It tracks the normalized SQL fingerprint, original SQL text, estimated execution cost, query parameters, cache statistics, and timing information. Query plans are typically managed by the `IQueryPlanCache` interface for efficient plan reuse across identical queries.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using System.Data;
+
+public class QueryPlanCacheExample
+{
+    private readonly IQueryPlanCache _queryPlanCache;
+
+    public QueryPlanCacheExample(IQueryPlanCache queryPlanCache)
+    {
+        _queryPlanCache = queryPlanCache;
+    }
+
+    public async Task CacheAndRetrieveQueryPlanAsync()
+    {
+        // Create a query plan for a common query
+        var queryPlan = new QueryPlan
+        {
+            Fingerprint = QueryPlanCache.ComputeFingerprint("SELECT * FROM users WHERE id = @id"),
+            Sql = "SELECT * FROM users WHERE id = @id",
+            EstimatedCost = 12.5,
+            Parameters = new List<QueryParameterDescriptor>
+            {
+                new QueryParameterDescriptor
+                {
+                    Name = "@id",
+                    DbType = DbType.Int32,
+                    Size = null
+                }
+            },
+            HitCount = 0
+        };
+
+        // Store the query plan in cache
+        await _queryPlanCache.StorePlanAsync(queryPlan);
+
+        // Retrieve the cached plan
+        var fingerprint = QueryPlanCache.ComputeFingerprint("SELECT * FROM users WHERE id = @id");
+        var cachedPlan = await _queryPlanCache.GetPlanAsync(fingerprint);
+
+        if (cachedPlan != null)
+        {
+            Console.WriteLine($"Cached plan found: {cachedPlan.Fingerprint}");
+            Console.WriteLine($"SQL: {cachedPlan.Sql}");
+            Console.WriteLine($"Estimated cost: {cachedPlan.EstimatedCost}");
+            Console.WriteLine($"Parameters: {cachedPlan.Parameters.Count}");
+            Console.WriteLine($"Cached at: {cachedPlan.CachedAt}");
+            Console.WriteLine($"Hit count: {cachedPlan.HitCount}");
+        }
+
+        // Get or analyze a query (cache hit or miss)
+        var plan = await _queryPlanCache.GetOrAnalyzeAsync(
+            "SELECT * FROM products WHERE category_id = @categoryId",
+            async (sql, ct) =>
+            {
+                // Analyzer function that generates the query plan
+                return new QueryPlan
+                {
+                    Fingerprint = QueryPlanCache.ComputeFingerprint(sql),
+                    Sql = sql,
+                    EstimatedCost = 8.2,
+                    Parameters = new List<QueryParameterDescriptor>
+                    {
+                        new QueryParameterDescriptor
+                        {
+                            Name = "@categoryId",
+                            DbType = DbType.Int32,
+                            Size = null
+                        }
+                    }
+                };
+            }
+        );
+
+        // Check cache statistics
+        var stats = await _queryPlanCache.GetStatisticsAsync();
+        Console.WriteLine($"Cache entries: {stats.Entries}, Hits: {stats.Hits}, Misses: {stats.Misses}");
+    }
+}
+```
+
 ## QueryProfiler
 
 The `QueryProfiler` class provides a thread-safe in-process query profiler. It stores profiles in a bounded ring-buffer, ensuring predictable memory usage under sustained load. You can use it to monitor and analyze the performance of your database queries.
