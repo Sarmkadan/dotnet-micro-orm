@@ -215,6 +215,56 @@ pipelineBuilder.Use(authMiddleware);
 authMiddleware.RevokeApiKey("demo-key-12345");
 ```
 
+## ErrorHandlingMiddleware
+
+The `ErrorHandlingMiddleware` catches exceptions thrown during request processing and converts them into standardized error responses. It prevents unhandled exceptions from propagating up the call stack, ensuring consistent error formatting and proper logging for debugging and monitoring purposes. The middleware handles specific exception types (like `OrmException`, `ArgumentException`, `UnauthorizedAccessException`, and `TimeoutException`) with appropriate error codes, while falling back to a generic "INTERNAL_ERROR" response for unexpected exceptions.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Middleware;
+using DotnetMicroOrm.Exceptions;
+
+// Create error handling middleware
+var errorMiddleware = new ErrorHandlingMiddleware();
+
+// Build a middleware pipeline with error handling
+var pipelineBuilder = new PipelineBuilder();
+pipelineBuilder.Use(errorMiddleware);
+pipelineBuilder.Use(new AuthenticationMiddleware());
+pipelineBuilder.Use(new SomeOtherMiddleware());
+
+// Simulate an ORM error scenario
+try
+{
+    // This would throw an OrmException in real usage
+    throw new OrmException("Database connection failed");
+}
+catch (OrmException ex)
+{
+    // The middleware will catch this and set context.ResponseData
+    var context = new MiddlewareContext
+    {
+        RequestId = Guid.NewGuid().ToString(),
+        Exception = ex
+    };
+    
+    // Invoke the pipeline
+    await errorMiddleware.InvokeAsync(context, _ => Task.CompletedTask);
+    
+    // Access the standardized error response
+    var errorResponse = context.ResponseData as ErrorResponse;
+    Console.WriteLine($"Error Code: {errorResponse?.Code}");
+    Console.WriteLine($"Error Message: {errorResponse?.Message}");
+    Console.WriteLine($"Request ID: {errorResponse?.RequestId}");
+    Console.WriteLine($"Timestamp: {errorResponse?.Timestamp}");
+}
+
+// Real-world usage in ASP.NET Core style pipeline:
+// app.UseMiddleware<ErrorHandlingMiddleware>();
+// app.UseMiddleware<AuthenticationMiddleware>();
+```
+
 ## QueryProfile
 
 The `QueryProfile` class represents a single captured profiling record for a database query execution. It contains metadata about the query including the SQL statement, execution parameters, timing information, success status, and caller context. This type is typically consumed through the `QueryProfiler` class which aggregates multiple profiles into a `QueryProfilerSummary`.
