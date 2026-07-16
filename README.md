@@ -1,4 +1,3 @@
-
 ## ValidationHelper
 
 The `ValidationHelper` class provides utility methods for validating common data types and business rules. It helps ensure data integrity before database operations and API calls by returning detailed error messages for validation failures. Each validation method returns a tuple with a boolean indicating success/failure and an error message that can be used for user feedback.
@@ -81,6 +80,76 @@ class Program
         
         var allValid = ValidationHelper.ValidateAll(validations);
         Console.WriteLine($"All validations: isValid={allValid.isValid}, error='{allValid.errorMessage}'");
+    }
+}
+```
+
+## StringHelper
+
+`StringHelper` offers a collection of static methods for common string transformations and checks, such as case conversion, truncation, repetition, whitespace handling, character classification, and simple validation of emails and URLs.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Collections.Generic;
+using DotnetMicroOrm.Utils;
+
+class Program
+{
+    static void Main()
+    {
+        // Case conversions
+        string kebab = StringHelper.ToKebabCase("UserProfile");          // "user-profile"
+        string snake = StringHelper.ToSnakeCase("UserProfile");          // "user_profile"
+        string pascal = StringHelper.ToPascalCase("user-profile");       // "UserProfile"
+
+        // Truncate and repeat
+        string truncated = StringHelper.Truncate("Hello World", 5);      // "He..."
+        string repeated = "ab".Repeat(3);                               // "ababab"
+
+        // Whitespace removal
+        string noWs = " a b c ".RemoveWhitespace();                     // "abc"
+
+        // Character checks
+        bool hasUpper = "Hello".ContainsUpperCase();                    // true
+        bool hasLower = "HELLO".ContainsLowerCase();                    // false
+        bool hasDigit = "Pass123".ContainsDigit();                      // true
+        bool alnum = "ABC123".IsAlphanumeric();                         // true
+
+        // Validation helpers
+        bool emailOk = "user@example.com".IsValidEmail();               // true
+        bool urlOk = "https://example.com".IsValidUrl();                // true
+
+        // Comparison and pluralization
+        bool equalIgnoreCase = "test".EqualsIgnoreCase("TEST");         // true
+        string plural = "city".Pluralize(2);                            // "cities"
+
+        // Reversal and substring extraction
+        string reversed = "abc".Reverse();                              // "cba"
+        string left = "abcdef".Left(3);                                 // "abc"
+        string right = "abcdef".Right(2);                               // "ef"
+
+        // Multiple replacements in one pass
+        var replacements = new Dictionary<string, string>
+        {
+            ["Hello"] = "Hi",
+            ["World"] = "Universe"
+        };
+        string replaced = "Hello World".ReplaceMultiple(replacements); // "Hi Universe"
+
+        // Output results
+        Console.WriteLine($"kebab: {kebab}");
+        Console.WriteLine($"snake: {snake}");
+        Console.WriteLine($"pascal: {pascal}");
+        Console.WriteLine($"truncated: {truncated}");
+        Console.WriteLine($"repeated: {repeated}");
+        Console.WriteLine($"noWs: {noWs}");
+        Console.WriteLine($"hasUpper: {hasUpper}, hasLower: {hasLower}, hasDigit: {hasDigit}, alnum: {alnum}");
+        Console.WriteLine($"emailOk: {emailOk}, urlOk: {urlOk}");
+        Console.WriteLine($"equalIgnoreCase: {equalIgnoreCase}, plural: {plural}");
+        Console.WriteLine($"reversed: {reversed}, left: {left}, right: {right}");
+        Console.WriteLine($"replaced: {replaced}");
     }
 }
 ```
