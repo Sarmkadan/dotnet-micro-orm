@@ -322,6 +322,92 @@ catch (InvalidOperationException ex) when (ex.Message.Contains("Rate limit excee
 rateLimitMiddleware.CleanupExpiredBuckets();
 ```
 
+## INotificationService
+
+The `INotificationService` interface provides a unified API for sending notifications through multiple channels including email, SMS, and push notifications. It supports asynchronous notification delivery, queuing for reliability, and template-based message composition. The service is designed for extensibility, allowing different notification providers to be plugged in without changing application code.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Services;
+
+public class NotificationManager
+{
+    private readonly INotificationService _notificationService;
+
+    public NotificationManager(INotificationService notificationService)
+    {
+        _notificationService = notificationService;
+    }
+
+    public async Task SendWelcomeEmailAsync(string email, string username)
+    {
+        // Send welcome email to new user
+        await _notificationService.SendEmailAsync(
+            to: email,
+            subject: "Welcome to our platform!",
+            body: $"Welcome {username}, thank you for registering!"
+        );
+    }
+
+    public async Task SendOrderConfirmationAsync(string email, int orderNumber)
+    {
+        // Send order confirmation email
+        await _notificationService.SendEmailAsync(
+            to: email,
+            subject: $"Order #{orderNumber} Confirmation",
+            body: $"Your order #{orderNumber} has been received and is being processed."
+        );
+    }
+
+    public async Task SendSmsAlertAsync(string phoneNumber, string message)
+    {
+        // Send SMS notification for urgent alerts
+        await _notificationService.SendSmsAsync(
+            phoneNumber: phoneNumber,
+            message: message
+        );
+    }
+
+    public async Task SendPushNotificationAsync(int userId, string title, string body)
+    {
+        // Send push notification to mobile app users
+        await _notificationService.SendPushNotificationAsync(
+            userId: userId,
+            title: title,
+            message: body
+        );
+    }
+
+    public async Task ProcessPendingNotificationsAsync()
+    {
+        // Process all queued notifications (typically called from a background service)
+        if (_notificationService is NotificationService notificationService)
+        {
+            await notificationService.ProcessQueueAsync();
+        }
+    }
+}
+
+// Usage with dependency injection
+var notificationService = new NotificationService();
+
+// Register templates for consistent messaging
+notificationService.RegisterTemplate("welcome_email", "Welcome {UserName}! Your account is ready.");
+notificationService.RegisterTemplate("order_confirmation", "Your order #{OrderNumber} has been confirmed.");
+
+var manager = new NotificationManager(notificationService);
+
+// Send notifications
+await manager.SendWelcomeEmailAsync("user@example.com", "johndoe");
+await manager.SendOrderConfirmationAsync("user@example.com", 12345);
+await manager.SendSmsAlertAsync("+1-555-123-4567", "Your verification code is 123456");
+await manager.SendPushNotificationAsync(42, "New Message", "You have a new message from Jane");
+
+// Process queued notifications in background
+await manager.ProcessPendingNotificationsAsync();
+```
+
 ## AnalyticsService
 
 The `AnalyticsService` tracks application metrics, events, and generates analytics reports. It provides real-time metric recording, event tracking, and historical aggregation capabilities with thread-safe operations. The service is useful for monitoring application performance, tracking business KPIs, and generating operational reports.
