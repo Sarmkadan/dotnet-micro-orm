@@ -479,6 +479,64 @@ public class CleanupTask
 }
 ```
 
+## User
+
+The `User` class represents a system user entity with authentication and profile information. It stores essential user data including credentials, contact information, account status flags, and navigation properties for related orders. The class provides validation logic, account lifecycle methods, and supports ORM mapping via attributes.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Domain.Models;
+
+// Create a new user
+var user = new User("johndoe", "john@example.com", "$2a$12$hashedpassword12345678901234")
+{
+    FirstName = "John",
+    LastName = "Doe",
+    PhoneNumber = "+1-555-123-4567",
+    IsActive = true,
+    IsEmailVerified = false,
+    CreatedDate = DateTime.UtcNow,
+    Version = 1
+};
+
+// Validate user data before saving
+if (user.Validate(out var errors))
+{
+    Console.WriteLine("User is valid");
+}
+else
+{
+    Console.WriteLine("Validation errors: " + string.Join(", ", errors));
+}
+
+// Get user's full name
+var fullName = user.GetFullName();
+Console.WriteLine($"User: {fullName}");
+
+// Mark email as verified after verification
+user.MarkAsEmailVerified();
+
+// Update last login timestamp
+user.UpdateLastLogin();
+
+// Deactivate user account
+user.Deactivate();
+
+// Add a related order
+var order = new Order(user.Id, "123 Main St, City");
+user.Orders = [order];
+
+// Display user information
+Console.WriteLine($"User ID: {user.Id}");
+Console.WriteLine($"Username: {user.Username}");
+Console.WriteLine($"Email: {user.Email}");
+Console.WriteLine($"Full Name: {user.GetFullName()}");
+Console.WriteLine($"Status: {(user.IsActive ? "Active" : "Inactive")}");
+Console.WriteLine($"Email Verified: {(user.IsEmailVerified ? "Yes" : "No")}");
+Console.WriteLine($"Last Login: {user.LastLoginDate?.ToString("yyyy-MM-dd HH:mm") ?? "Never"}");
+```
+
 ## TableAttribute
 
 The `TableAttribute` is used to specify the database table name and schema for entity classes. It allows you to map a class to a specific table in the database, including custom schema names for multi-tenant scenarios or when working with different database schemas.
