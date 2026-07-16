@@ -1213,6 +1213,82 @@ public class UserRepository
 }
 ```
 
+## QueryBuilder
+
+The `QueryBuilder` class provides a fluent interface for constructing type-safe SQL queries with LINQ-like syntax. It enables building complex queries with filtering, sorting, pagination, and eager loading while maintaining strong typing throughout the query construction process. The builder supports async operations for executing queries against the database.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+public class ProductService
+{
+    private readonly IRepository<Product> _productRepository;
+
+    public ProductService(IRepository<Product> productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
+    public async Task SearchProductsAsync(string searchTerm, int page = 0, int pageSize = 10)
+    {
+        // Build a query with multiple conditions
+        var products = await _productRepository.Query
+            .Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm))
+            .Include(p => p.Category)
+            .OrderBy(p => p.Name)
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        // Get total count for pagination
+        var totalCount = await _productRepository.Query
+            .Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm))
+            .CountAsync();
+
+        Console.WriteLine($"Found {products.Count} products (Total: {totalCount})");
+        foreach (var product in products)
+        {
+            Console.WriteLine($" - {product.Name} ({product.Price:C}) - {product.Category?.Name}");
+        }
+    }
+
+    public async Task GetExpensiveProductsAsync()
+    {
+        // Query with ordering and pagination
+        var expensiveProducts = await _productRepository.Query
+            .Where(p => p.Price > 1000)
+            .OrderByDescending(p => p.Price)
+            .Take(5)
+            .ToListAsync();
+
+        Console.WriteLine("Top 5 most expensive products:");
+        foreach (var product in expensiveProducts)
+        {
+            Console.WriteLine($" - {product.Name}: {product.Price:C}");
+        }
+    }
+
+    public async Task<Product?> FindProductByIdAsync(int productId)
+    {
+        // Simple query with eager loading
+        return await _productRepository.Query
+            .Where(p => p.Id == productId)
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<int> GetProductCountAsync()
+    {
+        // Simple count query
+        return await _productRepository.Query
+            .CountAsync();
+    }
+}
+```
+
 ## Repository
 
 The `Repository<T>` class provides a generic data access layer for performing CRUD operations on entities. It implements the repository pattern to abstract database operations, supporting both synchronous and asynchronous operations with LINQ query capabilities. The repository works with `BaseEntity` types and provides methods for common data access patterns including filtering, sorting, pagination, and bulk operations.
