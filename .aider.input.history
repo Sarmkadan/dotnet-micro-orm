@@ -8192,3 +8192,95 @@
 +- update redame
 +- .
 +- docs: explain README in readme
+
+# 2026-07-16 23:49:58.008642
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `Result` (defined in `src/Utils/Result.cs`).
++
++Add a "## Result" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public sealed record Success
++public sealed record Failure
++public static Result Ok
++public static Result Fail
++public static Result<T> Ok<T>
++public static Result<T> Fail<T>
++public sealed record Success
++public sealed record Failure
++public static Result<T> Ok
++public static Result<T> Fail
++public TOut Match<TOut>
++public Task<TOut> MatchAsync<TOut>
++public async Task<Result<TOut>> MapAsync<TOut>
++public Result<TOut> Map<TOut>
++public Result<T> Tap
++public async Task<Result<T>> TapAsync
++public record PagedResult<T>
++public PagedResult<TOut> Map<TOut>
++public override string ToString
++public record BatchOperationResult
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme tweaks
++- Readme tweaks
++- docs: add MemoryCacheProvider documentation section with usage example
++- readme: README usage
++- docs: add AppSettings documentation section with usage example
++- document README in the readme
++- Explain README in readme
++- Update readme
++- docs: readme tweaks
++- Readme tweaks
+
+# 2026-07-16 23:49:58.008699
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `Result` (defined in `src/Utils/Result.cs`).
++
++Add a "## Result" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public sealed record Success
++public sealed record Failure
++public static Result Ok
++public static Result Fail
++public static Result<T> Ok<T>
++public static Result<T> Fail<T>
++public sealed record Success
++public sealed record Failure
++public static Result<T> Ok
++public static Result<T> Fail
++public TOut Match<TOut>
++public Task<TOut> MatchAsync<TOut>
++public async Task<Result<TOut>> MapAsync<TOut>
++public Result<TOut> Map<TOut>
++public Result<T> Tap
++public async Task<Result<T>> TapAsync
++public record PagedResult<T>
++public PagedResult<TOut> Map<TOut>
++public override string ToString
++public record BatchOperationResult
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme tweaks
++- Readme tweaks
++- docs: add MemoryCacheProvider documentation section with usage example
++- readme: README usage
++- docs: add AppSettings documentation section with usage example
++- document README in the readme
++- Explain README in readme
++- Update readme
++- docs: readme tweaks
++- Readme tweaks
