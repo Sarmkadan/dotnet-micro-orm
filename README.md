@@ -1559,6 +1559,58 @@ var productsByPrice = new ProductsByPriceRangeSpecification(100, 1000);
 var lowStockProducts = new LowStockProductsSpecification(5);
 ```
 
+## PreparedStatementPoolOptions
+
+The `PreparedStatementPoolOptions` class provides configuration settings for the `PreparedStatementPool` system, which caches prepared SQL statements to eliminate redundant `DbCommand` construction overhead on high-frequency query paths. The pool uses an LRU (Least Recently Used) eviction policy based on the configured `MaxPoolSize`, automatically removing least-used entries when the pool reaches capacity.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using Microsoft.Extensions.DependencyInjection;
+
+// Configure prepared statement pooling with dependency injection
+var services = new ServiceCollection();
+
+// Configure pool options
+services.Configure<PreparedStatementPoolOptions>(options =>
+{
+    options.MaxPoolSize = 500; // Maximum number of statements to cache
+});
+
+// Register the pool service
+services.AddSingleton<IPreparedStatementPool, PreparedStatementPool>();
+
+var serviceProvider = services.BuildServiceProvider();
+
+// Resolve and use the pool
+var pool = serviceProvider.GetRequiredService<IPreparedStatementPool>();
+
+// Borrow a prepared statement from the pool
+var entry = await pool.BorrowAsync("SELECT * FROM users WHERE id = @id");
+
+if (entry != null)
+{
+    // Use the prepared statement
+    Console.WriteLine($"Reusing prepared statement: {entry.StatementKey}");
+    
+    // Return the statement to the pool when done
+    await pool.ReturnAsync(entry);
+}
+else
+{
+    // Statement not in pool, create new one
+    Console.WriteLine("Prepared statement not found in pool, creating new one");
+}
+
+// Get pool statistics
+var stats = await pool.GetPoolStatsAsync();
+Console.WriteLine($"Pool size: {stats.PoolSize}, Hit ratio: {stats.HitRatio:P1}");
+
+// Release a statement from the pool
+await pool.ReleaseAsync("SELECT * FROM users WHERE id = @id");
+```
+
 ## QueryPlanCacheOptions
 
 The `QueryPlanCacheOptions` class provides configuration settings for the `QueryPlanCache` system, which caches parsed SQL query execution plans to avoid redundant parsing and optimization overhead. The cache uses an LRU (Least Recently Used) eviction policy based on the configured capacity, and each plan has a configurable TTL (Time to Live) for automatic expiration.
