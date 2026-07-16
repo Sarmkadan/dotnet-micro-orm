@@ -325,6 +325,78 @@ class Program
 }
 ```
 
+## ReflectionHelper
+
+The `ReflectionHelper` class provides utility methods for common reflection operations including property retrieval, type checking, attribute access, and object instantiation. It simplifies reflection-based operations while maintaining type safety and performance through internal caching mechanisms.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Reflection;
+using DotnetMicroOrm.Utils;
+
+class Program
+{
+    static void Main()
+    {
+        // Get all properties from a type
+        PropertyInfo[] properties = ReflectionHelper.GetProperties(typeof(User));
+        Console.WriteLine($"User has {properties.Length} properties");
+
+        // Get specific property by name
+        PropertyInfo nameProperty = ReflectionHelper.GetProperty(typeof(User), "Name");
+        Console.WriteLine($"Property type: {nameProperty?.PropertyType.Name}");
+
+        // Get and set property values dynamically
+        var user = new User { Id = 1, Name = "John Doe", Email = "john@example.com" };
+        object nameValue = ReflectionHelper.GetPropertyValue(user, "Name");
+        Console.WriteLine($"Name value: {nameValue}");
+
+        ReflectionHelper.SetPropertyValue(user, "Name", "Jane Smith");
+        Console.WriteLine($"Updated name: {user.Name}");
+
+        // Check if type is nullable
+        bool isNullable = ReflectionHelper.IsNullableType(typeof(int?));
+        Console.WriteLine($"int? is nullable: {isNullable}");
+
+        // Check if type is simple (primitive, string, decimal, DateTime, etc.)
+        bool isSimple = ReflectionHelper.IsSimpleType(typeof(int));
+        Console.WriteLine($"int is simple: {isSimple}");
+
+        // Get attributes from type or member
+        var obsoleteAttr = ReflectionHelper.GetAttribute<ObsoleteAttribute>(nameProperty);
+        Console.WriteLine($"Has Obsolete attribute: {obsoleteAttr != null}");
+
+        // Check if type implements a generic interface
+        bool implementsIList = ReflectionHelper.ImplementsGenericInterface(typeof(List<int>), typeof(IList<>));
+        Console.WriteLine($"List<int> implements IList<>: {implementsIList}");
+
+        // Create instances dynamically
+        object userInstance = ReflectionHelper.CreateInstance(typeof(User));
+        Console.WriteLine($"Created instance: {userInstance?.GetType().Name}");
+
+        User genericUser = ReflectionHelper.CreateInstance<User>();
+        Console.WriteLine($"Generic instance created: {genericUser != null}");
+
+        // Get generic type arguments
+        Type[] genericArgs = ReflectionHelper.GetGenericArguments(typeof(List<string>));
+        Console.WriteLine($"List<string> generic args: {genericArgs.Length}");
+
+        // Get underlying type from nullable or array type
+        Type underlyingType = ReflectionHelper.GetUnderlyingType(typeof(int?));
+        Console.WriteLine($"Underlying type of int?: {underlyingType.Name}");
+    }
+}
+
+public class User
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+```
+
 ## Extensions
 
 The `Extensions` static class provides a collection of extension methods for common operations including entity reflection, data conversion, pagination, filtering, sorting, and utility functions. These methods simplify working with entities, queryables, and collections while maintaining type safety and clean syntax.
