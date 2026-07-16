@@ -256,3 +256,101 @@ class Program
 ```
 
 The snippet demonstrates creating successful, error, exception‑derived, validation‑error, and paginated responses using only the public members defined in `ApiResponse.cs`.
+
+
+## Extensions
+
+The `Extensions` static class provides a collection of extension methods for common operations including entity reflection, data conversion, pagination, filtering, sorting, and utility functions. These methods simplify working with entities, queryables, and collections while maintaining type safety and clean syntax.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using DotnetMicroOrm.Utils;
+using DotnetMicroOrm.Domain.Models;
+
+class Program
+{
+    static void Main()
+    {
+        // Get table name and schema from entity type
+        var userType = typeof(User);
+        string tableName = userType.GetTableName();
+        string schemaName = userType.GetTableSchema();
+        Console.WriteLine($"Table: {schemaName}.{tableName}");
+
+        // Get column name from property
+        var nameProperty = typeof(User).GetProperty("Name");
+        string columnName = nameProperty.GetColumnName();
+        Console.WriteLine($"Column name for 'Name': {columnName}");
+
+        // Get mapped properties and primary key
+        var mappedProperties = typeof(User).GetMappedProperties();
+        var primaryKey = typeof(User).GetPrimaryKeyProperty();
+        Console.WriteLine($"Mapped properties: {mappedProperties.Count}");
+        Console.WriteLine($"Primary key: {primaryKey?.Name}");
+
+        // Clone entity with new ID
+        var originalUser = new User { Id = 1, Name = "John", Email = "john@example.com" };
+        var clonedUser = originalUser.CloneWithNewId();
+        Console.WriteLine($"Original ID: {originalUser.Id}, Cloned ID: {clonedUser.Id}");
+
+        // Convert entity to dictionary
+        var userDict = originalUser.ToDictionary();
+        Console.WriteLine($"Dictionary keys: {string.Join(", ", userDict.Keys)}");
+
+        // Check if property has changed
+        bool hasChanged = originalUser.HasPropertyChanged("Name", "Jane");
+        Console.WriteLine($"Name property changed: {hasChanged}");
+
+        // Get member name from expression
+        string memberName = Extensions.GetMemberName<User, string>(u => u.Name);
+        Console.WriteLine($"Member name: {memberName}");
+
+        // Paginate a list
+        var users = new List<User>
+        {
+            new User { Id = 1, Name = "User 1" },
+            new User { Id = 2, Name = "User 2" },
+            new User { Id = 3, Name = "User 3" },
+            new User { Id = 4, Name = "User 4" },
+        };
+        
+        var (paginatedItems, totalCount) = users.Paginate(pageNumber: 1, pageSize: 2);
+        Console.WriteLine($"Page items: {paginatedItems.Count}, Total: {totalCount}");
+
+        // Safely apply filter to IQueryable
+        var query = users.AsQueryable().SafeWhere(u => u.Id > 2);
+        Console.WriteLine($"Filtered count: {query.Count()}");
+
+        // Apply sorting to IQueryable
+        var sortedQuery = users.AsQueryable().ApplySort(u => u.Name, ascending: true);
+        Console.WriteLine($"First sorted: {sortedQuery.First().Name}");
+
+        // Convert entity to JSON string
+        string json = originalUser.ToJsonString();
+        Console.WriteLine($"JSON: {json}");
+
+        // Check if string is null or empty
+        bool isEmpty = "".IsNullOrEmpty();
+        Console.WriteLine($"Is empty: {isEmpty}");
+
+        // Calculate age from birth date
+        int age = new DateTime(1990, 5, 15).GetAgeInYears();
+        Console.WriteLine($"Age: {age}");
+
+        // Format currency
+        string formatted = 1234.56m.FormatCurrency("$");
+        Console.WriteLine($"Formatted: {formatted}");
+    }
+}
+
+// Example entity for demonstration
+public class User : BaseEntity
+{
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+```
