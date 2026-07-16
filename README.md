@@ -1485,6 +1485,104 @@ public class ProductService
 }
 ```
 
+## DatabaseContext
+
+The `DatabaseContext` class manages database connections and provides low-level SQL execution capabilities. It handles connection lifecycle, transaction management, and raw SQL command execution with support for both scalar queries and streaming result sets. The context supports multiple database providers (SQL Server and SQLite) and provides methods for executing queries, managing transactions, and testing database connectivity.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Constants;
+
+public class DatabaseOperations
+{
+    private readonly DatabaseContext _dbContext;
+
+    public DatabaseOperations(DatabaseContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task ExecuteDatabaseOperationsAsync()
+    {
+        // Get database provider and connection string
+        var provider = _dbContext.GetDatabaseProvider();
+        var connectionString = _dbContext.GetConnectionString();
+        Console.WriteLine($"Using {provider} database provider");
+
+        // Test database connection
+        var connectionSuccessful = await _dbContext.TestConnectionAsync();
+        Console.WriteLine($"Database connection test: {(connectionSuccessful ? "Success" : "Failed")}");
+
+        // Execute a scalar query (e.g., count)
+        var countResult = await _dbContext.ExecuteScalarAsync(
+            "SELECT COUNT(*) FROM products WHERE is_active = @isActive",
+            new Dictionary<string, object> { ["@isActive"] = true }
+        );
+        Console.WriteLine($"Active products count: {countResult}");
+
+        // Execute a query returning multiple rows
+        var products = await _dbContext.ExecuteQueryAsync(
+            "SELECT id, name, price, stock_quantity FROM products WHERE price > @minPrice ORDER BY price DESC",
+            new Dictionary<string, object> { ["@minPrice"] = 500 }
+        );
+
+        foreach (var product in products)
+        {
+            Console.WriteLine($"Product: {product["name"]} - {product["price"]:C} (Stock: {product["stock_quantity"]})");
+        }
+
+        // Execute a non-query command (INSERT/UPDATE/DELETE)
+        var rowsAffected = await _dbContext.ExecuteNonQueryAsync(
+            "UPDATE products SET price = @newPrice WHERE id = @productId",
+            new Dictionary<string, object> { ["@newPrice"] = 1399.99m, ["@productId"] = 1 }
+        );
+        Console.WriteLine($"Rows updated: {rowsAffected}");
+
+        // Begin a transaction
+        var transactionStarted = await _dbContext.BeginTransactionAsync(TransactionIsolationLevel.ReadCommitted);
+        Console.WriteLine($"Transaction started: {transactionStarted}");
+
+        try
+        {
+            // Execute multiple commands in transaction
+            await _dbContext.ExecuteNonQueryAsync(
+                "UPDATE products SET stock_quantity = stock_quantity - @quantity WHERE id = @productId",
+                new Dictionary<string, object> { ["@quantity"] = 2, ["@productId"] = 1 }
+            );
+
+            await _dbContext.ExecuteNonQueryAsync(
+                "INSERT INTO order_items (product_id, quantity, unit_price) VALUES (@productId, @quantity, @unitPrice)",
+                new Dictionary<string, object> { ["@productId"] = 1, ["@quantity"] = 2, ["@unitPrice"] = 1399.99m }
+            );
+
+            // Commit transaction
+            var committed = await _dbContext.CommitAsync();
+            Console.WriteLine($"Transaction committed: {committed}");
+        }
+        catch (Exception ex)
+        {
+            // Rollback on error
+            await _dbContext.RollbackAsync();
+            Console.WriteLine($"Transaction rolled back due to error: {ex.Message}");
+        }
+
+        // Stream large result sets without loading all data into memory
+        await foreach (var row in _dbContext.ExecuteStreamAsync(
+            "SELECT id, name, price FROM products WHERE is_active = @isActive ORDER BY price DESC",
+            new Dictionary<string, object> { ["@isActive"] = true }
+        ))
+        {
+            Console.WriteLine($"Streamed product: {row["name"]} - {row["price"]:C}");
+        }
+
+        // Close connection when done
+        await _dbContext.CloseAsync();
+    }
+}
+```
+
 ## Specification
 
 The `Specification` class provides a flexible way to build reusable, composable query specifications for filtering, sorting, and paginating data. It supports complex queries with criteria expressions, eager loading of related entities, and configurable pagination. The pattern is commonly used with repositories to implement the Specification pattern for clean separation of query logic from business logic.
