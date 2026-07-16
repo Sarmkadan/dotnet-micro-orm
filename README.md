@@ -376,4 +376,74 @@ public class CleanupTask
     }
 }
 ```
+
+## PipelineBuilder
+
+The `PipelineBuilder` class constructs a middleware pipeline for processing requests through a sequence of middleware components. It enables composing multiple middleware in a specific order, with support for both sequential execution and custom ordering via the `Order` property on middleware. The pipeline executes middleware in FIFO order, allowing for flexible request/response processing patterns.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Pipeline;
+using DotnetMicroOrm.Middleware;
+
+// Define custom middleware
+public class LoggingMiddleware : IMiddleware
+{
+    public int Order => 1; // Lower order executes first
+    
+    public async Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
+    {
+        Console.WriteLine($"Before middleware execution at {DateTime.UtcNow}");
+        await next(context);
+        Console.WriteLine("After middleware execution");
+    }
+}
+
+public class AuthMiddleware : IMiddleware
+{
+    public int Order => 2;
+    
+    public async Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
+    {
+        Console.WriteLine("Authenticating request...");
+        await next(context);
+    }
+}
+
+// Build and execute a pipeline
+var builder = new PipelineBuilder();
+
+// Add middleware to the pipeline
+builder.Use(new LoggingMiddleware());
+builder.Use(new AuthMiddleware());
+
+// Alternatively, add multiple middleware at once
+var additionalMiddlewares = new IMiddleware[]
+{
+    new ErrorHandlingMiddleware(),
+    new MetricsMiddleware()
+};
+builder.UseAll(additionalMiddlewares);
+
+// Build the pipeline delegate
+var pipeline = builder.Build();
+
+// Create a context and execute the pipeline
+var context = new MiddlewareContext
+{
+    Items = new Dictionary<string, object>(),
+    Request = new HttpRequestMessage(),
+    Response = null
+};
+
+await builder.ExecuteAsync(context);
+
+// Inspect the ordered middleware
+var orderedMiddlewares = builder.GetOrdered();
+Console.WriteLine($"Pipeline contains {builder.Count} middleware components");
+
+// Clear the pipeline when needed
+builder.Clear();
+```
 ```
