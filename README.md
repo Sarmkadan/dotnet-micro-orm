@@ -2279,6 +2279,102 @@ public class ProductService
 }
 ```
 
+## ValidationBuilder
+
+The `ValidationBuilder` class provides a fluent interface for building validation rules for entities and properties. It supports common validation scenarios like null checks, string length validation, range validation, and format validation (email, URL, phone number). The builder collects validation errors and provides methods to check validity and throw exceptions when validation fails.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Utils;
+using DotnetMicroOrm.Domain.Models;
+
+public class UserRegistrationService
+{
+    public void ValidateUserRegistration(string username, string email, string phoneNumber, int age)
+    {
+        var validator = new ValidationBuilder()
+            .NotNull(username, nameof(username))
+            .NotEmpty(username, nameof(username))
+            .MinLength(username, 3, nameof(username))
+            .MaxLength(username, 50, nameof(username))
+            .Email(email, nameof(email))
+            .PhoneNumber(phoneNumber, nameof(phoneNumber))
+            .Range(age, 18, 120, nameof(age))
+            .When(age < 21, "Users must be at least 21 years old");
+
+        if (!validator.IsValid)
+        {
+            var errors = validator.GetErrors();
+            foreach (var error in errors)
+            {
+                Console.WriteLine($"Validation error: {error}");
+            }
+            return;
+        }
+
+        Console.WriteLine("User registration data is valid!");
+    }
+
+    public void ValidateProductCreation(string productName, decimal price, string description)
+    {
+        var validator = new ValidationBuilder()
+            .NotNull(productName, nameof(productName))
+            .NotEmpty(productName, nameof(productName))
+            .MinLength(productName, 2, nameof(productName))
+            .MaxLength(productName, 100, nameof(productName))
+            .NotNull(price, nameof(price))
+            .Range(price, 0.01m, 100000m, nameof(price))
+            .NotNull(description, nameof(description))
+            .MinLength(description, 10, nameof(description))
+            .MaxLength(description, 1000, nameof(description));
+
+        validator.ThrowIfInvalid();
+        Console.WriteLine("Product data is valid!");
+    }
+
+    public void ValidateWithRegex(string password, string url)
+    {
+        var validator = new ValidationBuilder()
+            .Regex(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$",
+                nameof(password), "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character")
+            .Url(url, nameof(url));
+
+        if (validator.IsValid)
+        {
+            Console.WriteLine("Password and URL formats are valid!");
+        }
+    }
+
+    public void ValidateWithCustomRules(User user, User existingUser)
+    {
+        var validator = new ValidationBuilder()
+            .NotNull(user.Username, nameof(user.Username))
+            .NotModified(user.Username, existingUser.Username, nameof(user.Username))
+            .Custom(user.Email, ValidationRules.IsValidEmail, nameof(user.Email), "Email format is invalid");
+
+        validator.ThrowIfInvalid();
+        Console.WriteLine("User update validation passed!");
+    }
+}
+
+// Static validation helper methods
+public class ValidationHelper
+{
+    public static bool IsValidEmailAddress(string email) => ValidationRules.IsValidEmail(email);
+    
+    public static bool IsValidPhoneNumber(string phoneNumber) => ValidationRules.IsValidPhoneNumber(phoneNumber);
+    
+    public static bool IsValidUrl(string url) => ValidationRules.IsValidUrl(url);
+    
+    public static bool IsStrongPassword(string password) => ValidationRules.IsStrongPassword(password);
+    
+    public static bool IsValidCreditCardNumber(string cardNumber) => ValidationRules.IsValidCreditCard(cardNumber);
+    
+    public static bool IsValidIpAddress(string ipAddress) => ValidationRules.IsValidIPAddress(ipAddress);
+}
+```
+
 ## UnitOfWork
 
 The `UnitOfWork` class implements the Unit of Work pattern for managing transactions and coordinating changes across multiple repositories. It provides transaction management (begin, commit, rollback), change tracking, and centralized repository access, ensuring that all operations within a transaction succeed or fail together. The class implements `IAsyncDisposable` for proper resource cleanup and supports concurrent repository access through a thread-safe repository cache.
