@@ -8552,3 +8552,81 @@
 +- Readme tweaks
 +- docs: add MemoryCacheProvider documentation section with usage example
 +- readme: README usage
+
+# 2026-07-17 00:46:24.899177
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `DateTimeHelper` (defined in `src/Utils/DateTimeHelper.cs`).
++
++Add a "## DateTimeHelper" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static DateTime FromUnixTimestamp
++public static long ToUnixTimestamp
++public static int GetBusinessDaysBetween
++public static DateTime GetStartOfDay
++public static DateTime GetEndOfDay
++public static DateTime GetStartOfWeek
++public static DateTime GetStartOfMonth
++public static DateTime GetEndOfMonth
++public static string ToIso8601
++public static DateTime ParseIso8601
++public static string ToRelativeTime
++public static DateTime AddBusinessDays
++public static bool IsBusinessHours
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme: .aider.chat.history usage
++- docs: add Extensions documentation section with usage examples
++- readme tweaks
++- explain .aider.chat.history in readme.
++- docs: add ApiResponse documentation section
++- Fix
++- docs: document .aider.chat.history in the readme
++- (no commit message provided)
++- readme tweaks
++- Readme tweaks
+
+# 2026-07-17 00:46:24.985462
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `DateTimeHelper` (defined in `src/Utils/DateTimeHelper.cs`).
++
++Add a "## DateTimeHelper" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static DateTime FromUnixTimestamp
++public static long ToUnixTimestamp
++public static int GetBusinessDaysBetween
++public static DateTime GetStartOfDay
++public static DateTime GetEndOfDay
++public static DateTime GetStartOfWeek
++public static DateTime GetStartOfMonth
++public static DateTime GetEndOfMonth
++public static string ToIso8601
++public static DateTime ParseIso8601
++public static string ToRelativeTime
++public static DateTime AddBusinessDays
++public static bool IsBusinessHours
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme: .aider.chat.history usage
++- docs: add Extensions documentation section with usage examples
++- readme tweaks
++- explain .aider.chat.history in readme.
++- docs: add ApiResponse documentation section
++- Fix
++- docs: document .aider.chat.history in the readme
++- (no commit message provided)
++- readme tweaks
++- Readme tweaks
