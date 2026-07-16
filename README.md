@@ -258,6 +258,73 @@ class Program
 The snippet demonstrates creating successful, error, exception‑derived, validation‑error, and paginated responses using only the public members defined in `ApiResponse.cs`.
 
 
+## DateTimeHelper
+
+The `DateTimeHelper` class provides utility methods for common DateTime operations including Unix timestamp conversions, business day calculations, and datetime formatting with proper timezone handling.
+
+### Example Usage
+
+```csharp
+using System;
+using DotnetMicroOrm.Utils;
+
+class Program
+{
+    static void Main()
+    {
+        // Convert Unix timestamp to DateTime
+        DateTime fromTimestamp = DateTimeHelper.FromUnixTimestamp(1715616000);
+        Console.WriteLine($"From Unix: {fromTimestamp:O}");
+        
+        // Convert DateTime to Unix timestamp
+        long unixTimestamp = DateTime.UtcNow.ToUnixTimestamp();
+        Console.WriteLine($"Unix timestamp: {unixTimestamp}");
+        
+        // Calculate business days between dates
+        int businessDays = DateTimeHelper.GetBusinessDaysBetween(
+            new DateTime(2024, 1, 1),
+            new DateTime(2024, 1, 31)
+        );
+        Console.WriteLine($"Business days in January 2024: {businessDays}");
+        
+        // Get start/end of day
+        DateTime now = DateTime.UtcNow;
+        DateTime startOfDay = now.GetStartOfDay();
+        DateTime endOfDay = now.GetEndOfDay();
+        Console.WriteLine($"Start of day: {startOfDay:O}");
+        Console.WriteLine($"End of day: {endOfDay:O}");
+        
+        // Get start/end of week/month
+        DateTime startOfWeek = now.GetStartOfWeek();
+        DateTime startOfMonth = now.GetStartOfMonth();
+        DateTime endOfMonth = now.GetEndOfMonth();
+        Console.WriteLine($"Start of week: {startOfWeek:yyyy-MM-dd}");
+        Console.WriteLine($"Start of month: {startOfMonth:yyyy-MM-dd}");
+        Console.WriteLine($"End of month: {endOfMonth:yyyy-MM-dd}");
+        
+        // Format to ISO 8601
+        string iso8601 = now.ToIso8601();
+        Console.WriteLine($"ISO 8601: {iso8601}");
+        
+        // Parse ISO 8601
+        DateTime parsed = DateTimeHelper.ParseIso8601(iso8601);
+        Console.WriteLine($"Parsed back: {parsed:O}");
+        
+        // Human-readable relative time
+        string relative = now.AddHours(-2).ToRelativeTime();
+        Console.WriteLine($"Relative time: {relative}");
+        
+        // Add business days
+        DateTime nextBusinessDay = now.AddBusinessDays(5);
+        Console.WriteLine($"5 business days from now: {nextBusinessDay:yyyy-MM-dd}");
+        
+        // Check if business hours
+        bool isBusinessHours = now.IsBusinessHours();
+        Console.WriteLine($"Is business hours: {isBusinessHours}");
+    }
+}
+```
+
 ## Extensions
 
 The `Extensions` static class provides a collection of extension methods for common operations including entity reflection, data conversion, pagination, filtering, sorting, and utility functions. These methods simplify working with entities, queryables, and collections while maintaining type safety and clean syntax.
