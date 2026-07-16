@@ -1031,6 +1031,87 @@ Console.WriteLine($"Pipeline contains {builder.Count} middleware components");
 builder.Clear();
 }
 
+## IMiddleware
+
+The `IMiddleware` interface defines the contract for middleware components in the request processing pipeline. Middleware implementations handle cross-cutting concerns such as logging, authentication, authorization, error handling, and request/response transformation. Middleware components are executed in order of their `Order` property, allowing for flexible composition of processing steps.
+
+Middleware implementations receive a `MiddlewareContext` containing request/response data, authenticated user information, timing metadata, and custom state. The `InvokeAsync` method receives a continuation delegate (`next`) that invokes the next middleware in the pipeline, enabling both pre-processing and post-processing behavior.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Middleware;
+using System.Net.Http;
+
+// Create a custom middleware that validates requests
+public class RequestValidationMiddleware : IMiddleware
+{
+    public int Order => 50; // Execute after auth but before business logic
+
+    public async Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
+    {
+        // Validate request data before processing
+        if (context.RequestData == null)
+        {
+            context.ResponseData = new {
+                Success = false,
+                Error = "Request data is required"
+            };
+            context.IsHandled = true; // Short-circuit the pipeline
+            return;
+        }
+
+        // Log request start
+        Console.WriteLine($"[{context.RequestId}] Starting {context.Operation}");
+        
+        // Call next middleware in the pipeline
+        await next(context);
+        
+        // Log completion and add response metadata
+        if (context.ResponseData != null)
+        {
+            Console.WriteLine($"[{context.RequestId}] Completed in {context.ElapsedTime.TotalMilliseconds}ms");
+        }
+    }
+}
+
+// Create a middleware pipeline with authentication and validation
+var authMiddleware = new AuthenticationMiddleware();
+authMiddleware.RegisterApiKey("secure-key-123", 42, "admin");
+
+var validationMiddleware = new RequestValidationMiddleware();
+
+var pipelineBuilder = new PipelineBuilder();
+pipelineBuilder.Use(authMiddleware);
+pipelineBuilder.Use(validationMiddleware);
+
+// Create a request context
+var requestContext = new MiddlewareContext
+{
+    RequestId = Guid.NewGuid().ToString(),
+    Operation = "GetUserProfile",
+    RequestData = new { UserId = 42 },
+    Metadata = new Dictionary<string, object> {
+        { "request_source", "api-gateway" }
+    }
+};
+
+// Execute the pipeline
+await pipelineBuilder.ExecuteAsync(requestContext);
+
+// Access results
+if (requestContext.ResponseData is not null)
+{
+    Console.WriteLine($"Response: {requestContext.ResponseData}");
+}
+
+// Access authenticated user information
+if (requestContext.User != null)
+{
+    Console.WriteLine($"Authenticated as: {requestContext.User.Username} ({requestContext.User.Role})");
+}
+```
+
 The `AuthenticationMiddleware` provides API authentication and authorization functionality. It validates API keys, authenticates users, and populates `AuthenticationInfo` in the middleware context for downstream handlers. The middleware supports both API key authentication (via `Bearer` or `ApiKey` tokens) and role-based authorization checks.
 
 
