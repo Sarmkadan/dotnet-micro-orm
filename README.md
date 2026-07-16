@@ -1213,6 +1213,80 @@ public class UserRepository
 }
 ```
 
+## Specification
+
+The `Specification` class provides a flexible way to build reusable, composable query specifications for filtering, sorting, and paginating data. It supports complex queries with criteria expressions, eager loading of related entities, and configurable pagination. The pattern is commonly used with repositories to implement the Specification pattern for clean separation of query logic from business logic.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+// Create a specification to find active users
+var activeUsersSpec = new Specification<User>()
+    .Where(u => u.IsActive)
+    .Include(u => u.Orders)
+    .OrderBy(u => u.Username)
+    .Take(10);
+
+// Create a specification for products in a price range with eager loading
+var expensiveProductsSpec = new Specification<Product>()
+    .Where(p => p.Price >= 500 && p.Price <= 2000)
+    .Include(p => p.Category)
+    .OrderByDescending(p => p.Price)
+    .Skip(20)
+    .Take(10);
+
+// Create a specification to find users by email domain
+var gmailUsersSpec = new Specification<User>()
+    .Where(u => u.Email.EndsWith("@gmail.com"))
+    .IncludeString("Orders")
+    .OrderBy(u => u.LastLoginDate)
+    .Page(2, 50);
+
+// Usage with repository
+public class UserRepository
+{
+    private readonly DatabaseContext _dbContext;
+
+    public UserRepository(DatabaseContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task<List<User>> GetActiveUsersAsync()
+    {
+        var spec = new Specification<User>()
+            .Where(u => u.IsActive)
+            .OrderBy(u => u.Username);
+
+        return await _dbContext.Query<User>()
+            .Where(spec.Criteria)
+            .ToListAsync();
+    }
+
+    public async Task<List<Product>> GetProductsByPriceRangeAsync(decimal minPrice, decimal maxPrice)
+    {
+        var spec = new Specification<Product>()
+            .Where(p => p.Price >= minPrice && p.Price <= maxPrice)
+            .Include(p => p.Category)
+            .OrderByDescending(p => p.Price);
+
+        return await _dbContext.Query<Product>()
+            .Where(spec.Criteria)
+            .Include(spec.Includes)
+            .ToListAsync();
+    }
+}
+
+// Predefined specifications for common queries
+var activeUsers = new ActiveUsersSpecification();
+var userById = new UserByIdSpecification(42);
+var productsByPrice = new ProductsByPriceRangeSpecification(100, 1000);
+var lowStockProducts = new LowStockProductsSpecification(5);
+```
+
 ## DataCleanupJob
 
 The `DataCleanupJob` is a background job that maintains database health by removing old audit logs, expired sessions, and soft-deleted records. It operates on a configurable schedule, allowing for fine-tuned control over retention periods, batch sizes for cleanup, and optional database index rebuilding.
