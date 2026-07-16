@@ -413,6 +413,51 @@ public class CleanupTask
 }
 ```
 
+## TableAttribute
+
+The `TableAttribute` is used to specify the database table name and schema for entity classes. It allows you to map a class to a specific table in the database, including custom schema names for multi-tenant scenarios or when working with different database schemas.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Domain.Models;
+using DotnetMicroOrm.Domain.Models.MappingAttributes;
+
+[Table("users", Schema = "auth")]
+public class User
+{
+    [Column("id")]
+    public int Id { get; set; }
+
+    [Column("username", IsNullable: false)]
+    public string Username { get; set; }
+
+    [Column("email", MaxLength = 255)]
+    public string Email { get; set; }
+
+    [Column("created_at")]
+    public DateTime CreatedAt { get; set; }
+}
+
+// Usage in repository
+public class UserRepository
+{
+    private readonly DatabaseContext _dbContext;
+
+    public UserRepository(DatabaseContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task<User?> GetByIdAsync(int id)
+    {
+        return await _dbContext.Query<User>()
+            .Where(u => u.Id == id)
+            .FirstOrDefaultAsync();
+    }
+}
+```
+
 ## OrderItem
 
 The `OrderItem` class represents a line item within an order, containing product details, pricing information, quantities, and calculated totals. It provides methods for calculating line totals, applying discounts, and computing tax amounts, making it suitable for e-commerce and order management scenarios.
