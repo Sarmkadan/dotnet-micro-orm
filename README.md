@@ -1,4 +1,40 @@
-// ... (rest of the README content remains the same)
+
+## Inventory
+
+The `Inventory` class tracks stock levels for products across different warehouse locations. It provides robust methods for managing inventory movements, including restocking, withdrawing stock, reserving items for orders, and performing periodic stock counts.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Domain.Models;
+
+public class InventoryManager
+{
+    public void ManageStock(Inventory inventory)
+    {
+        // Check for low stock
+        if (inventory.IsLowStock())
+        {
+            Console.WriteLine($"Low stock alert for product {inventory.ProductId} at {inventory.WarehouseLocation}.");
+            inventory.Restock(50);
+        }
+
+        // Perform inventory operations
+        inventory.Reserve(10);
+        inventory.Withdraw(5);
+        inventory.ReleaseReservation(2);
+        
+        // Validate and perform stock count
+        List<string> errors;
+        if (inventory.Validate(out errors))
+        {
+            inventory.PerformStockCount(inventory.CurrentStock);
+            inventory.ModifiedDate = DateTime.UtcNow;
+        }
+    }
+}
+```
+
 
 ## MigrationRecord
 
