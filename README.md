@@ -322,6 +322,82 @@ catch (InvalidOperationException ex) when (ex.Message.Contains("Rate limit excee
 rateLimitMiddleware.CleanupExpiredBuckets();
 ```
 
+## AnalyticsService
+
+The `AnalyticsService` tracks application metrics, events, and generates analytics reports. It provides real-time metric recording, event tracking, and historical aggregation capabilities with thread-safe operations. The service is useful for monitoring application performance, tracking business KPIs, and generating operational reports.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Services;
+using DotnetMicroOrm.Domain.Models;
+
+public class AnalyticsDemo
+{
+    private readonly AnalyticsService _analytics = new();
+
+    public void TrackApplicationMetrics()
+    {
+        // Record counter metrics
+        _analytics.IncrementCounter("api_requests");
+        _analytics.IncrementCounter("api_requests", 5); // Increment by 5
+        
+        // Record gauge metrics
+        _analytics.RecordMetric("memory_usage_mb", 1250.5);
+        _analytics.RecordMetric("memory_usage_mb", 1320.8, new Dictionary<string, string> { ["process"] = "web" });
+        
+        // Record custom events
+        _analytics.RecordEvent("user_login", "User successfully authenticated");
+        _analytics.RecordEvent("user_login", "User login failed - invalid password", 
+            new Dictionary<string, object> { ["user_id"] = 42, ["ip_address"] = "192.168.1.100" });
+        
+        _analytics.RecordEvent("order_placed", "New order created", 
+            new Dictionary<string, object> { ["order_id"] = 1001, ["amount"] = 99.99 });
+    }
+
+    public void GenerateAnalyticsReport()
+    {
+        // Get summary for a specific metric
+        var requestSummary = _analytics.GetMetricSummary("api_requests");
+        if (requestSummary != null)
+        {
+            Console.WriteLine($"API Requests - Total: {requestSummary.Count}, " +
+                           $"Average: {requestSummary.Average:F2}, " +
+                           $"Last: {requestSummary.LastValue}");
+        }
+        
+        // Get all recorded metrics
+        var allMetrics = _analytics.GetAllMetrics();
+        Console.WriteLine($"Total metrics tracked: {allMetrics.Count}");
+        
+        // Get recent events
+        var recentEvents = _analytics.GetRecentEvents(10);
+        Console.WriteLine($"Last 10 events:");
+        foreach (var e in recentEvents)
+        {
+            Console.WriteLine($"  [{e.Timestamp:T}] {e.Type}: {e.Description}");
+        }
+        
+        // Generate a complete analytics report
+        var report = _analytics.GenerateReport();
+        Console.WriteLine($"\n{report.GetSummary()}");
+        Console.WriteLine($"Metrics: {report.Metrics.Count}, Event Types: {report.EventTypes.Count}");
+        
+        // Get events by type
+        var loginEvents = _analytics.GetEvents("user_login", 5);
+        Console.WriteLine($"\nLast 5 login events:");
+        foreach (var e in loginEvents)
+        {
+            Console.WriteLine($"  [{e.Timestamp:T}] {e.Description}");
+        }
+        
+        // Clear data when needed
+        // _analytics.ClearMetrics();
+        // _analytics.ClearEvents();
+    }
+}
+```
+
 ## QueryProfile
 
 The `QueryProfile` class represents a single captured profiling record for a database query execution. It contains metadata about the query including the SQL statement, execution parameters, timing information, success status, and caller context. This type is typically consumed through the `QueryProfiler` class which aggregates multiple profiles into a `QueryProfilerSummary`.
