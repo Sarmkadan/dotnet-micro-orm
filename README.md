@@ -1376,6 +1376,73 @@ public class ProductService
 }
 ```
 
+## ProductRepository
+
+The `ProductRepository` class provides specialized data access methods for managing product entities in the system. It extends the base `Repository<Product>` class with product-specific query methods for common operations like SKU-based lookups, category filtering, stock management, price range queries, and profitability analytics. The repository handles all database operations through the `IDatabaseContext` and provides efficient, type-safe methods for working with product data.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data.Repositories;
+using DotnetMicroOrm.Domain.Models;
+
+public class ProductCatalogService
+{
+    private readonly ProductRepository _productRepository;
+
+    public ProductCatalogService(IDatabaseContext databaseContext)
+    {
+        _productRepository = new ProductRepository(databaseContext);
+    }
+
+    public async Task ManageProductCatalogAsync()
+    {
+        // Get a product by SKU
+        var productBySku = await _productRepository.GetBySkuAsync("LAP-001");
+        if (productBySku is not null)
+        {
+            Console.WriteLine($"Found product by SKU: {productBySku.Name} - {productBySku.Price:C}");
+        }
+
+        // Get all products in a specific category
+        var electronicsProducts = await _productRepository.GetByCategoryAsync(5);
+        Console.WriteLine($"Electronics products: {electronicsProducts.Count}");
+
+        // Get only active products
+        var activeProducts = await _productRepository.GetActiveProductsAsync();
+        Console.WriteLine($"Active products: {activeProducts.Count}");
+
+        // Get products with low stock (threshold: 5 units)
+        var lowStockProducts = await _productRepository.GetLowStockProductsAsync(5);
+        Console.WriteLine($"Low stock products (threshold 5): {lowStockProducts.Count}");
+
+        // Get products that are out of stock
+        var outOfStockProducts = await _productRepository.GetOutOfStockProductsAsync();
+        Console.WriteLine($"Out of stock products: {outOfStockProducts.Count}");
+
+        // Get products within a specific price range
+        var affordableProducts = await _productRepository.GetByPriceRangeAsync(100, 500);
+        Console.WriteLine($"Products in price range $100-$500: {affordableProducts.Count}");
+
+        // Get the most expensive products
+        var expensiveProducts = await _productRepository.GetExpensiveProductsAsync();
+        Console.WriteLine($"Most expensive products: {expensiveProducts.Count}");
+
+        // Search products by name
+        var gamingProducts = await _productRepository.SearchByNameAsync("gaming");
+        Console.WriteLine($"Products matching 'gaming': {gamingProducts.Count}");
+
+        // Get the most profitable products (by profit margin)
+        var profitableProducts = await _productRepository.GetMostProfitableAsync();
+        Console.WriteLine($"Most profitable products: {profitableProducts.Count}");
+
+        // Calculate total inventory value
+        var inventoryValue = await _productRepository.GetInventoryValueAsync();
+        Console.WriteLine($"Total inventory value: {inventoryValue:C}");
+    }
+}
+```
+
 ## Repository
 
 The `Repository<T>` class provides a generic data access layer for performing CRUD operations on entities. It implements the repository pattern to abstract database operations, supporting both synchronous and asynchronous operations with LINQ query capabilities. The repository works with `BaseEntity` types and provides methods for common data access patterns including filtering, sorting, pagination, and bulk operations.
@@ -1385,104 +1452,6 @@ The `Repository<T>` class provides a generic data access layer for performing CR
 ```csharp
 using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Domain.Models;
-
-public class ProductService
-{
-    private readonly IRepository<Product> _productRepository;
-    private readonly DatabaseContext _dbContext;
-
-    public ProductService(IRepository<Product> productRepository, DatabaseContext dbContext)
-    {
-        _productRepository = productRepository;
-        _dbContext = dbContext;
-    }
-
-    public async Task ManageProductsAsync()
-    {
-        // Create a new product
-        var newProduct = new Product("LAP-001", "Gaming Laptop", 1299.99m, 5)
-        {
-            Description = "High-performance gaming laptop with RTX graphics",
-            CostPrice = 950.00m,
-            StockQuantity = 25,
-            IsActive = true
-        };
-
-        // Add a product using repository
-        var addedProduct = await _productRepository.AddAsync(newProduct);
-        Console.WriteLine($"Added product: {addedProduct.Name} (ID: {addedProduct.Id})");
-
-        // Get a product by ID
-        var retrievedProduct = await _productRepository.GetByIdAsync(addedProduct.Id);
-        if (retrievedProduct is not null)
-        {
-            Console.WriteLine($"Retrieved product: {retrievedProduct.Name} - {retrievedProduct.Price:C}");
-        }
-
-        // Update a product
-        retrievedProduct!.Price = 1399.99m;
-        var updatedProduct = await _productRepository.UpdateAsync(retrievedProduct);
-        Console.WriteLine($"Updated product price to: {updatedProduct.Price:C}");
-
-        // Check if a product exists
-        var exists = await _productRepository.ExistsAsync(p => p.Sku == "LAP-001");
-        Console.WriteLine($"Product exists: {exists}");
-
-        // Get all products (with optional filtering)
-        var allProducts = await _productRepository.GetAllAsync();
-        Console.WriteLine($"Total products: {allProducts.Count}");
-
-        // Get first matching product
-        var firstExpensiveProduct = await _productRepository.FirstOrDefaultAsync(
-            p => p.Price > 1000,
-            p => p.OrderByDescending(x => x.Price)
-        );
-        Console.WriteLine($"First expensive product: {firstExpensiveProduct?.Name}");
-
-        // Count products matching criteria
-        var expensiveCount = await _productRepository.CountAsync(p => p.Price > 1000);
-        Console.WriteLine($"Products over $1000: {expensiveCount}");
-
-        // Get paged results
-        var pagedResults = await _productRepository.GetPagedAsync(
-            pageIndex: 0,
-            pageSize: 10,
-            orderBy: p => p.OrderBy(x => x.Name)
-        );
-        Console.WriteLine($"Page 1: {pagedResults.Count} products");
-
-        // Get paged results with total count
-        var (items, totalCount) = await _productRepository.GetPagedWithCountAsync(
-            pageIndex: 0,
-            pageSize: 10,
-            orderBy: p => p.OrderBy(x => x.Name)
-        );
-        Console.WriteLine($"Total items: {totalCount}, Returned: {items.Count}");
-
-        // Use IQueryable for complex queries
-        var query = _productRepository.Query
-            .Where(p => p.IsActive)
-            .OrderBy(p => p.CategoryId)
-            .ThenBy(p => p.Name);
-
-        var activeProducts = await query.ToListAsync();
-        Console.WriteLine($"Active products: {activeProducts.Count}");
-
-        // Bulk operations
-        var productsToAdd = new List<Product>
-        {
-            new Product("MOB-001", "Gaming Mouse", 79.99m, 10),
-            new Product("KBD-001", "Mechanical Keyboard", 129.99m, 8)
-        };
-
-        var addedProducts = await _productRepository.AddRangeAsync(productsToAdd);
-        Console.WriteLine($"Added {addedProducts.Count} products in bulk");
-
-        // Delete a product
-        var deleteSuccess = await _productRepository.DeleteAsync(addedProduct.Id);
-        Console.WriteLine($"Delete successful: {deleteSuccess}");
-    }
-}
 ```
 
 ## DatabaseContext
