@@ -1,4 +1,8 @@
 
+## Architecture
+
+See [docs/architecture.md](docs/architecture.md) for the full picture: project layout, core components (DatabaseContext, Repository, UnitOfWork, batch upsert, query plan cache), data flow, design decisions with their trade-offs, extension points, and known limitations.
+
 ## Inventory
 
 The `Inventory` class tracks stock levels for products across different warehouse locations. It provides robust methods for managing inventory movements, including restocking, withdrawing stock, reserving items for orders, and performing periodic stock counts.
