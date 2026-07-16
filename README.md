@@ -1287,6 +1287,142 @@ var productsByPrice = new ProductsByPriceRangeSpecification(100, 1000);
 var lowStockProducts = new LowStockProductsSpecification(5);
 ```
 
+## QueryPlanCacheOptions
+
+The `QueryPlanCacheOptions` class provides configuration settings for the `QueryPlanCache` system, which caches parsed SQL query execution plans to avoid redundant parsing and optimization overhead. The cache uses an LRU (Least Recently Used) eviction policy based on the configured capacity, and each plan has a configurable TTL (Time to Live) for automatic expiration.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+// Configure query plan caching with dependency injection
+var services = new ServiceCollection();
+
+// Configure cache options
+services.Configure<QueryPlanCacheOptions>(options =>
+{
+    options.Capacity = 1000;           // Maximum number of plans to cache (LRU eviction)
+    options.DefaultTtl = TimeSpan.FromHours(1); // Default expiration for cached plans
+});
+
+// Register the cache service
+services.AddSingleton<IQueryPlanCache, QueryPlanCache>();
+services.AddLogging(configure => configure.AddConsole());
+
+var serviceProvider = services.BuildServiceProvider();
+
+// Resolve and use the cache
+var cache = serviceProvider.GetRequiredService<IQueryPlanCache>();
+
+// Store a query plan with default TTL (1 hour)
+await cache.StorePlanAsync(new QueryPlan
+{
+    Fingerprint = QueryPlanCache.ComputeFingerprint("SELECT * FROM users WHERE id = @id"),
+    Sql = "SELECT * FROM users WHERE id = @id",
+    Parameters = new Dictionary<string, object> { ["@id"] = 42 },
+    HitCount = 0
+});
+
+// Retrieve a cached plan
+var fingerprint = QueryPlanCache.ComputeFingerprint("SELECT * FROM users WHERE id = @id");
+var cachedPlan = await cache.GetPlanAsync(fingerprint);
+
+// Get or analyze a query (cache hit or miss)
+var plan = await cache.GetOrAnalyzeAsync(
+    "SELECT * FROM products WHERE category_id = @categoryId",
+    async (sql, ct) => 
+    {
+        // Analyzer function that generates the query plan
+        return new QueryPlan
+        {
+            Fingerprint = QueryPlanCache.ComputeFingerprint(sql),
+            Sql = sql,
+            HitCount = 0
+        };
+    }
+);
+
+// Check cache statistics
+var stats = await cache.GetStatisticsAsync();
+Console.WriteLine($"Cache entries: {stats.Entries}, Hits: {stats.Hits}, Misses: {stats.Misses}");
+
+// Clear the cache when needed
+await cache.ClearAsync();
+```
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+// Create a specification to find active users
+var activeUsersSpec = new Specification<User>()
+    .Where(u => u.IsActive)
+    .Include(u => u.Orders)
+    .OrderBy(u => u.Username)
+    .Take(10);
+
+// Create a specification for products in a price range with eager loading
+var expensiveProductsSpec = new Specification<Product>()
+    .Where(p => p.Price >= 500 && p.Price <= 2000)
+    .Include(p => p.Category)
+    .OrderByDescending(p => p.Price)
+    .Skip(20)
+    .Take(10);
+
+// Create a specification to find users by email domain
+var gmailUsersSpec = new Specification<User>()
+    .Where(u => u.Email.EndsWith("@gmail.com"))
+    .IncludeString("Orders")
+    .OrderBy(u => u.LastLoginDate)
+    .Page(2, 50);
+
+// Usage with repository
+public class UserRepository
+{
+    private readonly DatabaseContext _dbContext;
+
+    public UserRepository(DatabaseContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public async Task<List<User>> GetActiveUsersAsync()
+    {
+        var spec = new Specification<User>()
+            .Where(u => u.IsActive)
+            .OrderBy(u => u.Username);
+
+        return await _dbContext.Query<User>()
+            .Where(spec.Criteria)
+            .ToListAsync();
+    }
+
+    public async Task<List<Product>> GetProductsByPriceRangeAsync(decimal minPrice, decimal maxPrice)
+    {
+        var spec = new Specification<Product>()
+            .Where(p => p.Price >= minPrice && p.Price <= maxPrice)
+            .Include(p => p.Category)
+            .OrderByDescending(p => p.Price);
+
+        return await _dbContext.Query<Product>()
+            .Where(spec.Criteria)
+            .Include(spec.Includes)
+            .ToListAsync();
+    }
+}
+
+// Predefined specifications for common queries
+var activeUsers = new ActiveUsersSpecification();
+var userById = new UserByIdSpecification(42);
+var productsByPrice = new ProductsByPriceRangeSpecification(100, 1000);
+var lowStockProducts = new LowStockProductsSpecification(5);
+```
+
 ## DataCleanupJob
 
 The `DataCleanupJob` is a background job that maintains database health by removing old audit logs, expired sessions, and soft-deleted records. It operates on a configurable schedule, allowing for fine-tuned control over retention periods, batch sizes for cleanup, and optional database index rebuilding.
