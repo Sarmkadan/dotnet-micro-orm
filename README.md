@@ -146,6 +146,89 @@ public class InventoryManager
 
 
 
+## ICacheProvider
+
+The `ICacheProvider` interface defines a contract for cache implementations with support for asynchronous operations, expiration policies, and pattern-based cache invalidation. It serves as an abstraction layer that allows the application to swap between different caching strategies (in-memory, distributed, etc.) without changing business logic. The interface supports common caching patterns like cache-aside, write-through, and provides methods for checking cache existence, counting entries, and bulk operations.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Caching;
+using System;
+
+// Create a cache provider instance (MemoryCacheProvider implements ICacheProvider)
+var cacheProvider = new MemoryCacheProvider();
+
+// Set a value with expiration
+await cacheProvider.SetAsync("user:42", new User { Id = 42, Username = "johndoe", Email = "john@example.com" }, 
+    TimeSpan.FromMinutes(30));
+
+// Get a value from cache
+var user = await cacheProvider.GetAsync<User>("user:42");
+if (user is not null)
+{
+    Console.WriteLine($"Cached user: {user.Username}");
+}
+
+// Get or set with factory pattern (cache-aside pattern)
+var product = await cacheProvider.GetOrSetAsync(
+    key: "product:101",
+    factory: async () => await FetchProductFromDatabaseAsync(101),
+    expiration: TimeSpan.FromHours(1)
+);
+Console.WriteLine($"Product from cache or database: {product.Name}");
+
+// Check if key exists
+var exists = await cacheProvider.ExistsAsync("user:42");
+Console.WriteLine($"Key exists: {exists}");
+
+// Remove a specific key
+await cacheProvider.RemoveAsync("user:42");
+
+// Remove keys by pattern (e.g., all user-related cache entries)
+await cacheProvider.RemoveByPatternAsync("user:*");
+
+// Get cache statistics
+var count = await cacheProvider.GetCountAsync();
+Console.WriteLine($"Cache entries: {count}");
+
+// Clear entire cache
+await cacheProvider.ClearAsync();
+
+// Dispose when done
+await cacheProvider.DisposeAsync();
+
+async Task<Product> FetchProductFromDatabaseAsync(int productId)
+{
+    // Simulate database fetch
+    await Task.Delay(100);
+    return new Product { Id = productId, Name = "Sample Product", Price = 99.99m };
+}
+```
+
+### Using CacheKey Helper
+
+```csharp
+using DotnetMicroOrm.Caching;
+
+// Create consistent cache keys using the CacheKey helper
+string userCacheKey = CacheKey.ForUser(42, "profile");
+string productCacheKey = CacheKey.ForProduct(101, "details");
+string orderCacheKey = CacheKey.ForOrder(5001, "status");
+string queryCacheKey = CacheKey.ForQuery("top_products", 10, "active");
+string configCacheKey = CacheKey.ForConfig("app_settings");
+
+// Set values using generated keys
+await cacheProvider.SetAsync(userCacheKey, userProfile, TimeSpan.FromMinutes(15));
+await cacheProvider.SetAsync(productCacheKey, productDetails, TimeSpan.FromHours(1));
+
+// Remove all user-related cache entries
+await cacheProvider.RemoveByPatternAsync(CacheKey.CreatePattern("user", 42, "*"));
+
+// Create patterns for bulk operations
+await cacheProvider.RemoveByPatternAsync(CacheKey.CreatePattern("product", "*", "details"));
+```
+
 ## MemoryCacheProvider
 
 The `MemoryCacheProvider` class provides an in-memory caching implementation using `ConcurrentDictionary` for thread-safe operations. It supports automatic expiration, pattern-based removal for cache invalidation, and integrates seamlessly with the application's dependency injection system. The cache is suitable for single-server applications where distributed caching is not required.
