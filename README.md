@@ -103,3 +103,91 @@ var batchResult = new BatchOperationResult(
 Console.WriteLine(batchResult.SuccessRate); // Output: 90
 Console.WriteLine(batchResult.HasFailures); // Output: True
 ```
+
+## ApiResponse
+
+`ApiResponse<T>` and `ApiPagedResponse<T>` are lightweight wrappers that give every API endpoint a consistent shape. They expose status information (`Success`), payload (`Data` or `Items`), human‑readable messages, optional error codes, timestamps, request identifiers and versioning. Helper factories (`CreateSuccess`, `CreateError`, `CreateFromException`, `CreateValidationError`, and the paged equivalents) make constructing responses concise and error‑free.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Collections.Generic;
+using DotnetMicroOrm.Utils;
+
+class Program
+{
+    static void Main()
+    {
+        // Simple success response with data
+        var success = ApiResponse<string>.CreateSuccess(
+            data: "Hello, world!",
+            message: "Request completed successfully");
+
+        Console.WriteLine($"Success: {success.Success}");
+        Console.WriteLine($"Data: {success.Data}");
+        Console.WriteLine($"Message: {success.Message}");
+        Console.WriteLine($"Timestamp: {success.Timestamp:u}");
+        Console.WriteLine($"Version: {success.Version}");
+
+        // Error response
+        var error = ApiResponse<string>.CreateError(
+            message: "Unable to process request",
+            errorCode: "ERR_INVALID_INPUT");
+
+        Console.WriteLine($"\nSuccess: {error.Success}");
+        Console.WriteLine($"ErrorCode: {error.ErrorCode}");
+        Console.WriteLine($"Message: {error.Message}");
+
+        // Exception‑based response
+        try
+        {
+            ThrowSomething();
+        }
+        catch (Exception ex)
+        {
+            var exResponse = ApiResponse<string>.CreateFromException(
+                ex,
+                requestId: "req-12345");
+
+            Console.WriteLine($"\nSuccess: {exResponse.Success}");
+            Console.WriteLine($"ErrorCode: {exResponse.ErrorCode}");
+            Console.WriteLine($"Message: {exResponse.Message}");
+            Console.WriteLine($"RequestId: {exResponse.RequestId}");
+        }
+
+        // Validation error response
+        var validationErrors = new Dictionary<string, string>
+        {
+            { "Email", "Invalid email format" },
+            { "Password", "Password must be at least 8 characters" }
+        };
+
+        var validation = ApiResponse<string>.CreateValidationError(validationErrors);
+        Console.WriteLine($"\nSuccess: {validation.Success}");
+        Console.WriteLine($"Message: {validation.Message}");
+        Console.WriteLine($"ErrorCode: {validation.ErrorCode}");
+
+        // Paginated response
+        var items = new[] { "Item1", "Item2", "Item3" };
+        var paged = ApiPagedResponse<string>.CreateSuccess(
+            items: items,
+            pageNumber: 1,
+            pageSize: 10,
+            totalCount: 3,
+            message: "Page retrieved successfully");
+
+        Console.WriteLine($"\nPaged Success: {paged.Success}");
+        Console.WriteLine($"Item count: {paged.Items.Count}");
+        Console.WriteLine($"Total pages: {paged.Pagination.TotalPages}");
+        Console.WriteLine($"Has next page: {paged.Pagination.HasNextPage}");
+    }
+
+    static void ThrowSomething()
+    {
+        throw new InvalidOperationException("Something went wrong");
+    }
+}
+```
+
+The snippet demonstrates creating successful, error, exception‑derived, validation‑error, and paginated responses using only the public members defined in `ApiResponse.cs`.
