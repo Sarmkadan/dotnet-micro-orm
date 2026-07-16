@@ -8284,3 +8284,95 @@
 +- Update readme
 +- docs: readme tweaks
 +- Readme tweaks
+
+# 2026-07-17 00:03:33.026533
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ApiResponse` (defined in `src/Utils/ApiResponse.cs`).
++
++Add a "## ApiResponse" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public bool Success
++public T? Data
++public string Message
++public string? ErrorCode
++public DateTime Timestamp
++public string? RequestId
++public string Version
++public static ApiResponse<T> CreateSuccess
++public static ApiResponse<T> CreateError
++public static ApiResponse<T> CreateFromException
++public static ApiResponse<T> CreateValidationError
++public bool Success
++public List<T> Items
++public PaginationMetadata Pagination
++public string Message
++public string? ErrorCode
++public DateTime Timestamp
++public string? RequestId
++public static ApiPagedResponse<T> CreateSuccess
++public static ApiPagedResponse<T> CreateError
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Fix
++- docs: document .aider.chat.history in the readme
++- (no commit message provided)
++- readme tweaks
++- Readme tweaks
++- docs: add MemoryCacheProvider documentation section with usage example
++- readme: README usage
++- docs: add AppSettings documentation section with usage example
++- document README in the readme
++- Explain README in readme
+
+# 2026-07-17 00:03:33.027098
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ApiResponse` (defined in `src/Utils/ApiResponse.cs`).
++
++Add a "## ApiResponse" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public bool Success
++public T? Data
++public string Message
++public string? ErrorCode
++public DateTime Timestamp
++public string? RequestId
++public string Version
++public static ApiResponse<T> CreateSuccess
++public static ApiResponse<T> CreateError
++public static ApiResponse<T> CreateFromException
++public static ApiResponse<T> CreateValidationError
++public bool Success
++public List<T> Items
++public PaginationMetadata Pagination
++public string Message
++public string? ErrorCode
++public DateTime Timestamp
++public string? RequestId
++public static ApiPagedResponse<T> CreateSuccess
++public static ApiPagedResponse<T> CreateError
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Fix
++- docs: document .aider.chat.history in the readme
++- (no commit message provided)
++- readme tweaks
++- Readme tweaks
++- docs: add MemoryCacheProvider documentation section with usage example
++- readme: README usage
++- docs: add AppSettings documentation section with usage example
++- document README in the readme
++- Explain README in readme
