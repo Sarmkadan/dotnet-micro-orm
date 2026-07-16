@@ -1,5 +1,36 @@
 // ... (rest of the file remains the same)
 
+## CryptoHelper
+
+The `CryptoHelper` class provides cryptographic operations including password hashing, encryption, and secure token generation using modern algorithms like PBKDF2-SHA256 and AES-256-CBC. It's designed for secure password storage and sensitive data protection.
+
+### Example Usage
+
+```csharp
+// Password hashing and verification
+string password = "SecurePassword123!";
+string hashedPassword = CryptoHelper.HashPassword(password);
+
+bool isValid = CryptoHelper.VerifyPassword(password, hashedPassword);
+Console.WriteLine(isValid); // Output: True
+
+// Secure token generation for API keys
+string apiToken = CryptoHelper.GenerateSecureToken();
+Console.WriteLine(apiToken.Length); // Output: 44 (base64 encoded)
+
+// SHA256 hashing for data integrity
+string fileContent = "important data";
+string checksum = CryptoHelper.ComputeSha256(fileContent);
+Console.WriteLine(checksum); // Output: 64-character hex string
+
+// AES-256 encryption for sensitive data
+string secretKey = "ThisIsA32CharacterKeyForAES256Encryption!";
+string sensitiveData = "Credit card: 4111-1111-1111-1111";
+string encrypted = CryptoHelper.EncryptAes256(sensitiveData, secretKey);
+string decrypted = CryptoHelper.DecryptAes256(encrypted, secretKey);
+Console.WriteLine(decrypted); // Output: Credit card: 4111-1111-1111-1111
+```
+
 ## Result
 
 The `Result` type provides a standardized way to represent operation outcomes, supporting both synchronous and asynchronous workflows. It allows you to handle success and failure cases explicitly, making your code more expressive and error-handling friendly. The `Result` type is often used in scenarios where you need to return a value or an error from a method.
