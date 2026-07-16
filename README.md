@@ -1747,6 +1747,93 @@ var productsByPrice = new ProductsByPriceRangeSpecification(100, 1000);
 var lowStockProducts = new LowStockProductsSpecification(5);
 ```
 
+## SpecificationCombinators
+
+The `SpecificationCombinators` class provides extension methods for combining `Specification<T>` instances using logical operators (AND, OR, NOT). These combinators enable building complex query specifications by composing simpler ones, supporting reusable and maintainable query logic. The class handles criteria combination, parameter rebinding, and includes propagation automatically.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+public class ProductService
+{
+    private readonly IRepository<Product> _productRepository;
+
+    public ProductService(IRepository<Product> productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
+    public async Task<List<Product>> GetExpensiveElectronicsAsync()
+    {
+        // Create base specifications
+        var expensiveSpec = new Specification<Product>()
+            .Where(p => p.Price > 1000);
+
+        var electronicsSpec = new Specification<Product>()
+            .Where(p => p.Category.Name == "Electronics");
+
+        // Combine specifications using AND
+        var expensiveElectronicsSpec = expensiveSpec.And(electronicsSpec);
+
+        // Use the combined specification with repository
+        return await _productRepository.Query
+            .Where(expensiveElectronicsSpec.Criteria)
+            .ToListAsync();
+    }
+
+    public async Task<List<Product>> GetAffordableOrClearanceAsync()
+    {
+        // Create base specifications
+        var affordableSpec = new Specification<Product>()
+            .Where(p => p.Price <= 200);
+
+        var clearanceSpec = new Specification<Product>()
+            .Where(p => p.IsOnSale);
+
+        // Combine specifications using OR
+        var affordableOrClearanceSpec = affordableSpec.Or(clearanceSpec);
+
+        return await _productRepository.Query
+            .Where(affordableOrClearanceSpec.Criteria)
+            .ToListAsync();
+    }
+
+    public async Task<List<Product>> GetNonElectronicsAsync()
+    {
+        // Create base specification
+        var electronicsSpec = new Specification<Product>()
+            .Where(p => p.Category.Name == "Electronics");
+
+        // Negate the specification using NOT
+        var nonElectronicsSpec = electronicsSpec.Not();
+
+        return await _productRepository.Query
+            .Where(nonElectronicsSpec.Criteria)
+            .ToListAsync();
+    }
+
+    public async Task<List<Product>> GetProductsByPriceRangeAsync(decimal minPrice, decimal maxPrice)
+    {
+        // Create base specification
+        var priceRangeSpec = new Specification<Product>()
+            .Where(p => p.Price >= minPrice && p.Price <= maxPrice);
+
+        // Combine with category specification using AND
+        var resultSpec = priceRangeSpec
+            .And(new Specification<Product>().Where(p => p.IsActive))
+            .And(new Specification<Product>().Where(p => p.StockQuantity > 0));
+
+        return await _productRepository.Query
+            .Where(resultSpec.Criteria)
+            .Include(p => p.Category)
+            .ToListAsync();
+    }
+}
+```
+
 ## PagedResult
 
 The `PagedResult<T>` class represents a paginated result set with metadata for navigation. It provides efficient data retrieval with pagination support, including total count, page information, and navigation methods. The class is commonly used for implementing list endpoints with pagination capabilities.
