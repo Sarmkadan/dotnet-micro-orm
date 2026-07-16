@@ -538,6 +538,173 @@ Console.WriteLine($"User deactivated: {deactivated}");
 await userService.DisposeAsync();
 ```
 
+## ProductService
+
+The `ProductService` provides comprehensive product catalog and inventory management functionality. It handles product creation, retrieval, updates, stock management, category-based filtering, search, and inventory analytics. The service integrates with the `ProductRepository` for data persistence and implements `IAsyncDisposable` for proper resource cleanup.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Services;
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+// Create database context and product service
+await using var dbContext = new DatabaseContext();
+var productService = new ProductService(dbContext);
+
+// Create a new product
+var newProduct = await productService.CreateProductAsync(
+    sku: "LAP-001",
+    name: "Gaming Laptop",
+    price: 1299.99m,
+    categoryId: 5,
+    description: "High-performance gaming laptop with RTX graphics"
+);
+Console.WriteLine($"Product created: {newProduct.Name} (SKU: {newProduct.Sku}, ID: {newProduct.Id})");
+
+// Get product by ID
+var product = await productService.GetProductAsync(newProduct.Id);
+if (product is not null)
+{
+    Console.WriteLine($"Found product: {product.Name} - {product.Price:C}");
+}
+
+// Get all active products
+var activeProducts = await productService.GetActiveProductsAsync();
+Console.WriteLine($"Active products: {activeProducts.Count}");
+
+// Get products by category
+var categoryProducts = await productService.GetCategoryProductsAsync(5);
+Console.WriteLine($"Products in category 5: {categoryProducts.Count}");
+
+// Update product details
+var updatedProduct = await productService.UpdateProductAsync(
+    productId: newProduct.Id,
+    name: "Gaming Laptop Pro",
+    price: 1399.99m,
+    description: "Updated: High-performance gaming laptop with RTX 4080 graphics"
+);
+Console.WriteLine($"Product updated: {updatedProduct.Name} - {updatedProduct.Price:C}");
+
+// Update stock quantity
+var stockUpdated = await productService.UpdateStockAsync(newProduct.Id, 25);
+Console.WriteLine($"Stock updated to: {stockUpdated.StockQuantity}");
+
+// Increase stock
+var stockIncreased = await productService.IncreaseStockAsync(newProduct.Id, 10);
+Console.WriteLine($"Stock increased to: {stockIncreased.StockQuantity}");
+
+// Decrease stock
+var stockDecreased = await productService.DecreaseStockAsync(newProduct.Id, 3);
+Console.WriteLine($"Stock decreased to: {stockDecreased.StockQuantity}");
+
+// Get low stock products
+var lowStockProducts = await productService.GetLowStockProductsAsync(threshold: 5);
+Console.WriteLine($"Low stock products (threshold 5): {lowStockProducts.Count}");
+
+// Get out of stock products
+var outOfStockProducts = await productService.GetOutOfStockProductsAsync();
+Console.WriteLine($"Out of stock products: {outOfStockProducts.Count}");
+
+// Search products
+var searchResults = await productService.SearchProductsAsync("laptop");
+Console.WriteLine($"Search results for 'laptop': {searchResults.Count}");
+
+// Get products by price range
+var priceRangeProducts = await productService.GetProductsByPriceAsync(500, 2000);
+Console.WriteLine($"Products in price range $500-$2000: {priceRangeProducts.Count}");
+
+// Deactivate product
+var deactivatedProduct = await productService.DeactivateProductAsync(newProduct.Id);
+Console.WriteLine($"Product deactivated: {deactivatedProduct.IsActive}");
+
+// Get inventory value
+var inventoryValue = await productService.GetInventoryValueAsync();
+Console.WriteLine($"Total inventory value: {inventoryValue:C}");
+
+// Get product count
+var productCount = await productService.GetProductCountAsync();
+Console.WriteLine($"Total active products: {productCount}");
+
+// Dispose the service when done
+await productService.DisposeAsync();
+```
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Services;
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+// Create database context and user service
+await using var dbContext = new DatabaseContext();
+var userService = new UserService(dbContext);
+
+// Register a new user
+var newUser = await userService.RegisterUserAsync(
+    username: "johndoe",
+    email: "john.doe@example.com",
+    password: "SecurePassword123!"
+);
+Console.WriteLine($"User registered: {newUser.Username} (ID: {newUser.Id})");
+
+// Authenticate user
+var authenticatedUser = await userService.AuthenticateAsync(
+    username: "johndoe",
+    password: "SecurePassword123!"
+);
+if (authenticatedUser is not null)
+{
+    Console.WriteLine("Authentication successful");
+    Console.WriteLine($"Last login: {authenticatedUser.LastLoginDate?.ToString("yyyy-MM-dd HH:mm") ?? "Never"}");
+}
+
+// Get user by ID
+var user = await userService.GetUserByIdAsync(newUser.Id);
+if (user is not null)
+{
+    Console.WriteLine($"Found user: {user.Username}, Email: {user.Email}");
+}
+
+// Update user profile
+var updatedUser = await userService.UpdateProfileAsync(
+    userId: newUser.Id,
+    firstName: "John",
+    lastName: "Doe",
+    phoneNumber: "+1-555-123-4567"
+);
+Console.WriteLine($"Profile updated: {updatedUser.FirstName} {updatedUser.LastName}");
+
+// Change password
+var passwordChanged = await userService.ChangePasswordAsync(
+    userId: newUser.Id,
+    currentPassword: "SecurePassword123!",
+    newPassword: "NewSecurePassword456!"
+);
+Console.WriteLine($"Password changed: {passwordChanged}");
+
+// Verify email
+var emailVerified = await userService.VerifyEmailAsync(newUser.Id);
+Console.WriteLine($"Email verified: {emailVerified}");
+
+// Get active users count
+var activeUsersCount = await userService.GetActiveUsersCountAsync();
+Console.WriteLine($"Active users: {activeUsersCount}");
+
+// Get inactive users
+var inactiveUsers = await userService.GetInactiveUsersAsync(daysInactive: 30);
+Console.WriteLine($"Inactive users: {inactiveUsers.Count}");
+
+// Deactivate user
+var deactivated = await userService.DeactivateUserAsync(newUser.Id);
+Console.WriteLine($"User deactivated: {deactivated}");
+
+// Dispose the service when done
+await userService.DisposeAsync();
+```
+
 ## INotificationService
 
 The `INotificationService` interface provides a unified API for sending notifications through multiple channels including email, SMS, and push notifications. It supports asynchronous notification delivery, queuing for reliability, and template-based message composition. The service is designed for extensibility, allowing different notification providers to be plugged in without changing application code.
