@@ -648,6 +648,107 @@ public class ProductCatalog
 }
 ```
 
+## Order
+
+The `Order` class represents a customer order entity that tracks order details including order number, customer information, items, pricing, status, and delivery information. It provides methods for managing order items, calculating totals, and updating order status throughout the order lifecycle from creation to delivery.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Domain.Models;
+
+public class OrderService
+{
+    public Order CreateNewOrder(int userId, string shippingAddress)
+    {
+        // Create a new order for a user
+        var order = new Order(userId, shippingAddress)
+        {
+            Status = "Pending",
+            TaxAmount = 0,
+            Notes = "Standard delivery"
+        };
+        
+        return order;
+    }
+
+    public void ProcessOrder(Order order, List<OrderItem> items)
+    {
+        // Add items to the order
+        foreach (var item in items)
+        {
+            order.AddItem(item);
+        }
+
+        // Validate order before processing
+        if (order.Validate(out var errors))
+        {
+            Console.WriteLine("Order is valid");
+            
+            // Mark order as confirmed
+            order.Status = "Confirmed";
+            order.ModifiedDate = DateTime.UtcNow;
+        }
+        else
+        {
+            Console.WriteLine("Validation errors: " + string.Join(", ", errors));
+        }
+    }
+
+    public void UpdateOrderStatus(Order order, string newStatus)
+    {
+        switch (newStatus)
+        {
+            case "Shipped":
+                order.Ship(DateTime.UtcNow);
+                Console.WriteLine($"Order {order.OrderNumber} shipped on {order.ShippingDate}");
+                break;
+                
+            case "Delivered":
+                order.MarkAsDelivered();
+                Console.WriteLine($"Order {order.OrderNumber} delivered on {order.DeliveryDate}");
+                break;
+                
+            case "Cancelled":
+                order.Cancel();
+                Console.WriteLine($"Order {order.OrderNumber} cancelled");
+                break;
+        }
+    }
+
+    public void DisplayOrderSummary(Order order)
+    {
+        Console.WriteLine($"Order #{order.OrderNumber}");
+        Console.WriteLine($"Date: {order.OrderDate:yyyy-MM-dd}");
+        Console.WriteLine($"Status: {order.Status}");
+        Console.WriteLine($"Total: {order.TotalAmount:C}");
+        Console.WriteLine($"Tax: {order.TaxAmount:C}");
+        Console.WriteLine($"Taxable Amount: {order.GetTaxableAmount():C}");
+        Console.WriteLine($"Items: {order.Items.Count}");
+        Console.WriteLine($"Shipping: {order.ShippingAddress}");
+        if (order.BillingAddress != null)
+        {
+            Console.WriteLine($"Billing: {order.BillingAddress}");
+        }
+        
+        if (order.ShippingDate.HasValue)
+        {
+            Console.WriteLine($"Shipped: {order.ShippingDate.Value:yyyy-MM-dd}");
+        }
+        
+        if (order.DeliveryDate.HasValue)
+        {
+            Console.WriteLine($"Delivered: {order.DeliveryDate.Value:yyyy-MM-dd}");
+        }
+        
+        if (!string.IsNullOrEmpty(order.Notes))
+        {
+            Console.WriteLine($"Notes: {order.Notes}");
+        }
+    }
+}
+```
+
 ## PipelineBuilder
 
 The `PipelineBuilder` class constructs a middleware pipeline for processing requests through a sequence of middleware components. It enables composing multiple middleware in a specific order, with support for both sequential execution and custom ordering via the `Order` property on middleware. The pipeline executes middleware in FIFO order, allowing for flexible request/response processing patterns.
