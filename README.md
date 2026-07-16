@@ -69,6 +69,68 @@ public class MigrationRunner
 }
 ```
 
+## AuditLog
+
+The `AuditLog` class records an audit trail for entity changes and system operations. It tracks who made changes, what was changed, when it happened, and the outcome of the operation. Useful for compliance, debugging, and monitoring entity lifecycle events.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Domain.Models;
+
+public class AuditService
+{
+    public AuditLog LogUserLogin(int userId, string username, string ipAddress, string userAgent)
+    {
+        var auditLog = AuditLog.CreateInsert(
+            entityType: "User",
+            entityId: userId,
+            newValues: $"Username: {username}",
+            userId: userId,
+            username: username
+        );
+        
+        auditLog.SetIpAndUserAgent(ipAddress, userAgent);
+        auditLog.MarkAsSuccess("User login successful");
+        
+        return auditLog;
+    }
+    
+    public AuditLog LogProductUpdate(Product product, string changedProperties, int userId, string username)
+    {
+        var auditLog = AuditLog.CreateUpdate(
+            entityType: "Product",
+            entityId: product.Id,
+            oldValues: $"Price: {product.CostPrice}, Stock: {product.StockQuantity}",
+            newValues: $"Price: {product.Price}, Stock: {product.StockQuantity}",
+            changedProps: changedProperties,
+            userId: userId,
+            username: username
+        );
+        
+        auditLog.SetIpAndUserAgent("192.168.1.100", "Mozilla/5.0");
+        auditLog.MarkAsSuccess("Product updated successfully");
+        
+        return auditLog;
+    }
+    
+    public AuditLog LogFailedOperation(string entityType, int entityId, string errorMessage, int? userId = null, string? username = null)
+    {
+        var auditLog = new AuditLog(entityType, entityId, "UPDATE")
+        {
+            UserId = userId,
+            Username = username,
+            IsSuccessful = false,
+            ErrorMessage = errorMessage,
+            Description = "Failed to update entity"
+        };
+        
+        auditLog.SetIpAndUserAgent("10.0.0.5", "API-Client/1.0");
+        return auditLog;
+    }
+}
+```
+
 ## MigrationRunner
 
 The `MigrationRunner` class manages the execution of database migrations in version order. It automatically creates and maintains a `_MigrationHistory` table to track which migrations have been applied, enabling reliable migration management across environments and deployments.
