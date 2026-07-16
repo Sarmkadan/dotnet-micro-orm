@@ -8952,3 +8952,81 @@
 +- docs: document .aider.chat.history in the readme
 +- readme: .aider.chat.history usage
 +- docs: add Extensions documentation section with usage examples
+
+# 2026-07-17 02:26:06.131063
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ExceptionTests` (defined in `tests/dotnet-micro-orm.Tests/ExceptionTests.cs`).
++
++Add a "## ExceptionTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public void OrmException_WithMessage_CreatesInstance
++public void OrmException_WithMessageAndErrorCode_CreatesInstance
++public void OrmException_WithMessageInnerExceptionAndErrorCode_CreatesInstance
++public void OrmException_WithContext_AddsContext
++public void DatabaseConnectionException_WithMessage_CreatesInstance
++public void EntityMappingException_WithMessage_CreatesInstance
++public void EntityMappingException_WithMessageAndPropertyName_CreatesInstance
++public void QueryExecutionException_WithMessage_CreatesInstance
++public void QueryExecutionException_WithMessageAndQuery_CreatesInstance
++public void EntityValidationException_WithMessage_CreatesInstance
++public void EntityValidationException_WithMessageAndErrors_CreatesInstance
++public void ConcurrencyException_WithMessage_CreatesInstance
++public void ConcurrencyException_WithMessageAndEntityKey_CreatesInstance
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: readme tweaks
++- docs: add CategoryModelTests section with usage example
++- docs: document .aider.chat.history in the readme
++- docs: add FormatterFactory documentation section with usage examples
++- Explain .aider.chat.history in readme
++- docs: add StringHelper section with usage examples
++- Readme tweaks
++- docs: readme.
++- docs: add ReflectionHelper documentation section with usage examples
++- docs: document .aider.chat.history in the readme
+
+# 2026-07-17 02:26:06.131126
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ExceptionTests` (defined in `tests/dotnet-micro-orm.Tests/ExceptionTests.cs`).
++
++Add a "## ExceptionTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public void OrmException_WithMessage_CreatesInstance
++public void OrmException_WithMessageAndErrorCode_CreatesInstance
++public void OrmException_WithMessageInnerExceptionAndErrorCode_CreatesInstance
++public void OrmException_WithContext_AddsContext
++public void DatabaseConnectionException_WithMessage_CreatesInstance
++public void EntityMappingException_WithMessage_CreatesInstance
++public void EntityMappingException_WithMessageAndPropertyName_CreatesInstance
++public void QueryExecutionException_WithMessage_CreatesInstance
++public void QueryExecutionException_WithMessageAndQuery_CreatesInstance
++public void EntityValidationException_WithMessage_CreatesInstance
++public void EntityValidationException_WithMessageAndErrors_CreatesInstance
++public void ConcurrencyException_WithMessage_CreatesInstance
++public void ConcurrencyException_WithMessageAndEntityKey_CreatesInstance
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- docs: readme tweaks
++- docs: add CategoryModelTests section with usage example
++- docs: document .aider.chat.history in the readme
++- docs: add FormatterFactory documentation section with usage examples
++- Explain .aider.chat.history in readme
++- docs: add StringHelper section with usage examples
++- Readme tweaks
++- docs: readme.
++- docs: add ReflectionHelper documentation section with usage examples
++- docs: document .aider.chat.history in the readme
