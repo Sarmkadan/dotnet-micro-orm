@@ -65,4 +65,31 @@ string breadcrumb = child.GetBreadcrumb();
 Console.WriteLine($"Breadcrumb: {breadcrumb}");
 ```
 
-The example demonstrates how the public members of `Category` are exercised by the test methods, providing a quick reference for developers who need to understand the expected behavior of the model.
+## ExceptionTests
+
+The `ExceptionTests` class contains a suite of unit tests that verify the behavior of the custom exception types shipped with the library. It ensures that each exception correctly populates its message, error code, inner exception, and any additional context data supplied via the fluent `WithContext` API.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Exceptions;
+
+// Instantiate the test class (it lives in the global namespace)
+var tests = new ExceptionTests();
+
+// Run the individual test methods directly – each method validates a specific
+// exception constructor or context‑adding behavior.
+tests.OrmException_WithMessage_CreatesInstance();
+tests.OrmException_WithMessageAndErrorCode_CreatesInstance();
+tests.OrmException_WithMessageInnerExceptionAndErrorCode_CreatesInstance();
+tests.OrmException_WithContext_AddsContext();
+tests.DatabaseConnectionException_WithMessage_CreatesInstance();
+tests.EntityMappingException_WithMessage_CreatesInstance();
+tests.EntityMappingException_WithMessageAndPropertyName_CreatesInstance();
+tests.QueryExecutionException_WithMessage_CreatesInstance();
+tests.QueryExecutionException_WithMessageAndQuery_CreatesInstance();
+tests.EntityValidationException_WithMessage_CreatesInstance();
+tests.EntityValidationException_WithMessageAndErrors_CreatesInstance();
+tests.ConcurrencyException_WithMessage_CreatesInstance();
+tests.ConcurrencyException_WithMessageAndEntityKey_CreatesInstance();
+```
