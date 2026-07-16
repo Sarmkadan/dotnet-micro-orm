@@ -1213,6 +1213,115 @@ public class UserRepository
 }
 ```
 
+## Repository
+
+The `Repository<T>` class provides a generic data access layer for performing CRUD operations on entities. It implements the repository pattern to abstract database operations, supporting both synchronous and asynchronous operations with LINQ query capabilities. The repository works with `BaseEntity` types and provides methods for common data access patterns including filtering, sorting, pagination, and bulk operations.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+public class ProductService
+{
+    private readonly IRepository<Product> _productRepository;
+    private readonly DatabaseContext _dbContext;
+
+    public ProductService(IRepository<Product> productRepository, DatabaseContext dbContext)
+    {
+        _productRepository = productRepository;
+        _dbContext = dbContext;
+    }
+
+    public async Task ManageProductsAsync()
+    {
+        // Create a new product
+        var newProduct = new Product("LAP-001", "Gaming Laptop", 1299.99m, 5)
+        {
+            Description = "High-performance gaming laptop with RTX graphics",
+            CostPrice = 950.00m,
+            StockQuantity = 25,
+            IsActive = true
+        };
+
+        // Add a product using repository
+        var addedProduct = await _productRepository.AddAsync(newProduct);
+        Console.WriteLine($"Added product: {addedProduct.Name} (ID: {addedProduct.Id})");
+
+        // Get a product by ID
+        var retrievedProduct = await _productRepository.GetByIdAsync(addedProduct.Id);
+        if (retrievedProduct is not null)
+        {
+            Console.WriteLine($"Retrieved product: {retrievedProduct.Name} - {retrievedProduct.Price:C}");
+        }
+
+        // Update a product
+        retrievedProduct!.Price = 1399.99m;
+        var updatedProduct = await _productRepository.UpdateAsync(retrievedProduct);
+        Console.WriteLine($"Updated product price to: {updatedProduct.Price:C}");
+
+        // Check if a product exists
+        var exists = await _productRepository.ExistsAsync(p => p.Sku == "LAP-001");
+        Console.WriteLine($"Product exists: {exists}");
+
+        // Get all products (with optional filtering)
+        var allProducts = await _productRepository.GetAllAsync();
+        Console.WriteLine($"Total products: {allProducts.Count}");
+
+        // Get first matching product
+        var firstExpensiveProduct = await _productRepository.FirstOrDefaultAsync(
+            p => p.Price > 1000,
+            p => p.OrderByDescending(x => x.Price)
+        );
+        Console.WriteLine($"First expensive product: {firstExpensiveProduct?.Name}");
+
+        // Count products matching criteria
+        var expensiveCount = await _productRepository.CountAsync(p => p.Price > 1000);
+        Console.WriteLine($"Products over $1000: {expensiveCount}");
+
+        // Get paged results
+        var pagedResults = await _productRepository.GetPagedAsync(
+            pageIndex: 0,
+            pageSize: 10,
+            orderBy: p => p.OrderBy(x => x.Name)
+        );
+        Console.WriteLine($"Page 1: {pagedResults.Count} products");
+
+        // Get paged results with total count
+        var (items, totalCount) = await _productRepository.GetPagedWithCountAsync(
+            pageIndex: 0,
+            pageSize: 10,
+            orderBy: p => p.OrderBy(x => x.Name)
+        );
+        Console.WriteLine($"Total items: {totalCount}, Returned: {items.Count}");
+
+        // Use IQueryable for complex queries
+        var query = _productRepository.Query
+            .Where(p => p.IsActive)
+            .OrderBy(p => p.CategoryId)
+            .ThenBy(p => p.Name);
+
+        var activeProducts = await query.ToListAsync();
+        Console.WriteLine($"Active products: {activeProducts.Count}");
+
+        // Bulk operations
+        var productsToAdd = new List<Product>
+        {
+            new Product("MOB-001", "Gaming Mouse", 79.99m, 10),
+            new Product("KBD-001", "Mechanical Keyboard", 129.99m, 8)
+        };
+
+        var addedProducts = await _productRepository.AddRangeAsync(productsToAdd);
+        Console.WriteLine($"Added {addedProducts.Count} products in bulk");
+
+        // Delete a product
+        var deleteSuccess = await _productRepository.DeleteAsync(addedProduct.Id);
+        Console.WriteLine($"Delete successful: {deleteSuccess}");
+    }
+}
+```
+
 ## Specification
 
 The `Specification` class provides a flexible way to build reusable, composable query specifications for filtering, sorting, and paginating data. It supports complex queries with criteria expressions, eager loading of related entities, and configurable pagination. The pattern is commonly used with repositories to implement the Specification pattern for clean separation of query logic from business logic.
