@@ -3,6 +3,50 @@
 
 See [docs/architecture.md](docs/architecture.md) for the full picture: project layout, core components (DatabaseContext, Repository, UnitOfWork, batch upsert, query plan cache), data flow, design decisions with their trade-offs, extension points, and known limitations.
 
+## ApplicationBuilder
+
+The `ApplicationBuilder` class provides a fluent interface for configuring and initializing the ORM application. It sets up database connections, middleware pipeline, caching, HTTP client, and other components in a composable manner. The builder pattern allows for clean, readable configuration of complex application setups.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Configuration;
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Middleware;
+using DotnetMicroOrm.Caching;
+
+// Create and configure the application
+var appBuilder = new ApplicationBuilder()
+    .WithDatabaseConnection(
+        "Server=localhost;Database=MyApp;User Id=sa;Password=YourPassword123;",
+        DatabaseProvider.SqlServer
+    )
+    .WithMemoryCache()
+    .WithHttpClient()
+    .WithDefaultMiddleware();
+
+// Add custom middleware
+appBuilder.AddMiddleware(new CustomMiddleware());
+
+// Register additional services
+appBuilder.RegisterService<IMyService>(new MyService());
+
+// Build the application configuration
+var appConfig = appBuilder.Build();
+
+// Access configured services
+var dbContext = appConfig.DatabaseContext;
+var cacheProvider = appConfig.CacheProvider;
+var httpClient = appConfig.HttpClient;
+
+// Get a registered service
+var myService = appConfig.GetService<IMyService>();
+
+// Execute the middleware pipeline
+var context = new MiddlewareContext();
+await appConfig.Pipeline(context);
+```
+
 ## Inventory
 
 The `Inventory` class tracks stock levels for products across different warehouse locations. It provides robust methods for managing inventory movements, including restocking, withdrawing stock, reserving items for orders, and performing periodic stock counts.
