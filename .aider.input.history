@@ -9522,3 +9522,85 @@
 +- Cleanup in BatchOperationsBenchmarksValidation
 +- docs: document .aider.chat.history in the readme
 +- docs: add CoreRepositoryTests section with usage example
+
+# 2026-07-17 07:16:44.009797
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `BatchOperationsTests` (defined in `tests/dotnet-micro-orm.Tests/BatchOperationsTests.cs`).
++
++Add a "## BatchOperationsTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public BatchOperationsTests
++public async Task AddRangeAsync_WithEmptyList_ReturnsEmptyList
++public async Task AddRangeAsync_WithValidProducts_AddsAllSuccessfully
++public async Task AddRangeAsync_WithInvalidProduct_ThrowsEntityValidationException
++public async Task DeleteRangeAsync_WithEmptyList_ReturnsZero
++public async Task DeleteRangeAsync_WithMultipleProducts_DeletesAllSuccessfully
++public async Task DeleteRangeAsync_WithSomeNonExistentProducts_ReturnsPartialCount
++public BatchOperationsUpsertTests
++public void Constructor_WithNullContext_ThrowsArgumentNullException
++public async Task UpsertAsync_WithSingleProductBySku_ReturnsInsertResult
++public async Task UpsertAsync_WithSingleProductById_ReturnsUpdateResult
++public async Task UpsertAsync_WithInvalidProduct_ThrowsEntityValidationException
++public async Task UpsertRangeAsync_WithMultipleProducts_ReturnsMultipleResults
++public async Task UpsertRangeAsync_WithBatchSize_SplitsIntoBatches
++public async Task UpsertRangeAsync_WithCompositeKey_ReturnsCorrectResults
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme: .aider.chat.history usage
++- docs: add EndToEndWorkflowTests section to README.md
++- polish WebhookHandlerExtensions
++- readme: .aider.chat.history usage
++- docs: add BatchUpsertOperationUnitTests section to README.md
++- docs: readme tweaks
++- docs: add BatchUpsertOperationTests section to README.md
++- refactor(events): small fix
++- Readability pass over OrmExceptionValidation
++- Cleanup in BatchOperationsBenchmarksValidation
+
+# 2026-07-17 07:16:44.009865
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `BatchOperationsTests` (defined in `tests/dotnet-micro-orm.Tests/BatchOperationsTests.cs`).
++
++Add a "## BatchOperationsTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public BatchOperationsTests
++public async Task AddRangeAsync_WithEmptyList_ReturnsEmptyList
++public async Task AddRangeAsync_WithValidProducts_AddsAllSuccessfully
++public async Task AddRangeAsync_WithInvalidProduct_ThrowsEntityValidationException
++public async Task DeleteRangeAsync_WithEmptyList_ReturnsZero
++public async Task DeleteRangeAsync_WithMultipleProducts_DeletesAllSuccessfully
++public async Task DeleteRangeAsync_WithSomeNonExistentProducts_ReturnsPartialCount
++public BatchOperationsUpsertTests
++public void Constructor_WithNullContext_ThrowsArgumentNullException
++public async Task UpsertAsync_WithSingleProductBySku_ReturnsInsertResult
++public async Task UpsertAsync_WithSingleProductById_ReturnsUpdateResult
++public async Task UpsertAsync_WithInvalidProduct_ThrowsEntityValidationException
++public async Task UpsertRangeAsync_WithMultipleProducts_ReturnsMultipleResults
++public async Task UpsertRangeAsync_WithBatchSize_SplitsIntoBatches
++public async Task UpsertRangeAsync_WithCompositeKey_ReturnsCorrectResults
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme: .aider.chat.history usage
++- docs: add EndToEndWorkflowTests section to README.md
++- polish WebhookHandlerExtensions
++- readme: .aider.chat.history usage
++- docs: add BatchUpsertOperationUnitTests section to README.md
++- docs: readme tweaks
++- docs: add BatchUpsertOperationTests section to README.md
++- refactor(events): small fix
++- Readability pass over OrmExceptionValidation
++- Cleanup in BatchOperationsBenchmarksValidation
