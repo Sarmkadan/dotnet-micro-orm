@@ -223,3 +223,77 @@ IReadOnlyList<MigrationRecord> failedMigrations = migrations.GetFailedMigrations
 Console.WriteLine($"Number of failed migrations: {failedMigrations.Count}"); // Output: Number of failed migrations: 1
 ```
 
+## PipelineBuilderExtensions
+
+`PipelineBuilderExtensions` provides a collection of extension methods for `PipelineBuilder` that simplify middleware pipeline construction and management. It offers features for adding ordered middleware, conditional execution, context transformation, cloning pipelines, removing middleware by type, and diagnostic utilities to inspect pipeline composition. These helpers enable clean, fluent pipeline configuration while maintaining type safety.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using DotnetMicroOrm.Middleware;
+using DotnetMicroOrm.Pipeline;
+
+// Create a simple middleware that adds a message to the context
+public class MessageMiddleware : IMiddleware
+{
+    private readonly string _message;
+    
+    public MessageMiddleware(string message) => _message = message;
+    
+    public Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
+    {
+        context.Items["Messages"] = context.Items.GetValueOrDefault("Messages", new List<string>()) as List<string> ?? new List<string>();
+        ((List<string>)context.Items["Messages"]).Add(_message);
+        return next(context);
+    }
+}
+
+// Create a pipeline with ordered middleware
+var builder = new PipelineBuilder();
+
+// Add middleware with explicit ordering (lower values execute first)
+builder.Use(new MessageMiddleware("First"), order: 10);
+builder.Use(new MessageMiddleware("Second"), order: 20);
+builder.Use(new MessageMiddleware("Third"), order: 30);
+
+// Add multiple middleware with explicit orders
+builder.UseAll(
+    (new MessageMiddleware("Ordered 1"), 5),
+    (new MessageMiddleware("Ordered 2"), 15),
+    (new MessageMiddleware("Ordered 3"), 25)
+);
+
+// Add conditional middleware that only executes when context has a specific flag
+builder.UseWhen(
+    ctx => ctx.Items.ContainsKey("ShouldLog"),
+    new MessageMiddleware("Conditional log middleware")
+);
+
+// Add middleware that transforms the context before passing to next
+builder.UseTransform(
+    ctx => 
+    {
+        ctx.Items["Transformed"] = true;
+        return ctx;
+    },
+    new MessageMiddleware("Middleware after transformation")
+);
+
+// Clone the pipeline for reuse
+var clonedBuilder = builder.Clone();
+
+// Remove all middleware of a specific type
+builder.RemoveAll<MessageMiddleware>();
+
+// Get diagnostic information
+Console.WriteLine(builder.GetMiddlewareCountString());
+var middlewareTypes = builder.GetMiddlewareTypeNames();
+Console.WriteLine(string.Join(", ", middlewareTypes));
+
+// Execute pipeline and get the resulting context
+var context = new MiddlewareContext();
+await builder.ExecuteAndGetContextAsync(context);
+```
+
