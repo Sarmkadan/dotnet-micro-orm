@@ -101,3 +101,57 @@ Console.WriteLine(body); // Output: 42
 ```
 
 // ... goes in between
+
+## WebhookHandlerExtensions
+
+`WebhookHandlerExtensions` offers a collection of extension methods for `WebhookHandler` that streamline common webhook processing scenarios, including retry logic, batch handling, payload creation, data extraction, event‑type checking, age calculation, and required‑field validation. These helpers encapsulate guard clauses and repetitive patterns, allowing developers to work with webhooks in a concise and type‑safe manner.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Collections.Generic;
+using DotnetMicroOrm.Integration;
+
+// Assume a concrete WebhookHandler implementation is available
+var handler = new WebhookHandler(/* dependencies */);
+
+// Create a payload for an "order.created" event
+var payload = handler.CreatePayload(
+    eventType: "order.created",
+    data: new Dictionary<string, object>
+    {
+        ["orderId"] = 123,
+        ["amount"] = 49.99m
+    });
+
+// Process the payload with automatic retry logic
+var result = await handler.ProcessWithRetryAsync(
+    payload,
+    handler.GenerateSignature(payload));
+
+Console.WriteLine(result.Success
+    ? "Webhook processed successfully"
+    : $"Processing failed: {result.Error}");
+
+// Extract strongly‑typed data from the payload
+var orderInfo = handler.GetData<OrderInfo>(payload);
+if (orderInfo != null && handler.IsEventType(payload, "order.created"))
+{
+    Console.WriteLine($"Order {orderInfo.OrderId} amount {orderInfo.Amount}");
+}
+
+// Process a batch of payloads
+var batch = new[]
+{
+    handler.CreatePayload("order.created"),
+    handler.CreatePayload("order.cancelled")
+};
+
+var batchResults = await handler.ProcessBatchAsync(batch);
+foreach (var kvp in batchResults)
+{
+    Console.WriteLine($"{kvp.Key}: {(kvp.Value.Success ? "OK" : "Failed")}");
+}
+```
+
