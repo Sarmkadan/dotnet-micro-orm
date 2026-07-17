@@ -6,7 +6,6 @@
 // =====================================================================
 
 using System.Data;
-using System.Globalization;
 
 namespace DotnetMicroOrm.Data;
 
@@ -70,6 +69,10 @@ public static class QueryPlanValidation
         {
             problems.Add("QueryPlan.CachedAt appears to be in the future.");
         }
+        else if (value.CachedAt < DateTime.UtcNow.AddYears(-1))
+        {
+            problems.Add("QueryPlan.CachedAt appears to be excessively old.");
+        }
 
         // Validate HitCount (should be non-negative)
         if (value.HitCount < 0)
@@ -85,9 +88,11 @@ public static class QueryPlanValidation
     /// </summary>
     /// <param name="value">The query plan to check.</param>
     /// <returns><see langword="true"/> if the plan is valid; otherwise, <see langword="false"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
     public static bool IsValid(this QueryPlan? value)
     {
-        return value is not null && Validate(value).Count == 0;
+        ArgumentNullException.ThrowIfNull(value);
+        return Validate(value).Count == 0;
     }
 
     /// <summary>
@@ -108,9 +113,8 @@ public static class QueryPlanValidation
             return;
         }
 
-        throw new ArgumentException(
-            $"QueryPlan validation failed:{Environment.NewLine}- {
-                string.Join(Environment.NewLine + "- ", problems)
-            }");
+        throw new ArgumentException($"QueryPlan validation failed:{Environment.NewLine}- {
+            string.Join(Environment.NewLine + "- ", problems)
+        }");
     }
 }
