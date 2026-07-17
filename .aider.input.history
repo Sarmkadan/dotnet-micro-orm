@@ -9754,3 +9754,95 @@
 +- readme: .aider.chat.history usage
 +- docs: add BatchUpsertOperationUnitTests section to README.md
 +- docs: readme tweaks
+
+# 2026-07-17 09:05:52.263655
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ProductModelTests` (defined in `tests/dotnet-micro-orm.Tests/ProductModelTests.cs`).
++
++Add a "## ProductModelTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public void Validate_WithValidProduct_ReturnsTrue
++public void Validate_WithEmptySku_ReturnsFalseWithError
++public void Validate_WithShortSku_ReturnsFalseWithError
++public void Validate_WithNullSku_ReturnsFalseWithError
++public void Validate_WithEmptyName_ReturnsFalseWithError
++public void Validate_WithShortName_ReturnsFalseWithError
++public void Validate_WithZeroPrice_ReturnsFalseWithError
++public void Validate_WithNegativePrice_ReturnsFalseWithError
++public void Validate_WithNegativeCostPrice_ReturnsFalseWithError
++public void Validate_WithNegativeStockQuantity_ReturnsFalseWithError
++public void Validate_WithZeroCategoryId_ReturnsFalseWithError
++public void Validate_WithNegativeCategoryId_ReturnsFalseWithError
++public void Validate_WithMultipleValidationErrors_ReturnsAllErrors
++public void IncreaseStock_WithPositiveQuantity_IncreasesStockCorrectly
++public void IncreaseStock_WithZeroQuantity_ThrowsArgumentException
++public void IncreaseStock_WithNegativeQuantity_ThrowsArgumentException
++public void DecreaseStock_WithValidQuantity_DecreasesStockCorrectly
++public void DecreaseStock_WithZeroQuantity_ThrowsArgumentException
++public void DecreaseStock_WithNegativeQuantity_ThrowsArgumentException
++public void DecreaseStock_WithMoreThanAvailable_ThrowsInvalidOperationException
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Readability pass over CommandHandlerExtensions
++- docs: readme: .aider.chat.history usage.
++- docs: add QueryProfilerTests section to README.md
++- docs: document .aider.chat.history in the readme.
++- docs: add DatabaseContextTests section to README.md
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
++- docs: add EndToEndWorkflowTests section to README.md
++- polish WebhookHandlerExtensions
+
+# 2026-07-17 09:05:52.263752
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `ProductModelTests` (defined in `tests/dotnet-micro-orm.Tests/ProductModelTests.cs`).
++
++Add a "## ProductModelTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public void Validate_WithValidProduct_ReturnsTrue
++public void Validate_WithEmptySku_ReturnsFalseWithError
++public void Validate_WithShortSku_ReturnsFalseWithError
++public void Validate_WithNullSku_ReturnsFalseWithError
++public void Validate_WithEmptyName_ReturnsFalseWithError
++public void Validate_WithShortName_ReturnsFalseWithError
++public void Validate_WithZeroPrice_ReturnsFalseWithError
++public void Validate_WithNegativePrice_ReturnsFalseWithError
++public void Validate_WithNegativeCostPrice_ReturnsFalseWithError
++public void Validate_WithNegativeStockQuantity_ReturnsFalseWithError
++public void Validate_WithZeroCategoryId_ReturnsFalseWithError
++public void Validate_WithNegativeCategoryId_ReturnsFalseWithError
++public void Validate_WithMultipleValidationErrors_ReturnsAllErrors
++public void IncreaseStock_WithPositiveQuantity_IncreasesStockCorrectly
++public void IncreaseStock_WithZeroQuantity_ThrowsArgumentException
++public void IncreaseStock_WithNegativeQuantity_ThrowsArgumentException
++public void DecreaseStock_WithValidQuantity_DecreasesStockCorrectly
++public void DecreaseStock_WithZeroQuantity_ThrowsArgumentException
++public void DecreaseStock_WithNegativeQuantity_ThrowsArgumentException
++public void DecreaseStock_WithMoreThanAvailable_ThrowsInvalidOperationException
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Readability pass over CommandHandlerExtensions
++- docs: readme: .aider.chat.history usage.
++- docs: add QueryProfilerTests section to README.md
++- docs: document .aider.chat.history in the readme.
++- docs: add DatabaseContextTests section to README.md
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
++- docs: add EndToEndWorkflowTests section to README.md
++- polish WebhookHandlerExtensions
