@@ -2,9 +2,9 @@
 
 // ... goes in between
 
-## EndToEndWorkflowTests
+## BatchOperationsTests
 
-The `EndToEndWorkflowTests` class provides comprehensive end-to-end tests for the DotnetMicroOrm library. It covers various scenarios, including product creation, inventory management, caching, and user management.
+The `BatchOperationsTests` class provides comprehensive unit tests for the batch operations functionality of the DotnetMicroOrm library. It covers various scenarios, including adding and deleting multiple products, handling invalid products, and testing the constructor.
 
 ### Example Usage
 
@@ -12,43 +12,25 @@ The `EndToEndWorkflowTests` class provides comprehensive end-to-end tests for th
 using DotnetMicroOrm.Tests;
 
 // Create an instance of the test class
-var tests = new EndToEndWorkflowTests();
+var tests = new BatchOperationsTests();
 
-// Test product creation and retrieval
-await tests.CreateAndRetrieveProduct_FullWorkflow();
+// Test adding an empty list of products
+await tests.AddRangeAsync_WithEmptyList_ReturnsEmptyList();
 
-// Test inventory management
-await tests.InventoryManagement_IncreaseAndDecreaseStock();
+// Test adding a list of valid products
+await tests.AddRangeAsync_WithValidProducts_AddsAllSuccessfully();
 
-// Test profit calculation
-await tests.ProfitCalculation_WithAndWithoutCost();
+// Test adding an invalid product
+await tests.AddRangeAsync_WithInvalidProduct_ThrowsEntityValidationException();
 
-// Test batch product creation
-await tests.BatchProductCreation_Simulation();
+// Test deleting an empty list of products
+await tests.DeleteRangeAsync_WithEmptyList_ReturnsZero();
 
-// Test caching strategy
-await tests.CachingStrategy_GetOrSet();
+// Test deleting a list of multiple products
+await tests.DeleteRangeAsync_WithMultipleProducts_DeletesAllSuccessfully();
 
-// Test user management
-await tests.UserManagement_CompleteLifecycle();
-
-// Test specification pattern
-await tests.SpecificationPattern_ProductFiltering();
-
-// Test concurrency scenario
-await tests.ConcurrencyScenario_MultipleOperations();
-
-// Test validation error handling
-await tests.ValidationErrorHandling_Comprehensive();
-
-// Test cache invalidation
-await tests.CacheInvalidation_PatternBased();
-
-// Test order management
-await tests.OrderManagement_Scenario();
-
-// Test data export scenario
-await tests.DataExportScenario_MultipleFormats();
+// Test deleting some non-existent products
+await tests.DeleteRangeAsync_WithSomeNonExistentProducts_ReturnsPartialCount();
 ```
 
 // ... goes in between
