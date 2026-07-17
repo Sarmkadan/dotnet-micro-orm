@@ -24,7 +24,61 @@ public static class MigrationRunnerValidation
 
         var problems = new List<string>();
 
-        return problems.AsReadOnly();
+        // Validate context
+    if (value.Context is null)
+    {
+        problems.Add("MigrationRunner context is null.");
+    }
+    else
+    {
+        // Validate context can connect
+        try
+        {
+            var connectionTest = value.Context.TestConnectionAsync().GetAwaiter().GetResult();
+            if (!connectionTest)
+            {
+                problems.Add("Database connection test failed.");
+            }
+        }
+        catch (Exception ex)
+        {
+            problems.Add($"Database connection test failed: {ex.Message}");
+        }
+    }
+
+    // Validate migrations list
+    if (value.Migrations is null)
+    {
+        problems.Add("MigrationRunner migrations collection is null.");
+    }
+    else if (value.Migrations.Count == 0)
+    {
+        problems.Add("MigrationRunner has no migrations to apply.");
+    }
+    else
+    {
+        // Validate each migration
+        foreach (var migration in value.Migrations)
+        {
+            if (migration is null)
+            {
+                problems.Add("MigrationRunner contains a null migration.");
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(migration.Version))
+            {
+                problems.Add($"Migration has empty or null version: {migration.Description ?? "unknown"}.");
+            }
+
+            if (string.IsNullOrWhiteSpace(migration.Description))
+            {
+                problems.Add($"Migration '{migration.Version ?? "unknown"}' has empty or null description.");
+            }
+        }
+    }
+
+    return problems.AsReadOnly();
     }
 
     /// <summary>
@@ -48,8 +102,8 @@ public static class MigrationRunnerValidation
         if (problems.Count > 0)
         {
             throw new ArgumentException(
-                $"MigrationRunner is not valid. Problems:\n- {
-                    string.Join("\n- ", problems)
+                $"MigrationRunner is not valid. Problems:{Environment.NewLine}- {
+                    string.Join($"{Environment.NewLine}- ", problems)
                 }",
                 nameof(value));
         }
