@@ -331,3 +331,96 @@ Console.WriteLine($"Is urgent: {isUrgent}");
 Console.WriteLine(display);
 Console.WriteLine($"Estimated delivery: {estimatedDelivery}");
 ```
+
+## SpecificationCombinatorsValidation
+
+`SpecificationCombinatorsValidation` provides validation helpers for specification compositions and individual specifications. It offers methods to validate specification compositions (And, Or, Not) and individual specifications, returning detailed error messages or throwing exceptions when validation fails. This class is useful for ensuring specifications are correctly composed before using them in queries or business logic.
+
+### Example Usage
+
+```csharp
+using System;
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Specifications;
+
+// Define a simple specification for filtering active users
+public class ActiveUserSpecification : Specification<User>
+{
+    public override IReadOnlyList<string> Validate()
+    {
+        var errors = new List<string>();
+        if (string.IsNullOrWhiteSpace(Filter?.Status))
+            errors.Add("Status filter cannot be null or empty");
+        return errors.AsReadOnly();
+    }
+
+    public override bool IsSatisfiedBy(User entity) =>
+        entity.Status == "Active";
+}
+
+// Define another specification for filtering users by role
+public class AdminUserSpecification : Specification<User>
+{
+    public override bool IsSatisfiedBy(User entity) =>
+        entity.Role == "Admin";
+}
+
+// Create specifications
+var activeUsers = new ActiveUserSpecification();
+var adminUsers = new AdminUserSpecification();
+
+// Validate individual specifications
+var activeUserErrors = SpecificationCombinatorsValidation.Validate(activeUsers);
+if (activeUserErrors.Count > 0)
+{
+    Console.WriteLine("Active user specification has errors:");
+    foreach (var error in activeUserErrors)
+        Console.WriteLine($"- {error}");
+}
+
+// Check if specifications are valid
+bool isAdminValid = SpecificationCombinatorsValidation.IsValid(adminUsers);
+Console.WriteLine($"Admin specification is valid: {isAdminValid}");
+
+// Validate specification composition (e.g., Active AND Admin users)
+var compositionErrors = SpecificationCombinatorsValidation.ValidateComposition(
+    activeUsers,
+    adminUsers
+);
+
+if (compositionErrors.Count > 0)
+{
+    Console.WriteLine("Composition is invalid:");
+    foreach (var error in compositionErrors)
+        Console.WriteLine($"- {error}");
+}
+else
+{
+    Console.WriteLine("Composition is valid - both specifications are correctly defined");
+}
+
+// Ensure composition is valid, throws exception if invalid
+try
+{
+    SpecificationCombinatorsValidation.EnsureValidComposition(
+        activeUsers,
+        adminUsers
+    );
+    Console.WriteLine("Composition validated successfully!");
+}
+catch (ArgumentException ex)
+{
+    Console.WriteLine($"Validation failed: {ex.Message}");
+}
+
+// Validate individual specification and ensure it's valid
+try
+{
+    SpecificationCombinatorsValidation.EnsureValid(activeUsers);
+    Console.WriteLine("Active user specification is valid!");
+}
+catch (ArgumentException ex)
+{
+    Console.WriteLine($"Validation failed: {ex.Message}");
+}
+```
