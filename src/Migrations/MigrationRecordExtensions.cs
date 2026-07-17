@@ -59,9 +59,9 @@ namespace DotnetMicroOrm.Migrations
         {
             ArgumentNullException.ThrowIfNull(record);
 
-            return $"Migration {record.Id}: {record.Version} - {record.Description} " +
-                   $"(Applied: {record.AppliedAt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)}) " +
-                   $"Status: {(record.Success ? "SUCCESS" : "FAILED")}";
+            return string.Create(
+                CultureInfo.InvariantCulture,
+                $"Migration {record.Id}: {record.Version} - {record.Description} (Applied: {record.AppliedAt:yyyy-MM-dd HH:mm:ss}) Status: {(record.Success ? "SUCCESS" : "FAILED")}");
         }
 
         /// <summary>
