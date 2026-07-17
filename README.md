@@ -97,4 +97,17 @@ await profiler.Clear_RemovesAllProfiles();
 await profiler.Constructor_MaxProfilesExceeded_EvictsOldEntries();
 ```
 
+## ProductModelTests
+
+The `ProductModelTests` class provides unit tests for the `ProductModel` class, ensuring its validation, stock management, and profit calculation functionality work as expected. This class contains various test methods to validate different scenarios, such as product validation, stock increase and decrease, and profit calculation.
+
+### Example Usage
+
+```csharp
+var productModelTests = new ProductModelTests();
+productModelTests.Validate_WithValidProduct_ReturnsTrue();
+productModelTests.IncreaseStock_WithPositiveQuantity_IncreasesStockCorrectly();
+productModelTests.DecreaseStock_WithValidQuantity_DecreasesStockCorrectly();
+```
+
 // ... goes in between
