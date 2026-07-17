@@ -66,5 +66,35 @@ tests.GetDatabaseProvider_ReturnsCorrectProvider();
 tests.GetDatabaseProvider_AfterConstruction_ReturnsDefault();
 ```
 
-// ... goes in between
+## QueryProfilerTests
+
+The `QueryProfilerTests` class provides unit tests for the `QueryProfiler` class, ensuring its profiling functionality works as expected.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Profiling;
+
+// Create an instance of the test class
+var profiler = new QueryProfilerTests();
+
+// Test profiling a successful operation
+await profiler.ProfileAsync_SuccessfulOperation_RecordsProfileWithCorrectDuration();
+
+// Test profiling when disabled
+await profiler.ProfileAsync_WhenDisabled_DoesNotRecordProfiles();
+
+// Test profiling a failing operation
+await profiler.ProfileAsync_FailingOperation_RecordsFailedProfileAndRethrows();
+
+// Test getting a summary of multiple queries
+await profiler.GetSummary_MultipleQueries_ReturnsCorrectAggregates();
+
+// Test clearing all profiles
+await profiler.Clear_RemovesAllProfiles();
+
+// Test constructor with max profiles exceeded
+await profiler.Constructor_MaxProfilesExceeded_EvictsOldEntries();
 ```
+
+// ... goes in between
