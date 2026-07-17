@@ -10376,3 +10376,189 @@
 +- refactor: tighten guard clauses in XmlFormatterJsonExtensions
 +- refactor(repositories): cleanup in UserRepositoryValidation
 +- polish SpecificationValidation
+
+# 2026-07-19 01:03:24.158103
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `OrderExtensions` (defined in `src/Domain/Models/OrderExtensions.cs`).
++
++Add a "## OrderExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static decimal GetTotalWeight
++public static decimal GetTotalWeight
++public static bool IsUrgent
++public static string ToDisplayString
++public static DateTime? GetEstimatedDeliveryDate
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
++- Readability pass over StringHelperTestsJsonExtensions
++- polish CategoryModelTestsJsonExtensions
++- Tidy up ProductModelTestsJsonExtensions
+
+# 2026-07-19 01:03:24.158533
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `OrderExtensions` (defined in `src/Domain/Models/OrderExtensions.cs`).
++
++Add a "## OrderExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static decimal GetTotalWeight
++public static decimal GetTotalWeight
++public static bool IsUrgent
++public static string ToDisplayString
++public static DateTime? GetEstimatedDeliveryDate
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
++- Readability pass over StringHelperTestsJsonExtensions
++- polish CategoryModelTestsJsonExtensions
++- Tidy up ProductModelTestsJsonExtensions
+
+# 2026-07-19 01:03:35.269603
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `OrderExtensions` (defined in `src/Domain/Models/OrderExtensions.cs`).
++
++Add a "## OrderExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static decimal GetTotalWeight
++public static decimal GetTotalWeight
++public static bool IsUrgent
++public static string ToDisplayString
++public static DateTime? GetEstimatedDeliveryDate
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
++- Readability pass over StringHelperTestsJsonExtensions
++- polish CategoryModelTestsJsonExtensions
++- Tidy up ProductModelTestsJsonExtensions
+
+# 2026-07-19 01:03:35.269688
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `OrderExtensions` (defined in `src/Domain/Models/OrderExtensions.cs`).
++
++Add a "## OrderExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static decimal GetTotalWeight
++public static decimal GetTotalWeight
++public static bool IsUrgent
++public static string ToDisplayString
++public static DateTime? GetEstimatedDeliveryDate
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
++- Readability pass over StringHelperTestsJsonExtensions
++- polish CategoryModelTestsJsonExtensions
++- Tidy up ProductModelTestsJsonExtensions
+
+# 2026-07-19 01:06:59.014732
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `OrderExtensions` (defined in `src/Domain/Models/OrderExtensions.cs`).
++
++Add a "## OrderExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static decimal GetTotalWeight
++public static decimal GetTotalWeight
++public static bool IsUrgent
++public static string ToDisplayString
++public static DateTime? GetEstimatedDeliveryDate
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
++- Readability pass over StringHelperTestsJsonExtensions
++- polish CategoryModelTestsJsonExtensions
++- Tidy up ProductModelTestsJsonExtensions
+
+# 2026-07-19 01:06:59.014802
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `OrderExtensions` (defined in `src/Domain/Models/OrderExtensions.cs`).
++
++Add a "## OrderExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static decimal GetTotalWeight
++public static decimal GetTotalWeight
++public static bool IsUrgent
++public static string ToDisplayString
++public static DateTime? GetEstimatedDeliveryDate
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
++- Readability pass over StringHelperTestsJsonExtensions
++- polish CategoryModelTestsJsonExtensions
++- Tidy up ProductModelTestsJsonExtensions
