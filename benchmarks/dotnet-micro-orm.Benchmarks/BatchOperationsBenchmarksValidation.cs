@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace DotnetMicroOrm.Benchmarks;
 
@@ -25,13 +27,21 @@ public static class BatchOperationsBenchmarksValidation
         // Validate GlobalSetup method existence and signature
         if (value.GlobalSetup == null)
         {
-            errors.Add("GlobalSetup property must not be null.");
+            errors.Add("GlobalSetup method must not be null.");
+        }
+        else if (!IsAsyncMethod(value.GlobalSetup))
+        {
+            errors.Add("GlobalSetup must be an async Task method.");
         }
 
         // Validate GlobalCleanup method existence and signature
         if (value.GlobalCleanup == null)
         {
-            errors.Add("GlobalCleanup property must not be null.");
+            errors.Add("GlobalCleanup method must not be null.");
+        }
+        else if (!IsAsyncMethod(value.GlobalCleanup))
+        {
+            errors.Add("GlobalCleanup must be an async Task method.");
         }
 
         // Validate AddRangeAsync_1000_Entities method existence and signature
@@ -39,11 +49,19 @@ public static class BatchOperationsBenchmarksValidation
         {
             errors.Add("AddRangeAsync_1000_Entities method must not be null.");
         }
+        else if (!IsAsyncMethod(value.AddRangeAsync_1000_Entities))
+        {
+            errors.Add("AddRangeAsync_1000_Entities must be an async Task method.");
+        }
 
         // Validate AddRangeAsync_5000_Entities method existence and signature
         if (value.AddRangeAsync_5000_Entities == null)
         {
             errors.Add("AddRangeAsync_5000_Entities method must not be null.");
+        }
+        else if (!IsAsyncMethod(value.AddRangeAsync_5000_Entities))
+        {
+            errors.Add("AddRangeAsync_5000_Entities must be an async Task method.");
         }
 
         // Validate UpdateRangeAsync_1000_Entities method existence and signature
@@ -51,11 +69,19 @@ public static class BatchOperationsBenchmarksValidation
         {
             errors.Add("UpdateRangeAsync_1000_Entities method must not be null.");
         }
+        else if (!IsAsyncMethod(value.UpdateRangeAsync_1000_Entities))
+        {
+            errors.Add("UpdateRangeAsync_1000_Entities must be an async Task method.");
+        }
 
         // Validate UpdateRangeAsync_5000_Entities method existence and signature
         if (value.UpdateRangeAsync_5000_Entities == null)
         {
             errors.Add("UpdateRangeAsync_5000_Entities method must not be null.");
+        }
+        else if (!IsAsyncMethod(value.UpdateRangeAsync_5000_Entities))
+        {
+            errors.Add("UpdateRangeAsync_5000_Entities must be an async Task method.");
         }
 
         // Validate DeleteRangeAsync_1000_Entities method existence and signature
@@ -63,11 +89,19 @@ public static class BatchOperationsBenchmarksValidation
         {
             errors.Add("DeleteRangeAsync_1000_Entities method must not be null.");
         }
+        else if (!IsAsyncMethod(value.DeleteRangeAsync_1000_Entities))
+        {
+            errors.Add("DeleteRangeAsync_1000_Entities must be an async Task method.");
+        }
 
         // Validate DeleteRangeAsync_5000_Entities method existence and signature
         if (value.DeleteRangeAsync_5000_Entities == null)
         {
             errors.Add("DeleteRangeAsync_5000_Entities method must not be null.");
+        }
+        else if (!IsAsyncMethod(value.DeleteRangeAsync_5000_Entities))
+        {
+            errors.Add("DeleteRangeAsync_5000_Entities must be an async Task method.");
         }
 
         // Validate BulkInsert_100_Entities method existence and signature
@@ -75,11 +109,19 @@ public static class BatchOperationsBenchmarksValidation
         {
             errors.Add("BulkInsert_100_Entities method must not be null.");
         }
+        else if (!IsAsyncMethod(value.BulkInsert_100_Entities))
+        {
+            errors.Add("BulkInsert_100_Entities must be an async Task method.");
+        }
 
         // Validate BulkInsert_10000_Entities method existence and signature
         if (value.BulkInsert_10000_Entities == null)
         {
             errors.Add("BulkInsert_10000_Entities method must not be null.");
+        }
+        else if (!IsAsyncMethod(value.BulkInsert_10000_Entities))
+        {
+            errors.Add("BulkInsert_10000_Entities must be an async Task method.");
         }
 
         // Validate BatchInsert_1000_Entities_With_Relations method existence and signature
@@ -87,11 +129,19 @@ public static class BatchOperationsBenchmarksValidation
         {
             errors.Add("BatchInsert_1000_Entities_With_Relations method must not be null.");
         }
+        else if (!IsAsyncMethod(value.BatchInsert_1000_Entities_With_Relations))
+        {
+            errors.Add("BatchInsert_1000_Entities_With_Relations must be an async Task method.");
+        }
 
         // Validate BatchUpdate_Complex_Predicate method existence and signature
         if (value.BatchUpdate_Complex_Predicate == null)
         {
             errors.Add("BatchUpdate_Complex_Predicate method must not be null.");
+        }
+        else if (!IsAsyncMethod(value.BatchUpdate_Complex_Predicate))
+        {
+            errors.Add("BatchUpdate_Complex_Predicate must be an async Task method.");
         }
 
         // Validate BatchDelete_With_Where_Clause method existence and signature
@@ -99,8 +149,29 @@ public static class BatchOperationsBenchmarksValidation
         {
             errors.Add("BatchDelete_With_Where_Clause method must not be null.");
         }
+        else if (!IsAsyncMethod(value.BatchDelete_With_Where_Clause))
+        {
+            errors.Add("BatchDelete_With_Where_Clause must be an async Task method.");
+        }
 
         return errors.AsReadOnly();
+    }
+
+    /// <summary>
+    /// Checks if a method is an async Task method.
+    /// </summary>
+    /// <param name="method">The method to check.</param>
+    /// <returns>True if the method is an async Task method; otherwise, false.</returns>
+    private static bool IsAsyncMethod(Delegate method)
+    {
+        if (method == null)
+        {
+            return false;
+        }
+
+        var methodInfo = method.Method;
+        return methodInfo.ReturnType == typeof(Task) ||
+               (methodInfo.ReturnType.IsGenericType && methodInfo.ReturnType.GetGenericTypeDefinition() == typeof(Task<>));
     }
 
     /// <summary>
