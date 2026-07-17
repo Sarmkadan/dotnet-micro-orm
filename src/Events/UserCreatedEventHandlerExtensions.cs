@@ -15,10 +15,11 @@ namespace DotnetMicroOrm.Events
         /// </summary>
         /// <param name="handler">The <see cref="UserCreatedEventHandler"/> instance.</param>
         /// <param name="event">The <see cref="UserCreatedEvent"/> to handle.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="handler"/> or <paramref name="event"/> is null.</exception>
         public static async Task HandleWithConsoleLoggingAsync(this UserCreatedEventHandler handler, UserCreatedEvent @event)
         {
-            if (handler == null) throw new ArgumentNullException(nameof(handler));
-            if (@event == null) throw new ArgumentNullException(nameof(@event));
+            ArgumentNullException.ThrowIfNull(handler);
+            ArgumentNullException.ThrowIfNull(@event);
 
             Console.WriteLine($"[UserCreated] Handling start for user '{@event.Username}' (Id: {@event.UserId})");
             await handler.HandleAsync(@event);
@@ -29,21 +30,21 @@ namespace DotnetMicroOrm.Events
         /// Returns a short description that includes the handler's priority.
         /// </summary>
         /// <param name="handler">The <see cref="UserCreatedEventHandler"/> instance.</param>
-        public static string GetDescription(this UserCreatedEventHandler handler)
-        {
-            if (handler == null) throw new ArgumentNullException(nameof(handler));
-            return $"UserCreatedEventHandler (Priority = {handler.Priority})";
-        }
+        /// <returns>A string describing the handler and its priority.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="handler"/> is null.</exception>
+        public static string GetDescription(this UserCreatedEventHandler handler) =>
+            $"UserCreatedEventHandler (Priority = {handler?.Priority ?? throw new ArgumentNullException(nameof(handler))})";
 
         /// <summary>
         /// Handles a collection of <see cref="UserCreatedEvent"/> instances sequentially.
         /// </summary>
         /// <param name="events">The events to handle.</param>
         /// <param name="handler">The handler that will process each event.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="handler"/> or <paramref name="events"/> is null.</exception>
         public static async Task HandleManyAsync(this IEnumerable<UserCreatedEvent> events, UserCreatedEventHandler handler)
         {
-            if (handler == null) throw new ArgumentNullException(nameof(handler));
-            if (events == null) throw new ArgumentNullException(nameof(events));
+            ArgumentNullException.ThrowIfNull(handler);
+            ArgumentNullException.ThrowIfNull(events);
 
             foreach (var ev in events)
             {
@@ -53,23 +54,25 @@ namespace DotnetMicroOrm.Events
 
         /// <summary>
         /// Executes the handler and returns a boolean indicating success.
-        /// Any exception is caught and false is returned.
+        /// Any exception is caught, logged to stderr, and false is returned.
         /// </summary>
         /// <param name="handler">The <see cref="UserCreatedEventHandler"/> instance.</param>
         /// <param name="event">The <see cref="UserCreatedEvent"/> to handle.</param>
+        /// <returns>True if the event was handled successfully; otherwise, false.</returns>
         public static async Task<bool> TryHandleAsync(this UserCreatedEventHandler handler, UserCreatedEvent @event)
         {
-            if (handler == null) throw new ArgumentNullException(nameof(handler));
-            if (@event == null) throw new ArgumentNullException(nameof(@event));
+            ArgumentNullException.ThrowIfNull(handler);
+            ArgumentNullException.ThrowIfNull(@event);
 
             try
             {
                 await handler.HandleAsync(@event);
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                // Swallow exception – caller can decide what to do.
+                // Log exception to stderr for debugging purposes before returning false
+                Console.Error.WriteLine($"Error handling user created event: {@event.Username} ({@event.UserId}): {ex}");
                 return false;
             }
         }
