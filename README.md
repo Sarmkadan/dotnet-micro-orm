@@ -63,4 +63,41 @@ if (!validationResult.IsValid)
 }
 ```
 
+## ExpressionAndCachingBenchmarksExtensions
+
+`ExpressionAndCachingBenchmarksExtensions` provides a set of helper extension methods that simplify the creation, cloning, and inspection of expression trees used in benchmark scenarios. These methods enable quick generation of simple and complex lambda expressions, deep‑clone existing expressions, and retrieve the body of a lambda expression.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Linq.Expressions;
+using DotnetMicroOrm.Benchmarks;
+
+// Assume an instance of the benchmark class exists
+var benchmarks = new ExpressionAndCachingBenchmarks();
+
+// Create a simple lambda expression that returns a constant value
+Expression<Func<int>> simpleExpr = benchmarks.CreateExpression<int>(
+    paramName: "unused",
+    body: Expression.Constant(42));
+
+Console.WriteLine(simpleExpr); // Output: () => 42
+
+// Create a more complex lambda expression that evaluates a boolean condition
+Expression<Func<int, bool>> complexExpr = benchmarks.CreateComplexExpression<int>(
+    paramName: "x",
+    body: Expression.Constant(true));
+
+Console.WriteLine(complexExpr); // Output: x => True
+
+// Clone the previously created expression
+Expression clonedExpr = benchmarks.CloneExpression(simpleExpr);
+Console.WriteLine(clonedExpr); // Output: () => 42 (cloned)
+
+// Retrieve the body of the simple expression
+Expression body = benchmarks.GetBody(simpleExpr);
+Console.WriteLine(body); // Output: 42
+```
+
 // ... goes in between
