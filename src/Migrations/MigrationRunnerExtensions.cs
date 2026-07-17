@@ -14,20 +14,20 @@ namespace DotnetMicroOrm.Migrations
         /// Retrieves the most recently applied migration, or <c>null</c> if no migrations have been applied.
         /// </summary>
         /// <param name="runner">The <see cref="MigrationRunner"/> instance.</param>
-        /// <returns>A task that resolves to the latest <see cref="MigrationRecord"/>, or <c>null</c> when none exist.</returns>
+        /// <returns>A task that resolves to the latest <see cref="MigrationRecord"/>, or <c>null</c> if none exist.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="runner"/> is <c>null</c>.</exception>
         public static async Task<MigrationRecord?> GetLatestAppliedMigrationAsync(this MigrationRunner runner)
         {
             ArgumentNullException.ThrowIfNull(runner);
             IReadOnlyList<MigrationRecord> applied = await runner.GetAppliedMigrationsAsync().ConfigureAwait(false);
-            return applied.LastOrDefault();
+            return applied.Count > 0 ? applied[^1] : null;
         }
 
         /// <summary>
         /// Counts the number of pending migrations that have not yet been applied.
         /// </summary>
         /// <param name="runner">The <see cref="MigrationRunner"/> instance.</param>
-        /// <returns>A task that resolves to the count of pending migrations.</returns>
+        /// <returns>A task that resolves to the number of pending migrations.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="runner"/> is <c>null</c>.</exception>
         public static async Task<int> GetPendingMigrationsCountAsync(this MigrationRunner runner)
         {
