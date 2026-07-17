@@ -14,9 +14,14 @@ using System.Linq.Expressions;
 namespace DotnetMicroOrm.Data;
 
 /// <summary>
-/// Provides validation helpers for Specification objects.
+/// Provides validation helpers for <see cref="Specification{T}"/> objects.
 /// Validates criteria expressions, includes, pagination parameters, and ordering configurations.
 /// </summary>
+/// <remarks>
+/// This static class offers extension methods to validate Specification instances, ensuring they are properly configured
+/// before being used in queries. Validation includes checking for null expressions, proper pagination settings,
+/// and detecting potentially problematic default DateTime values in criteria expressions.
+/// </remarks>
 public static class SpecificationValidation
 {
     /// <summary>
@@ -39,29 +44,22 @@ public static class SpecificationValidation
         }
 
         // Validate Includes
-        if (value.Includes is null)
-        {
-            problems.Add("Includes collection is null");
-        }
-        else if (value.Includes.Any(include => include is null))
+        ArgumentNullException.ThrowIfNull(value.Includes);
+
+        if (value.Includes.Any(include => include is null))
         {
             problems.Add("Includes collection contains null expressions");
         }
 
         // Validate IncludeStrings
-        if (value.IncludeStrings is null)
+        ArgumentNullException.ThrowIfNull(value.IncludeStrings);
+
+        foreach (var includeString in value.IncludeStrings)
         {
-            problems.Add("IncludeStrings collection is null");
-        }
-        else
-        {
-            foreach (var includeString in value.IncludeStrings)
+            if (string.IsNullOrWhiteSpace(includeString))
             {
-                if (string.IsNullOrWhiteSpace(includeString))
-                {
-                    problems.Add("IncludeStrings collection contains null, empty, or whitespace strings");
-                    break;
-                }
+                problems.Add("IncludeStrings collection contains null, empty, or whitespace strings");
+                break;
             }
         }
 
@@ -81,6 +79,12 @@ public static class SpecificationValidation
         if (value.OrderByDescending is null && value.OrderBy is not null)
         {
             problems.Add("OrderBy is set but OrderByDescending is null - consider setting both for clarity");
+        }
+
+        // Validate that both OrderBy and OrderByDescending aren't set simultaneously (potential conflict)
+        if (value.OrderBy is not null && value.OrderByDescending is not null)
+        {
+            problems.Add("Both OrderBy and OrderByDescending are set - this may cause conflicting ordering behavior");
         }
 
         // Validate pagination parameters
