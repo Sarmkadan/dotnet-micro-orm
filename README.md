@@ -2,9 +2,9 @@
 
 // ... goes in between
 
-## BatchOperationsTests
+## DatabaseContextTests
 
-The `BatchOperationsTests` class provides comprehensive unit tests for the batch operations functionality of the DotnetMicroOrm library. It covers various scenarios, including adding and deleting multiple products, handling invalid products, and testing the constructor.
+The `DatabaseContextTests` class provides comprehensive unit tests for the `DatabaseContext` class, ensuring its constructor, connection management, and query execution functionality work as expected.
 
 ### Example Usage
 
@@ -12,25 +12,59 @@ The `BatchOperationsTests` class provides comprehensive unit tests for the batch
 using DotnetMicroOrm.Tests;
 
 // Create an instance of the test class
-var tests = new BatchOperationsTests();
+var tests = new DatabaseContextTests();
 
-// Test adding an empty list of products
-await tests.AddRangeAsync_WithEmptyList_ReturnsEmptyList();
+// Test the constructor with a null connection string
+tests.Constructor_WithNullConnectionString_ThrowsArgumentNullException();
 
-// Test adding a list of valid products
-await tests.AddRangeAsync_WithValidProducts_AddsAllSuccessfully();
+// Test the constructor with an empty connection string
+tests.Constructor_WithEmptyConnectionString_ThrowsArgumentException();
 
-// Test adding an invalid product
-await tests.AddRangeAsync_WithInvalidProduct_ThrowsEntityValidationException();
+// Test the constructor with a valid connection string
+tests.Constructor_WithValidConnectionString_CreatesInstance();
 
-// Test deleting an empty list of products
-await tests.DeleteRangeAsync_WithEmptyList_ReturnsZero();
+// Test opening a valid connection
+await tests.OpenAsync_WithValidConnection_OpensSuccessfully();
 
-// Test deleting a list of multiple products
-await tests.DeleteRangeAsync_WithMultipleProducts_DeletesAllSuccessfully();
+// Test opening an invalid connection
+await tests.OpenAsync_WithInvalidConnection_ThrowsDatabaseConnectionException();
 
-// Test deleting some non-existent products
-await tests.DeleteRangeAsync_WithSomeNonExistentProducts_ReturnsPartialCount();
+// Test closing an open connection
+await tests.CloseAsync_WithOpenConnection_ClosesSuccessfully();
+
+// Test testing a valid connection
+await tests.TestConnectionAsync_WithValidConnection_ReturnsTrue();
+
+// Test testing an invalid connection
+await tests.TestConnectionAsync_WithInvalidConnection_ReturnsFalse();
+
+// Test executing a scalar query with a valid query
+await tests.ExecuteScalarAsync_WithValidQuery_ReturnsResult();
+
+// Test executing a scalar query with parameters
+await tests.ExecuteScalarAsync_WithParameters_ReturnsCorrectResult();
+
+// Test executing a scalar query with an invalid query
+await tests.ExecuteScalarAsync_WithInvalidQuery_ThrowsQueryExecutionException();
+
+// Test executing a non-query with a valid query
+await tests.ExecuteNonQueryAsync_WithValidQuery_ExecutesSuccessfully();
+
+// Test executing a non-query with parameters
+await tests.ExecuteNonQueryAsync_WithParameters_ExecutesSuccessfully();
+
+// Test executing a query with a valid query
+await tests.ExecuteQueryAsync_WithValidQuery_ReturnsResults();
+
+// Test executing a query with parameters
+await tests.ExecuteQueryAsync_WithParameters_ReturnsFilteredResults();
+
+// Test getting the database provider
+tests.GetDatabaseProvider_ReturnsCorrectProvider();
+
+// Test getting the database provider after construction
+tests.GetDatabaseProvider_AfterConstruction_ReturnsDefault();
 ```
 
 // ... goes in between
+```
