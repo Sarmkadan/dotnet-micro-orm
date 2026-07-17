@@ -17,12 +17,13 @@ namespace DotnetMicroOrm.Pipeline;
 public static class PipelineBuilderExtensions
 {
     /// <summary>
-    /// Adds middleware to the pipeline with a specific order
+    /// Adds middleware to the pipeline with a specific order.
     /// </summary>
-    /// <param name="builder">The pipeline builder</param>
-    /// <param name="middleware">The middleware to add</param>
-    /// <param name="order">The execution order (lower values execute first)</param>
-    /// <exception cref="ArgumentNullException">Thrown when middleware is null</exception>
+    /// <param name="builder">The pipeline builder.</param>
+    /// <param name="middleware">The middleware to add.</param>
+    /// <param name="order">The execution order (lower values execute first).</param>
+    /// <returns>The pipeline builder for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> or <paramref name="middleware"/> is <see langword="null"/>.</exception>
     public static PipelineBuilder Use(this PipelineBuilder builder, IMiddleware middleware, int order)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -32,11 +33,12 @@ public static class PipelineBuilderExtensions
     }
 
     /// <summary>
-    /// Adds multiple middleware with explicit orders
+    /// Adds multiple middleware with explicit orders.
     /// </summary>
-    /// <param name="builder">The pipeline builder</param>
-    /// <param name="middlewares">Collection of middleware and their orders</param>
-    /// <exception cref="ArgumentNullException">Thrown when builder or middlewares is null</exception>
+    /// <param name="builder">The pipeline builder.</param>
+    /// <param name="middlewares">Collection of middleware and their orders.</param>
+    /// <returns>The pipeline builder for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> or <paramref name="middlewares"/> is <see langword="null"/>.</exception>
     public static PipelineBuilder UseAll(this PipelineBuilder builder, params (IMiddleware middleware, int order)[] middlewares)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -51,12 +53,13 @@ public static class PipelineBuilderExtensions
     }
 
     /// <summary>
-    /// Adds middleware that executes conditionally based on the context
+    /// Adds middleware that executes conditionally based on the context.
     /// </summary>
-    /// <param name="builder">The pipeline builder</param>
-    /// <param name="predicate">Function that determines if middleware should execute</param>
-    /// <param name="middleware">The middleware to conditionally add</param>
-    /// <exception cref="ArgumentNullException">Thrown when builder, predicate, or middleware is null</exception>
+    /// <param name="builder">The pipeline builder.</param>
+    /// <param name="predicate">Function that determines if middleware should execute.</param>
+    /// <param name="middleware">The middleware to conditionally add.</param>
+    /// <returns>The pipeline builder for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/>, <paramref name="predicate"/>, or <paramref name="middleware"/> is <see langword="null"/>.</exception>
     public static PipelineBuilder UseWhen(this PipelineBuilder builder, Func<MiddlewareContext, bool> predicate, IMiddleware middleware)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -67,12 +70,13 @@ public static class PipelineBuilderExtensions
     }
 
     /// <summary>
-    /// Adds middleware that transforms the context before passing to next middleware
+    /// Adds middleware that transforms the context before passing to next middleware.
     /// </summary>
-    /// <param name="builder">The pipeline builder</param>
-    /// <param name="transformer">Function that transforms the context</param>
-    /// <param name="middleware">The middleware to add after transformation</param>
-    /// <exception cref="ArgumentNullException">Thrown when builder, transformer, or middleware is null</exception>
+    /// <param name="builder">The pipeline builder.</param>
+    /// <param name="transformer">Function that transforms the context.</param>
+    /// <param name="middleware">The middleware to add after transformation.</param>
+    /// <returns>The pipeline builder for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/>, <paramref name="transformer"/>, or <paramref name="middleware"/> is <see langword="null"/>.</exception>
     public static PipelineBuilder UseTransform(this PipelineBuilder builder, Func<MiddlewareContext, MiddlewareContext> transformer, IMiddleware middleware)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -83,11 +87,11 @@ public static class PipelineBuilderExtensions
     }
 
     /// <summary>
-    /// Gets the middleware count as a formatted string for logging/telemetry
+    /// Gets the middleware count as a formatted string for logging/telemetry.
     /// </summary>
-    /// <param name="builder">The pipeline builder</param>
-    /// <returns>Formatted string with middleware count</returns>
-    /// <exception cref="ArgumentNullException">Thrown when builder is null</exception>
+    /// <param name="builder">The pipeline builder.</param>
+    /// <returns>Formatted string with middleware count.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is <see langword="null"/>.</exception>
     public static string GetMiddlewareCountString(this PipelineBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -96,11 +100,11 @@ public static class PipelineBuilderExtensions
     }
 
     /// <summary>
-    /// Gets the middleware types in execution order for diagnostics
+    /// Gets the middleware types in execution order for diagnostics.
     /// </summary>
-    /// <param name="builder">The pipeline builder</param>
-    /// <returns>Collection of middleware type names in execution order</returns>
-    /// <exception cref="ArgumentNullException">Thrown when builder is null</exception>
+    /// <param name="builder">The pipeline builder.</param>
+    /// <returns>Collection of middleware type names in execution order.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is <see langword="null"/>.</exception>
     public static IReadOnlyList<string> GetMiddlewareTypeNames(this PipelineBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -112,12 +116,12 @@ public static class PipelineBuilderExtensions
     }
 
     /// <summary>
-    /// Removes all middleware of a specific type from the pipeline
+    /// Removes all middleware of a specific type from the pipeline.
     /// </summary>
-    /// <typeparam name="TMiddleware">The middleware type to remove</typeparam>
-    /// <param name="builder">The pipeline builder</param>
-    /// <returns>The pipeline builder for method chaining</returns>
-    /// <exception cref="ArgumentNullException">Thrown when builder is null</exception>
+    /// <typeparam name="TMiddleware">The middleware type to remove.</typeparam>
+    /// <param name="builder">The pipeline builder.</param>
+    /// <returns>The pipeline builder for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is <see langword="null"/>.</exception>
     public static PipelineBuilder RemoveAll<TMiddleware>(this PipelineBuilder builder) where TMiddleware : IMiddleware
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -128,12 +132,12 @@ public static class PipelineBuilderExtensions
     }
 
     /// <summary>
-    /// Executes the pipeline and returns the context after execution
+    /// Executes the pipeline and returns the context after execution.
     /// </summary>
-    /// <param name="builder">The pipeline builder</param>
-    /// <param name="context">The middleware context</param>
-    /// <returns>The context after pipeline execution</returns>
-    /// <exception cref="ArgumentNullException">Thrown when builder or context is null</exception>
+    /// <param name="builder">The pipeline builder.</param>
+    /// <param name="context">The middleware context.</param>
+    /// <returns>The context after pipeline execution.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> or <paramref name="context"/> is <see langword="null"/>.</exception>
     public static async Task<MiddlewareContext> ExecuteAndGetContextAsync(this PipelineBuilder builder, MiddlewareContext context)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -144,11 +148,11 @@ public static class PipelineBuilderExtensions
     }
 
     /// <summary>
-    /// Creates a shallow copy of the pipeline builder
+    /// Creates a shallow copy of the pipeline builder.
     /// </summary>
-    /// <param name="builder">The pipeline builder to copy</param>
-    /// <returns>A new PipelineBuilder with the same middleware</returns>
-    /// <exception cref="ArgumentNullException">Thrown when builder is null</exception>
+    /// <param name="builder">The pipeline builder to copy.</param>
+    /// <returns>A new PipelineBuilder with the same middleware.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is <see langword="null"/>.</exception>
     public static PipelineBuilder Clone(this PipelineBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -163,12 +167,14 @@ public static class PipelineBuilderExtensions
     }
 
     /// <summary>
-    /// Adds middleware that executes only once (idempotent)
+    /// Adds middleware that executes only once (idempotent).
     /// </summary>
-    /// <param name="builder">The pipeline builder</param>
-    /// <param name="middleware">The middleware to add</param>
-    /// <param name="key">Unique key to identify this middleware instance</param>
-    /// <exception cref="ArgumentNullException">Thrown when builder or middleware is null, or key is null/empty</exception>
+    /// <param name="builder">The pipeline builder.</param>
+    /// <param name="middleware">The middleware to add.</param>
+    /// <param name="key">Unique key to identify this middleware instance.</param>
+    /// <returns>The pipeline builder for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> or <paramref name="middleware"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="key"/> is <see langword="null"/> or empty.</exception>
     public static PipelineBuilder UseOnce(this PipelineBuilder builder, IMiddleware middleware, string key)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -184,14 +190,28 @@ file sealed class OrderedMiddleware : IMiddleware
     private readonly IMiddleware _inner;
     private readonly int _order;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OrderedMiddleware"/> class.
+    /// </summary>
+    /// <param name="inner">The inner middleware to wrap.</param>
+    /// <param name="order">The execution order (lower values execute first).</param>
     public OrderedMiddleware(IMiddleware inner, int order)
     {
         _inner = inner;
         _order = order;
     }
 
+    /// <summary>
+    /// Gets the execution order of this middleware.
+    /// </summary>
     public int Order => _order;
 
+    /// <summary>
+    /// Invokes the middleware with the given context and next delegate.
+    /// </summary>
+    /// <param name="context">The middleware context.</param>
+    /// <param name="next">The next middleware delegate.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
         => _inner.InvokeAsync(context, next);
 }
@@ -201,14 +221,32 @@ file sealed class ConditionalMiddleware : IMiddleware
     private readonly IMiddleware _inner;
     private readonly Func<MiddlewareContext, bool> _predicate;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ConditionalMiddleware"/> class.
+    /// </summary>
+    /// <param name="inner">The inner middleware to conditionally execute.</param>
+    /// <param name="predicate">The predicate function that determines if middleware should execute.</param>
     public ConditionalMiddleware(IMiddleware inner, Func<MiddlewareContext, bool> predicate)
     {
         _inner = inner;
         _predicate = predicate;
     }
 
-    public int Order => int.MaxValue; // Execute last so condition can be evaluated
+    /// <summary>
+    /// Gets the execution order of this middleware.
+    /// </summary>
+    /// <remarks>
+    /// This middleware executes last (int.MaxValue) so the condition can be evaluated
+    /// after all other middleware has had a chance to modify the context.
+    /// </remarks>
+    public int Order => int.MaxValue;
 
+    /// <summary>
+    /// Invokes the middleware with the given context and next delegate.
+    /// </summary>
+    /// <param name="context">The middleware context.</param>
+    /// <param name="next">The next middleware delegate.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
     {
         if (_predicate(context))
@@ -225,14 +263,32 @@ file sealed class TransformMiddleware : IMiddleware
     private readonly IMiddleware _inner;
     private readonly Func<MiddlewareContext, MiddlewareContext> _transformer;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TransformMiddleware"/> class.
+    /// </summary>
+    /// <param name="transformer">The function that transforms the context.</param>
+    /// <param name="inner">The inner middleware to invoke with the transformed context.</param>
     public TransformMiddleware(Func<MiddlewareContext, MiddlewareContext> transformer, IMiddleware inner)
     {
         _transformer = transformer;
         _inner = inner;
     }
 
-    public int Order => int.MaxValue - 1; // Execute second-to-last
+    /// <summary>
+    /// Gets the execution order of this middleware.
+    /// </summary>
+    /// <remarks>
+    /// This middleware executes second-to-last (int.MaxValue - 1) so it can transform the context
+    /// before the final middleware executes.
+    /// </remarks>
+    public int Order => int.MaxValue - 1;
 
+    /// <summary>
+    /// Invokes the middleware with the given context and next delegate.
+    /// </summary>
+    /// <param name="context">The middleware context.</param>
+    /// <param name="next">The next middleware delegate.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
     {
         var transformedContext = _transformer(context);
@@ -246,14 +302,31 @@ file sealed class OnceMiddleware : IMiddleware
     private readonly string _key;
     private bool _executed;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OnceMiddleware"/> class.
+    /// </summary>
+    /// <param name="inner">The inner middleware to execute only once.</param>
+    /// <param name="key">The unique key to identify this middleware instance.</param>
     public OnceMiddleware(IMiddleware inner, string key)
     {
         _inner = inner;
         _key = key;
     }
 
+    /// <summary>
+    /// Gets the execution order of this middleware.
+    /// </summary>
+    /// <remarks>
+    /// This middleware executes first (order 0) to ensure it runs before other middleware.
+    /// </remarks>
     public int Order => 0;
 
+    /// <summary>
+    /// Invokes the middleware with the given context and next delegate.
+    /// </summary>
+    /// <param name="context">The middleware context.</param>
+    /// <param name="next">The next middleware delegate.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     public Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
     {
         if (_executed)
