@@ -424,3 +424,53 @@ catch (ArgumentException ex)
     Console.WriteLine($"Validation failed: {ex.Message}");
 }
 ```
+
+## UserRepositoryValidation
+
+`UserRepositoryValidation` provides a set of extension methods for validating `UserRepository` instances and their parameters. It includes methods to validate repository instances, usernames, emails, date ranges, and inactive user thresholds, ensuring data integrity before operations. The validation methods return boolean results while the Ensure methods throw exceptions on failure, making them suitable for guard clauses in repository methods.
+
+### Example Usage
+
+```csharp
+using System;
+using DotnetMicroOrm.Data.Repositories;
+
+// Create a UserRepository instance (typically injected via DI)
+var userRepository = new UserRepository(/* database context */);
+
+// Validate the repository instance itself
+bool isRepositoryValid = userRepository.IsValid();
+Console.WriteLine($"Repository is valid: {isRepositoryValid}");
+
+// Validate repository and throw if invalid
+try
+{
+    userRepository.EnsureValid();
+    Console.WriteLine("Repository passed validation!");
+}
+catch (ArgumentException ex)
+{
+    Console.WriteLine($"Repository validation failed: {ex.Message}");
+}
+
+// Validate username parameter before calling repository methods
+string username = "john_doe";
+bool isUsernameValid = username.IsValidUsername();
+Console.WriteLine($"Username '{username}' is valid: {isUsernameValid}");
+
+// Validate email parameter
+string email = "john@example.com";
+bool isEmailValid = email.IsValidEmail();
+Console.WriteLine($"Email '{email}' is valid: {isEmailValid}");
+
+// Validate date range for queries
+DateTime startDate = DateTime.UtcNow.AddDays(-30);
+DateTime endDate = DateTime.UtcNow;
+bool isDateRangeValid = startDate.IsValidDateRange(endDate);
+Console.WriteLine($"Date range is valid: {isDateRangeValid}");
+
+// Validate days inactive parameter for GetInactiveUsersAsync
+int daysInactive = 30;
+bool isDaysInactiveValid = daysInactive.IsValidDaysInactive();
+Console.WriteLine($"Days inactive threshold is valid: {isDaysInactiveValid}");
+```
