@@ -32,4 +32,35 @@ var count = await cache.GetCountAsync();
 Console.WriteLine(count); // Output: 0
 ```
 
+## ValidationExample
+
+The `ValidationExample` class demonstrates how to validate business rules and constraints before persisting entities. It shows validation for product fields such as name, price, stock quantity, and description, with comprehensive error reporting through the `IsValid` property and `Errors` collection.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Examples;
+
+// Create validation example with connection string
+var example = new ValidationExample("Server=localhost;Database=DotnetMicroOrmExamples;User Id=sa;Password=YourPassword;");
+
+// Run validation demonstration
+await example.RunAsync();
+
+// Or use as standalone validation
+var validationResult = new ValidationExample.ValidationResult
+{
+    IsValid = true,
+    Errors = new List<string>()
+};
+
+if (!validationResult.IsValid)
+{
+    foreach (var error in validationResult.Errors)
+    {
+        Console.WriteLine($"Validation error: {error}");
+    }
+}
+```
+
 // ... goes in between
