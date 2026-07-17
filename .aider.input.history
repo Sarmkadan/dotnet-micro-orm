@@ -9446,3 +9446,79 @@
 +- docs: write up PipelineBuilder docs
 +- WebhookHandler reference page
 +- document .aider.chat.history in the readme
+
+# 2026-07-17 07:16:10.690989
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `EndToEndWorkflowTests` (defined in `tests/dotnet-micro-orm.Tests/EndToEndWorkflowTests.cs`).
++
++Add a "## EndToEndWorkflowTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task CreateAndRetrieveProduct_FullWorkflow
++public async Task InventoryManagement_IncreaseAndDecreaseStock
++public async Task ProfitCalculation_WithAndWithoutCost
++public async Task BatchProductCreation_Simulation
++public async Task CachingStrategy_GetOrSet
++public async Task UserManagement_CompleteLifecycle
++public async Task SpecificationPattern_ProductFiltering
++public async Task ConcurrencyScenario_MultipleOperations
++public async Task ValidationErrorHandling_Comprehensive
++public async Task CacheInvalidation_PatternBased
++public async Task OrderManagement_Scenario
++public async Task DataExportScenario_MultipleFormats
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- polish WebhookHandlerExtensions
++- readme: .aider.chat.history usage
++- docs: add BatchUpsertOperationUnitTests section to README.md
++- docs: readme tweaks
++- docs: add BatchUpsertOperationTests section to README.md
++- refactor(events): small fix
++- Readability pass over OrmExceptionValidation
++- Cleanup in BatchOperationsBenchmarksValidation
++- docs: document .aider.chat.history in the readme
++- docs: add CoreRepositoryTests section with usage example
+
+# 2026-07-17 07:16:10.691047
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `EndToEndWorkflowTests` (defined in `tests/dotnet-micro-orm.Tests/EndToEndWorkflowTests.cs`).
++
++Add a "## EndToEndWorkflowTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task CreateAndRetrieveProduct_FullWorkflow
++public async Task InventoryManagement_IncreaseAndDecreaseStock
++public async Task ProfitCalculation_WithAndWithoutCost
++public async Task BatchProductCreation_Simulation
++public async Task CachingStrategy_GetOrSet
++public async Task UserManagement_CompleteLifecycle
++public async Task SpecificationPattern_ProductFiltering
++public async Task ConcurrencyScenario_MultipleOperations
++public async Task ValidationErrorHandling_Comprehensive
++public async Task CacheInvalidation_PatternBased
++public async Task OrderManagement_Scenario
++public async Task DataExportScenario_MultipleFormats
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- polish WebhookHandlerExtensions
++- readme: .aider.chat.history usage
++- docs: add BatchUpsertOperationUnitTests section to README.md
++- docs: readme tweaks
++- docs: add BatchUpsertOperationTests section to README.md
++- refactor(events): small fix
++- Readability pass over OrmExceptionValidation
++- Cleanup in BatchOperationsBenchmarksValidation
++- docs: document .aider.chat.history in the readme
++- docs: add CoreRepositoryTests section with usage example
