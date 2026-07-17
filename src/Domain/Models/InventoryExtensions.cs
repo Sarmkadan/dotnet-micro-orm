@@ -14,10 +14,13 @@ namespace DotnetMicroOrm.Domain.Models
         /// <param name="inventory">The inventory instance.</param>
         /// <returns><see langword="true"/> if restocking is required; otherwise, <see langword="false"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="inventory"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        /// This method delegates to the <see cref="Inventory.IsLowStock()"/> method for consistency.
+        /// </remarks>
         public static bool RequiresRestocking(this Inventory inventory)
         {
             ArgumentNullException.ThrowIfNull(inventory);
-            return inventory.CurrentStock <= inventory.MinimumThreshold;
+            return inventory.IsLowStock();
         }
 
         /// <summary>
@@ -29,15 +32,18 @@ namespace DotnetMicroOrm.Domain.Models
         public static string GenerateInventorySummary(this Inventory inventory)
         {
             ArgumentNullException.ThrowIfNull(inventory);
-            return $@"
-Inventory Summary:
+
+            return $@"Inventory Summary:
 - Product ID: {inventory.ProductId}
 - Current Stock: {inventory.CurrentStock}
 - Reserved Stock: {inventory.ReservedStock}
-- Available Stock: {inventory.CurrentStock - inventory.ReservedStock}
+- Available Stock: {inventory.AvailableStock}
+- Minimum Threshold: {inventory.MinimumThreshold}
 - Last Restock: {inventory.LastRestockDate?.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) ?? "Never"}
 - Last Count: {inventory.LastCountDate?.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) ?? "Never"}
-- Low Stock: {(inventory.IsLowStock() ? "Yes" : "No")}";
+- Low Stock: {(inventory.IsLowStock() ? "Yes" : "No")}
+- Days Since Last Restock: {inventory.GetDaysLastRestocked()}
+- Reservation Percentage: {inventory.GetReservationPercentage():F2}%";
         }
 
         /// <summary>
@@ -66,10 +72,10 @@ Inventory Summary:
         public static double GetReservationPercentage(this Inventory inventory)
         {
             ArgumentNullException.ThrowIfNull(inventory);
-            if (inventory.CurrentStock == 0)
-                return 0;
 
-            return (double)inventory.ReservedStock / inventory.CurrentStock * 100;
+            return inventory.CurrentStock == 0
+                ? 0
+                : (double)inventory.ReservedStock / inventory.CurrentStock * 100;
         }
     }
 }
