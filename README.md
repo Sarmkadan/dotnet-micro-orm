@@ -2,10 +2,9 @@
 
 // ... goes in between
 
-## BatchUpsertOperationUnitTests
+## EndToEndWorkflowTests
 
-The `BatchUpsertOperationUnitTests` class provides comprehensive unit tests for the `BatchUpsertOperation<TEntity>` class. 
-These tests validate the behavior of `BatchUpsertOperation` in various scenarios, including error handling, entity validation, and batch operations.
+The `EndToEndWorkflowTests` class provides comprehensive end-to-end tests for the DotnetMicroOrm library. It covers various scenarios, including product creation, inventory management, caching, and user management.
 
 ### Example Usage
 
@@ -13,22 +12,43 @@ These tests validate the behavior of `BatchUpsertOperation` in various scenarios
 using DotnetMicroOrm.Tests;
 
 // Create an instance of the test class
-var tests = new BatchUpsertOperationUnitTests();
+var tests = new EndToEndWorkflowTests();
 
-// Verify constructor behavior with a null context
-tests.Constructor_WithNullContext_ThrowsArgumentNullException();
+// Test product creation and retrieval
+await tests.CreateAndRetrieveProduct_FullWorkflow();
 
-// Test upserting a valid entity
-var user = new User("testuser", "test@example.com", "password");
-var result = await tests._batchUpsert.UpsertAsync(user, u => u.Id);
+// Test inventory management
+await tests.InventoryManagement_IncreaseAndDecreaseStock();
 
-// Test upserting multiple valid entities
-var users = new List<User>
-{
-    new User("user1", "user1@example.com", "password1"),
-    new User("user2", "user2@example.com", "password2")
-};
-var results = await tests._batchUpsert.UpsertRangeAsync(users, u => u.Id);
+// Test profit calculation
+await tests.ProfitCalculation_WithAndWithoutCost();
+
+// Test batch product creation
+await tests.BatchProductCreation_Simulation();
+
+// Test caching strategy
+await tests.CachingStrategy_GetOrSet();
+
+// Test user management
+await tests.UserManagement_CompleteLifecycle();
+
+// Test specification pattern
+await tests.SpecificationPattern_ProductFiltering();
+
+// Test concurrency scenario
+await tests.ConcurrencyScenario_MultipleOperations();
+
+// Test validation error handling
+await tests.ValidationErrorHandling_Comprehensive();
+
+// Test cache invalidation
+await tests.CacheInvalidation_PatternBased();
+
+// Test order management
+await tests.OrderManagement_Scenario();
+
+// Test data export scenario
+await tests.DataExportScenario_MultipleFormats();
 ```
 
 // ... goes in between
