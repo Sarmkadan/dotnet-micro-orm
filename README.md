@@ -155,3 +155,71 @@ foreach (var kvp in batchResults)
 }
 ```
 
+## MigrationRecordExtensions
+
+`MigrationRecordExtensions` provides a set of extension methods for `MigrationRecord` that simplify common migration operations such as checking success status, retrieving error messages, comparing migration timestamps, formatting records for display, and filtering failed migrations. These helpers encapsulate repetitive patterns and provide a fluent API for working with migration records.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Collections.Generic;
+using DotnetMicroOrm.Migrations;
+
+// Assume we have a collection of migration records
+var migrations = new List<MigrationRecord>
+{
+    new MigrationRecord
+    {
+        Id = 1,
+        Version = "1.0.0",
+        Description = "Initial migration",
+        AppliedAt = new DateTime(2024, 1, 15, 10, 30, 0),
+        Success = true,
+        ErrorMessage = null
+    },
+    new MigrationRecord
+    {
+        Id = 2,
+        Version = "1.0.1",
+        Description = "Add users table",
+        AppliedAt = new DateTime(2024, 1, 16, 9, 15, 0),
+        Success = false,
+        ErrorMessage = "Table already exists"
+    },
+    new MigrationRecord
+    {
+        Id = 3,
+        Version = "1.0.2",
+        Description = "Create indexes",
+        AppliedAt = new DateTime(2024, 1, 17, 14, 20, 0),
+        Success = true,
+        ErrorMessage = null
+    }
+};
+
+// Check if a specific migration was successful
+var migration1 = migrations[0];
+bool isSuccessful = migration1.WasSuccessful();
+Console.WriteLine($"Migration 1 successful: {isSuccessful}"); // Output: Migration 1 successful: True
+
+// Get the error message if migration failed
+var migration2 = migrations[1];
+string errorMessage = migration2.GetErrorMessage();
+Console.WriteLine($"Migration 2 error: {errorMessage}"); // Output: Migration 2 error: Table already exists
+
+// Check if migration was applied before a specific date
+var cutoffDate = new DateTime(2024, 1, 16, 12, 0, 0);
+bool appliedBefore = migration1.WasAppliedBefore(cutoffDate);
+Console.WriteLine($"Migration 1 applied before cutoff: {appliedBefore}"); // Output: Migration 1 applied before cutoff: True
+
+// Format a migration record as a display string
+string displayString = migration3.ToDisplayString();
+Console.WriteLine(displayString);
+// Output: Migration 3: 1.0.2 - Create indexes (Applied: 2024-01-17 14:20:00) Status: SUCCESS
+
+// Get all failed migrations from a collection
+IReadOnlyList<MigrationRecord> failedMigrations = migrations.GetFailedMigrations();
+Console.WriteLine($"Number of failed migrations: {failedMigrations.Count}"); // Output: Number of failed migrations: 1
+```
+
