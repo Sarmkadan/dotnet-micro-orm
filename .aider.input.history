@@ -9604,3 +9604,89 @@
 +- refactor(events): small fix
 +- Readability pass over OrmExceptionValidation
 +- Cleanup in BatchOperationsBenchmarksValidation
+
+# 2026-07-17 07:18:20.768836
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `DatabaseContextTests` (defined in `tests/dotnet-micro-orm.Tests/DatabaseContextTests.cs`).
++
++Add a "## DatabaseContextTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public void Constructor_WithNullConnectionString_ThrowsArgumentNullException
++public void Constructor_WithEmptyConnectionString_ThrowsArgumentException
++public void Constructor_WithValidConnectionString_CreatesInstance
++public async Task OpenAsync_WithValidConnection_OpensSuccessfully
++public async Task OpenAsync_WithInvalidConnection_ThrowsDatabaseConnectionException
++public async Task CloseAsync_WithOpenConnection_ClosesSuccessfully
++public async Task TestConnectionAsync_WithValidConnection_ReturnsTrue
++public async Task TestConnectionAsync_WithInvalidConnection_ReturnsFalse
++public async Task ExecuteScalarAsync_WithValidQuery_ReturnsResult
++public async Task ExecuteScalarAsync_WithParameters_ReturnsCorrectResult
++public async Task ExecuteScalarAsync_WithInvalidQuery_ThrowsQueryExecutionException
++public async Task ExecuteNonQueryAsync_WithValidQuery_ExecutesSuccessfully
++public async Task ExecuteNonQueryAsync_WithParameters_ExecutesSuccessfully
++public async Task ExecuteQueryAsync_WithValidQuery_ReturnsResults
++public async Task ExecuteQueryAsync_WithParameters_ReturnsFilteredResults
++public async Task GetDatabaseProvider_ReturnsCorrectProvider
++public void GetDatabaseProvider_AfterConstruction_ReturnsDefault
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
++- docs: add EndToEndWorkflowTests section to README.md
++- polish WebhookHandlerExtensions
++- readme: .aider.chat.history usage
++- docs: add BatchUpsertOperationUnitTests section to README.md
++- docs: readme tweaks
++- docs: add BatchUpsertOperationTests section to README.md
++- refactor(events): small fix
+
+# 2026-07-17 07:18:20.768918
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `DatabaseContextTests` (defined in `tests/dotnet-micro-orm.Tests/DatabaseContextTests.cs`).
++
++Add a "## DatabaseContextTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public void Constructor_WithNullConnectionString_ThrowsArgumentNullException
++public void Constructor_WithEmptyConnectionString_ThrowsArgumentException
++public void Constructor_WithValidConnectionString_CreatesInstance
++public async Task OpenAsync_WithValidConnection_OpensSuccessfully
++public async Task OpenAsync_WithInvalidConnection_ThrowsDatabaseConnectionException
++public async Task CloseAsync_WithOpenConnection_ClosesSuccessfully
++public async Task TestConnectionAsync_WithValidConnection_ReturnsTrue
++public async Task TestConnectionAsync_WithInvalidConnection_ReturnsFalse
++public async Task ExecuteScalarAsync_WithValidQuery_ReturnsResult
++public async Task ExecuteScalarAsync_WithParameters_ReturnsCorrectResult
++public async Task ExecuteScalarAsync_WithInvalidQuery_ThrowsQueryExecutionException
++public async Task ExecuteNonQueryAsync_WithValidQuery_ExecutesSuccessfully
++public async Task ExecuteNonQueryAsync_WithParameters_ExecutesSuccessfully
++public async Task ExecuteQueryAsync_WithValidQuery_ReturnsResults
++public async Task ExecuteQueryAsync_WithParameters_ReturnsFilteredResults
++public async Task GetDatabaseProvider_ReturnsCorrectProvider
++public void GetDatabaseProvider_AfterConstruction_ReturnsDefault
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
++- docs: add EndToEndWorkflowTests section to README.md
++- polish WebhookHandlerExtensions
++- readme: .aider.chat.history usage
++- docs: add BatchUpsertOperationUnitTests section to README.md
++- docs: readme tweaks
++- docs: add BatchUpsertOperationTests section to README.md
++- refactor(events): small fix
