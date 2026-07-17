@@ -94,6 +94,54 @@ tests.ConcurrencyException_WithMessage_CreatesInstance();
 tests.ConcurrencyException_WithMessageAndEntityKey_CreatesInstance();
 ```
 
+## UserModelTests
+
+`UserModelTests` is a comprehensive suite of unit tests that verify the behavior of the `User` domain model. The tests cover validation scenarios (username, email, password hash, name lengths), property behaviors, and method functionality including email verification, last login tracking, and name formatting, ensuring the `User` model works correctly in various scenarios.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Domain.Models;
+
+// Instantiate the test class (it lives in the global namespace)
+var tests = new UserModelTests();
+
+// Example: creating a valid user (mirrors Constructor_WithParameters_InitializesFieldsCorrectly)
+var user = new User("johndoe", "john@example.com", "hashedpassword1234567890123456789012")
+{
+    FirstName = "John",
+    LastName = "Doe"
+};
+
+// Example: validating a user with valid properties (mirrors Validate_WithValidUser_ReturnsTrue)
+bool isValid = user.Validate(out var validationErrors);
+// isValid == true, validationErrors is empty
+
+// Example: validating a user with invalid username (mirrors Validate_WithEmptyUsername_ReturnsFalseWithError)
+var invalidUser = new User { Username = "", Email = "test@example.com", PasswordHash = "hashedpassword123456789012" };
+isValid = invalidUser.Validate(out validationErrors);
+// isValid == false, validationErrors contains error about Username
+
+// Example: getting full name (mirrors GetFullName_WithFirstAndLastNames_ReturnsCombined)
+string fullName = user.GetFullName();
+// fullName == "John Doe"
+
+// Example: marking email as verified (mirrors MarkAsEmailVerified_ChangesEmailVerificationFlag)
+user.MarkAsEmailVerified();
+// user.IsEmailVerified == true
+
+// Example: updating last login (mirrors UpdateLastLogin_SetsLastLoginDate)
+user.UpdateLastLogin();
+// user.LastLoginDate is set to current UTC time
+
+// Example: running individual test methods directly
+// Each test method exercises specific User model functionality
+tests.Validate_WithValidUser_ReturnsTrue();
+tests.Validate_WithEmptyUsername_ReturnsFalseWithError();
+tests.GetFullName_WithFirstAndLastNames_ReturnsCombined();
+tests.MarkAsEmailVerified_ChangesEmailVerificationFlag();
+```
+
 ## RepositoryIntegrationTests
 
 The `RepositoryIntegrationTests` class provides integration tests for the `Repository<TEntity>` class, verifying that repository operations work correctly with mocked database contexts. It tests constructor validation, CRUD operations, batch operations, existence checks, and pagination functionality, ensuring proper interaction patterns and exception handling across various scenarios.
