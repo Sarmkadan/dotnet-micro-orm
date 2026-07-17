@@ -9846,3 +9846,279 @@
 +- readme: .aider.chat.history usage
 +- docs: add EndToEndWorkflowTests section to README.md
 +- polish WebhookHandlerExtensions
+
+# 2026-07-17 09:06:17.554946
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `MemoryCacheProviderTests` (defined in `tests/dotnet-micro-orm.Tests/MemoryCacheProviderTests.cs`).
++
++Add a "## MemoryCacheProviderTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task GetAsync_WithNonExistentKey_ReturnsNull
++public async Task SetAsync_WithValidKeyValue_StoresInCache
++public async Task SetAsync_WithNullKey_ThrowsArgumentException
++public async Task SetAsync_WithEmptyKey_ThrowsArgumentException
++public async Task SetAsync_WithNullValue_RemovesKey
++public async Task GetAsync_WithExpiredEntry_ReturnsNull
++public async Task RemoveAsync_WithValidKey_DeletesFromCache
++public async Task RemoveAsync_WithNullKey_DoesNotThrow
++public async Task RemoveByPatternAsync_WithWildcardPattern_RemovesMatchingKeys
++public async Task RemoveByPatternAsync_WithEmptyPattern_DoesNotThrow
++public async Task ClearAsync_RemovesAllEntries
++public async Task ExistsAsync_WithExistingKey_ReturnsTrue
++public async Task ExistsAsync_WithNonExistentKey_ReturnsFalse
++public async Task ExistsAsync_WithExpiredKey_ReturnsFalse
++public async Task GetOrSetAsync_WithCachedValue_ReturnsCached
++public async Task GetOrSetAsync_WithMissingValue_CallsFactory
++public async Task GetOrSetAsync_WithExpiration_StoresWithTTL
++public async Task GetCountAsync_ReturnsAccurateCount
++public async Task GetCountAsync_WithExpiredEntries_ExcludesExpired
++public async Task CleanupAsync_RemovesExpiredEntries
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Update readme
++- docs: add ProductModelTests section to README.md
++- Readability pass over CommandHandlerExtensions
++- docs: readme: .aider.chat.history usage.
++- docs: add QueryProfilerTests section to README.md
++- docs: document .aider.chat.history in the readme.
++- docs: add DatabaseContextTests section to README.md
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
+
+# 2026-07-17 09:06:17.555004
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `MemoryCacheProviderTests` (defined in `tests/dotnet-micro-orm.Tests/MemoryCacheProviderTests.cs`).
++
++Add a "## MemoryCacheProviderTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task GetAsync_WithNonExistentKey_ReturnsNull
++public async Task SetAsync_WithValidKeyValue_StoresInCache
++public async Task SetAsync_WithNullKey_ThrowsArgumentException
++public async Task SetAsync_WithEmptyKey_ThrowsArgumentException
++public async Task SetAsync_WithNullValue_RemovesKey
++public async Task GetAsync_WithExpiredEntry_ReturnsNull
++public async Task RemoveAsync_WithValidKey_DeletesFromCache
++public async Task RemoveAsync_WithNullKey_DoesNotThrow
++public async Task RemoveByPatternAsync_WithWildcardPattern_RemovesMatchingKeys
++public async Task RemoveByPatternAsync_WithEmptyPattern_DoesNotThrow
++public async Task ClearAsync_RemovesAllEntries
++public async Task ExistsAsync_WithExistingKey_ReturnsTrue
++public async Task ExistsAsync_WithNonExistentKey_ReturnsFalse
++public async Task ExistsAsync_WithExpiredKey_ReturnsFalse
++public async Task GetOrSetAsync_WithCachedValue_ReturnsCached
++public async Task GetOrSetAsync_WithMissingValue_CallsFactory
++public async Task GetOrSetAsync_WithExpiration_StoresWithTTL
++public async Task GetCountAsync_ReturnsAccurateCount
++public async Task GetCountAsync_WithExpiredEntries_ExcludesExpired
++public async Task CleanupAsync_RemovesExpiredEntries
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Update readme
++- docs: add ProductModelTests section to README.md
++- Readability pass over CommandHandlerExtensions
++- docs: readme: .aider.chat.history usage.
++- docs: add QueryProfilerTests section to README.md
++- docs: document .aider.chat.history in the readme.
++- docs: add DatabaseContextTests section to README.md
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
+
+# 2026-07-17 09:07:27.590384
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `MemoryCacheProviderTests` (defined in `tests/dotnet-micro-orm.Tests/MemoryCacheProviderTests.cs`).
++
++Add a "## MemoryCacheProviderTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task GetAsync_WithNonExistentKey_ReturnsNull
++public async Task SetAsync_WithValidKeyValue_StoresInCache
++public async Task SetAsync_WithNullKey_ThrowsArgumentException
++public async Task SetAsync_WithEmptyKey_ThrowsArgumentException
++public async Task SetAsync_WithNullValue_RemovesKey
++public async Task GetAsync_WithExpiredEntry_ReturnsNull
++public async Task RemoveAsync_WithValidKey_DeletesFromCache
++public async Task RemoveAsync_WithNullKey_DoesNotThrow
++public async Task RemoveByPatternAsync_WithWildcardPattern_RemovesMatchingKeys
++public async Task RemoveByPatternAsync_WithEmptyPattern_DoesNotThrow
++public async Task ClearAsync_RemovesAllEntries
++public async Task ExistsAsync_WithExistingKey_ReturnsTrue
++public async Task ExistsAsync_WithNonExistentKey_ReturnsFalse
++public async Task ExistsAsync_WithExpiredKey_ReturnsFalse
++public async Task GetOrSetAsync_WithCachedValue_ReturnsCached
++public async Task GetOrSetAsync_WithMissingValue_CallsFactory
++public async Task GetOrSetAsync_WithExpiration_StoresWithTTL
++public async Task GetCountAsync_ReturnsAccurateCount
++public async Task GetCountAsync_WithExpiredEntries_ExcludesExpired
++public async Task CleanupAsync_RemovesExpiredEntries
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Update readme
++- docs: add ProductModelTests section to README.md
++- Readability pass over CommandHandlerExtensions
++- docs: readme: .aider.chat.history usage.
++- docs: add QueryProfilerTests section to README.md
++- docs: document .aider.chat.history in the readme.
++- docs: add DatabaseContextTests section to README.md
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
+
+# 2026-07-17 09:07:27.590449
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `MemoryCacheProviderTests` (defined in `tests/dotnet-micro-orm.Tests/MemoryCacheProviderTests.cs`).
++
++Add a "## MemoryCacheProviderTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task GetAsync_WithNonExistentKey_ReturnsNull
++public async Task SetAsync_WithValidKeyValue_StoresInCache
++public async Task SetAsync_WithNullKey_ThrowsArgumentException
++public async Task SetAsync_WithEmptyKey_ThrowsArgumentException
++public async Task SetAsync_WithNullValue_RemovesKey
++public async Task GetAsync_WithExpiredEntry_ReturnsNull
++public async Task RemoveAsync_WithValidKey_DeletesFromCache
++public async Task RemoveAsync_WithNullKey_DoesNotThrow
++public async Task RemoveByPatternAsync_WithWildcardPattern_RemovesMatchingKeys
++public async Task RemoveByPatternAsync_WithEmptyPattern_DoesNotThrow
++public async Task ClearAsync_RemovesAllEntries
++public async Task ExistsAsync_WithExistingKey_ReturnsTrue
++public async Task ExistsAsync_WithNonExistentKey_ReturnsFalse
++public async Task ExistsAsync_WithExpiredKey_ReturnsFalse
++public async Task GetOrSetAsync_WithCachedValue_ReturnsCached
++public async Task GetOrSetAsync_WithMissingValue_CallsFactory
++public async Task GetOrSetAsync_WithExpiration_StoresWithTTL
++public async Task GetCountAsync_ReturnsAccurateCount
++public async Task GetCountAsync_WithExpiredEntries_ExcludesExpired
++public async Task CleanupAsync_RemovesExpiredEntries
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Update readme
++- docs: add ProductModelTests section to README.md
++- Readability pass over CommandHandlerExtensions
++- docs: readme: .aider.chat.history usage.
++- docs: add QueryProfilerTests section to README.md
++- docs: document .aider.chat.history in the readme.
++- docs: add DatabaseContextTests section to README.md
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
+
+# 2026-07-17 09:12:40.726054
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `MemoryCacheProviderTests` (defined in `tests/dotnet-micro-orm.Tests/MemoryCacheProviderTests.cs`).
++
++Add a "## MemoryCacheProviderTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task GetAsync_WithNonExistentKey_ReturnsNull
++public async Task SetAsync_WithValidKeyValue_StoresInCache
++public async Task SetAsync_WithNullKey_ThrowsArgumentException
++public async Task SetAsync_WithEmptyKey_ThrowsArgumentException
++public async Task SetAsync_WithNullValue_RemovesKey
++public async Task GetAsync_WithExpiredEntry_ReturnsNull
++public async Task RemoveAsync_WithValidKey_DeletesFromCache
++public async Task RemoveAsync_WithNullKey_DoesNotThrow
++public async Task RemoveByPatternAsync_WithWildcardPattern_RemovesMatchingKeys
++public async Task RemoveByPatternAsync_WithEmptyPattern_DoesNotThrow
++public async Task ClearAsync_RemovesAllEntries
++public async Task ExistsAsync_WithExistingKey_ReturnsTrue
++public async Task ExistsAsync_WithNonExistentKey_ReturnsFalse
++public async Task ExistsAsync_WithExpiredKey_ReturnsFalse
++public async Task GetOrSetAsync_WithCachedValue_ReturnsCached
++public async Task GetOrSetAsync_WithMissingValue_CallsFactory
++public async Task GetOrSetAsync_WithExpiration_StoresWithTTL
++public async Task GetCountAsync_ReturnsAccurateCount
++public async Task GetCountAsync_WithExpiredEntries_ExcludesExpired
++public async Task CleanupAsync_RemovesExpiredEntries
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Update readme
++- docs: add ProductModelTests section to README.md
++- Readability pass over CommandHandlerExtensions
++- docs: readme: .aider.chat.history usage.
++- docs: add QueryProfilerTests section to README.md
++- docs: document .aider.chat.history in the readme.
++- docs: add DatabaseContextTests section to README.md
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
+
+# 2026-07-17 09:12:40.726130
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `MemoryCacheProviderTests` (defined in `tests/dotnet-micro-orm.Tests/MemoryCacheProviderTests.cs`).
++
++Add a "## MemoryCacheProviderTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task GetAsync_WithNonExistentKey_ReturnsNull
++public async Task SetAsync_WithValidKeyValue_StoresInCache
++public async Task SetAsync_WithNullKey_ThrowsArgumentException
++public async Task SetAsync_WithEmptyKey_ThrowsArgumentException
++public async Task SetAsync_WithNullValue_RemovesKey
++public async Task GetAsync_WithExpiredEntry_ReturnsNull
++public async Task RemoveAsync_WithValidKey_DeletesFromCache
++public async Task RemoveAsync_WithNullKey_DoesNotThrow
++public async Task RemoveByPatternAsync_WithWildcardPattern_RemovesMatchingKeys
++public async Task RemoveByPatternAsync_WithEmptyPattern_DoesNotThrow
++public async Task ClearAsync_RemovesAllEntries
++public async Task ExistsAsync_WithExistingKey_ReturnsTrue
++public async Task ExistsAsync_WithNonExistentKey_ReturnsFalse
++public async Task ExistsAsync_WithExpiredKey_ReturnsFalse
++public async Task GetOrSetAsync_WithCachedValue_ReturnsCached
++public async Task GetOrSetAsync_WithMissingValue_CallsFactory
++public async Task GetOrSetAsync_WithExpiration_StoresWithTTL
++public async Task GetCountAsync_ReturnsAccurateCount
++public async Task GetCountAsync_WithExpiredEntries_ExcludesExpired
++public async Task CleanupAsync_RemovesExpiredEntries
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Update readme
++- docs: add ProductModelTests section to README.md
++- Readability pass over CommandHandlerExtensions
++- docs: readme: .aider.chat.history usage.
++- docs: add QueryProfilerTests section to README.md
++- docs: document .aider.chat.history in the readme.
++- docs: add DatabaseContextTests section to README.md
++- readme: .aider.chat.history usage.
++- docs: add BatchOperationsTests section to README.md
++- readme: .aider.chat.history usage
