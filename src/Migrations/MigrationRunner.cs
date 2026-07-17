@@ -23,6 +23,9 @@ public sealed class MigrationRunner : IMigrationRunner
     private const string HistoryTable = "_MigrationHistory";
     private const string Schema = "dbo";
 
+    internal IDatabaseContext Context => _context;
+    internal IReadOnlyList<IMigration> Migrations => _migrations;
+
     /// <summary>
     /// Creates a new runner.
     /// </summary>
