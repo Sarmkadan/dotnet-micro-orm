@@ -40,6 +40,10 @@ public static class CategoryValidation
         else if (value.Slug.Length > 100)
             errors.Add("Category slug cannot exceed 100 characters");
 
+        // Validate Description if set
+        if (value.Description is not null && value.Description.Length > 500)
+            errors.Add("Category description cannot exceed 500 characters");
+
         // Validate DisplayOrder (must be non-negative)
         if (value.DisplayOrder < 0)
             errors.Add("Display order cannot be negative");
@@ -63,7 +67,11 @@ public static class CategoryValidation
     /// <param name="value">The category to check</param>
     /// <returns>True if the category is valid; otherwise, false</returns>
     /// <exception cref="ArgumentNullException">Thrown when value is null</exception>
-    public static bool IsValid(this Category value) => Validate(value).Count == 0;
+    public static bool IsValid(this Category value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        return Validate(value).Count == 0;
+    }
 
     /// <summary>
     /// Ensures that a category is valid, throwing an exception if it is not
