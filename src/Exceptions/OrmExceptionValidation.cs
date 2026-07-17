@@ -7,16 +7,16 @@
 namespace DotnetMicroOrm.Exceptions;
 
 /// <summary>
-/// Provides validation helpers for ORM-related exceptions
+/// Provides validation helpers for ORM-related exceptions.
 /// </summary>
 public static class OrmExceptionValidation
 {
     /// <summary>
     /// Validates an <see cref="OrmException"/> instance and returns a list of validation problems.
     /// </summary>
-    /// <param name="value">The exception to validate</param>
-    /// <returns>A read-only list of human-readable validation problems; empty if valid</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null</exception>
+    /// <param name="value">The exception to validate.</param>
+    /// <returns>A read-only list of human-readable validation problems; empty if valid.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
     public static IReadOnlyList<string> Validate(this OrmException? value)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -60,20 +60,17 @@ public static class OrmExceptionValidation
     /// <summary>
     /// Determines whether the specified exception is valid.
     /// </summary>
-    /// <param name="value">The exception to check</param>
-    /// <returns>True if the exception is valid; otherwise, false</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null</exception>
-    public static bool IsValid(this OrmException? value)
-    {
-        return Validate(value).Count == 0;
-    }
+    /// <param name="value">The exception to check.</param>
+    /// <returns>True if the exception is valid; otherwise, false.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    public static bool IsValid(this OrmException? value) => Validate(value).Count == 0;
 
     /// <summary>
     /// Validates the exception and throws an <see cref="ArgumentException"/> if invalid.
     /// </summary>
-    /// <param name="value">The exception to validate</param>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null</exception>
-    /// <exception cref="ArgumentException">Thrown when the exception is invalid, containing a list of validation problems</exception>
+    /// <param name="value">The exception to validate.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when the exception is invalid, containing a list of validation problems.</exception>
     public static void EnsureValid(this OrmException? value)
     {
         ArgumentNullException.ThrowIfNull(value);
@@ -89,6 +86,9 @@ public static class OrmExceptionValidation
 
     private static void ValidateEntityValidationException(EntityValidationException exception, List<string> errors)
     {
+        ArgumentNullException.ThrowIfNull(exception);
+        ArgumentNullException.ThrowIfNull(errors);
+
         if (exception.ValidationErrors is null)
         {
             errors.Add("EntityValidationException.ValidationErrors cannot be null.");
@@ -101,6 +101,9 @@ public static class OrmExceptionValidation
 
     private static void ValidateEntityMappingException(EntityMappingException exception, List<string> errors)
     {
+        ArgumentNullException.ThrowIfNull(exception);
+        ArgumentNullException.ThrowIfNull(errors);
+
         // EntityMappingException inherits from OrmException and adds a propertyName parameter
         // The propertyName is optional, so we only validate if it was provided
         if (exception.ErrorContext?.TryGetValue("Property", out var propertyValue) == true
@@ -113,6 +116,9 @@ public static class OrmExceptionValidation
 
     private static void ValidateQueryExecutionException(QueryExecutionException exception, List<string> errors)
     {
+        ArgumentNullException.ThrowIfNull(exception);
+        ArgumentNullException.ThrowIfNull(errors);
+
         if (exception.ErrorContext?.TryGetValue("Query", out var queryValue) == true
             && queryValue is string query
             && string.IsNullOrWhiteSpace(query))
@@ -123,12 +129,18 @@ public static class OrmExceptionValidation
 
     private static void ValidateConcurrencyException(ConcurrencyException exception, List<string> errors)
     {
+        ArgumentNullException.ThrowIfNull(exception);
+        ArgumentNullException.ThrowIfNull(errors);
+
         // ConcurrencyException adds an entityKey parameter which is optional
         // No validation needed for object values
     }
 
     private static void ValidateDatabaseConnectionException(DatabaseConnectionException exception, List<string> errors)
     {
+        ArgumentNullException.ThrowIfNull(exception);
+        ArgumentNullException.ThrowIfNull(errors);
+
         // DatabaseConnectionException inherits from OrmException
         // No additional validation needed beyond base exception
     }
