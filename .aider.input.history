@@ -10308,3 +10308,71 @@
 +- polish SpecificationValidation
 +- cleanup in SpecificationCombinatorsValidation.
 +- cleanup in QueryPlanValidation.
+
+# 2026-07-18 22:33:30.089192
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `WebhookHandlerExtensions` (defined in `src/Integration/WebhookHandlerExtensions.cs`).
++
++Add a "## WebhookHandlerExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<WebhookResult> ProcessWithRetryAsync
++public static async Task<WebhookResult> ProcessAsync
++public static async Task<IReadOnlyDictionary<string, WebhookResult>> ProcessBatchAsync
++public static WebhookPayload CreatePayload
++public static T? GetData<T>
++public static bool IsEventType
++public static long GetAgeInMilliseconds
++public static bool HasRequiredData
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
++- Readability pass over StringHelperTestsJsonExtensions
++- polish CategoryModelTestsJsonExtensions
++- Tidy up ProductModelTestsJsonExtensions
++- dedupe some logic in BatchOperationsTestsJsonExtensions
++- refactor: tighten guard clauses in XmlFormatterJsonExtensions
++- refactor(repositories): cleanup in UserRepositoryValidation
++- polish SpecificationValidation
+
+# 2026-07-18 22:33:30.089253
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `WebhookHandlerExtensions` (defined in `src/Integration/WebhookHandlerExtensions.cs`).
++
++Add a "## WebhookHandlerExtensions" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static async Task<WebhookResult> ProcessWithRetryAsync
++public static async Task<WebhookResult> ProcessAsync
++public static async Task<IReadOnlyDictionary<string, WebhookResult>> ProcessBatchAsync
++public static WebhookPayload CreatePayload
++public static T? GetData<T>
++public static bool IsEventType
++public static long GetAgeInMilliseconds
++public static bool HasRequiredData
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
++- Readability pass over StringHelperTestsJsonExtensions
++- polish CategoryModelTestsJsonExtensions
++- Tidy up ProductModelTestsJsonExtensions
++- dedupe some logic in BatchOperationsTestsJsonExtensions
++- refactor: tighten guard clauses in XmlFormatterJsonExtensions
++- refactor(repositories): cleanup in UserRepositoryValidation
++- polish SpecificationValidation
