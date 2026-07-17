@@ -23,7 +23,6 @@ class Program
         Console.WriteLine(csvFormatter.Format(new { Name = "Jane", Age = 25 }));
     }
 }
-```
 
 // ... goes in between
 
@@ -52,6 +51,11 @@ var category = new Category("Books", "books")
 // Example: validating a correct category (mirrors Validate_WithValidCategory_ReturnsTrue)
 bool isValid = category.Validate(out var validationErrors);
 // isValid == true, validationErrors is empty
+
+// Example: validating a category with invalid display order (mirrors Validate_WithInvalidDisplayOrder_ReturnsFalseWithError)
+var invalidCategory = new Category("Invalid", "invalid") { DisplayOrder = -1 };
+isValid = invalidCategory.Validate(out validationErrors);
+// isValid == false, validationErrors contains error about DisplayOrder
 
 // Example: moving a category up (mirrors MoveUp_WithDisplayOrderGreaterThanZero_DecrementsOrder)
 category.DisplayOrder = 5;
@@ -101,6 +105,7 @@ tests.ConcurrencyException_WithMessageAndEntityKey_CreatesInstance();
 ### Example Usage
 
 ```csharp
+using System;
 using DotnetMicroOrm.Domain.Models;
 
 // Instantiate the test class (it lives in the global namespace)
@@ -140,6 +145,7 @@ tests.Validate_WithValidUser_ReturnsTrue();
 tests.Validate_WithEmptyUsername_ReturnsFalseWithError();
 tests.GetFullName_WithFirstAndLastNames_ReturnsCombined();
 tests.MarkAsEmailVerified_ChangesEmailVerificationFlag();
+tests.UpdateLastLogin_SetsLastLoginDate();
 ```
 
 ## RepositoryTests
@@ -258,4 +264,43 @@ tests.DeleteRangeAsync_WithValidEntities_DeletesAll();
 tests.DeleteAsync_WithValidId_DeletesSuccessfully();
 tests.DeleteAsync_WithNonExistentId_ReturnsFalse();
 tests.DeleteAsync_WithEntity_DeletesSuccessfully();
+```
+
+## CoreRepositoryTests
+
+The `CoreRepositoryTests` class contains a set of unit tests for the `Repository<T>` class, focusing on its core functionality such as CRUD operations, filtering, and existence checks. It ensures that the repository behaves correctly under various scenarios, including valid and invalid data, existing and non-existing entities, and different query parameters.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+using DotnetMicroOrm.Exceptions;
+using Moq;
+
+// Create a mock database context
+var mockContext = new Mock<IDatabaseContext>();
+
+// Create a repository instance for testing
+var repository = new Repository<Product>(mockContext.Object);
+
+// Test getting a product by ID
+var product = await repository.GetByIdAsync(1);
+
+// Test adding a new product
+var newProduct = new Product("NEW001", "New Product", 19.99m, 1);
+await repository.AddAsync(newProduct);
+
+// Test updating an existing product
+var updatedProduct = new Product("UPD001", "Updated Product", 24.99m, 2) { Id = 1 };
+await repository.UpdateAsync(updatedProduct);
+
+// Test deleting a product
+await repository.DeleteAsync(1);
+
+// Test filtering products with a predicate
+var filteredProducts = await repository.GetAsync(p => p.IsActive);
+```
+
+// ... goes in between
 ```
