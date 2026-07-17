@@ -2,36 +2,33 @@
 
 // ... goes in between
 
-## BatchUpsertOperationTests
+## BatchUpsertOperationUnitTests
 
-The `BatchUpsertOperationTests` class provides unit tests for the `BatchUpsertOperation<TEntity>` class, verifying its behavior in various scenarios. It tests operations such as upserting entities in batches, handling empty lists, new entity insertions, existing entity updates, batch size validation, entity validation, and multiple batch executions.
+The `BatchUpsertOperationUnitTests` class provides comprehensive unit tests for the `BatchUpsertOperation<TEntity>` class. 
+These tests validate the behavior of `BatchUpsertOperation` in various scenarios, including error handling, entity validation, and batch operations.
 
 ### Example Usage
 
 ```csharp
-using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Tests;
 
-// Instantiate the test class (it lives in the global namespace)
-var tests = new BatchUpsertOperationTests();
+// Create an instance of the test class
+var tests = new BatchUpsertOperationUnitTests();
 
-// Test upserting an empty list
-await tests.UpsertRangeAsync_EmptyList_ReturnsEmptyResults();
+// Verify constructor behavior with a null context
+tests.Constructor_WithNullContext_ThrowsArgumentNullException();
 
-// Test upserting a new entity
-await tests.UpsertAsync_NewEntity_ReturnsInsertedResult();
+// Test upserting a valid entity
+var user = new User("testuser", "test@example.com", "password");
+var result = await tests._batchUpsert.UpsertAsync(user, u => u.Id);
 
-// Test upserting an existing entity
-await tests.UpsertAsync_ExistingEntity_ReturnsUpdatedResult();
-
-// Test invalid batch size
-await tests.UpsertRangeAsync_InvalidBatchSize_ThrowsArgumentOutOfRange();
-
-// Test invalid entity validation
-await tests.UpsertRangeAsync_InvalidEntity_ThrowsEntityValidationException();
-
-// Test multiple batches
-await tests.UpsertRangeAsync_MultipleBatches_ExecutesMultipleQueries();
+// Test upserting multiple valid entities
+var users = new List<User>
+{
+    new User("user1", "user1@example.com", "password1"),
+    new User("user2", "user2@example.com", "password2")
+};
+var results = await tests._batchUpsert.UpsertRangeAsync(users, u => u.Id);
 ```
 
 // ... goes in between
