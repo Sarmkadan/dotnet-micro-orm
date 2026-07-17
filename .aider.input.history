@@ -10690,3 +10690,135 @@
 +- docs: add ExpressionAndCachingBenchmarksExtensions section to README
 +- Readability pass over ECommerceExampleJsonExtensions
 +- Readability pass over StringHelperTestsJsonExtensions
+
+# 2026-07-19 02:27:33.809448
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `UserRepositoryValidation` (defined in `src/Data/Repositories/UserRepositoryValidation.cs`).
++
++Add a "## UserRepositoryValidation" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static IReadOnlyList<string> Validate
++public static bool IsValid
++public static bool IsValidUsername
++public static bool IsValidEmail
++public static bool IsValidDateRange
++public static bool IsValidDaysInactive
++public static void EnsureValid
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
+
+# 2026-07-19 02:27:33.809537
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `UserRepositoryValidation` (defined in `src/Data/Repositories/UserRepositoryValidation.cs`).
++
++Add a "## UserRepositoryValidation" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static IReadOnlyList<string> Validate
++public static bool IsValid
++public static bool IsValidUsername
++public static bool IsValidEmail
++public static bool IsValidDateRange
++public static bool IsValidDaysInactive
++public static void EnsureValid
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
+
+# 2026-07-19 02:27:38.754602
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `UserRepositoryValidation` (defined in `src/Data/Repositories/UserRepositoryValidation.cs`).
++
++Add a "## UserRepositoryValidation" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static IReadOnlyList<string> Validate
++public static bool IsValid
++public static bool IsValidUsername
++public static bool IsValidEmail
++public static bool IsValidDateRange
++public static bool IsValidDaysInactive
++public static void EnsureValid
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
+
+# 2026-07-19 02:27:38.754659
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `UserRepositoryValidation` (defined in `src/Data/Repositories/UserRepositoryValidation.cs`).
++
++Add a "## UserRepositoryValidation" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public static IReadOnlyList<string> Validate
++public static bool IsValid
++public static bool IsValidUsername
++public static bool IsValidEmail
++public static bool IsValidDateRange
++public static bool IsValidDaysInactive
++public static void EnsureValid
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
++- docs: add WebhookHandlerExtensions documentation to README
++- readme tweaks
++- docs: add ExpressionAndCachingBenchmarksExtensions section to README
++- Readability pass over ECommerceExampleJsonExtensions
