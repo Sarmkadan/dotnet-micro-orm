@@ -9298,3 +9298,67 @@
 +- docs: add ExceptionTests section with usage example
 +- docs: readme tweaks
 +- docs: add CategoryModelTests section with usage example
+
+# 2026-07-17 06:59:46.856501
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `BatchUpsertOperationTests` (defined in `tests/dotnet-micro-orm.Tests/BatchUpsertOperationTests.cs`).
++
++Add a "## BatchUpsertOperationTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task UpsertRangeAsync_EmptyList_ReturnsEmptyResults
++public async Task UpsertAsync_NewEntity_ReturnsInsertedResult
++public async Task UpsertAsync_ExistingEntity_ReturnsUpdatedResult
++public async Task UpsertRangeAsync_InvalidBatchSize_ThrowsArgumentOutOfRange
++public async Task UpsertRangeAsync_InvalidEntity_ThrowsEntityValidationException
++public async Task UpsertRangeAsync_MultipleBatches_ExecutesMultipleQueries
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- refactor(events): small fix
++- Readability pass over OrmExceptionValidation
++- Cleanup in BatchOperationsBenchmarksValidation
++- docs: document .aider.chat.history in the readme
++- docs: add CoreRepositoryTests section with usage example
++- docs: write up PipelineBuilder docs
++- WebhookHandler reference page
++- document .aider.chat.history in the readme
++- docs: minor
++- Readme tweaks
+
+# 2026-07-17 06:59:46.857292
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, extend README.md with a documentation section for the type `BatchUpsertOperationTests` (defined in `tests/dotnet-micro-orm.Tests/BatchUpsertOperationTests.cs`).
++
++Add a "## BatchUpsertOperationTests" section: 2-3 sentences on what it does and a realistic, compiling C# usage example based on its REAL public members:
++```
++public async Task UpsertRangeAsync_EmptyList_ReturnsEmptyResults
++public async Task UpsertAsync_NewEntity_ReturnsInsertedResult
++public async Task UpsertAsync_ExistingEntity_ReturnsUpdatedResult
++public async Task UpsertRangeAsync_InvalidBatchSize_ThrowsArgumentOutOfRange
++public async Task UpsertRangeAsync_InvalidEntity_ThrowsEntityValidationException
++public async Task UpsertRangeAsync_MultipleBatches_ExecutesMultipleQueries
++```
++Only edit README.md. Do not invent members that are not listed.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except the one named above.
++- Do NOT write tests. Do NOT add NuGet packages. No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- refactor(events): small fix
++- Readability pass over OrmExceptionValidation
++- Cleanup in BatchOperationsBenchmarksValidation
++- docs: document .aider.chat.history in the readme
++- docs: add CoreRepositoryTests section with usage example
++- docs: write up PipelineBuilder docs
++- WebhookHandler reference page
++- document .aider.chat.history in the readme
++- docs: minor
++- Readme tweaks
