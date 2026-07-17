@@ -142,6 +142,65 @@ tests.GetFullName_WithFirstAndLastNames_ReturnsCombined();
 tests.MarkAsEmailVerified_ChangesEmailVerificationFlag();
 ```
 
+## RepositoryTests
+
+The `RepositoryTests` class provides unit tests for the `Repository<T>` class, verifying that repository operations work correctly with mocked database contexts. It tests constructor validation, CRUD operations, filtering, counting, existence checks, and proper exception handling, ensuring the repository behaves correctly across various scenarios.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+using DotnetMicroOrm.Exceptions;
+using Moq;
+
+// Instantiate the test class (it lives in the global namespace)
+var tests = new RepositoryTests();
+
+// Test constructor validation
+tests.Constructor_WithNullContext_ThrowsArgumentNullException();
+
+// Create a mock database context and repository
+var mockContext = new Mock<IDatabaseContext>();
+var repository = new Repository<User>(mockContext.Object);
+
+// Test basic CRUD operations
+
+// Test adding a valid entity
+tests.AddAsync_WithValidEntity_AddsSuccessfully();
+
+// Test adding an invalid entity (should throw validation exception)
+tests.AddAsync_WithInvalidEntity_ThrowsEntityValidationException();
+
+// Test getting by ID
+tests.GetByIdAsync_WithExistingId_ReturnsEntity();
+tests.GetByIdAsync_WithNonExistingId_ReturnsNull();
+
+// Test getting all entities
+tests.GetAllAsync_WithMultipleEntities_ReturnsAllEntities();
+tests.GetAllAsync_WithNoEntities_ReturnsEmptyList();
+
+// Test filtering with predicate
+tests.GetAsync_WithMatchingPredicate_ReturnsFilteredEntities();
+tests.GetAsync_WithNoMatchingPredicate_ReturnsEmptyList();
+
+// Test counting entities
+tests.CountAsync_WithPredicate_ReturnsCorrectCount();
+tests.CountAsync_WithNullPredicate_ReturnsTotalCount();
+
+// Test existence checks
+tests.ExistsAsync_WithExistingEntity_ReturnsTrue();
+tests.ExistsAsync_WithNonExistingEntity_ReturnsFalse();
+
+// Test updating entities
+tests.UpdateAsync_WithValidEntity_UpdatesSuccessfully();
+tests.UpdateAsync_WithInvalidEntity_ThrowsEntityValidationException();
+
+// Test deleting entities
+tests.DeleteAsync_WithValidId_DeletesSuccessfully();
+tests.DeleteAsync_WithNonExistingId_ReturnsFalse();
+```
+
 ## RepositoryIntegrationTests
 
 The `RepositoryIntegrationTests` class provides integration tests for the `Repository<TEntity>` class, verifying that repository operations work correctly with mocked database contexts. It tests constructor validation, CRUD operations, batch operations, existence checks, and pagination functionality, ensuring proper interaction patterns and exception handling across various scenarios.
