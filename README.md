@@ -100,8 +100,6 @@ Expression body = benchmarks.GetBody(simpleExpr);
 Console.WriteLine(body); // Output: 42
 ```
 
-// ... goes in between
-
 ## WebhookHandlerExtensions
 
 `WebhookHandlerExtensions` offers a collection of extension methods for `WebhookHandler` that streamline common webhook processing scenarios, including retry logic, batch handling, payload creation, data extraction, event‑type checking, age calculation, and required‑field validation. These helpers encapsulate guard clauses and repetitive patterns, allowing developers to work with webhooks in a concise and type‑safe manner.
@@ -297,3 +295,39 @@ var context = new MiddlewareContext();
 await builder.ExecuteAndGetContextAsync(context);
 ```
 
+## OrderExtensions
+
+`OrderExtensions` adds a set of handy extension methods for the `Order` domain model, allowing you to calculate total weight, determine urgency, format a readable display string, and estimate delivery dates without modifying the original `Order` class.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Collections.Generic;
+using DotnetMicroOrm.Domain.Models;
+
+var order = new Order
+{
+    OrderNumber = 123,
+    OrderDate = DateTime.UtcNow.AddDays(-1),
+    Status = "Pending",
+    TotalAmount = 150.00m,
+    Items = new List<OrderItem>
+    {
+        new OrderItem { ProductId = 1, Quantity = 2 },
+        new OrderItem { ProductId = 2, Quantity = 1 }
+    },
+    ShippingAddress = "123 Main St, Springfield",
+    CreatedDate = DateTime.UtcNow.AddDays(-1)
+};
+
+decimal totalWeight = order.GetTotalWeight();               // uses default weight
+bool isUrgent = order.IsUrgent();                           // true for recent pending orders
+string display = order.ToDisplayString();                   // formatted order details
+DateTime? estimatedDelivery = order.GetEstimatedDeliveryDate();
+
+Console.WriteLine($"Total weight: {totalWeight} kg");
+Console.WriteLine($"Is urgent: {isUrgent}");
+Console.WriteLine(display);
+Console.WriteLine($"Estimated delivery: {estimatedDelivery}");
+```
