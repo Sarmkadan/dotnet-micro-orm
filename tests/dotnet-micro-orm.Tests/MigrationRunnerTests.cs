@@ -99,7 +99,41 @@ public sealed class MigrationRunnerTests
         var pending = await runner.GetPendingMigrationsAsync();
 
         pending.Should().ContainSingle();
-        pending[0].Version.Should().Be("20240103_001");
+        pending[0].Should().Be("20240103_001");
+    }
+
+    /// <summary>
+    /// Tests that GetPendingMigrationsAsync returns only pending migrations in version order.
+    /// </summary>
+    [Fact]
+    public async Task GetPendingMigrationsAsync_ReturnsPendingMigrations()
+    {
+        var contextMock = BuildContextMock();
+
+        var m1 = new Mock<IMigration>();
+        m1.SetupGet(m => m.Version).Returns("20240101_001");
+        
+        var m2 = new Mock<IMigration>();
+        m2.SetupGet(m => m.Version).Returns("20240102_001");
+
+        var m3 = new Mock<IMigration>();
+        m3.SetupGet(m => m.Version).Returns("20240103_001");
+
+        // Assume only m1 is applied
+        contextMock.Setup(c => c.ExecuteQueryAsync(
+                It.Is<string>(s => s.Contains("SELECT [Version]")), It.IsAny<Dictionary<string, object>>()))
+            .ReturnsAsync([new Dictionary<string, object> { ["Version"] = "20240101_001" }]);
+        
+        contextMock.Setup(c => c.ExecuteQueryAsync(
+                It.Is<string>(s => s.Contains("SELECT [Version]")), null))
+            .ReturnsAsync([new Dictionary<string, object> { ["Version"] = "20240101_001" }]);
+
+        var runner = new MigrationRunner(contextMock.Object, [m3.Object, m2.Object, m1.Object]);
+
+        var pending = await runner.GetPendingMigrationsAsync();
+
+        pending.Should().HaveCount(2);
+        pending.Should().Equal("20240102_001", "20240103_001");
     }
 
     /// <summary>
