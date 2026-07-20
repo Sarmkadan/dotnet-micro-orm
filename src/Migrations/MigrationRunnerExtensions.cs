@@ -29,10 +29,10 @@ namespace DotnetMicroOrm.Migrations
         /// <param name="runner">The <see cref="MigrationRunner"/> instance.</param>
         /// <returns>A task that resolves to the number of pending migrations.</returns>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="runner"/> is <c>null</c>.</exception>
-        public static async Task<int> GetPendingMigrationsCountAsync(this MigrationRunner runner)
+        public static async Task<int> GetPendingMigrationsCountAsync(this IMigrationRunner runner)
         {
             ArgumentNullException.ThrowIfNull(runner);
-            IReadOnlyList<IMigration> pending = await runner.GetPendingMigrationsAsync().ConfigureAwait(false);
+            IReadOnlyList<string> pending = await runner.GetPendingMigrationsAsync().ConfigureAwait(false);
             return pending.Count;
         }
 

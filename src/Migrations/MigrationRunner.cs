@@ -101,11 +101,14 @@ public sealed class MigrationRunner : IMigrationRunner
     }
 
     /// <inheritdoc/>
-    public async Task<IReadOnlyList<IMigration>> GetPendingMigrationsAsync()
+    public async Task<IReadOnlyList<string>> GetPendingMigrationsAsync()
     {
         await EnsureHistoryTableAsync();
         var applied = (await GetAppliedVersionsAsync()).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        return _migrations.Where(m => !applied.Contains(m.Version)).ToList();
+        return _migrations
+            .Where(m => !applied.Contains(m.Version))
+            .Select(m => m.Version)
+            .ToList();
     }
 
     // Runs a migration's Up script and records the result in the history table.

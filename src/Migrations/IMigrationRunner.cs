@@ -35,7 +35,7 @@ public interface IMigrationRunner
     Task<IReadOnlyList<MigrationRecord>> GetAppliedMigrationsAsync();
 
     /// <summary>
-    /// Returns the subset of registered migrations that have not yet been applied.
+    /// Returns the versions of registered migrations that have not yet been applied.
     /// </summary>
-    Task<IReadOnlyList<IMigration>> GetPendingMigrationsAsync();
+    Task<IReadOnlyList<string>> GetPendingMigrationsAsync();
 }
