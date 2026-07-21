@@ -11326,3 +11326,123 @@
 +- explain README in readme
 +- readme: README usage
 +- docs: update readme
+
+# 2026-07-21 13:28:13.377667
++Extend tests/dotnet-micro-orm.Tests/MigrationRunnerTests.cs for MigrationRunner (src/Migrations/MigrationRunner.cs): migrations applied in version order regardless of registration order, already-applied migrations skipped (MigrationRecord check), a failing migration halts the run leaving prior ones recorded, and duplicate version handling. Read the class first.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
+
+# 2026-07-21 13:28:13.377732
++Extend tests/dotnet-micro-orm.Tests/MigrationRunnerTests.cs for MigrationRunner (src/Migrations/MigrationRunner.cs): migrations applied in version order regardless of registration order, already-applied migrations skipped (MigrationRecord check), a failing migration halts the run leaving prior ones recorded, and duplicate version handling. Read the class first.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
+
+# 2026-07-21 13:28:19.931881
++Extend tests/dotnet-micro-orm.Tests/MigrationRunnerTests.cs for MigrationRunner (src/Migrations/MigrationRunner.cs): migrations applied in version order regardless of registration order, already-applied migrations skipped (MigrationRecord check), a failing migration halts the run leaving prior ones recorded, and duplicate version handling. Read the class first.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
+
+# 2026-07-21 13:28:19.931943
++Extend tests/dotnet-micro-orm.Tests/MigrationRunnerTests.cs for MigrationRunner (src/Migrations/MigrationRunner.cs): migrations applied in version order regardless of registration order, already-applied migrations skipped (MigrationRecord check), a failing migration halts the run leaving prior ones recorded, and duplicate version handling. Read the class first.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
