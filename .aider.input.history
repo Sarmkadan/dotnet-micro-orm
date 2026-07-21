@@ -11086,3 +11086,243 @@
 +- docs: update readme
 +- docs: add WebhookHandlerExtensions documentation to README
 +- readme tweaks
+
+# 2026-07-21 13:15:02.982452
++Extend tests/dotnet-micro-orm.Tests/QueryBuilderTests.cs: values containing quotes/semicolons must be parameterized (assert generated SQL contains parameter placeholders, not inlined values), identifiers with unexpected characters rejected or quoted, and ORDER BY direction handling. Read the query builder implementation first (grep 'class QueryBuilder' in src/); do not duplicate existing cases.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
+
+# 2026-07-21 13:15:02.982549
++Extend tests/dotnet-micro-orm.Tests/QueryBuilderTests.cs: values containing quotes/semicolons must be parameterized (assert generated SQL contains parameter placeholders, not inlined values), identifiers with unexpected characters rejected or quoted, and ORDER BY direction handling. Read the query builder implementation first (grep 'class QueryBuilder' in src/); do not duplicate existing cases.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
+
+# 2026-07-21 13:15:13.881232
++Extend tests/dotnet-micro-orm.Tests/QueryBuilderTests.cs: values containing quotes/semicolons must be parameterized (assert generated SQL contains parameter placeholders, not inlined values), identifiers with unexpected characters rejected or quoted, and ORDER BY direction handling. Read the query builder implementation first (grep 'class QueryBuilder' in src/); do not duplicate existing cases.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
+
+# 2026-07-21 13:15:13.881285
++Extend tests/dotnet-micro-orm.Tests/QueryBuilderTests.cs: values containing quotes/semicolons must be parameterized (assert generated SQL contains parameter placeholders, not inlined values), identifiers with unexpected characters rejected or quoted, and ORDER BY direction handling. Read the query builder implementation first (grep 'class QueryBuilder' in src/); do not duplicate existing cases.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
+
+# 2026-07-21 13:17:20.922600
++Extend tests/dotnet-micro-orm.Tests/QueryBuilderTests.cs: values containing quotes/semicolons must be parameterized (assert generated SQL contains parameter placeholders, not inlined values), identifiers with unexpected characters rejected or quoted, and ORDER BY direction handling. Read the query builder implementation first (grep 'class QueryBuilder' in src/); do not duplicate existing cases.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
+
+# 2026-07-21 13:17:20.922675
++Extend tests/dotnet-micro-orm.Tests/QueryBuilderTests.cs: values containing quotes/semicolons must be parameterized (assert generated SQL contains parameter placeholders, not inlined values), identifiers with unexpected characters rejected or quoted, and ORDER BY direction handling. Read the query builder implementation first (grep 'class QueryBuilder' in src/); do not duplicate existing cases.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
+
+# 2026-07-21 13:17:29.123440
++Extend tests/dotnet-micro-orm.Tests/QueryBuilderTests.cs: values containing quotes/semicolons must be parameterized (assert generated SQL contains parameter placeholders, not inlined values), identifiers with unexpected characters rejected or quoted, and ORDER BY direction handling. Read the query builder implementation first (grep 'class QueryBuilder' in src/); do not duplicate existing cases.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
+
+# 2026-07-21 13:17:29.123513
++Extend tests/dotnet-micro-orm.Tests/QueryBuilderTests.cs: values containing quotes/semicolons must be parameterized (assert generated SQL contains parameter placeholders, not inlined values), identifiers with unexpected characters rejected or quoted, and ORDER BY direction handling. Read the query builder implementation first (grep 'class QueryBuilder' in src/); do not duplicate existing cases.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
++- explain README in readme
++- readme: README usage
++- docs: update readme
