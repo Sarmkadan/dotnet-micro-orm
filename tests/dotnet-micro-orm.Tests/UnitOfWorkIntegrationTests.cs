@@ -205,6 +205,140 @@ public sealed class UnitOfWorkIntegrationTests
     }
 
     [Fact]
+    public async Task ExceptionInsideTransactionScope_RollsBackChanges()
+    {
+        _contextMock.Setup(c => c.BeginTransactionAsync(It.IsAny<TransactionIsolationLevel>()))
+            .ReturnsAsync(true);
+
+        // Simulate an exception during commit
+        _contextMock.Setup(c => c.CommitAsync())
+            .ThrowsAsync(new Exception("Database commit failed"));
+
+        _contextMock.Setup(c => c.RollbackAsync())
+            .ReturnsAsync(true);
+
+        await _unitOfWork.BeginTransactionAsync();
+
+        // Act & Assert - commit should throw and rollback
+        var act = async () => await _unitOfWork.CommitAsync();
+        await act.Should().ThrowAsync<Exception>();
+
+        // Verify rollback was called
+        _contextMock.Verify(c => c.RollbackAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task CommitAfterDisposeAsync_ThrowsOrmException()
+    {
+        var uow = new UnitOfWork(_contextMock.Object);
+        await uow.DisposeAsync();
+
+        var act = async () => await uow.CommitAsync();
+        await act.Should().ThrowAsync<OrmException>();
+    }
+
+    [Fact]
+    public async Task RollbackAfterDisposeAsync_DoesNotThrow()
+    {
+        var uow = new UnitOfWork(_contextMock.Object);
+        await uow.DisposeAsync();
+
+        var act = async () => await uow.RollbackAsync();
+        await act.Should().NotThrowAsync();
+    }
+
+    [Fact]
+    public async Task DoubleCommit_SecondCommitThrowsOrmException()
+    {
+        _contextMock.Setup(c => c.BeginTransactionAsync(It.IsAny<TransactionIsolationLevel>()))
+            .ReturnsAsync(true);
+        _contextMock.Setup(c => c.CommitAsync())
+            .ReturnsAsync(true);
+
+        await _unitOfWork.BeginTransactionAsync();
+        var firstCommitResult = await _unitOfWork.CommitAsync();
+        firstCommitResult.Should().BeTrue();
+
+        // Second commit should throw because no active transaction
+        var act = async () => await _unitOfWork.CommitAsync();
+        await act.Should().ThrowAsync<OrmException>();
+    }
+
+    [Fact]
+    public async Task DoubleRollback_SecondRollbackDoesNotThrow()
+    {
+        _contextMock.Setup(c => c.BeginTransactionAsync(It.IsAny<TransactionIsolationLevel>()))
+            .ReturnsAsync(true);
+        _contextMock.Setup(c => c.RollbackAsync())
+            .ReturnsAsync(true);
+
+        await _unitOfWork.BeginTransactionAsync();
+        var firstRollbackResult = await _unitOfWork.RollbackAsync();
+        firstRollbackResult.Should().BeTrue();
+
+        // Second rollback should not throw because transaction is no longer active
+        var act = async () => await _unitOfWork.RollbackAsync();
+        await act.Should().NotThrowAsync();
+    }
+
+    [Fact]
+    public async Task ExceptionDuringCommit_CallsRollbackAndThrows()
+    {
+        _contextMock.Setup(c => c.BeginTransactionAsync(It.IsAny<TransactionIsolationLevel>()))
+            .ReturnsAsync(true);
+        _contextMock.Setup(c => c.CommitAsync())
+            .ThrowsAsync(new InvalidOperationException("Invalid operation during commit"));
+        _contextMock.Setup(c => c.RollbackAsync())
+            .ReturnsAsync(true);
+
+        await _unitOfWork.BeginTransactionAsync();
+
+        // Act & Assert
+        var act = async () => await _unitOfWork.CommitAsync();
+        await act.Should().ThrowAsync<InvalidOperationException>();
+
+        // Verify rollback was called despite commit failure
+        _contextMock.Verify(c => c.RollbackAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task DisposeAsync_WithActiveTransaction_CallsRollback()
+    {
+        _contextMock.Setup(c => c.BeginTransactionAsync(It.IsAny<TransactionIsolationLevel>()))
+            .ReturnsAsync(true);
+        _contextMock.Setup(c => c.RollbackAsync())
+            .ReturnsAsync(true);
+
+        await _unitOfWork.BeginTransactionAsync();
+
+        await _unitOfWork.DisposeAsync();
+
+        // Verify rollback was called during disposal
+        _contextMock.Verify(c => c.RollbackAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task DisposeAsync_MultipleTimes_DoesNotThrow()
+    {
+        var uow = new UnitOfWork(_contextMock.Object);
+        await uow.DisposeAsync();
+        await uow.DisposeAsync(); // Second dispose should not throw
+    }
+
+    [Fact]
+    public async Task SaveChangesAsync_WithChanges_ClearsChangeSet()
+    {
+        // Manually add to change set to simulate changes being tracked
+        var changeTrackingField = typeof(UnitOfWork).GetField("_changeSet", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var changeSet = (List<BaseEntity>)changeTrackingField!.GetValue(_unitOfWork)!;
+        changeSet.Add(new Product("TEST-002", "Test Product 2", 15.99m, 1));
+
+        var result = await _unitOfWork.SaveChangesAsync();
+        result.Should().Be(1);
+        _unitOfWork.HasChanges().Should().BeFalse();
+    }
+
+    [Fact]
     public async Task TransactionWorkflow_BeginCommitSequence()
     {
         _contextMock.Setup(c => c.BeginTransactionAsync(It.IsAny<TransactionIsolationLevel>()))
