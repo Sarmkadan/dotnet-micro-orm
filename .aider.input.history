@@ -12204,3 +12204,183 @@
 +- Tweka .aider.chat.history
 +- test: add specification unit tests for active products and users
 +- tweak IMigrationRunner
+
+# 2026-07-22 14:00:21.368827
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandlerJsonExtensions` (defined in `src/Events/OrderCreatedEventHandlerJsonExtensions.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerJsonExtensionsTests.cs` with a test class `OrderCreatedEventHandlerJsonExtensionsTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public static string ToJson
++public static OrderCreatedEventHandler? FromJson
++public static bool TryFromJson(string json, [NotNullWhen
++```
++
++Read the implementation in `src/Events/OrderCreatedEventHandlerJsonExtensions.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
+
+# 2026-07-22 14:00:21.368900
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandlerJsonExtensions` (defined in `src/Events/OrderCreatedEventHandlerJsonExtensions.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerJsonExtensionsTests.cs` with a test class `OrderCreatedEventHandlerJsonExtensionsTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public static string ToJson
++public static OrderCreatedEventHandler? FromJson
++public static bool TryFromJson(string json, [NotNullWhen
++```
++
++Read the implementation in `src/Events/OrderCreatedEventHandlerJsonExtensions.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
+
+# 2026-07-22 14:02:31.721262
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandlerJsonExtensions` (defined in `src/Events/OrderCreatedEventHandlerJsonExtensions.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerJsonExtensionsTests.cs` with a test class `OrderCreatedEventHandlerJsonExtensionsTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public static string ToJson
++public static OrderCreatedEventHandler? FromJson
++public static bool TryFromJson(string json, [NotNullWhen
++```
++
++Read the implementation in `src/Events/OrderCreatedEventHandlerJsonExtensions.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
+
+# 2026-07-22 14:02:31.721414
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandlerJsonExtensions` (defined in `src/Events/OrderCreatedEventHandlerJsonExtensions.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerJsonExtensionsTests.cs` with a test class `OrderCreatedEventHandlerJsonExtensionsTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public static string ToJson
++public static OrderCreatedEventHandler? FromJson
++public static bool TryFromJson(string json, [NotNullWhen
++```
++
++Read the implementation in `src/Events/OrderCreatedEventHandlerJsonExtensions.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
