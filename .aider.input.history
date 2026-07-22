@@ -11824,3 +11824,191 @@
 +- readme: .aider.chat.history usage
 +- update readme
 +- Document .aider.chat.history in the readme
+
+# 2026-07-22 12:27:19.109025
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `DotnetMicroOrmException` (defined in `src/Exceptions/DotnetMicroOrmException.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/DotnetMicroOrmExceptionTests.cs` with a test class `DotnetMicroOrmExceptionTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Read the implementation in `src/Exceptions/DotnetMicroOrmException.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
+
+# 2026-07-22 12:27:19.109280
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `DotnetMicroOrmException` (defined in `src/Exceptions/DotnetMicroOrmException.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/DotnetMicroOrmExceptionTests.cs` with a test class `DotnetMicroOrmExceptionTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Read the implementation in `src/Exceptions/DotnetMicroOrmException.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
+
+# 2026-07-22 12:29:25.211786
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `DotnetMicroOrmException` (defined in `src/Exceptions/DotnetMicroOrmException.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/DotnetMicroOrmExceptionTests.cs` with a test class `DotnetMicroOrmExceptionTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Read the implementation in `src/Exceptions/DotnetMicroOrmException.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
+
+# 2026-07-22 12:29:25.211894
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `DotnetMicroOrmException` (defined in `src/Exceptions/DotnetMicroOrmException.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/DotnetMicroOrmExceptionTests.cs` with a test class `DotnetMicroOrmExceptionTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public string? ErrorCode
++public Dictionary<string, object>? ErrorContext
++public DotnetMicroOrmException
++public DotnetMicroOrmException WithContext
++public override string ToString
++```
++
++Read the implementation in `src/Exceptions/DotnetMicroOrmException.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
