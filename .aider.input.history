@@ -11566,3 +11566,61 @@
 +- Document .aider.chat.history in the readme
 +- docs: add OrderExtensions documentation to README
 +- explain README in readme
+
+# 2026-07-22 08:29:00.299391
++STEP-BY-STEP INSTRUCTIONS (follow exactly):
++1. Read the file. Find the exact bug described below.
++2. Fix ONLY that bug. Do not refactor or change anything else.
++3. Run: dotnet build. Verify your fix compiles.
++4. Commit with message describing what was wrong and how you fixed it.
++
++BUG TO FIX:
++Read how ConcurrencyTokenAttribute is honored in update SQL generation (grep ConcurrencyToken in src/). Verify the UPDATE includes the token in the WHERE clause AND bumps it in SET, and that a 0-rows-affected result raises ConcurrencyException. If either is missing/wrong, fix it; either way add a regression test for the conflicting-update path.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
+
+# 2026-07-22 08:29:00.299450
++STEP-BY-STEP INSTRUCTIONS (follow exactly):
++1. Read the file. Find the exact bug described below.
++2. Fix ONLY that bug. Do not refactor or change anything else.
++3. Run: dotnet build. Verify your fix compiles.
++4. Commit with message describing what was wrong and how you fixed it.
++
++BUG TO FIX:
++Read how ConcurrencyTokenAttribute is honored in update SQL generation (grep ConcurrencyToken in src/). Verify the UPDATE includes the token in the WHERE clause AND bumps it in SET, and that a 0-rows-affected result raises ConcurrencyException. If either is missing/wrong, fix it; either way add a regression test for the conflicting-update path.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props unless the task explicitly says to.
++- Do NOT add NuGet packages unless the task explicitly requires it.
++- The whole solution MUST still compile with dotnet build.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
++- .aider.chat.history.md
++- Tweka .aider.chat.history
++- test: add specification unit tests for active products and users
++- tweak IMigrationRunner
++- readme: .aider.chat.history usage
++- update readme
++- Document .aider.chat.history in the readme
++- docs: add OrderExtensions documentation to README
