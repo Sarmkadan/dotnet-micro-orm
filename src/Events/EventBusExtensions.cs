@@ -66,7 +66,7 @@ public static class EventBusExtensions
         ArgumentNullException.ThrowIfNull(bus);
 
         return bus.GetType()
-            .GetProperty("Subscribers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .GetField("_subscribers", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
             ?.GetValue(bus) is System.Collections.Concurrent.ConcurrentDictionary<Type, List<object>> subscribersDict
             ? subscribersDict.Values.Sum(list => list.Count)
             : 0;
