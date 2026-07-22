@@ -139,6 +139,13 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
             if (originalConcurrencyValue is null)
                 throw new OrmException($"Concurrency token '{concurrencyTokenInfo.PropertyName}' cannot be null for entity with Id {idValue}.");
 
+            // Bump the concurrency token value in the SET clause for optimistic concurrency control
+            // This ensures the next update will fail if someone else modified the record
+            query = query.Replace(
+                $"[{concurrencyTokenInfo.ColumnName}] = @{concurrencyTokenInfo.PropertyName}",
+                $"[{concurrencyTokenInfo.ColumnName}] = @{concurrencyTokenInfo.PropertyName} + 1"
+            );
+
             query += $" AND [{concurrencyTokenInfo.ColumnName}] = @OriginalConcurrencyValue";
             parameters["OriginalConcurrencyValue"] = originalConcurrencyValue;
         }
