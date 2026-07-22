@@ -12474,3 +12474,363 @@
 +- MigrationRunnerTests changes
 +- .aider.chat.history.md
 +- Tweka .aider.chat.history
+
+# 2026-07-22 17:10:46.294023
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandler` (defined in `src/Events/OrderEventHandler.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerTests.cs` with a test class `OrderCreatedEventHandlerTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public async Task HandleAsync
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Read the implementation in `src/Events/OrderEventHandler.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: update EventBusExtensions
++- Update OrmExceptionValidationTests
++- chore(dotnet-micro-orm.tests): OrderCreatedEventHandlerJsonExtensionsTes
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
+
+# 2026-07-22 17:10:46.294479
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandler` (defined in `src/Events/OrderEventHandler.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerTests.cs` with a test class `OrderCreatedEventHandlerTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public async Task HandleAsync
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Read the implementation in `src/Events/OrderEventHandler.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: update EventBusExtensions
++- Update OrmExceptionValidationTests
++- chore(dotnet-micro-orm.tests): OrderCreatedEventHandlerJsonExtensionsTes
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
+
+# 2026-07-22 17:15:56.972102
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandler` (defined in `src/Events/OrderEventHandler.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerTests.cs` with a test class `OrderCreatedEventHandlerTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public async Task HandleAsync
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Read the implementation in `src/Events/OrderEventHandler.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: update EventBusExtensions
++- Update OrmExceptionValidationTests
++- chore(dotnet-micro-orm.tests): OrderCreatedEventHandlerJsonExtensionsTes
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
+
+# 2026-07-22 17:15:56.972164
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandler` (defined in `src/Events/OrderEventHandler.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerTests.cs` with a test class `OrderCreatedEventHandlerTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public async Task HandleAsync
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Read the implementation in `src/Events/OrderEventHandler.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: update EventBusExtensions
++- Update OrmExceptionValidationTests
++- chore(dotnet-micro-orm.tests): OrderCreatedEventHandlerJsonExtensionsTes
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
+
+# 2026-07-22 17:18:06.150992
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandler` (defined in `src/Events/OrderEventHandler.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerTests.cs` with a test class `OrderCreatedEventHandlerTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public async Task HandleAsync
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Read the implementation in `src/Events/OrderEventHandler.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: update EventBusExtensions
++- Update OrmExceptionValidationTests
++- chore(dotnet-micro-orm.tests): OrderCreatedEventHandlerJsonExtensionsTes
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
+
+# 2026-07-22 17:18:06.151069
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandler` (defined in `src/Events/OrderEventHandler.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerTests.cs` with a test class `OrderCreatedEventHandlerTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public async Task HandleAsync
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Read the implementation in `src/Events/OrderEventHandler.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: update EventBusExtensions
++- Update OrmExceptionValidationTests
++- chore(dotnet-micro-orm.tests): OrderCreatedEventHandlerJsonExtensionsTes
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
+
+# 2026-07-22 17:18:18.858823
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandler` (defined in `src/Events/OrderEventHandler.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerTests.cs` with a test class `OrderCreatedEventHandlerTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public async Task HandleAsync
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Read the implementation in `src/Events/OrderEventHandler.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: update EventBusExtensions
++- Update OrmExceptionValidationTests
++- chore(dotnet-micro-orm.tests): OrderCreatedEventHandlerJsonExtensionsTes
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
+
+# 2026-07-22 17:18:18.859237
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `OrderCreatedEventHandler` (defined in `src/Events/OrderEventHandler.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/OrderCreatedEventHandlerTests.cs` with a test class `OrderCreatedEventHandlerTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public async Task HandleAsync
++public async Task HandleAsync
++public async Task HandleAsync
++```
++
++Read the implementation in `src/Events/OrderEventHandler.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++EXPLICIT STEPS:
++1. Check which test framework the project uses: look at existing test .csproj for xUnit/NUnit/MSTest PackageReference.
++2. Match that framework exactly. Do NOT use a different one.
++3. Create the test file in the path specified above.
++4. Write 4-8 real test methods - read the source class to understand actual behavior.
++5. Run: dotnet test. ALL tests must pass. If they fail, fix them.
++6. If the test project does not exist or has no test framework reference, STOP - do not create it.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: update EventBusExtensions
++- Update OrmExceptionValidationTests
++- chore(dotnet-micro-orm.tests): OrderCreatedEventHandlerJsonExtensionsTes
++- chore: EventBusTests changes
++- Tweak DotnetMicroOrmExceptionTests
++- .
++- Update OrmExceptionTests
++- Repository changes
++- Tweak UnitOfWorkIntegrationTests
++- MigrationRunnerTests changes
