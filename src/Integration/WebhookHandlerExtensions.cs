@@ -70,7 +70,7 @@ public static class WebhookHandlerExtensions
     }
 
     /// <summary>
-    /// Processes a webhook payload and automatically generates the expected signature.
+    /// Processes a webhook payload and automatically generates the expected signature header.
     /// Useful for testing scenarios where you need to simulate verified webhooks.
     /// </summary>
     /// <param name="handler">The webhook handler instance.</param>
@@ -84,8 +84,8 @@ public static class WebhookHandlerExtensions
         ArgumentNullException.ThrowIfNull(handler);
         ArgumentNullException.ThrowIfNull(payload);
 
-        var signature = handler.GenerateSignature(payload);
-        return await handler.ProcessAsync(payload, signature).ConfigureAwait(false);
+        var signatureHeader = handler.GenerateSignatureHeader(payload);
+        return await handler.ProcessAsync(payload, signatureHeader).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public static class WebhookHandlerExtensions
         {
             var payloadList = group.Value.ToList();
             var tasks = payloadList
-                .Select(p => handler.ProcessAsync(p, handler.GenerateSignature(p)))
+                .Select(p => handler.ProcessAsync(p, handler.GenerateSignatureHeader(p)))
                 .ToArray();
 
             var batchResults = await Task.WhenAll(tasks).ConfigureAwait(false);
