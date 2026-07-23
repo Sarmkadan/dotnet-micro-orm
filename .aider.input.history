@@ -14204,3 +14204,147 @@
 +- .aider.chat.history.md
 +- test: add unit tests for WebhookHandler
 +- test: add webhook handler tests
+
+# 2026-07-24 02:20:25.391803
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, implement the following improvement.
++
++Title: Sign webhook payloads with HMAC and provide signature verification
++
++Likely relevant file/type: src/DotnetMicroOrm/Webhooks/WebhookPayload.cs
++
++No signing/verification type exists near WebhookPayload. Add HMAC-SHA256 signing: WebhookHandler computes a signature header over the serialized payload plus timestamp; ship a WebhookSignatureValidator with constant-time comparison and a timestamp tolerance window to prevent replay. Secret comes from configuration, never logged.
++
++Read the actual current code first - the file/type hint above is a starting pointer from a lightweight analysis, not a guarantee of exact current structure. If the described issue doesn't apply as stated (code already handles it, or the type/file differs), adapt the fix to what you actually find, or pick the closest genuinely useful improvement in the same area. Do not fabricate a problem that doesn't exist.
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Implement the feature COMPLETELY and for real. If some part cannot be implemented for real, omit it - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application".
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit, pattern matching over if-chains, target-typed new.
++- XML doc comments on every new public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except what's needed for this task.
++- Do NOT write tests unless explicitly asked. Do NOT add NuGet packages unless explicitly needed and already-available in the BCL is not enough.
++- No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- CircuitBreakerException.cs
++- tweak CommandHandlerTests
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- chore: .aider.chat.history.md
++- update DefaultHttpClientExtensionsTests
++- Update DefaultHttpClientTests
++- Nits
++- .aider.chat.history.md
++- test: add unit tests for WebhookHandler
+
+# 2026-07-24 02:20:25.391909
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, implement the following improvement.
++
++Title: Sign webhook payloads with HMAC and provide signature verification
++
++Likely relevant file/type: src/DotnetMicroOrm/Webhooks/WebhookPayload.cs
++
++No signing/verification type exists near WebhookPayload. Add HMAC-SHA256 signing: WebhookHandler computes a signature header over the serialized payload plus timestamp; ship a WebhookSignatureValidator with constant-time comparison and a timestamp tolerance window to prevent replay. Secret comes from configuration, never logged.
++
++Read the actual current code first - the file/type hint above is a starting pointer from a lightweight analysis, not a guarantee of exact current structure. If the described issue doesn't apply as stated (code already handles it, or the type/file differs), adapt the fix to what you actually find, or pick the closest genuinely useful improvement in the same area. Do not fabricate a problem that doesn't exist.
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Implement the feature COMPLETELY and for real. If some part cannot be implemented for real, omit it - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application".
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit, pattern matching over if-chains, target-typed new.
++- XML doc comments on every new public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except what's needed for this task.
++- Do NOT write tests unless explicitly asked. Do NOT add NuGet packages unless explicitly needed and already-available in the BCL is not enough.
++- No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- CircuitBreakerException.cs
++- tweak CommandHandlerTests
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- chore: .aider.chat.history.md
++- update DefaultHttpClientExtensionsTests
++- Update DefaultHttpClientTests
++- Nits
++- .aider.chat.history.md
++- test: add unit tests for WebhookHandler
+
+# 2026-07-24 02:20:37.657418
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, implement the following improvement.
++
++Title: Sign webhook payloads with HMAC and provide signature verification
++
++Likely relevant file/type: src/DotnetMicroOrm/Webhooks/WebhookPayload.cs
++
++No signing/verification type exists near WebhookPayload. Add HMAC-SHA256 signing: WebhookHandler computes a signature header over the serialized payload plus timestamp; ship a WebhookSignatureValidator with constant-time comparison and a timestamp tolerance window to prevent replay. Secret comes from configuration, never logged.
++
++Read the actual current code first - the file/type hint above is a starting pointer from a lightweight analysis, not a guarantee of exact current structure. If the described issue doesn't apply as stated (code already handles it, or the type/file differs), adapt the fix to what you actually find, or pick the closest genuinely useful improvement in the same area. Do not fabricate a problem that doesn't exist.
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Implement the feature COMPLETELY and for real. If some part cannot be implemented for real, omit it - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application".
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit, pattern matching over if-chains, target-typed new.
++- XML doc comments on every new public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except what's needed for this task.
++- Do NOT write tests unless explicitly asked. Do NOT add NuGet packages unless explicitly needed and already-available in the BCL is not enough.
++- No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- CircuitBreakerException.cs
++- tweak CommandHandlerTests
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- chore: .aider.chat.history.md
++- update DefaultHttpClientExtensionsTests
++- Update DefaultHttpClientTests
++- Nits
++- .aider.chat.history.md
++- test: add unit tests for WebhookHandler
+
+# 2026-07-24 02:20:37.657492
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, implement the following improvement.
++
++Title: Sign webhook payloads with HMAC and provide signature verification
++
++Likely relevant file/type: src/DotnetMicroOrm/Webhooks/WebhookPayload.cs
++
++No signing/verification type exists near WebhookPayload. Add HMAC-SHA256 signing: WebhookHandler computes a signature header over the serialized payload plus timestamp; ship a WebhookSignatureValidator with constant-time comparison and a timestamp tolerance window to prevent replay. Secret comes from configuration, never logged.
++
++Read the actual current code first - the file/type hint above is a starting pointer from a lightweight analysis, not a guarantee of exact current structure. If the described issue doesn't apply as stated (code already handles it, or the type/file differs), adapt the fix to what you actually find, or pick the closest genuinely useful improvement in the same area. Do not fabricate a problem that doesn't exist.
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Implement the feature COMPLETELY and for real. If some part cannot be implemented for real, omit it - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application".
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit, pattern matching over if-chains, target-typed new.
++- XML doc comments on every new public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except what's needed for this task.
++- Do NOT write tests unless explicitly asked. Do NOT add NuGet packages unless explicitly needed and already-available in the BCL is not enough.
++- No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- CircuitBreakerException.cs
++- tweak CommandHandlerTests
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- chore: .aider.chat.history.md
++- update DefaultHttpClientExtensionsTests
++- Update DefaultHttpClientTests
++- Nits
++- .aider.chat.history.md
++- test: add unit tests for WebhookHandler

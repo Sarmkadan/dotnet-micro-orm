@@ -13,12 +13,12 @@ namespace DotnetMicroOrm.Integration;
 /// <summary>
 /// Handles incoming webhooks with signature verification and event processing.
 /// Supports multiple webhook types (user events, order events, etc).
-/// Verifies authenticity using HMAC-SHA256 signatures.
+/// Verifies authenticity using HMAC-SHA256 signatures with timestamp-based anti-replay protection.
 /// </summary>
 public sealed class WebhookHandler : IAsyncDisposable
 {
     private readonly Dictionary<string, List<Func<WebhookPayload, Task>>> _handlers = [];
-    private readonly string _secret;
+    private readonly WebhookSignatureValidator _signatureValidator;
     private readonly IHttpClient _httpClient;
     private readonly IWebhookDeadLetterStore _deadLetterStore;
     private readonly Dictionary<string, ICircuitBreakerPolicy> _circuitBreakers = [];
@@ -32,14 +32,16 @@ public sealed class WebhookHandler : IAsyncDisposable
     /// <param name="secret">Secret for signature verification</param>
     /// <param name="httpClient">HTTP client for outbound requests (optional)</param>
     /// <param name="deadLetterStore">Dead letter store for failed deliveries (optional)</param>
+    /// <param name="timestampTolerance">Maximum allowed time difference between webhook timestamp and current time (default: 5 minutes)</param>
     public WebhookHandler(
         string secret,
         IHttpClient? httpClient = null,
-        IWebhookDeadLetterStore? deadLetterStore = null)
+        IWebhookDeadLetterStore? deadLetterStore = null,
+        TimeSpan? timestampTolerance = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(secret);
 
-        _secret = secret;
+        _signatureValidator = new WebhookSignatureValidator(secret, timestampTolerance);
         _httpClient = httpClient ?? new DefaultHttpClient();
         _deadLetterStore = deadLetterStore ?? new InMemoryWebhookDeadLetterStore();
     }
@@ -64,12 +66,16 @@ public sealed class WebhookHandler : IAsyncDisposable
     /// <summary>
     /// Processes an incoming webhook request with signature verification
     /// </summary>
-    public async Task<WebhookResult> ProcessAsync(WebhookPayload payload, string signature)
+    /// <param name="payload">Webhook payload to process</param>
+    /// <param name="signatureHeader">Signature header in format "t={timestamp},v1={signature}"</param>
+    /// <returns>Result of webhook processing</returns>
+    /// <exception cref="ArgumentNullException">Thrown if payload is null</exception>
+    public async Task<WebhookResult> ProcessAsync(WebhookPayload payload, string signatureHeader)
     {
         ArgumentNullException.ThrowIfNull(payload);
 
-        // Verify signature
-        if (!VerifySignature(payload, signature))
+        // Verify signature with timestamp validation
+        if (!_signatureValidator.ValidateSignature(payload, signatureHeader))
         {
             return new WebhookResult
             {
@@ -115,41 +121,30 @@ public sealed class WebhookHandler : IAsyncDisposable
     }
 
     /// <summary>
-    /// Verifies webhook signature using HMAC-SHA256
+    /// Generates a signature header for a webhook payload (for testing and outbound deliveries)
     /// </summary>
-    private bool VerifySignature(WebhookPayload payload, string signature)
+    /// <param name="payload">Webhook payload to sign</param>
+    /// <returns>Signature header string in format "t={timestamp},v1={signature}"</returns>
+    /// <exception cref="ArgumentNullException">Thrown if payload is null</exception>
+    public string GenerateSignatureHeader(WebhookPayload payload)
     {
-        if (string.IsNullOrEmpty(signature))
-            return false;
-
-        try
-        {
-            var payloadJson = System.Text.Json.JsonSerializer.Serialize(payload);
-            var secretBytes = Encoding.UTF8.GetBytes(_secret);
-
-            using (var hmac = new HMACSHA256(secretBytes))
-            {
-                var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payloadJson));
-                var expectedSignature = Convert.ToHexString(hash).ToLowerInvariant();
-
-                return signature.Equals(expectedSignature, StringComparison.OrdinalIgnoreCase);
-            }
-        }
-        catch
-        {
-            return false;
-        }
+        ArgumentNullException.ThrowIfNull(payload);
+        return _signatureValidator.GenerateSignatureHeader(payload);
     }
 
     /// <summary>
-    /// Generates a signature for a webhook payload (for testing)
+    /// Generates a signature for a webhook payload (legacy method for backward compatibility)
     /// </summary>
+    /// <param name="payload">Webhook payload to sign</param>
+    /// <returns>Hex-encoded HMAC-SHA256 signature</returns>
+    /// <exception cref="ArgumentNullException">Thrown if payload is null</exception>
+    [Obsolete("Use GenerateSignatureHeader instead. This method does not include timestamp-based anti-replay protection.")]
     public string GenerateSignature(WebhookPayload payload)
     {
         ArgumentNullException.ThrowIfNull(payload);
 
         var payloadJson = System.Text.Json.JsonSerializer.Serialize(payload);
-        var secretBytes = Encoding.UTF8.GetBytes(_secret);
+        var secretBytes = Encoding.UTF8.GetBytes(_signatureValidator.GetSecretForBackwardCompatibility());
 
         using (var hmac = new HMACSHA256(secretBytes))
         {
