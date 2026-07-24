@@ -14674,3 +14674,79 @@
 +- chore(dotnet-micro-orm.tests): .aider.chat.history.md
 +- CircuitBreakerException.cs
 +- tweak CommandHandlerTests
+
+# 2026-07-24 16:33:22.183470
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, implement the following improvement.
++
++Title: Wire QueryProfile into an N+1 and slow-query detector
++
++Likely relevant file/type: src/DotnetMicroOrm/Profiling/QueryProfile.cs
++
++QueryProfile/QueryProfilerSummary exist but nothing consumes them. Add a QueryProfilerOptions with SlowQueryThreshold and an N+1 heuristic: flag when the same parameterized SQL text executes more than N times within one connection/unit-of-work scope. Emit via a pluggable IProfilerSink (logging default) so it works in production, not just tests. Ensure profiling is zero-allocation when disabled (guard before capturing SQL text/stack).
++
++Read the actual current code first - the file/type hint above is a starting pointer from a lightweight analysis, not a guarantee of exact current structure. If the described issue doesn't apply as stated (code already handles it, or the type/file differs), adapt the fix to what you actually find, or pick the closest genuinely useful improvement in the same area. Do not fabricate a problem that doesn't exist.
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Implement the feature COMPLETELY and for real. If some part cannot be implemented for real, omit it - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application".
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit, pattern matching over if-chains, target-typed new.
++- XML doc comments on every new public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except what's needed for this task.
++- Do NOT write tests unless explicitly asked. Do NOT add NuGet packages unless explicitly needed and already-available in the BCL is not enough.
++- No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++IMPORTANT: a previous attempt at this exact task changed NOTHING - it replied with an explanation or a code fragment instead of an applicable edit, so no file was written. Do not repeat that. Output each file you change as a COMPLETE file: the full contents from the first line to the last, inside a fenced code block preceded by the file path. Never reply with a snippet, a diff hunk, a partial class, or a description of what you would do. If the task is already satisfied in the current code, say exactly: NO CHANGE NEEDED - and explain why.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .
++- feat: add exponential backoff retry policy for transient connection failures
++- MemoryCacheProvider.cs
++- CachingStrategy changes
++- Tweak MigrationRunnerExtensionsTests
++- ICacheProvider.cs
++- QueryProfileTests changes
++- WebhookHandler changes
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- CircuitBreakerException.cs
+
+# 2026-07-24 16:33:22.183567
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, implement the following improvement.
++
++Title: Wire QueryProfile into an N+1 and slow-query detector
++
++Likely relevant file/type: src/DotnetMicroOrm/Profiling/QueryProfile.cs
++
++QueryProfile/QueryProfilerSummary exist but nothing consumes them. Add a QueryProfilerOptions with SlowQueryThreshold and an N+1 heuristic: flag when the same parameterized SQL text executes more than N times within one connection/unit-of-work scope. Emit via a pluggable IProfilerSink (logging default) so it works in production, not just tests. Ensure profiling is zero-allocation when disabled (guard before capturing SQL text/stack).
++
++Read the actual current code first - the file/type hint above is a starting pointer from a lightweight analysis, not a guarantee of exact current structure. If the described issue doesn't apply as stated (code already handles it, or the type/file differs), adapt the fix to what you actually find, or pick the closest genuinely useful improvement in the same area. Do not fabricate a problem that doesn't exist.
++
++QUALITY BAR (an automated review rejects the commit if violated):
++- Implement the feature COMPLETELY and for real. If some part cannot be implemented for real, omit it - never fake a result, never hardcode a return value, never write "simplified for demo" / "in a real application".
++- Guard clauses first: ArgumentNullException.ThrowIfNull(x) / ArgumentException.ThrowIfNullOrEmpty(s) at the top of each public method.
++- Modern C#: expression-bodied members where they fit, pattern matching over if-chains, target-typed new.
++- XML doc comments on every new public member, including <exception> tags for every throw.
++
++HARD RULES (build check runs after you; violating any fails the task):
++- Do NOT touch .csproj/.sln/.slnx/Directory.Build.props or any other existing file except what's needed for this task.
++- Do NOT write tests unless explicitly asked. Do NOT add NuGet packages unless explicitly needed and already-available in the BCL is not enough.
++- No mention of AI/assistant in code or commits.
++- The whole solution MUST still compile with `dotnet build`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++IMPORTANT: a previous attempt at this exact task changed NOTHING - it replied with an explanation or a code fragment instead of an applicable edit, so no file was written. Do not repeat that. Output each file you change as a COMPLETE file: the full contents from the first line to the last, inside a fenced code block preceded by the file path. Never reply with a snippet, a diff hunk, a partial class, or a description of what you would do. If the task is already satisfied in the current code, say exactly: NO CHANGE NEEDED - and explain why.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- .
++- feat: add exponential backoff retry policy for transient connection failures
++- MemoryCacheProvider.cs
++- CachingStrategy changes
++- Tweak MigrationRunnerExtensionsTests
++- ICacheProvider.cs
++- QueryProfileTests changes
++- WebhookHandler changes
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- CircuitBreakerException.cs
