@@ -28,8 +28,29 @@ public class OrmException : DotnetMicroOrmException
 /// </summary>
 public sealed class DatabaseConnectionException : OrmException
 {
-    public DatabaseConnectionException(string message, Exception? innerException = null)
-        : base(message, "DB_CONNECTION_ERROR", innerException) { }
+    /// <summary>
+    /// Indicates whether the underlying failure is transient (e.g. a timeout, deadlock, or
+    /// temporary service throttling) and therefore safe to retry. Consulted by
+    /// <see cref="DotnetMicroOrm.Data.ConnectionRetryPolicy"/> when deciding whether to retry the
+    /// failed operation.
+    /// </summary>
+    public bool IsTransient { get; }
+
+    /// <summary>
+    /// Creates a new <see cref="DatabaseConnectionException"/>.
+    /// </summary>
+    /// <param name="message">Human-readable description of the failure.</param>
+    /// <param name="innerException">The underlying exception raised by the ADO.NET provider, if any.</param>
+    /// <param name="isTransient">
+    /// Whether the failure is transient and worth retrying. Defaults to <c>false</c> when not specified.
+    /// </param>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="message"/> is null or empty.</exception>
+    public DatabaseConnectionException(string message, Exception? innerException = null, bool isTransient = false)
+        : base(message, "DB_CONNECTION_ERROR", innerException)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(message);
+        IsTransient = isTransient;
+    }
 }
 
 /// <summary>
