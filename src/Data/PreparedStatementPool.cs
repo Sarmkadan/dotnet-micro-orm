@@ -5,6 +5,7 @@
 // =============================================================================
 
 using System.Collections.Concurrent;
+using DotnetMicroOrm.Caching;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -142,16 +143,18 @@ public static class QueryPlanCacheExtensions
     /// <param name="services">The DI container to configure.</param>
     /// <param name="configurePlanCache">Optional delegate to adjust <see cref="QueryPlanCacheOptions"/>.</param>
     /// <param name="configureStatementPool">Optional delegate to adjust <see cref="PreparedStatementPoolOptions"/>.</param>
+    /// <param name="cacheProvider">Optional custom cache provider. If null, <see cref="MemoryCacheProvider"/> will be used.</param>
     /// <returns>The same <see cref="IServiceCollection"/> for method chaining.</returns>
     public static IServiceCollection AddQueryPlanCaching(
         this IServiceCollection services,
         Action<QueryPlanCacheOptions>? configurePlanCache = null,
-        Action<PreparedStatementPoolOptions>? configureStatementPool = null)
+        Action<PreparedStatementPoolOptions>? configureStatementPool = null,
+        ICacheProvider? cacheProvider = null)
     {
         var planCacheOptions = new QueryPlanCacheOptions();
         configurePlanCache?.Invoke(planCacheOptions);
         services.AddSingleton(planCacheOptions);
-        services.AddSingleton<IQueryPlanCache, QueryPlanCache>();
+        services.AddSingleton<IQueryPlanCache>(provider => new QueryPlanCache(planCacheOptions, provider.GetRequiredService<ILogger<QueryPlanCache>>(), cacheProvider));
 
         var poolOptions = new PreparedStatementPoolOptions();
         configureStatementPool?.Invoke(poolOptions);
