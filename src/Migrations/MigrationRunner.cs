@@ -7,6 +7,7 @@
 namespace DotnetMicroOrm.Migrations;
 
 using System.Globalization;
+using DotnetMicroOrm.Constants;
 using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Exceptions;
 
@@ -109,6 +110,168 @@ public sealed class MigrationRunner : IMigrationRunner
             .Where(m => !applied.Contains(m.Version))
             .Select(m => m.Version)
             .ToList();
+    }
+
+    /// <inheritdoc/>
+    public async Task<IReadOnlyList<IMigrationRunner.PendingMigration>> GetPendingMigrationsWithDetailsAsync()
+    {
+        await EnsureHistoryTableAsync();
+        var applied = (await GetAppliedVersionsAsync()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var pendingMigrations = new List<IMigrationRunner.PendingMigration>();
+
+        foreach (var migration in _migrations.Where(m => !applied.Contains(m.Version))
+                     .OrderBy(m => m.Version, StringComparer.OrdinalIgnoreCase))
+        {
+            pendingMigrations.Add(new IMigrationRunner.PendingMigration
+            {
+                Version = migration.Version,
+                Description = migration.Description,
+                UpSql = await GenerateSqlInternalAsync(migration, isUp: true)
+            });
+        }
+
+        return pendingMigrations;
+    }
+
+    /// <inheritdoc/>
+    public async Task<string> GenerateUpSqlAsync(string version)
+    {
+        if (string.IsNullOrWhiteSpace(version))
+            throw new ArgumentException("Version must not be empty.", nameof(version));
+
+        var migration = _migrations.FirstOrDefault(m => string.Equals(m.Version, version, StringComparison.OrdinalIgnoreCase))
+            ?? throw new KeyNotFoundException($"No migration found with version '{version}'.");
+
+        return await GenerateSqlInternalAsync(migration, isUp: true);
+    }
+
+    /// <inheritdoc/>
+    public async Task<string> GenerateDownSqlAsync(string version)
+    {
+        if (string.IsNullOrWhiteSpace(version))
+            throw new ArgumentException("Version must not be empty.", nameof(version));
+
+        var migration = _migrations.FirstOrDefault(m => string.Equals(m.Version, version, StringComparison.OrdinalIgnoreCase))
+            ?? throw new KeyNotFoundException($"No migration found with version '{version}'.");
+
+        return await GenerateSqlInternalAsync(migration, isUp: false);
+    }
+
+    /// <inheritdoc/>
+    public async Task<IReadOnlyList<string>> MigrateDryRunAsync(string? targetVersion = null)
+    {
+        if (!string.IsNullOrWhiteSpace(targetVersion) && string.IsNullOrWhiteSpace(targetVersion.Trim()))
+            throw new ArgumentException("Target version must not be whitespace.", nameof(targetVersion));
+
+        await EnsureHistoryTableAsync();
+        var applied = (await GetAppliedVersionsAsync()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var migrationsToApply = targetVersion == null
+            ? _migrations.Where(m => !applied.Contains(m.Version))
+            : _migrations
+                .Where(m => string.Compare(m.Version, targetVersion, StringComparison.OrdinalIgnoreCase) <= 0
+                            && !applied.Contains(m.Version));
+
+        var scripts = new List<string>();
+
+        foreach (var migration in migrationsToApply.OrderBy(m => m.Version, StringComparer.OrdinalIgnoreCase))
+        {
+            scripts.Add(await GenerateSqlInternalAsync(migration, isUp: true));
+        }
+
+        return scripts;
+    }
+
+    /// <inheritdoc/>
+    public async Task<IReadOnlyList<string>> RollbackDryRunAsync(string targetVersion)
+    {
+        if (string.IsNullOrWhiteSpace(targetVersion))
+            throw new ArgumentException("Target version must not be empty.", nameof(targetVersion));
+
+        await EnsureHistoryTableAsync();
+        var applied = (await GetAppliedVersionsAsync()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var migrationsToRollback = _migrations
+            .Where(m => string.Compare(m.Version, targetVersion, StringComparison.OrdinalIgnoreCase) > 0
+                        && applied.Contains(m.Version))
+            .OrderByDescending(m => m.Version, StringComparer.OrdinalIgnoreCase);
+
+        var scripts = new List<string>();
+
+        foreach (var migration in migrationsToRollback)
+        {
+            scripts.Add(await GenerateSqlInternalAsync(migration, isUp: false));
+        }
+
+        return scripts;
+    }
+
+    // Generates SQL for a migration by executing it against a mock context that captures SQL.
+    private async Task<string> GenerateSqlInternalAsync(IMigration migration, bool isUp)
+    {
+        // Create a simple mock context that captures SQL statements
+        var mockContext = new SqlCaptureContext();
+
+        if (isUp)
+        {
+            await migration.UpAsync(mockContext);
+        }
+        else
+        {
+            await migration.DownAsync(mockContext);
+        }
+
+        return string.Join("\n\n", mockContext.CapturedSql);
+    }
+
+    // Simple mock IDatabaseContext that captures SQL statements without executing them
+    private sealed class SqlCaptureContext : IDatabaseContext
+    {
+        public List<string> CapturedSql { get; } = [];
+
+        public Task<bool> OpenAsync() => Task.FromResult(true);
+        public Task<bool> CloseAsync() => Task.FromResult(true);
+        public Task<bool> TestConnectionAsync() => Task.FromResult(true);
+        public Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)
+        {
+            CapturedSql.Add(query);
+            return Task.FromResult<object?>(null);
+        }
+
+        public Task<List<Dictionary<string, object>>> ExecuteQueryAsync(string query, Dictionary<string, object>? parameters = null)
+        {
+            CapturedSql.Add(query);
+            return Task.FromResult<List<Dictionary<string, object>>>([]);
+        }
+
+        public IAsyncEnumerable<Dictionary<string, object>> ExecuteStreamAsync(string query, Dictionary<string, object>? parameters = null)
+        {
+            CapturedSql.Add(query);
+            return Array.Empty<Dictionary<string, object>>().ToAsyncEnumerable();
+        }
+
+        public Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null)
+        {
+            CapturedSql.Add(query);
+            return Task.FromResult(1);
+        }
+
+        public Task<int> ExecuteNonQueryAsync(string query, object? parameters = null)
+        {
+            CapturedSql.Add(query);
+            return Task.FromResult(1);
+        }
+
+        public Task<bool> BeginTransactionAsync(TransactionIsolationLevel isolationLevel) => Task.FromResult(true);
+        public Task<bool> CommitAsync() => Task.FromResult(true);
+        public Task<bool> RollbackAsync() => Task.FromResult(true);
+        public DatabaseProvider GetDatabaseProvider() => DatabaseProvider.Sqlite;
+        public string GetConnectionString() => "Data Source=:memory:";
+
+        public void Dispose() { }
+
+        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
     }
 
     // Runs a migration's Up script and records the result in the history table.
