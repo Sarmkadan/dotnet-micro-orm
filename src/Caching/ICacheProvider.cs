@@ -23,8 +23,11 @@ public interface ICacheProvider : IAsyncDisposable
     Task SetAsync<T>(string key, T value, TimeSpan? expiration = null) where T : class;
 
     /// <summary>
-    /// Gets a value or creates it if not cached
+    /// Gets a value or creates it if not cached using a single-flight pattern to prevent cache stampede.
+    /// Only one concurrent call to the factory will execute for any given key; other concurrent calls
+    /// will wait for the result, preventing thundering herds when cache entries expire.
     /// </summary>
+    /// <exception cref="ArgumentNullException"><paramref name="factory"/> is <see langword="null"/></exception>
     Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan? expiration = null) where T : class;
 
     /// <summary>
