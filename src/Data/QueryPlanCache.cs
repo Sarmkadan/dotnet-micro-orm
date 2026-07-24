@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using DotnetMicroOrm.Caching;
 using Microsoft.Extensions.Logging;
 
 namespace DotnetMicroOrm.Data;
@@ -34,65 +35,71 @@ public sealed class QueryPlanCacheOptions
 /// Thread-safe, LRU-evicting implementation of <see cref="IQueryPlanCache"/>.
 /// Plans are indexed by a normalized SHA-256 SQL fingerprint and evicted by least-recently-used
 /// order once <see cref="QueryPlanCacheOptions.Capacity"/> is reached.
+/// Uses <see cref="ICacheProvider"/> for distributed caching support.
 /// </summary>
 public sealed class QueryPlanCache : IQueryPlanCache
 {
     private readonly QueryPlanCacheOptions _options;
     private readonly ILogger<QueryPlanCache> _logger;
-    private readonly ConcurrentDictionary<string, PlanEntry> _store = new(StringComparer.Ordinal);
+    private readonly ICacheProvider _cacheProvider;
+    private readonly ConcurrentDictionary<string, QueryPlanWithExpiry> _store = new(StringComparer.Ordinal);
     private long _hits;
     private long _misses;
 
     /// <summary>
-    /// Initializes the cache with the supplied options and logger.
+    /// Initializes the cache with the supplied options, logger, and cache provider.
     /// </summary>
     /// <param name="options">Capacity and TTL configuration.</param>
     /// <param name="logger">Logger for diagnostic events.</param>
-    public QueryPlanCache(QueryPlanCacheOptions options, ILogger<QueryPlanCache> logger)
+    /// <param name="cacheProvider">Cache provider for storing query plans. Uses MemoryCacheProvider by default if null.</param>
+    public QueryPlanCache(QueryPlanCacheOptions options, ILogger<QueryPlanCache> logger, ICacheProvider? cacheProvider = null)
     {
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _cacheProvider = cacheProvider ?? new MemoryCacheProvider();
     }
 
     /// <inheritdoc/>
-    public Task<QueryPlan?> GetPlanAsync(string fingerprint, CancellationToken cancellationToken = default)
+    public async Task<QueryPlan?> GetPlanAsync(string fingerprint, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        if (!_store.TryGetValue(fingerprint, out var entry))
+        var cachedPlan = await _cacheProvider.GetAsync<QueryPlanWithExpiry>(GetCacheKey(fingerprint), cancellationToken).ConfigureAwait(false);
+        if (cachedPlan is null)
         {
             Interlocked.Increment(ref _misses);
-            return Task.FromResult<QueryPlan?>(null);
+            return null;
         }
 
-        if (entry.IsExpired())
+        if (cachedPlan.ExpiresAt <= DateTime.UtcNow)
         {
-            _store.TryRemove(fingerprint, out _);
+            await _cacheProvider.RemoveAsync(GetCacheKey(fingerprint), cancellationToken).ConfigureAwait(false);
             Interlocked.Increment(ref _misses);
-            return Task.FromResult<QueryPlan?>(null);
+            return null;
         }
 
-        entry.LastAccessedAt = DateTime.UtcNow;
         Interlocked.Increment(ref _hits);
-        entry.Plan.HitCount++;
+        cachedPlan.Plan.HitCount++;
 
         _logger.LogDebug("Query plan cache hit for fingerprint {Fingerprint}", fingerprint);
-        return Task.FromResult<QueryPlan?>(entry.Plan);
+        return cachedPlan.Plan;
     }
 
     /// <inheritdoc/>
-    public Task StorePlanAsync(QueryPlan plan, TimeSpan? ttl = null, CancellationToken cancellationToken = default)
+    public async Task StorePlanAsync(QueryPlan plan, TimeSpan? ttl = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentNullException.ThrowIfNull(plan);
 
-        EvictIfNecessary();
+        // Evict if necessary (LRU eviction based on capacity)
+        await EvictIfNecessaryAsync(cancellationToken).ConfigureAwait(false);
 
         var expiresAt = DateTime.UtcNow.Add(ttl ?? _options.DefaultTtl);
-        _store[plan.Fingerprint] = new PlanEntry(plan, expiresAt);
+        var planWithExpiry = new QueryPlanWithExpiry(plan, expiresAt);
+
+        await _cacheProvider.SetAsync(GetCacheKey(plan.Fingerprint), planWithExpiry, ttl ?? _options.DefaultTtl, cancellationToken).ConfigureAwait(false);
 
         _logger.LogDebug("Stored query plan {Fingerprint} (TTL={Ttl})", plan.Fingerprint, ttl ?? _options.DefaultTtl);
-        return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
@@ -104,6 +111,7 @@ public sealed class QueryPlanCache : IQueryPlanCache
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sql);
         ArgumentNullException.ThrowIfNull(analyzer);
+        cancellationToken.ThrowIfCancellationRequested();
 
         var fingerprint = ComputeFingerprint(sql);
         var cached = await GetPlanAsync(fingerprint, cancellationToken).ConfigureAwait(false);
@@ -117,28 +125,28 @@ public sealed class QueryPlanCache : IQueryPlanCache
     }
 
     /// <inheritdoc/>
-    public Task InvalidateAsync(string fingerprint, CancellationToken cancellationToken = default)
+    public async Task InvalidateAsync(string fingerprint, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        _store.TryRemove(fingerprint, out _);
+        await _cacheProvider.RemoveAsync(GetCacheKey(fingerprint), cancellationToken).ConfigureAwait(false);
         _logger.LogDebug("Invalidated query plan {Fingerprint}", fingerprint);
-        return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
-    public Task ClearAsync(CancellationToken cancellationToken = default)
+    public async Task ClearAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
+        await _cacheProvider.ClearAsync(cancellationToken).ConfigureAwait(false);
         _store.Clear();
-        _logger.LogInformation("Query plan cache cleared ({Count} plans removed)", _store.Count);
-        return Task.CompletedTask;
+        _logger.LogInformation("Query plan cache cleared");
     }
 
     /// <inheritdoc/>
-    public Task<(long Entries, long Hits, long Misses)> GetStatisticsAsync(CancellationToken cancellationToken = default)
+    public async Task<(long Entries, long Hits, long Misses)> GetStatisticsAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return Task.FromResult(((long)_store.Count, Interlocked.Read(ref _hits), Interlocked.Read(ref _misses)));
+        var count = await _cacheProvider.GetCountAsync(cancellationToken).ConfigureAwait(false);
+        return (count >= 0 ? count : 0, Interlocked.Read(ref _hits), Interlocked.Read(ref _misses));
     }
 
     /// <summary>
@@ -159,13 +167,13 @@ public sealed class QueryPlanCache : IQueryPlanCache
         // Replace all parameter names (e.g., @p1, @paramName) with a generic placeholder (@p)
         // to ensure structurally identical queries produce the same fingerprint regardless of
         // dynamically generated parameter names.
-        normalized = Regex.Replace(normalized, @"@\w+", "@P"); 
+        normalized = Regex.Replace(normalized, @"@\w+", "@P");
 
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(normalized));
         return Convert.ToHexString(bytes).ToLowerInvariant();
     }
 
-    private void EvictIfNecessary()
+    private async Task EvictIfNecessaryAsync(CancellationToken cancellationToken = default)
     {
         if (_store.Count < _options.Capacity)
             return;
@@ -183,17 +191,29 @@ public sealed class QueryPlanCache : IQueryPlanCache
     }
 
     /// <inheritdoc/>
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
-        _store.Clear();
-        return ValueTask.CompletedTask;
+        // The cache provider will be disposed by its owner
+        await _cacheProvider.ClearAsync().ConfigureAwait(false);
     }
 
-    private sealed class PlanEntry(QueryPlan plan, DateTime expiresAt)
+    private string GetCacheKey(string fingerprint) => $"query-plan:{fingerprint}";
+
+    /// <summary>
+    /// Stores query plan with expiry information for proper TTL handling
+    /// </summary>
+    private sealed class QueryPlanWithExpiry
     {
-        public QueryPlan Plan { get; } = plan;
-        public DateTime ExpiresAt { get; } = expiresAt;
-        public DateTime LastAccessedAt { get; set; } = DateTime.UtcNow;
-        public bool IsExpired() => DateTime.UtcNow >= ExpiresAt;
+        public QueryPlan Plan { get; }
+        public DateTime ExpiresAt { get; }
+        public DateTime LastAccessedAt { get; private set; } = DateTime.UtcNow;
+
+        public QueryPlanWithExpiry(QueryPlan plan, DateTime expiresAt)
+        {
+            Plan = plan;
+            ExpiresAt = expiresAt;
+        }
+
+        public void Touch() => LastAccessedAt = DateTime.UtcNow;
     }
 }

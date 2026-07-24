@@ -4,8 +4,10 @@
 // CTO & Software Architect
 // =============================================================================
 
+using System;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace DotnetMicroOrm.Caching;
 
@@ -21,17 +23,17 @@ public sealed class MemoryCacheProvider : ICacheProvider
     private readonly ConcurrentDictionary<string, SemaphoreSlim> _singleFlightLocks = [];
     private readonly SemaphoreSlim _cleanupSemaphore = new(1);
 
-    public async Task<T?> GetAsync<T>(string key) where T : class
+    public async Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default) where T : class
     {
-        if (string.IsNullOrEmpty(key))
-            return null;
+        cancellationToken.ThrowIfCancellationRequested();
+        ArgumentException.ThrowIfNullOrEmpty(key);
 
         if (_cache.TryGetValue(key, out var entry))
         {
             // Check if expired
             if (entry.ExpiresAt.HasValue && DateTime.UtcNow >= entry.ExpiresAt)
             {
-                await RemoveAsync(key);
+                await RemoveAsync(key, cancellationToken).ConfigureAwait(false);
                 return null;
             }
 
@@ -41,14 +43,14 @@ public sealed class MemoryCacheProvider : ICacheProvider
         return null;
     }
 
-    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null) where T : class
+    public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null, CancellationToken cancellationToken = default) where T : class
     {
-        if (string.IsNullOrEmpty(key))
-            throw new ArgumentException("Key cannot be empty", nameof(key));
+        cancellationToken.ThrowIfCancellationRequested();
+        ArgumentException.ThrowIfNullOrEmpty(key);
 
         if (value is null)
         {
-            await RemoveAsync(key);
+            await RemoveAsync(key, cancellationToken).ConfigureAwait(false);
             return;
         }
 
@@ -91,31 +93,33 @@ public sealed class MemoryCacheProvider : ICacheProvider
     /// <param name="key">The cache key</param>
     /// <param name="factory">The factory function to create the value if not cached</param>
     /// <param name="expiration">Optional expiration time span</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The cached or newly created value</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> or <paramref name="factory"/> is null or empty</exception>
-    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan? expiration = null) where T : class
+    public async Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> factory, TimeSpan? expiration = null, CancellationToken cancellationToken = default) where T : class
     {
         ArgumentNullException.ThrowIfNull(key);
         ArgumentNullException.ThrowIfNull(factory);
+        cancellationToken.ThrowIfCancellationRequested();
 
         // Use single-flight pattern to prevent cache stampede
         // Only one thread will execute the factory for a given key at a time
         var singleFlightLock = GetSingleFlightLock(key);
-        await singleFlightLock.WaitAsync();
+        await singleFlightLock.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         try
         {
             // Double-check cache after acquiring lock (another thread may have set it)
-            var cachedAfterLock = await GetAsync<T>(key);
+            var cachedAfterLock = await GetAsync<T>(key, cancellationToken).ConfigureAwait(false);
             if (cachedAfterLock is not null)
             {
                 return cachedAfterLock;
             }
 
-            var value = await factory();
+            var value = await factory().ConfigureAwait(false);
             if (value is not null)
             {
-                await SetAsync(key, value, expiration);
+                await SetAsync(key, value, expiration, cancellationToken).ConfigureAwait(false);
             }
 
             return value!;
@@ -146,8 +150,9 @@ public sealed class MemoryCacheProvider : ICacheProvider
         }
     }
 
-    public async Task RemoveAsync(string key)
+    public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrEmpty(key))
             return;
 
@@ -161,8 +166,9 @@ public sealed class MemoryCacheProvider : ICacheProvider
         await Task.CompletedTask;
     }
 
-    public async Task RemoveByPatternAsync(string pattern)
+    public async Task RemoveByPatternAsync(string pattern, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrEmpty(pattern))
             return;
 
@@ -176,7 +182,7 @@ public sealed class MemoryCacheProvider : ICacheProvider
 
             foreach (var key in matchingKeys)
             {
-                await RemoveAsync(key);
+                await RemoveAsync(key, cancellationToken).ConfigureAwait(false);
             }
         }
         catch
@@ -187,8 +193,10 @@ public sealed class MemoryCacheProvider : ICacheProvider
         await Task.CompletedTask;
     }
 
-    public async Task ClearAsync()
+    public async Task ClearAsync(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         foreach (var timer in _timers.Values)
         {
             timer?.Dispose();
@@ -200,8 +208,9 @@ public sealed class MemoryCacheProvider : ICacheProvider
         await Task.CompletedTask;
     }
 
-    public async Task<bool> ExistsAsync(string key)
+    public async Task<bool> ExistsAsync(string key, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrEmpty(key))
             return false;
 
@@ -209,15 +218,17 @@ public sealed class MemoryCacheProvider : ICacheProvider
 
         if (exists && entry is not null && entry.ExpiresAt.HasValue && DateTime.UtcNow >= entry.ExpiresAt.Value)
         {
-            await RemoveAsync(key);
+            await RemoveAsync(key, cancellationToken).ConfigureAwait(false);
             return false;
         }
 
         return exists;
     }
 
-    public async Task<long> GetCountAsync()
+    public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         // Clean up expired entries first
         var expiredKeys = _cache
             .Where(x => x.Value.ExpiresAt.HasValue && DateTime.UtcNow >= x.Value.ExpiresAt)
@@ -226,7 +237,7 @@ public sealed class MemoryCacheProvider : ICacheProvider
 
         foreach (var key in expiredKeys)
         {
-            await RemoveAsync(key);
+            await RemoveAsync(key, cancellationToken).ConfigureAwait(false);
         }
 
         return _cache.Count;
@@ -238,7 +249,7 @@ public sealed class MemoryCacheProvider : ICacheProvider
     /// </summary>
     public async Task CleanupAsync()
     {
-        await _cleanupSemaphore.WaitAsync();
+        await _cleanupSemaphore.WaitAsync().ConfigureAwait(false);
 
         try
         {
@@ -249,7 +260,7 @@ public sealed class MemoryCacheProvider : ICacheProvider
 
             foreach (var key in expiredKeys)
             {
-                await RemoveAsync(key);
+                await RemoveAsync(key).ConfigureAwait(false);
             }
         }
         finally
@@ -260,7 +271,7 @@ public sealed class MemoryCacheProvider : ICacheProvider
 
     public async ValueTask DisposeAsync()
     {
-        await ClearAsync();
+        await ClearAsync().ConfigureAwait(false);
         _cleanupSemaphore.Dispose();
     }
 

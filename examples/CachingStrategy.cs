@@ -42,7 +42,6 @@ namespace DotnetMicroOrm.Examples
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddMemoryCache();
             services.AddSingleton<ICacheProvider, MemoryCacheProvider>();
 
             _serviceProvider = services.BuildServiceProvider();
@@ -79,7 +78,7 @@ namespace DotnetMicroOrm.Examples
                 Console.WriteLine("3. Manual Cache Management...");
                 var featured = await GetFeaturedProductsAsync(repository);
                 Console.WriteLine($"✓ Retrieved {featured.Count} featured products");
-                Console.WriteLine("  (cached for 1 hour)\n");
+                Console.WriteLine(" (cached for 1 hour)\n");
 
                 // Cache invalidation
                 Console.WriteLine("4. Cache Invalidation...");
@@ -89,7 +88,7 @@ namespace DotnetMicroOrm.Examples
                 await unitOfWork.SaveChangesAsync();
 
                 // Manually invalidate
-                _cacheProvider.Remove(CategoriesCacheKey);
+                await _cacheProvider.RemoveAsync(CategoriesCacheKey);
                 Console.WriteLine("✓ Cache invalidated after update\n");
 
                 // Demonstrate cache performance impact
@@ -107,7 +106,7 @@ namespace DotnetMicroOrm.Examples
             const string cacheKey = "products:all";
 
             // Check cache first
-            var cached = _cacheProvider.Get<List<Product>>(cacheKey);
+            var cached = await _cacheProvider.GetAsync<List<Product>>(cacheKey);
             if (cached is not null)
                 return cached;
 
@@ -116,14 +115,14 @@ namespace DotnetMicroOrm.Examples
             var products = await repository.GetAsync(spec);
 
             // Cache result
-            _cacheProvider.Set(cacheKey, products, TimeSpan.FromHours(1));
+            await _cacheProvider.SetAsync(cacheKey, products, TimeSpan.FromHours(1));
 
             return products;
         }
 
         private async Task<List<Product>> GetFeaturedProductsAsync(IRepository<Product> repository)
         {
-            var cached = _cacheProvider.Get<List<Product>>(FeaturedProductsCacheKey);
+            var cached = await _cacheProvider.GetAsync<List<Product>>(FeaturedProductsCacheKey);
             if (cached is not null)
                 return cached;
 
@@ -133,7 +132,7 @@ namespace DotnetMicroOrm.Examples
                 .Take(10);
 
             var products = await repository.GetAsync(spec);
-            _cacheProvider.Set(FeaturedProductsCacheKey, products, TimeSpan.FromHours(1));
+            await _cacheProvider.SetAsync(FeaturedProductsCacheKey, products, TimeSpan.FromHours(1));
 
             return products;
         }
@@ -167,7 +166,7 @@ namespace DotnetMicroOrm.Examples
             const string testCacheKey = "performance:test";
 
             // Without cache
-            _cacheProvider.Clear();
+            await _cacheProvider.ClearAsync();
             var stopwatch = Stopwatch.StartNew();
 
             for (int i = 0; i < 100; i++)
@@ -180,15 +179,15 @@ namespace DotnetMicroOrm.Examples
             var withoutCacheTime = stopwatch.ElapsedMilliseconds;
 
             // With cache
-            _cacheProvider.Clear();
+            await _cacheProvider.ClearAsync();
             stopwatch.Restart();
 
             var cachedData = await repository.GetAsync(new Specification<Product>().Take(10));
-            _cacheProvider.Set(testCacheKey, cachedData, TimeSpan.FromHours(1));
+            await _cacheProvider.SetAsync(testCacheKey, cachedData, TimeSpan.FromHours(1));
 
             for (int i = 0; i < 100; i++)
             {
-                var data = _cacheProvider.Get<List<Product>>(testCacheKey);
+                var data = await _cacheProvider.GetAsync<List<Product>>(testCacheKey);
             }
 
             stopwatch.Stop();
@@ -196,9 +195,9 @@ namespace DotnetMicroOrm.Examples
 
             var speedup = (double)withoutCacheTime / withCacheTime;
 
-            Console.WriteLine($"  Without cache: {withoutCacheTime}ms");
-            Console.WriteLine($"  With cache: {withCacheTime}ms");
-            Console.WriteLine($"  Speedup: {speedup:F0}x faster\n");
+            Console.WriteLine($" Without cache: {withoutCacheTime}ms");
+            Console.WriteLine($" With cache: {withCacheTime}ms");
+            Console.WriteLine($" Speedup: {speedup:F0}x faster\n");
         }
 
         public static async Task Main(string[] args)
