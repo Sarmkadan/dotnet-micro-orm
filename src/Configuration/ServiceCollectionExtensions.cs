@@ -57,7 +57,13 @@ public static class ServiceCollectionExtensions
 		services.AddScoped(typeof(IBatchUpsertOperation<>), typeof(BatchUpsertOperation<>));
 
 		// Register query profiler
-		services.AddSingleton<IQueryProfiler, QueryProfiler>();
+		services.AddSingleton(QueryProfilerOptions.Default);
+
+    // Register query profiler
+    services.AddSingleton<IQueryProfiler, QueryProfiler>();
+
+    // Register default console profiler sink
+    services.AddSingleton<IProfilerSink>(_ => ConsoleProfilerSink.Instance);
 
 		// Register default in-memory cache provider
 		services.AddSingleton<Caching.ICacheProvider, Caching.MemoryCacheProvider>();
