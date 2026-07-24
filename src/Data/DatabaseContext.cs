@@ -20,11 +20,29 @@ public sealed class DatabaseContext : IDatabaseContext
 {
     private readonly string _connectionString;
     private readonly DatabaseProvider _provider;
+    private readonly ConnectionRetryPolicy _retryPolicy;
     private DbConnection? _connection;
     private DbTransaction? _transaction;
     private bool _disposed;
 
-    public DatabaseContext(string connectionString, DatabaseProvider provider = DatabaseProvider.SqlServer)
+    /// <summary>
+    /// The retry policy applied to connection opening and command execution. Defaults to
+    /// <see cref="ConnectionRetryPolicy.None"/> (no retries) when none is supplied at construction.
+    /// </summary>
+    public ConnectionRetryPolicy RetryPolicy => _retryPolicy;
+
+    /// <summary>
+    /// Creates a new <see cref="DatabaseContext"/>.
+    /// </summary>
+    /// <param name="connectionString">The ADO.NET connection string used to connect to the database.</param>
+    /// <param name="provider">The database provider the connection string targets.</param>
+    /// <param name="retryPolicy">
+    /// Optional retry policy applied to connection opening and command execution. When omitted,
+    /// <see cref="ConnectionRetryPolicy.None"/> is used and no retries are attempted.
+    /// </param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="connectionString"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="connectionString"/> is empty or whitespace.</exception>
+    public DatabaseContext(string connectionString, DatabaseProvider provider = DatabaseProvider.SqlServer, ConnectionRetryPolicy? retryPolicy = null)
     {
         if (connectionString is null)
             throw new ArgumentNullException(nameof(connectionString));
@@ -33,23 +51,32 @@ public sealed class DatabaseContext : IDatabaseContext
 
         _connectionString = connectionString;
         _provider = provider;
+        _retryPolicy = retryPolicy ?? ConnectionRetryPolicy.None;
     }
 
-    // Opens database connection
+    // Opens database connection, retrying transient failures per the configured retry policy
     public async Task<bool> OpenAsync()
     {
         try
         {
             if (_connection?.State != ConnectionState.Open)
             {
-                _connection = CreateConnection();
-                await _connection.OpenAsync();
+                await _retryPolicy.ExecuteAsync(async () =>
+                {
+                    _connection?.Dispose();
+                    _connection = CreateConnection();
+                    await _connection.OpenAsync();
+                    return true;
+                }, _provider);
             }
             return true;
         }
         catch (Exception ex)
         {
-            throw new DatabaseConnectionException($"Failed to open database connection: {ex.Message}", ex);
+            throw new DatabaseConnectionException(
+                $"Failed to open database connection: {ex.Message}",
+                ex,
+                ConnectionRetryPolicy.DefaultTransientClassifier(ex, _provider));
         }
     }
 
@@ -101,7 +128,7 @@ public sealed class DatabaseContext : IDatabaseContext
 
         try
         {
-            return await command.ExecuteScalarAsync();
+            return await _retryPolicy.ExecuteAsync(() => command.ExecuteScalarAsync(), _provider);
         }
         catch (Exception ex)
         {
@@ -116,7 +143,6 @@ public sealed class DatabaseContext : IDatabaseContext
             throw new ArgumentException("Query cannot be null or empty.", nameof(query));
 
         await OpenAsync();
-        var results = new List<Dictionary<string, object>>();
 
         await using var command = _connection!.CreateCommand();
         command.CommandText = query;
@@ -126,17 +152,21 @@ public sealed class DatabaseContext : IDatabaseContext
 
         try
         {
-            await using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            return await _retryPolicy.ExecuteAsync(async () =>
             {
-                var row = new Dictionary<string, object>();
-                for (int i = 0; i < reader.FieldCount; i++)
+                var results = new List<Dictionary<string, object>>();
+                await using var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    row[reader.GetName(i)] = reader.IsDBNull(i) ? DBNull.Value : reader.GetValue(i);
+                    var row = new Dictionary<string, object>();
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        row[reader.GetName(i)] = reader.IsDBNull(i) ? DBNull.Value : reader.GetValue(i);
+                    }
+                    results.Add(row);
                 }
-                results.Add(row);
-            }
-            return results;
+                return results;
+            }, _provider);
         }
         catch (Exception ex)
         {
@@ -160,7 +190,7 @@ public sealed class DatabaseContext : IDatabaseContext
 
         try
         {
-            return await command.ExecuteNonQueryAsync();
+            return await _retryPolicy.ExecuteAsync(() => command.ExecuteNonQueryAsync(), _provider);
         }
         catch (Exception ex)
         {
@@ -186,7 +216,7 @@ public sealed class DatabaseContext : IDatabaseContext
         DbDataReader reader;
         try
         {
-            reader = await command.ExecuteReaderAsync();
+            reader = await _retryPolicy.ExecuteAsync(() => command.ExecuteReaderAsync(), _provider);
         }
         catch (Exception ex)
         {
