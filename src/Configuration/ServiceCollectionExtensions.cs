@@ -8,6 +8,7 @@
 namespace DotnetMicroOrm.Configuration;
 
 using DotnetMicroOrm.Constants;
+using DotnetMicroOrm.Events;
 using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Migrations;
 using DotnetMicroOrm.Profiling;
@@ -77,6 +78,9 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<OrderService>();
 		services.AddScoped<IAuditService, AuditService>();
 		services.AddScoped<AuditService>();
+
+        // Register event dispatcher with auto-discovery
+        services.AddEventHandlers(options => options.EnableAutoDiscovery(true));
 
 		return services;
 	}
