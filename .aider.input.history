@@ -14446,3 +14446,87 @@
 +- Update DefaultHttpClientTests
 +- Nits
 +- .aider.chat.history.md
+
+# 2026-07-24 04:56:21.865645
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `MigrationRunnerExtensions` (defined in `src/Migrations/MigrationRunnerExtensions.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/MigrationRunnerExtensionsTests.cs` with a test class `MigrationRunnerExtensionsTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public static async Task<MigrationRecord?> GetLatestAppliedMigrationAsync
++public static async Task<int> GetPendingMigrationsCountAsync
++public static async Task<IReadOnlyList<MigrationRecord>> MigrateAndGetAppliedAsync
++```
++
++BEFORE writing any test:
++1. Read the FULL constructor(s) of `MigrationRunnerExtensions` in `src/Migrations/MigrationRunnerExtensions.cs` - not just the method list above. If the constructor requires parameters, every `new MigrationRunnerExtensions(...)` call must pass valid values for ALL of them. Never assume a parameterless constructor exists.
++2. Open one existing `*Tests.cs` file in `tests/dotnet-micro-orm.Tests` and copy its exact namespace style (file-scoped `namespace X;` vs block-scoped `namespace X { }`). Do NOT mix styles within your new file.
++3. Read the implementation in `src/Migrations/MigrationRunnerExtensions.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++Keep the file under 200 lines - fewer, well-chosen test methods beat many. Before finishing, count your braces mentally or re-read the file top to bottom to confirm every `{` has a matching `}` and the file doesn't end mid-method.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- ICacheProvider.cs
++- QueryProfileTests changes
++- WebhookHandler changes
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- CircuitBreakerException.cs
++- tweak CommandHandlerTests
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- chore: .aider.chat.history.md
++- update DefaultHttpClientExtensionsTests
++- Update DefaultHttpClientTests
+
+# 2026-07-24 04:56:21.865913
++In repo /home/redrocket/task-factory/workdir/dotnet-micro-orm, write unit tests for `MigrationRunnerExtensions` (defined in `src/Migrations/MigrationRunnerExtensions.cs`).
++
++Create ONE new file: `tests/dotnet-micro-orm.Tests/MigrationRunnerExtensionsTests.cs` with a test class `MigrationRunnerExtensionsTests` using xUnit (or whatever test framework the project already uses - check existing test files).
++
++Write 4-8 test methods covering:
++- Happy path for each major public method
++- Edge cases: null inputs, empty collections, boundary values
++- Error paths: expected exceptions
++
++Public members to test:
++```
++public static async Task<MigrationRecord?> GetLatestAppliedMigrationAsync
++public static async Task<int> GetPendingMigrationsCountAsync
++public static async Task<IReadOnlyList<MigrationRecord>> MigrateAndGetAppliedAsync
++```
++
++BEFORE writing any test:
++1. Read the FULL constructor(s) of `MigrationRunnerExtensions` in `src/Migrations/MigrationRunnerExtensions.cs` - not just the method list above. If the constructor requires parameters, every `new MigrationRunnerExtensions(...)` call must pass valid values for ALL of them. Never assume a parameterless constructor exists.
++2. Open one existing `*Tests.cs` file in `tests/dotnet-micro-orm.Tests` and copy its exact namespace style (file-scoped `namespace X;` vs block-scoped `namespace X { }`). Do NOT mix styles within your new file.
++3. Read the implementation in `src/Migrations/MigrationRunnerExtensions.cs` to understand what each method actually does. Test REAL behavior, not just that methods exist.
++
++Keep the file under 200 lines - fewer, well-chosen test methods beat many. Before finishing, count your braces mentally or re-read the file top to bottom to confirm every `{` has a matching `}` and the file doesn't end mid-method.
++
++HARD RULES:
++- Create ONLY the test file. Do NOT modify any existing files.
++- Do NOT add NuGet packages. Use whatever test framework is already referenced.
++- Tests MUST compile and pass with `dotnet test`.
++- Commit message: conventional commits style, lowercase, no AI mentions.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- ICacheProvider.cs
++- QueryProfileTests changes
++- WebhookHandler changes
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- CircuitBreakerException.cs
++- tweak CommandHandlerTests
++- chore(dotnet-micro-orm.tests): .aider.chat.history.md
++- chore: .aider.chat.history.md
++- update DefaultHttpClientExtensionsTests
++- Update DefaultHttpClientTests
