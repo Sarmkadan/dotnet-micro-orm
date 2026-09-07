@@ -29,6 +29,7 @@ public interface IRepository<T> where T : BaseEntity
     Task<List<T>> UpdateRangeAsync(List<T> entities);
     Task<int> DeleteRangeAsync(List<T> entities);
     Task<List<T>> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate = null);
+    Task<PagedResult<T>> GetPagedResultAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate = null);
     Task<(List<T> Items, int TotalCount)> GetPagedWithCountAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate = null);
     IQueryable<T> Query();
     IAsyncEnumerable<T> QueryStreamAsync(string query, Dictionary<string, object>? parameters = null);
