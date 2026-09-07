@@ -13,8 +13,23 @@ namespace DotnetMicroOrm.Utils;
 /// Provides utility methods for string manipulation and validation.
 /// Handles trimming, case conversion, splitting, formatting, and regular expression operations.
 /// </summary>
-public static class StringHelper
+public static partial class StringHelper
 {
+    [GeneratedRegex("([a-z])([A-Z])")]
+    private static partial Regex LowerUpperBoundaryRegex();
+
+    [GeneratedRegex("([A-Z]+)([A-Z][a-z])")]
+    private static partial Regex AcronymWordBoundaryRegex();
+
+    [GeneratedRegex("[-_]")]
+    private static partial Regex WordSeparatorRegex();
+
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex WhitespaceRegex();
+
+    [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
+    private static partial Regex EmailAddressRegex();
+
     /// <summary>
     /// Converts PascalCase or camelCase to kebab-case
     /// Example: "UserProfile" -> "user-profile", "userId" -> "user-id"
@@ -24,7 +39,7 @@ public static class StringHelper
         if (string.IsNullOrEmpty(input))
             return input;
 
-        var result = Regex.Replace(input, "([a-z])([A-Z])", "$1-$2");
+        var result = LowerUpperBoundaryRegex().Replace(input, "$1-$2");
         return result.ToLowerInvariant();
     }
 
@@ -37,9 +52,9 @@ public static class StringHelper
         if (string.IsNullOrEmpty(input))
             return input;
 
-        var step1 = Regex.Replace(input, "([a-z])([A-Z])", "$1_$2");
-        var step2 = Regex.Replace(step1, "([A-Z]+)([A-Z][a-z])", "$1_$2");
-        var step3 = Regex.Replace(step2, "-", "_");
+        var step1 = LowerUpperBoundaryRegex().Replace(input, "$1_$2");
+        var step2 = AcronymWordBoundaryRegex().Replace(step1, "$1_$2");
+        var step3 = step2.Replace("-", "_");
 
         return step3.ToLowerInvariant();
     }
@@ -53,7 +68,7 @@ public static class StringHelper
         if (string.IsNullOrEmpty(input))
             return input;
 
-        var words = Regex.Split(input, "[-_]");
+        var words = WordSeparatorRegex().Split(input);
         var sb = new StringBuilder();
 
         foreach (var word in words)
@@ -100,7 +115,7 @@ public static class StringHelper
     /// Removes all whitespace from a string
     /// </summary>
     public static string RemoveWhitespace(this string input)
-        => string.IsNullOrEmpty(input) ? input : Regex.Replace(input, @"\s+", "");
+        => string.IsNullOrEmpty(input) ? input : WhitespaceRegex().Replace(input, "");
 
     /// <summary>
     /// Checks if a string contains any uppercase letters
@@ -136,8 +151,7 @@ public static class StringHelper
 
         try
         {
-            var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-            return Regex.IsMatch(input, pattern);
+            return EmailAddressRegex().IsMatch(input);
         }
         catch
         {
