@@ -66,6 +66,9 @@ public sealed class HttpResponseData
 
     /// <summary>Indicates if response is a server error (5xx status code)</summary>
     public bool IsServerError => StatusCode >= 500;
+
+    /// <summary>Indicates if response body was truncated due to size limit</summary>
+    public bool IsBodyTruncated { get; set; }
 }
 
 /// <summary>
@@ -87,4 +90,7 @@ public sealed class HttpClientConfig
 
     /// <summary>Pool connections for better performance</summary>
     public bool PoolConnections { get; set; } = true;
+
+    /// <summary>Maximum response size in bytes (default: 10MB)</summary>
+    public int? MaxResponseSizeBytes { get; set; } = 10 * 1024 * 1024;
 }

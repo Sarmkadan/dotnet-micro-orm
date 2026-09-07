@@ -3,9 +3,9 @@
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
-// =============================================================================
+// =====================================================================
 
-using System.Globalization;
+using DotnetMicroOrm.Integration;
 
 namespace DotnetMicroOrm.Integration;
 
@@ -254,5 +254,24 @@ public static class WebhookHandlerExtensions
         return requiredKeys.All(key =>
             payload.Data.ContainsKey(key) &&
             payload.Data[key] is not null);
+    }
+
+    /// <summary>
+    /// Validates a URL for SSRF safety for use with webhooks.
+    /// </summary>
+    /// <param name="url">The URL to validate</param>
+    /// <param name="allowLocalhost">Whether to allow localhost addresses</param>
+    /// <param name="allowPrivateNetworks">Whether to allow private network addresses</param>
+    /// <returns>True if the URL is safe for webhook delivery, false otherwise</returns>
+    public static bool IsUrlSafeForWebhooks(this string url, bool allowLocalhost = false, bool allowPrivateNetworks = false)
+    {
+        try
+        {
+            return UrlSsrfValidator.IsUrlSafe(url, allowLocalhost, allowPrivateNetworks);
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
