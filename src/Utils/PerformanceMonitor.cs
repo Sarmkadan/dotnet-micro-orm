@@ -5,6 +5,9 @@
 // =============================================================================
 
 using System.Diagnostics;
+using System.Globalization;
+using DotnetMicroOrm.Configuration;
+using DotnetMicroOrm.Middleware;
 
 namespace DotnetMicroOrm.Utils;
 
@@ -17,13 +20,15 @@ public sealed class PerformanceMonitor : IDisposable
 {
     private readonly Stopwatch _stopwatch;
     private readonly string _operationName;
+    private readonly ILogger<PerformanceMonitor> _logger;
     private readonly Dictionary<string, object> _metrics = [];
     private DateTime _startTime;
     private long _startMemory;
 
-    public PerformanceMonitor(string operationName)
+    public PerformanceMonitor(string operationName, ILogger<PerformanceMonitor>? logger = null)
     {
         _operationName = operationName ?? "Unknown Operation";
+        _logger = logger ?? new ConsoleLogger<PerformanceMonitor>();
         _stopwatch = Stopwatch.StartNew();
         _startTime = DateTime.UtcNow;
         _startMemory = GC.GetTotalMemory(false);
@@ -102,11 +107,18 @@ public sealed class PerformanceMonitor : IDisposable
     }
 
     /// <summary>
-    /// Logs performance summary to console
+    /// Logs a structured performance summary
     /// </summary>
     public void LogSummary()
     {
-        Console.WriteLine($"[PERF] {GetSummary()}");
+        var report = GetReport();
+        var message = FormattableString.Invariant(
+            $"Operation={report.OperationName} ElapsedMs={report.ElapsedMilliseconds} MemoryDeltaMb={report.MemoryDeltaMb:F2}");
+
+        if (report.Metrics.TryGetValue("item_count", out var itemCount))
+            message += $" ItemCount={Convert.ToString(itemCount, CultureInfo.InvariantCulture)}";
+
+        _logger.LogInformation(message);
     }
 
     /// <summary>
@@ -115,7 +127,7 @@ public sealed class PerformanceMonitor : IDisposable
     public PerformanceMonitor CreateChild(string childName)
     {
         var fullName = $"{_operationName} > {childName}";
-        return new PerformanceMonitor(fullName);
+        return new PerformanceMonitor(fullName, _logger);
     }
 
     public void Dispose()
@@ -176,7 +188,8 @@ public static class PerformanceHelper
     /// <summary>
     /// Measures the time of a synchronous operation
     /// </summary>
-    public static (T result, long elapsedMs) Measure<T>(Func<T> operation, string? label = null)
+    public static (T result, long elapsedMs) Measure<T>(
+        Func<T> operation, string? label = null, Action<string>? output = null)
     {
         var sw = Stopwatch.StartNew();
         var result = operation();
@@ -184,7 +197,7 @@ public static class PerformanceHelper
 
         if (!string.IsNullOrEmpty(label))
         {
-            Console.WriteLine($"[PERF] {label}: {sw.ElapsedMilliseconds}ms");
+            (output ?? Console.WriteLine)($"Operation={label} ElapsedMs={sw.ElapsedMilliseconds}");
         }
 
         return (result, sw.ElapsedMilliseconds);
@@ -194,7 +207,7 @@ public static class PerformanceHelper
     /// Measures the time of an asynchronous operation
     /// </summary>
     public static async Task<(T result, long elapsedMs)> MeasureAsync<T>(
-        Func<Task<T>> operation, string? label = null)
+        Func<Task<T>> operation, string? label = null, Action<string>? output = null)
     {
         var sw = Stopwatch.StartNew();
         var result = await operation();
@@ -202,7 +215,7 @@ public static class PerformanceHelper
 
         if (!string.IsNullOrEmpty(label))
         {
-            Console.WriteLine($"[PERF] {label}: {sw.ElapsedMilliseconds}ms");
+            (output ?? Console.WriteLine)($"Operation={label} ElapsedMs={sw.ElapsedMilliseconds}");
         }
 
         return (result, sw.ElapsedMilliseconds);
@@ -211,7 +224,8 @@ public static class PerformanceHelper
     /// <summary>
     /// Measures the time of a void operation
     /// </summary>
-    public static long Measure(Action operation, string? label = null)
+    public static long Measure(
+        Action operation, string? label = null, Action<string>? output = null)
     {
         var sw = Stopwatch.StartNew();
         operation();
@@ -219,7 +233,7 @@ public static class PerformanceHelper
 
         if (!string.IsNullOrEmpty(label))
         {
-            Console.WriteLine($"[PERF] {label}: {sw.ElapsedMilliseconds}ms");
+            (output ?? Console.WriteLine)($"Operation={label} ElapsedMs={sw.ElapsedMilliseconds}");
         }
 
         return sw.ElapsedMilliseconds;
@@ -229,7 +243,7 @@ public static class PerformanceHelper
     /// Measures the time of an async void operation
     /// </summary>
     public static async Task<long> MeasureAsync(
-        Func<Task> operation, string? label = null)
+        Func<Task> operation, string? label = null, Action<string>? output = null)
     {
         var sw = Stopwatch.StartNew();
         await operation();
@@ -237,7 +251,7 @@ public static class PerformanceHelper
 
         if (!string.IsNullOrEmpty(label))
         {
-            Console.WriteLine($"[PERF] {label}: {sw.ElapsedMilliseconds}ms");
+            (output ?? Console.WriteLine)($"Operation={label} ElapsedMs={sw.ElapsedMilliseconds}");
         }
 
         return sw.ElapsedMilliseconds;
