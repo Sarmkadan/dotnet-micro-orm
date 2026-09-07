@@ -19,13 +19,47 @@ namespace DotnetMicroOrm.Caching;
 /// </summary>
 public sealed class MemoryCacheProvider : ICacheProvider
 {
-    // Configuration constants
+    // Default maximum number of entries retained before LRU eviction begins.
     private const int DefaultMaxEntries = 10000;
+
+    // Default configured cache memory limit, expressed in megabytes.
     private const int DefaultMemoryLimitMb = 500;
-    private const int BackgroundCleanupIntervalMs = 30000; // 30 seconds
-    private const int MemoryPressureCheckIntervalMs = 10000; // 10 seconds
-    private const double HighMemoryPressureThreshold = 0.90; // 90% of GC heap
-    private const double LowMemoryPressureThreshold = 0.70; // 70% of GC heap
+
+    // Number of bytes used when converting kilobytes to bytes.
+    private const int BytesPerKilobyte = 1024;
+
+    // Number of bytes used when converting megabytes to bytes.
+    private const int BytesPerMegabyte = BytesPerKilobyte * BytesPerKilobyte;
+
+    // Heap sizes below this value are too small for meaningful pressure checks.
+    private const int MinimumHeapSizeForPressureCheckMb = 10;
+
+    // GC memory-load ratio that triggers pressure-based eviction.
+    private const double HighMemoryPressureThreshold = 0.90;
+
+    // GC memory-load ratio at which memory pressure is considered relieved.
+    private const double LowMemoryPressureThreshold = 0.70;
+
+    // Fraction of cache entries selected during aggressive pressure eviction.
+    private const double EvictionBatchPercentage = 0.1;
+
+    // Minimum number of entries selected during aggressive pressure eviction.
+    private const int MinimumEvictionBatchSize = 10;
+
+    // Approximate number of bytes occupied by each character in a string.
+    private const int EstimatedBytesPerCharacter = 2;
+
+    // Approximate per-item overhead used when sizing collection values.
+    private const int EstimatedCollectionItemSizeBytes = 16;
+
+    // Fallback estimated size, in bytes, for values without a specialized estimate.
+    private const int DefaultEstimatedEntrySizeBytes = BytesPerKilobyte;
+
+    // Period between scans that remove expired cache entries.
+    private static readonly TimeSpan DefaultCleanupInterval = TimeSpan.FromMilliseconds(30000);
+
+    // Period between checks of the GC memory-load level.
+    private static readonly TimeSpan MemoryPressureCheckInterval = TimeSpan.FromMilliseconds(10000);
 
     private readonly ConcurrentDictionary<string, LinkedListNode<CacheEntry>> _cache = [];
     private readonly ConcurrentDictionary<string, Timer> _timers = [];
@@ -64,15 +98,15 @@ public sealed class MemoryCacheProvider : ICacheProvider
         ArgumentOutOfRangeException.ThrowIfLessThan(maxMemoryMb, 1);
 
         _maxEntries = maxEntries;
-        _maxMemoryBytes = maxMemoryMb * 1024L * 1024L;
+        _maxMemoryBytes = maxMemoryMb * (long)BytesPerMegabyte;
         _enableMemoryPressureEviction = enableMemoryPressureEviction && maxMemoryMb > 0;
 
         // Start background cleanup timer
         _backgroundCleanupTimer = new Timer(
             _ => CleanupExpiredEntriesAsync(default).ConfigureAwait(false).GetAwaiter().GetResult(),
             null,
-            BackgroundCleanupIntervalMs,
-            BackgroundCleanupIntervalMs);
+            DefaultCleanupInterval,
+            DefaultCleanupInterval);
 
         // Start memory pressure monitoring if enabled
         if (_enableMemoryPressureEviction)
@@ -80,8 +114,8 @@ public sealed class MemoryCacheProvider : ICacheProvider
             _memoryPressureCheckTimer = new Timer(
                 _ => CheckMemoryPressureAsync(default).ConfigureAwait(false).GetAwaiter().GetResult(),
                 null,
-                MemoryPressureCheckIntervalMs,
-                MemoryPressureCheckIntervalMs);
+                MemoryPressureCheckInterval,
+                MemoryPressureCheckInterval);
         }
     }
 
@@ -290,10 +324,10 @@ public sealed class MemoryCacheProvider : ICacheProvider
         {
             var gcMemoryInfo = GC.GetGCMemoryInfo();
             var totalMemory = gcMemoryInfo.HeapSizeBytes;
-            var totalMemoryMb = totalMemory / (1024.0 * 1024.0);
+            var totalMemoryMb = totalMemory / (double)BytesPerMegabyte;
 
             // If total memory is very small, skip memory pressure checks
-            if (totalMemoryMb < 10)
+            if (totalMemoryMb < MinimumHeapSizeForPressureCheckMb)
             {
                 return false;
             }
@@ -316,10 +350,10 @@ public sealed class MemoryCacheProvider : ICacheProvider
         {
             var gcMemoryInfo = GC.GetGCMemoryInfo();
             var totalMemory = gcMemoryInfo.HeapSizeBytes;
-            var totalMemoryMb = totalMemory / (1024.0 * 1024.0);
+            var totalMemoryMb = totalMemory / (double)BytesPerMegabyte;
 
             // If total memory is very small, skip memory pressure checks
-            if (totalMemoryMb < 10)
+            if (totalMemoryMb < MinimumHeapSizeForPressureCheckMb)
             {
                 return;
             }
@@ -330,7 +364,7 @@ public sealed class MemoryCacheProvider : ICacheProvider
             if (memoryLoadPercent >= HighMemoryPressureThreshold)
             {
                 // Evict up to 10% of entries or at least 10 entries
-                var entriesToEvict = Math.Max(10, (int)(_cache.Count * 0.1));
+                var entriesToEvict = Math.Max(MinimumEvictionBatchSize, (int)(_cache.Count * EvictionBatchPercentage));
                 for (int i = 0; i < entriesToEvict && _cache.Count > 0; i++)
                 {
                     await EvictLruEntriesAsync().ConfigureAwait(false);
@@ -550,7 +584,7 @@ public sealed class MemoryCacheProvider : ICacheProvider
     /// <returns>The total size in MB</returns>
     public double GetTotalSizeMb()
     {
-        return GetTotalSizeBytes() / (1024.0 * 1024.0);
+        return GetTotalSizeBytes() / (double)BytesPerMegabyte;
     }
 
     private static long CalculateSize<T>(T value) where T : class
@@ -569,7 +603,7 @@ public sealed class MemoryCacheProvider : ICacheProvider
             // For strings, use length * 2 (approximate char size)
             if (value is string str)
             {
-                return str.Length * 2;
+                return str.Length * EstimatedBytesPerCharacter;
             }
 
             // For byte arrays, use length
@@ -581,16 +615,16 @@ public sealed class MemoryCacheProvider : ICacheProvider
             // For collections, use approximate count * average item size
             if (value is System.Collections.ICollection collection)
             {
-                return collection.Count * 16; // Approximate per-item overhead
+                return collection.Count * EstimatedCollectionItemSizeBytes;
             }
 
             // Default: use 1KB as a reasonable estimate for most objects
-            return 1024;
+            return DefaultEstimatedEntrySizeBytes;
         }
         catch
         {
             // If size calculation fails, return a safe default
-            return 1024;
+            return DefaultEstimatedEntrySizeBytes;
         }
     }
 
