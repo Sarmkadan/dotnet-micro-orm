@@ -1,8 +1,9 @@
 #nullable enable
+
 // =============================================================================
 // Author: Vladyslav Zaiets | https://sarmkadan.com
 // CTO & Software Architect
-// =============================================================================
+// =====================================================================
 
 namespace DotnetMicroOrm.Integration;
 
@@ -35,7 +36,7 @@ public sealed class DefaultHttpClient : IHttpClient
         if (string.IsNullOrEmpty(url))
             throw new ArgumentException("URL cannot be empty", nameof(url));
 
-        return await SendAsync(System.Net.Http.HttpMethod.Get, url, null, "application/json", headers);
+        return await SendAsync(System.Net.Http.HttpMethod.Get, url, null, "application/json", headers).ConfigureAwait(false);
     }
 
     public async Task<HttpResponseData> PostAsync(string url, string body, string contentType = "application/json", Dictionary<string, string>? headers = null)
@@ -43,7 +44,7 @@ public sealed class DefaultHttpClient : IHttpClient
         if (string.IsNullOrEmpty(url))
             throw new ArgumentException("URL cannot be empty", nameof(url));
 
-        return await SendAsync(System.Net.Http.HttpMethod.Post, url, body, contentType, headers);
+        return await SendAsync(System.Net.Http.HttpMethod.Post, url, body, contentType, headers).ConfigureAwait(false);
     }
 
     public async Task<HttpResponseData> PutAsync(string url, string body, string contentType = "application/json", Dictionary<string, string>? headers = null)
@@ -51,7 +52,7 @@ public sealed class DefaultHttpClient : IHttpClient
         if (string.IsNullOrEmpty(url))
             throw new ArgumentException("URL cannot be empty", nameof(url));
 
-        return await SendAsync(System.Net.Http.HttpMethod.Put, url, body, contentType, headers);
+        return await SendAsync(System.Net.Http.HttpMethod.Put, url, body, contentType, headers).ConfigureAwait(false);
     }
 
     public async Task<HttpResponseData> DeleteAsync(string url, Dictionary<string, string>? headers = null)
@@ -59,7 +60,7 @@ public sealed class DefaultHttpClient : IHttpClient
         if (string.IsNullOrEmpty(url))
             throw new ArgumentException("URL cannot be empty", nameof(url));
 
-        return await SendAsync(System.Net.Http.HttpMethod.Delete, url, null, "application/json", headers);
+        return await SendAsync(System.Net.Http.HttpMethod.Delete, url, null, "application/json", headers).ConfigureAwait(false);
     }
 
     public async Task<HttpResponseData> GetWithRetryAsync(string url, int maxRetries = 3, TimeSpan? retryDelay = null)
@@ -68,7 +69,7 @@ public sealed class DefaultHttpClient : IHttpClient
 
         while (attempt < maxRetries)
         {
-            var response = await GetAsync(url);
+            var response = await GetAsync(url).ConfigureAwait(false);
 
             if (response.IsSuccess)
                 return response;
@@ -82,11 +83,11 @@ public sealed class DefaultHttpClient : IHttpClient
             if (attempt < maxRetries)
             {
                 var delay = retryDelay ?? _retryPolicy.GetDelay(attempt);
-                await Task.Delay(delay);
+                await Task.Delay(delay).ConfigureAwait(false);
             }
         }
 
-        return await GetAsync(url);
+        return await GetAsync(url).ConfigureAwait(false);
     }
 
     private async Task<HttpResponseData> SendAsync(
@@ -117,22 +118,25 @@ public sealed class DefaultHttpClient : IHttpClient
                 request.Content = new System.Net.Http.StringContent(body, System.Text.Encoding.UTF8, contentType);
             }
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
-            var responseBody = await response.Content.ReadAsStringAsync();
             var responseHeaders = new Dictionary<string, string>();
-
             foreach (var header in response.Headers)
             {
                 responseHeaders[header.Key] = string.Join(",", header.Value);
             }
+
+            // Read response with size limit (10MB default)
+            var maxResponseSize = _config.MaxResponseSizeBytes ?? 10 * 1024 * 1024;
+            var responseBody = await ReadResponseBodyWithLimitAsync(response.Content, maxResponseSize).ConfigureAwait(false);
 
             return new HttpResponseData
             {
                 StatusCode = (int)response.StatusCode,
                 Body = responseBody,
                 Headers = responseHeaders,
-                Duration = DateTime.UtcNow - startTime
+                Duration = DateTime.UtcNow - startTime,
+                IsBodyTruncated = responseBody.Length >= maxResponseSize
             };
         }
         catch (Exception ex)
@@ -147,10 +151,51 @@ public sealed class DefaultHttpClient : IHttpClient
         }
     }
 
+    private async Task<string> ReadResponseBodyWithLimitAsync(System.Net.Http.HttpContent content, int maxSizeBytes)
+    {
+        using var responseStream = await content.ReadAsStreamAsync().ConfigureAwait(false);
+        using var limitedStream = new System.IO.MemoryStream(maxSizeBytes + 1); // +1 to detect overflow
+
+        var buffer = new byte[8192];
+        var totalRead = 0;
+        var isTruncated = false;
+
+        try
+        {
+            int bytesRead;
+            while ((bytesRead = await responseStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) > 0)
+            {
+                if (totalRead + bytesRead > maxSizeBytes)
+                {
+                    // Write only up to maxSizeBytes
+                    var remaining = maxSizeBytes - totalRead;
+                    await limitedStream.WriteAsync(buffer, 0, remaining).ConfigureAwait(false);
+                    totalRead += remaining;
+                    isTruncated = true;
+                    break;
+                }
+
+                await limitedStream.WriteAsync(buffer, 0, bytesRead).ConfigureAwait(false);
+                totalRead += bytesRead;
+            }
+
+            return System.Text.Encoding.UTF8.GetString(limitedStream.ToArray());
+        }
+        catch (HttpRequestException ex) when (ex.Message.Contains("request timed out"))
+        {
+            throw;
+        }
+        catch
+        {
+            // If we can't read the response, return empty string
+            return string.Empty;
+        }
+    }
+
     public async ValueTask DisposeAsync()
     {
         _httpClient?.Dispose();
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(false);
     }
 }
 

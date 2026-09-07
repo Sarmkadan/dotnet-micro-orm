@@ -7,6 +7,7 @@
 
 using System.Security.Cryptography;
 using System.Text;
+using DotnetMicroOrm.Integration;
 
 namespace DotnetMicroOrm.Integration;
 
@@ -42,7 +43,7 @@ public sealed class WebhookHandler : IAsyncDisposable
         ArgumentException.ThrowIfNullOrWhiteSpace(secret);
 
         _signatureValidator = new WebhookSignatureValidator(secret, timestampTolerance);
-        _httpClient = httpClient ?? new DefaultHttpClient();
+        _httpClient = httpClient ?? new DefaultHttpClient(UrlSsrfValidator.CreateSsrfProtectedConfig());
         _deadLetterStore = deadLetterStore ?? new InMemoryWebhookDeadLetterStore();
     }
 
@@ -173,7 +174,8 @@ public sealed class WebhookHandler : IAsyncDisposable
     /// <param name="circuitBreakerDuration">Duration circuit stays open (default: 30 seconds)</param>
     /// <returns>Webhook delivery result with attempt tracking</returns>
     /// <exception cref="ArgumentNullException">Thrown if payload or url is null</exception>
-    /// <exception cref="ArgumentException">Thrown if url is empty</exception>
+    /// <exception cref="ArgumentException">Thrown if url is empty or invalid</exception>
+    /// <exception cref="InvalidOperationException">Thrown if URL fails SSRF validation</exception>
     public async Task<WebhookResult> DeliverAsync(
         WebhookPayload payload,
         string url,
@@ -184,6 +186,19 @@ public sealed class WebhookHandler : IAsyncDisposable
     {
         ArgumentNullException.ThrowIfNull(payload);
         ArgumentException.ThrowIfNullOrEmpty(url);
+
+        // Validate URL for SSRF safety at delivery time with DNS resolution
+        if (!await UrlSsrfValidator.IsUrlSafeAtDeliveryTimeAsync(url).ConfigureAwait(false))
+        {
+            return new WebhookResult
+            {
+                Success = false,
+                Error = "Invalid webhook URL - SSRF protection violation",
+                ProcessedAt = DateTime.UtcNow,
+                AttemptCount = 1,
+                FinalDisposition = "ssrf_violation"
+            };
+        }
 
         var startTime = DateTime.UtcNow;
         var attemptCount = 0;
