@@ -21,10 +21,21 @@ public static class DateTimeHelper
     /// <summary>
     /// Converts Unix timestamp (seconds since epoch) to DateTime
     /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when <paramref name="seconds"/> is outside the range supported by <see cref="DateTimeOffset"/>.
+    /// </exception>
     public static DateTime FromUnixTimestamp(long seconds)
     {
-        if (seconds < 0)
-            throw new ArgumentException("Timestamp cannot be negative", nameof(seconds));
+        const long minUnixSeconds = -62_135_596_800;
+        const long maxUnixSeconds = 253_402_300_799;
+
+        if (seconds < minUnixSeconds || seconds > maxUnixSeconds)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(seconds),
+                seconds,
+                $"Unix timestamp must be between {minUnixSeconds} and {maxUnixSeconds} seconds, inclusive.");
+        }
 
         return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(seconds);
     }
@@ -44,10 +55,17 @@ public static class DateTimeHelper
     /// <summary>
     /// Calculates business days between two dates (excludes weekends)
     /// </summary>
+    /// <exception cref="ArgumentException">
+    /// Thrown when <paramref name="end"/> is earlier than <paramref name="start"/>.
+    /// </exception>
     public static int GetBusinessDaysBetween(DateTime start, DateTime end)
     {
         if (start > end)
-            throw new ArgumentException("Start date must be before end date");
+        {
+            throw new ArgumentException(
+                $"End date '{end:O}' must be greater than or equal to start date '{start:O}'.",
+                nameof(end));
+        }
 
         int businessDays = 0;
         var current = start;
@@ -113,8 +131,13 @@ public static class DateTimeHelper
     /// <summary>
     /// Parses ISO 8601 string to DateTime
     /// </summary>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="value"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="value"/> is empty.</exception>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> is not a valid round-trip ISO 8601 value.</exception>
     public static DateTime ParseIso8601(string value)
     {
+        ArgumentException.ThrowIfNullOrEmpty(value);
+
         if (!DateTime.TryParseExact(value, "O", null, System.Globalization.DateTimeStyles.RoundtripKind, out var result))
             throw new FormatException($"Invalid ISO 8601 format: {value}");
 
@@ -146,8 +169,19 @@ public static class DateTimeHelper
     /// <summary>
     /// Adds business days (skipping weekends) to a date
     /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when <paramref name="days"/> is <see cref="int.MinValue"/>, whose absolute value cannot be represented by an <see cref="int"/>.
+    /// </exception>
     public static DateTime AddBusinessDays(this DateTime dateTime, int days)
     {
+        if (days == int.MinValue)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(days),
+                days,
+                $"Business-day count cannot be {int.MinValue} because its absolute value cannot be represented.");
+        }
+
         int direction = days > 0 ? 1 : -1;
         int count = Math.Abs(days);
         var result = dateTime;
