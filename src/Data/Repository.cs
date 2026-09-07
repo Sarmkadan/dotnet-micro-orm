@@ -16,6 +16,7 @@ using DotnetMicroOrm.Exceptions;
 /// </summary>
 public class Repository<T> : IRepository<T> where T : BaseEntity, new()
 {
+    private static readonly Func<T, int> IdAccessor = CreateIdAccessor();
     private readonly IDatabaseContext _context;
     private readonly List<T> _changeTracking = [];
     private readonly string _tableName;
@@ -31,8 +32,14 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Retrieves entity by primary key
     public async Task<T?> GetByIdAsync(int id)
     {
-        var idProperty = typeof(T).GetProperty("Id") ?? throw new OrmException("Entity must have Id property");
-        return await FirstOrDefaultAsync(e => (int)idProperty.GetValue(e)! == id);
+        return await FirstOrDefaultAsync(e => IdAccessor(e) == id);
+    }
+
+    private static Func<T, int> CreateIdAccessor()
+    {
+        var entity = Expression.Parameter(typeof(T), "entity");
+        var id = Expression.Property(entity, "Id");
+        return Expression.Lambda<Func<T, int>>(id, entity).Compile();
     }
 
     // Retrieves first entity matching predicate
@@ -66,6 +73,12 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Counts entities
     public async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
     {
+        if (predicate is not null)
+        {
+            var matches = await GetAsync(predicate);
+            return matches.Count;
+        }
+
         var query = $"SELECT COUNT(*) FROM [{_schema}].[{_tableName}]";
         var count = await _context.ExecuteScalarAsync(query);
         return count is not null ? (int)(long)count : 0;
