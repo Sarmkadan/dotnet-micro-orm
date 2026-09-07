@@ -307,6 +307,27 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
         return items;
     }
 
+    // Paged query with pagination metadata
+    public async Task<PagedResult<T>> GetPagedResultAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate = null)
+    {
+        if (pageNumber < 1)
+            throw new ArgumentOutOfRangeException(nameof(pageNumber), "Page number must be greater than 0.");
+        if (pageSize < 1)
+            throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than 0.");
+
+        var filtered = predicate is null
+            ? await GetAllAsync()
+            : await GetAsync(predicate);
+
+        return new PagedResult<T>
+        {
+            Items = filtered.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(),
+            TotalCount = filtered.Count,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+    }
+
     // Paged query with total count
     public async Task<(List<T> Items, int TotalCount)> GetPagedWithCountAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? predicate = null)
     {
