@@ -54,7 +54,11 @@ public sealed class DatabaseContext : IDatabaseContext
         _retryPolicy = retryPolicy ?? ConnectionRetryPolicy.None;
     }
 
-    // Opens database connection, retrying transient failures per the configured retry policy
+    /// <summary>
+    /// Opens the database connection, retrying transient failures per the configured retry policy.
+    /// </summary>
+    /// <returns><c>true</c> when the connection is open after the operation completes.</returns>
+    /// <exception cref="DatabaseConnectionException">Thrown when the connection cannot be opened.</exception>
     public async Task<bool> OpenAsync()
     {
         try
@@ -80,7 +84,11 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
-    // Closes database connection
+    /// <summary>
+    /// Closes the database connection if it is currently open.
+    /// </summary>
+    /// <returns><c>true</c> when the connection is closed after the operation completes.</returns>
+    /// <exception cref="DatabaseConnectionException">Thrown when the connection cannot be closed.</exception>
     public async Task<bool> CloseAsync()
     {
         try
@@ -95,7 +103,10 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
-    // Tests database connection
+    /// <summary>
+    /// Tests the database connection by executing a simple <c>SELECT 1</c> query.
+    /// </summary>
+    /// <returns><c>true</c> when the connection is usable and the query returns a non-null result; otherwise <c>false</c>.</returns>
     public async Task<bool> TestConnectionAsync()
     {
         try
@@ -113,7 +124,14 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
-    // Executes scalar query
+    /// <summary>
+    /// Executes a query and returns the first column of the first row as a scalar value.
+    /// </summary>
+    /// <param name="query">The SQL query to execute.</param>
+    /// <param name="parameters">Optional parameters to apply to the command.</param>
+    /// <returns>The scalar result, or <c>null</c> when the query returns no value.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="query"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="QueryExecutionException">Thrown when the query execution fails.</exception>
     public async Task<object?> ExecuteScalarAsync(string query, Dictionary<string, object>? parameters = null)
     {
         if (string.IsNullOrWhiteSpace(query))
@@ -136,7 +154,14 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
-    // Executes query returning rows
+    /// <summary>
+    /// Executes a query and returns the resulting rows as a list of column dictionaries.
+    /// </summary>
+    /// <param name="query">The SQL query to execute.</param>
+    /// <param name="parameters">Optional parameters to apply to the command.</param>
+    /// <returns>A list of rows, each represented as a dictionary of column name to value.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="query"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="QueryExecutionException">Thrown when the query execution fails.</exception>
     public async Task<List<Dictionary<string, object>>> ExecuteQueryAsync(string query, Dictionary<string, object>? parameters = null)
     {
         if (string.IsNullOrWhiteSpace(query))
@@ -174,7 +199,14 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
-    // Executes non-query command
+    /// <summary>
+    /// Executes a non-query command such as INSERT, UPDATE, or DELETE.
+    /// </summary>
+    /// <param name="query">The SQL command to execute.</param>
+    /// <param name="parameters">Optional parameters to apply to the command.</param>
+    /// <returns>The number of rows affected by the command.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="query"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="QueryExecutionException">Thrown when the command execution fails.</exception>
     public async Task<int> ExecuteNonQueryAsync(string query, Dictionary<string, object>? parameters = null)
     {
         if (string.IsNullOrWhiteSpace(query))
@@ -198,7 +230,14 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
-    // Executes query returning rows as an IAsyncEnumerable
+    /// <summary>
+    /// Executes a query and returns the resulting rows as an asynchronous enumerable.
+    /// </summary>
+    /// <param name="query">The SQL query to execute.</param>
+    /// <param name="parameters">Optional parameters to apply to the command.</param>
+    /// <returns>An asynchronous enumerable of rows, each represented as a dictionary of column name to value.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="query"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="QueryExecutionException">Thrown when the query execution fails.</exception>
     public async IAsyncEnumerable<Dictionary<string, object>> ExecuteStreamAsync(string query, Dictionary<string, object>? parameters = null)
     {
         if (string.IsNullOrWhiteSpace(query))
@@ -237,7 +276,12 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
-    // Begins transaction
+    /// <summary>
+    /// Begins a new database transaction with the specified isolation level.
+    /// </summary>
+    /// <param name="isolationLevel">The isolation level for the transaction.</param>
+    /// <returns><c>true</c> when the transaction is successfully begun.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when a transaction is already active.</exception>
     public async Task<bool> BeginTransactionAsync(TransactionIsolationLevel isolationLevel)
     {
         await OpenAsync();
@@ -258,7 +302,12 @@ public sealed class DatabaseContext : IDatabaseContext
         return true;
     }
 
-    // Commits transaction
+    /// <summary>
+    /// Commits the current database transaction.
+    /// </summary>
+    /// <returns><c>true</c> when the transaction is successfully committed.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when no active transaction exists to commit.</exception>
+    /// <exception cref="OrmException">Thrown when the transaction commit fails.</exception>
     public async Task<bool> CommitAsync()
     {
         if (_transaction is null)
@@ -277,7 +326,12 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
-    // Rollbacks transaction
+    /// <summary>
+    /// Rolls back the current database transaction.
+    /// </summary>
+    /// <returns><c>true</c> when the transaction is successfully rolled back.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when no active transaction exists to roll back.</exception>
+    /// <exception cref="OrmException">Thrown when the transaction rollback fails.</exception>
     public async Task<bool> RollbackAsync()
     {
         if (_transaction is null)
@@ -296,8 +350,16 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
+    /// <summary>
+    /// Gets the database provider associated with this context.
+    /// </summary>
+    /// <returns>The database provider.</returns>
     public DatabaseProvider GetDatabaseProvider() => _provider;
 
+    /// <summary>
+    /// Gets the connection string used by this context.
+    /// </summary>
+    /// <returns>The connection string.</returns>
     public string GetConnectionString() => _connectionString;
 
     private DbConnection CreateConnection() => _provider switch
