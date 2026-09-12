@@ -383,6 +383,9 @@ public sealed class DatabaseContext : IDatabaseContext
         }
     }
 
+    /// <summary>
+    /// Disposes the database context, rolling back any active transaction and closing the connection.
+    /// </summary>
     public async ValueTask DisposeAsync()
     {
         if (_disposed) return;
