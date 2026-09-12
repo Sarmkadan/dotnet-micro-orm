@@ -524,3 +524,97 @@ var first = await new QueryBuilder<User>(repository)
     .Where(u => u.Email == "john@example.com")
     .FirstOrDefaultAsync();
 ```
+
+## Repository
+
+`Repository<T>` (in `src/Data/Repository.cs`) is the generic base repository
+implementing `IRepository<T>`. It provides CRUD, query, bulk, and paging
+operations for any entity that derives from `BaseEntity`. The repository maps
+entity properties to table columns via `[Table]`, `[Column]`, `[NotMapped]`,
+and `[ConcurrencyToken]` attributes and executes SQL through an injected
+`IDatabaseContext`.
+
+### Generic Repository Pattern
+
+`Repository<T>` is a single generic implementation reused for every entity
+type. Instead of writing a dedicated repository per aggregate, you register one
+generic instance per entity (typically via DI) and get the full set of data
+operations for free:
+
+- **CRUD** — `GetByIdAsync`, `AddAsync`, `UpdateAsync`, `DeleteAsync`.
+- **Querying** — `GetAllAsync`, `GetAsync(predicate)`, `FirstOrDefaultAsync`,
+  `ExistsAsync`, `CountAsync`.
+- **Bulk operations** — `AddRangeAsync`, `UpdateRangeAsync`, `DeleteRangeAsync`.
+- **Paging** — `GetPagedAsync`, `GetPagedResultAsync`, `GetPagedWithCountAsync`.
+- **Streaming / queryable** — `Query()` (in-memory `IQueryable<T>` backing
+  `QueryBuilder<T>`) and `QueryStreamAsync` for row-by-row reads.
+
+Entities are validated (`Validate`) and normalized (`PreSave` / `PostLoad`)
+automatically. If an entity declares a `[ConcurrencyToken]` column, `UpdateAsync`
+and `DeleteAsync` include an optimistic-concurrency check and throw
+`ConcurrencyException` on conflict.
+
+### Entity Mapping
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+[Table(Name = "Users", Schema = "dbo")]
+public class User : BaseEntity
+{
+    [Column(Name = "Id", IsPrimaryKey = true)]
+    public int Id { get; set; }
+
+    [Column(Name = "Email")]
+    public string Email { get; set; } = "";
+
+    [Column(Name = "Status")]
+    public string Status { get; set; } = "Active";
+
+    [NotMapped]
+    public string FullName => $"{FirstName} {LastName}";
+}
+```
+
+### Example Usage
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using DotnetMicroOrm.Data;
+
+// Obtain an IRepository<T> (typically injected via DI)
+IRepository<User> repository = /* ... */;
+
+// Create
+var user = new User { Email = "john@example.com", Status = "Active" };
+await repository.AddAsync(user);
+
+// Read
+var byId = await repository.GetByIdAsync(user.Id);
+var active = await repository.GetAsync(u => u.Status == "Active");
+var first = await repository.FirstOrDefaultAsync(u => u.Email == "john@example.com");
+bool exists = await repository.ExistsAsync(u => u.Email == "john@example.com");
+int total = await repository.CountAsync();
+
+// Update
+user.Status = "Inactive";
+await repository.UpdateAsync(user);
+
+// Delete
+bool deleted = await repository.DeleteAsync(user.Id);
+
+// Bulk insert
+var batch = new List<User>
+{
+    new User { Email = "a@example.com" },
+    new User { Email = "b@example.com" }
+};
+await repository.AddRangeAsync(batch);
+
+// Paging
+var page = await repository.GetPagedResultAsync(pageNumber: 1, pageSize: 20);
+Console.WriteLine($"Page {page.PageNumber} of {page.TotalCount} total users");
+```
