@@ -20,6 +20,7 @@ public sealed class OrderService : IAsyncDisposable
 
     public OrderService(IDatabaseContext context)
     {
+        ArgumentNullException.ThrowIfNull(context);
         _context = context;
         _orderRepository = new Repository<Order>(context);
         _orderItemRepository = new Repository<OrderItem>(context);
@@ -28,6 +29,8 @@ public sealed class OrderService : IAsyncDisposable
     // Creates new order
     public async Task<Order> CreateOrderAsync(int userId, string shippingAddress)
     {
+        ArgumentNullException.ThrowIfNull(shippingAddress);
+
         if (userId <= 0)
             throw new ArgumentException("Invalid user ID");
 
@@ -58,6 +61,8 @@ public sealed class OrderService : IAsyncDisposable
     // Gets orders by status
     public async Task<List<Order>> GetOrdersByStatusAsync(string status)
     {
+        ArgumentNullException.ThrowIfNull(status);
+
         if (string.IsNullOrWhiteSpace(status))
             throw new ArgumentException("Invalid status");
 
@@ -68,6 +73,8 @@ public sealed class OrderService : IAsyncDisposable
     // Adds item to order
     public async Task<Order> AddOrderItemAsync(int orderId, int productId, string productName, int quantity, decimal unitPrice)
     {
+        ArgumentNullException.ThrowIfNull(productName);
+
         var order = await _orderRepository.GetByIdAsync(orderId);
         if (order is null)
             throw new InvalidOperationException("Order not found");
