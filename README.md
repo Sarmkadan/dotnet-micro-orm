@@ -474,3 +474,53 @@ int daysInactive = 30;
 bool isDaysInactiveValid = daysInactive.IsValidDaysInactive();
 Console.WriteLine($"Days inactive threshold is valid: {isDaysInactiveValid}");
 ```
+
+## QueryBuilder
+
+`QueryBuilder<T>` (in `src/Data/QueryBuilder.cs`) is a fluent, deferred-execution query builder for composing complex queries against an `IRepository<T>`. Clauses are accumulated and executed only when an async materialization method is called. See [docs/QueryBuilder.md](docs/QueryBuilder.md) for the full API reference.
+
+### Public API
+
+- `Where(Expression<Func<T, bool>> predicate)` — adds a filter; multiple calls are combined with a logical AND. Throws `ArgumentNullException` if `predicate` is `null`.
+- `OrderBy<TKey>(Expression<Func<T, TKey>> keySelector)` — orders results ascending. Throws `ArgumentNullException` if `keySelector` is `null`.
+- `OrderByDescending<TKey>(Expression<Func<T, TKey>> keySelector)` — orders results descending. Throws `ArgumentNullException` if `keySelector` is `null`.
+- `Take(int count)` — limits the number of returned rows. Throws `ArgumentException` if `count <= 0`.
+- `Skip(int count)` — skips the first `count` rows. Throws `ArgumentException` if `count < 0`.
+- `Include(Expression<Func<T, object>> navigationProperty)` — records a navigation property to materialize with the results. Throws `ArgumentException` if the expression does not point at a member of `T`.
+- `IncludedProperties` — `IReadOnlyCollection<string>` of navigation properties registered via `Include`.
+- `ToListAsync()` — executes the query and returns `List<T>`.
+- `FirstOrDefaultAsync()` — executes the query and returns the first match or `null`.
+- `CountAsync()` — executes the query and returns the number of matching rows.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Linq.Expressions;
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+// Obtain an IRepository<T> (typically injected via DI)
+IRepository<User> repository = /* ... */;
+
+var builder = new QueryBuilder<User>(repository);
+
+// Compose a query: filter, order, paginate, and include a navigation property
+var recentActiveUsers = await builder
+    .Where(u => u.IsActive && u.LastLogin > DateTime.UtcNow.AddDays(-30))
+    .OrderByDescending(u => u.LastLogin)
+    .Skip(20)
+    .Take(10)
+    .Include(u => u.Profile)
+    .ToListAsync();
+
+// Count matching rows without materializing them
+var total = await new QueryBuilder<User>(repository)
+    .Where(u => u.IsActive)
+    .CountAsync();
+
+// Fetch a single match
+var first = await new QueryBuilder<User>(repository)
+    .Where(u => u.Email == "john@example.com")
+    .FirstOrDefaultAsync();
+```
