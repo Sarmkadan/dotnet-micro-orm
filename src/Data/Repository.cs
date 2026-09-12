@@ -45,8 +45,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Retrieves first entity matching predicate
     public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
     {
-        if (predicate is null)
-            throw new ArgumentNullException(nameof(predicate));
+        ArgumentNullException.ThrowIfNull(predicate);
 
         var list = await GetAsync(predicate);
         return list.FirstOrDefault();
@@ -63,8 +62,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Retrieves entities matching predicate
     public async Task<List<T>> GetAsync(Expression<Func<T, bool>> predicate)
     {
-        if (predicate is null)
-            throw new ArgumentNullException(nameof(predicate));
+        ArgumentNullException.ThrowIfNull(predicate);
 
         var all = await GetAllAsync();
         return all.AsQueryable().Where(predicate).ToList();
@@ -87,8 +85,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Checks if entity exists
     public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)
     {
-        if (predicate is null)
-            throw new ArgumentNullException(nameof(predicate));
+        ArgumentNullException.ThrowIfNull(predicate);
 
         var count = await CountAsync(predicate);
         return count > 0;
@@ -97,8 +94,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Adds entity
     public async Task<T> AddAsync(T entity)
     {
-        if (entity is null)
-            throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
 
         entity.Validate(out var errors);
         if (errors.Count > 0)
@@ -122,8 +118,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Updates entity
     public async Task<T> UpdateAsync(T entity)
     {
-        if (entity is null)
-            throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
 
         entity.Validate(out var errors);
         if (errors.Count > 0)
@@ -198,8 +193,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Deletes entity
     public async Task<bool> DeleteAsync(T entity)
     {
-        if (entity is null)
-            throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
 
         var idProperty = typeof(T).GetProperty("Id") ?? throw new OrmException("Entity must have Id property for Delete operations");
         var idValue = idProperty.GetValue(entity);
@@ -245,8 +239,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     {
         const int MAX_SQL_PARAMS_PER_BATCH = 2000; // SQL Server limit is 2100, leaving some buffer
 
-        if (entities is null)
-            throw new ArgumentNullException(nameof(entities));
+        ArgumentNullException.ThrowIfNull(entities);
         if (!entities.Any())
             return new List<T>();
 
@@ -291,8 +284,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Bulk update
     public async Task<List<T>> UpdateRangeAsync(List<T> entities)
     {
-        if (entities is null)
-            throw new ArgumentNullException(nameof(entities));
+        ArgumentNullException.ThrowIfNull(entities);
 
         var updated = new List<T>(entities.Count);
         foreach (var entity in entities)
@@ -303,8 +295,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     // Bulk delete
     public async Task<int> DeleteRangeAsync(List<T> entities)
     {
-        if (entities is null)
-            throw new ArgumentNullException(nameof(entities));
+        ArgumentNullException.ThrowIfNull(entities);
 
         var deletedCount = 0;
         foreach (var entity in entities)
@@ -366,6 +357,8 @@ public class Repository<T> : IRepository<T> where T : BaseEntity, new()
 
     public async IAsyncEnumerable<T> QueryStreamAsync(string query, Dictionary<string, object>? parameters = null)
     {
+        ArgumentNullException.ThrowIfNull(query);
+
         var results = _context.ExecuteStreamAsync(query, parameters);
         await foreach (var row in results)
         {
