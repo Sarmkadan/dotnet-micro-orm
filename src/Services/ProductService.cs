@@ -27,6 +27,9 @@ public sealed class ProductService : IAsyncDisposable
     // Creates new product
     public async Task<Product> CreateProductAsync(string sku, string name, decimal price, int categoryId, string? description = null)
     {
+        ArgumentNullException.ThrowIfNull(sku);
+        ArgumentNullException.ThrowIfNull(name);
+
         if (string.IsNullOrWhiteSpace(sku) || sku.Length < 3)
             throw new ArgumentException("SKU must be at least 3 characters");
 
@@ -133,6 +136,7 @@ public sealed class ProductService : IAsyncDisposable
     // Searches products
     public async Task<List<Product>> SearchProductsAsync(string searchTerm)
     {
+        ArgumentNullException.ThrowIfNull(searchTerm);
         return await _productRepository.SearchByNameAsync(searchTerm);
     }
 
