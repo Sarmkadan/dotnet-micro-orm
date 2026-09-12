@@ -23,6 +23,7 @@ public sealed class UserService : IAsyncDisposable
 
     public UserService(IDatabaseContext context)
     {
+        ArgumentNullException.ThrowIfNull(context);
         _context = context;
         _userRepository = new UserRepository(context);
     }
@@ -30,6 +31,10 @@ public sealed class UserService : IAsyncDisposable
     // Registers new user
     public async Task<User> RegisterUserAsync(string username, string email, string password)
     {
+        ArgumentNullException.ThrowIfNull(username);
+        ArgumentNullException.ThrowIfNull(email);
+        ArgumentNullException.ThrowIfNull(password);
+
         if (string.IsNullOrWhiteSpace(username) || username.Length < 3)
             throw new ArgumentException("Username must be at least 3 characters");
 
@@ -59,6 +64,9 @@ public sealed class UserService : IAsyncDisposable
     // Authenticates user
     public async Task<User?> AuthenticateAsync(string username, string password)
     {
+        ArgumentNullException.ThrowIfNull(username);
+        ArgumentNullException.ThrowIfNull(password);
+
         var user = await _userRepository.GetByUsernameAsync(username);
         if (user is null || !user.IsActive)
             return null;
@@ -80,6 +88,10 @@ public sealed class UserService : IAsyncDisposable
     // Updates user profile
     public async Task<User> UpdateProfileAsync(int userId, string? firstName, string? lastName, string? phoneNumber)
     {
+        ArgumentNullException.ThrowIfNull(firstName);
+        ArgumentNullException.ThrowIfNull(lastName);
+        ArgumentNullException.ThrowIfNull(phoneNumber);
+
         var user = await _userRepository.GetByIdAsync(userId);
         if (user is null)
             throw new InvalidOperationException("User not found");
@@ -100,6 +112,9 @@ public sealed class UserService : IAsyncDisposable
     // Changes password
     public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
     {
+        ArgumentNullException.ThrowIfNull(currentPassword);
+        ArgumentNullException.ThrowIfNull(newPassword);
+
         var user = await _userRepository.GetByIdAsync(userId);
         if (user is null)
             throw new InvalidOperationException("User not found");
