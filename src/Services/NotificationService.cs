@@ -32,6 +32,10 @@ public sealed class NotificationService : INotificationService
 
     public async Task SendEmailAsync(string to, string subject, string body)
     {
+        ArgumentNullException.ThrowIfNull(to);
+        ArgumentNullException.ThrowIfNull(subject);
+        ArgumentNullException.ThrowIfNull(body);
+
         if (string.IsNullOrWhiteSpace(to))
             throw new ArgumentException("Email address cannot be empty", nameof(to));
 
@@ -54,6 +58,9 @@ public sealed class NotificationService : INotificationService
 
     public async Task SendSmsAsync(string phoneNumber, string message)
     {
+        ArgumentNullException.ThrowIfNull(phoneNumber);
+        ArgumentNullException.ThrowIfNull(message);
+
         if (string.IsNullOrWhiteSpace(phoneNumber))
             throw new ArgumentException("Phone number cannot be empty", nameof(phoneNumber));
 
@@ -78,6 +85,9 @@ public sealed class NotificationService : INotificationService
 
     public async Task SendPushNotificationAsync(int userId, string title, string message)
     {
+        ArgumentNullException.ThrowIfNull(title);
+        ArgumentNullException.ThrowIfNull(message);
+
         if (string.IsNullOrWhiteSpace(title))
             throw new ArgumentException("Title cannot be empty", nameof(title));
 
@@ -131,6 +141,9 @@ public sealed class NotificationService : INotificationService
     /// </summary>
     public void RegisterTemplate(string name, string template)
     {
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(template);
+
         if (string.IsNullOrEmpty(name))
             throw new ArgumentException("Template name cannot be empty", nameof(name));
 
@@ -142,6 +155,8 @@ public sealed class NotificationService : INotificationService
     /// </summary>
     public string? GetTemplate(string name)
     {
+        ArgumentNullException.ThrowIfNull(name);
+
         return _templates.TryGetValue(name, out var template) ? template : null;
     }
 
