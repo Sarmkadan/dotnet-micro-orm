@@ -59,7 +59,12 @@ public sealed class QueryPlanCache : IQueryPlanCache
         _cacheProvider = cacheProvider ?? new MemoryCacheProvider();
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Returns the cached <see cref="QueryPlan"/> for the given fingerprint, or <c>null</c> if not present or expired.
+    /// </summary>
+    /// <param name="fingerprint">The normalized SQL fingerprint to look up.</param>
+    /// <param name="cancellationToken">Token to observe for cancellation.</param>
+    /// <returns>The cached query plan, or <c>null</c> if not found.</returns>
     public async Task<QueryPlan?> GetPlanAsync(string fingerprint, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -85,7 +90,12 @@ public sealed class QueryPlanCache : IQueryPlanCache
         return cachedPlan.Plan;
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Stores a <see cref="QueryPlan"/> in the cache with an optional time-to-live.
+    /// </summary>
+    /// <param name="plan">The query plan to store.</param>
+    /// <param name="ttl">Optional time-to-live override. If not specified, uses <see cref="QueryPlanCacheOptions.DefaultTtl"/>.</param>
+    /// <param name="cancellationToken">Token to observe for cancellation.</param>
     public async Task StorePlanAsync(QueryPlan plan, TimeSpan? ttl = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -102,7 +112,14 @@ public sealed class QueryPlanCache : IQueryPlanCache
         _logger.LogDebug("Stored query plan {Fingerprint} (TTL={Ttl})", plan.Fingerprint, ttl ?? _options.DefaultTtl);
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Returns a cached plan for the SQL text, invoking <paramref name="analyzer"/> on a cache miss to produce and store one.
+    /// </summary>
+    /// <param name="sql">Raw SQL statement to look up or analyze.</param>
+    /// <param name="analyzer">Async factory invoked on a cache miss; receives the SQL and a cancellation token.</param>
+    /// <param name="ttl">Optional TTL override for the produced plan.</param>
+    /// <param name="cancellationToken">Token to observe for cancellation.</param>
+    /// <returns>The cached or newly analyzed query plan.</returns>
     public async Task<QueryPlan> GetOrAnalyzeAsync(
         string sql,
         Func<string, CancellationToken, Task<QueryPlan>> analyzer,
@@ -124,7 +141,11 @@ public sealed class QueryPlanCache : IQueryPlanCache
         return plan;
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Removes a specific plan from the cache by fingerprint.
+    /// </summary>
+    /// <param name="fingerprint">The normalized SQL fingerprint to remove.</param>
+    /// <param name="cancellationToken">Token to observe for cancellation.</param>
     public async Task InvalidateAsync(string fingerprint, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -132,7 +153,10 @@ public sealed class QueryPlanCache : IQueryPlanCache
         _logger.LogDebug("Invalidated query plan {Fingerprint}", fingerprint);
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Removes all cached plans.
+    /// </summary>
+    /// <param name="cancellationToken">Token to observe for cancellation.</param>
     public async Task ClearAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -141,7 +165,11 @@ public sealed class QueryPlanCache : IQueryPlanCache
         _logger.LogInformation("Query plan cache cleared");
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Returns cache statistics: total entries currently held, cumulative hits, and cumulative misses.
+    /// </summary>
+    /// <param name="cancellationToken">Token to observe for cancellation.</param>
+    /// <returns>A tuple containing (entries, hits, misses).</returns>
     public async Task<(long Entries, long Hits, long Misses)> GetStatisticsAsync(CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -190,7 +218,9 @@ public sealed class QueryPlanCache : IQueryPlanCache
         }
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Clears the cache provider. The provider itself is disposed by its owner.
+    /// </summary>
     public async ValueTask DisposeAsync()
     {
         // The cache provider will be disposed by its owner
