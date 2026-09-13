@@ -26,6 +26,8 @@ public sealed class UserRepository : Repository<User>
     /// <returns>The user with the specified username, or null if not found.</returns>
     public async Task<User?> GetByUsernameAsync(string username)
     {
+        ArgumentNullException.ThrowIfNull(username);
+
         if (string.IsNullOrWhiteSpace(username))
             return null;
 
@@ -40,6 +42,8 @@ public sealed class UserRepository : Repository<User>
     /// <returns>The user with the specified email address, or null if not found.</returns>
     public async Task<User?> GetByEmailAsync(string email)
     {
+        ArgumentNullException.ThrowIfNull(email);
+
         if (string.IsNullOrWhiteSpace(email))
             return null;
 
