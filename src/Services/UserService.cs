@@ -21,6 +21,11 @@ public sealed class UserService : IAsyncDisposable
     private readonly UserRepository _userRepository;
     private readonly IDatabaseContext _context;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UserService"/> class.
+    /// </summary>
+    /// <param name="context">The database context used to access user data.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="context"/> is <c>null</c>.</exception>
     public UserService(IDatabaseContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -28,7 +33,16 @@ public sealed class UserService : IAsyncDisposable
         _userRepository = new UserRepository(context);
     }
 
-    // Registers new user
+    /// <summary>
+    /// Registers a new user with the specified username, email, and password.
+    /// </summary>
+    /// <param name="username">The username for the new user. Must be at least 3 characters.</param>
+    /// <param name="email">The email address for the new user. Must be a valid email format.</param>
+    /// <param name="password">The password for the new user. Must be at least 6 characters.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the newly created user.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="username"/>, <paramref name="email"/>, or <paramref name="password"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">Thrown when username is less than 3 characters, email is invalid, or password is less than 6 characters.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the username or email is already registered.</exception>
     public async Task<User> RegisterUserAsync(string username, string email, string password)
     {
         ArgumentNullException.ThrowIfNull(username);
@@ -61,7 +75,13 @@ public sealed class UserService : IAsyncDisposable
         return await _userRepository.AddAsync(user);
     }
 
-    // Authenticates user
+    /// <summary>
+    /// Authenticates a user by verifying the provided username and password.
+    /// </summary>
+    /// <param name="username">The username of the user to authenticate.</param>
+    /// <param name="password">The password of the user to authenticate.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the authenticated user, or <c>null</c> if authentication fails or the user is inactive.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="username"/> or <paramref name="password"/> is <c>null</c>.</exception>
     public async Task<User?> AuthenticateAsync(string username, string password)
     {
         ArgumentNullException.ThrowIfNull(username);
@@ -79,13 +99,26 @@ public sealed class UserService : IAsyncDisposable
         return user;
     }
 
-    // Gets user by id
+    /// <summary>
+    /// Gets a user by their unique identifier.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the user, or <c>null</c> if no user with the specified identifier exists.</returns>
     public async Task<User?> GetUserByIdAsync(int userId)
     {
         return await _userRepository.GetByIdAsync(userId);
     }
 
-    // Updates user profile
+    /// <summary>
+    /// Updates the profile of an existing user.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user to update.</param>
+    /// <param name="firstName">The new first name. Ignored when <c>null</c> or whitespace.</param>
+    /// <param name="lastName">The new last name. Ignored when <c>null</c> or whitespace.</param>
+    /// <param name="phoneNumber">The new phone number. Ignored when <c>null</c> or whitespace.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the updated user.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="firstName"/>, <paramref name="lastName"/>, or <paramref name="phoneNumber"/> is <c>null</c>.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when no user with the specified identifier exists.</exception>
     public async Task<User> UpdateProfileAsync(int userId, string? firstName, string? lastName, string? phoneNumber)
     {
         ArgumentNullException.ThrowIfNull(firstName);
@@ -109,7 +142,16 @@ public sealed class UserService : IAsyncDisposable
         return await _userRepository.UpdateAsync(user);
     }
 
-    // Changes password
+    /// <summary>
+    /// Changes the password of an existing user after verifying the current password.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user.</param>
+    /// <param name="currentPassword">The user's current password.</param>
+    /// <param name="newPassword">The new password. Must be at least 6 characters.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result is <c>true</c> if the password was changed successfully.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="currentPassword"/> or <paramref name="newPassword"/> is <c>null</c>.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when no user with the specified identifier exists or the current password is incorrect.</exception>
+    /// <exception cref="ArgumentException">Thrown when the new password is less than 6 characters.</exception>
     public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
     {
         ArgumentNullException.ThrowIfNull(currentPassword);
@@ -131,7 +173,12 @@ public sealed class UserService : IAsyncDisposable
         return true;
     }
 
-    // Verifies user email
+    /// <summary>
+    /// Marks a user's email as verified.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result is <c>true</c> if the email was verified successfully.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when no user with the specified identifier exists.</exception>
     public async Task<bool> VerifyEmailAsync(int userId)
     {
         var user = await _userRepository.GetByIdAsync(userId);
@@ -144,19 +191,31 @@ public sealed class UserService : IAsyncDisposable
         return true;
     }
 
-    // Gets active users count
+    /// <summary>
+    /// Gets the number of active users.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the count of active users.</returns>
     public async Task<int> GetActiveUsersCountAsync()
     {
         return await _userRepository.CountActiveUsersAsync();
     }
 
-    // Gets inactive users
+    /// <summary>
+    /// Gets users that have been inactive for the specified number of days.
+    /// </summary>
+    /// <param name="daysInactive">The number of days of inactivity used to filter users. Defaults to 30.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the list of inactive users.</returns>
     public async Task<List<User>> GetInactiveUsersAsync(int daysInactive = 30)
     {
         return await _userRepository.GetInactiveUsersAsync(daysInactive);
     }
 
-    // Deactivates user
+    /// <summary>
+    /// Deactivates a user account.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user to deactivate.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result is <c>true</c> if the user was deactivated successfully.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when no user with the specified identifier exists.</exception>
     public async Task<bool> DeactivateUserAsync(int userId)
     {
         var user = await _userRepository.GetByIdAsync(userId);
@@ -182,6 +241,10 @@ public sealed class UserService : IAsyncDisposable
         return hashOfInput.Equals(hash, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// Releases the underlying database context.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous dispose operation.</returns>
     public async ValueTask DisposeAsync()
     {
         await _context.DisposeAsync();
