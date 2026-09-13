@@ -15144,3 +15144,33 @@
 +- Tweak MigrationRunnerExtensionsTests
 +- ICacheProvider.cs
 +- QueryProfileTests changes
+
+# 2026-09-13 08:25:03.249790
++In repo dotnet-micro-orm, add XML doc comments to public members of src/Data/QueryPlanCache.cs and IQueryPlanCache.cs lacking documentation. HARD RULES: Do NOT touch .csproj/.sln. Do NOT change behavior. Do NOT add NuGet. Must compile. Conventional commit.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- docs: add XML doc comments to DatabaseContext public members
+
+# 2026-09-13 08:25:03.250128
++In repo dotnet-micro-orm, add XML doc comments to public members of src/Data/QueryPlanCache.cs and IQueryPlanCache.cs lacking documentation. HARD RULES: Do NOT touch .csproj/.sln. Do NOT change behavior. Do NOT add NuGet. Must compile. Conventional commit.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- docs: add XML doc comments to DatabaseContext public members
