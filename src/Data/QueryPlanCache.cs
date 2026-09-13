@@ -47,11 +47,11 @@ public sealed class QueryPlanCache : IQueryPlanCache
     private long _misses;
 
     /// <summary>
-    /// Initializes the cache with the supplied options, logger, and cache provider.
+    /// Initializes a new instance of the <see cref="QueryPlanCache"/> class.
     /// </summary>
-    /// <param name="options">Capacity and TTL configuration.</param>
+    /// <param name="options">Configuration options for capacity and TTL.</param>
     /// <param name="logger">Logger for diagnostic events.</param>
-    /// <param name="cacheProvider">Cache provider for storing query plans. Uses MemoryCacheProvider by default if null.</param>
+    /// <param name="cacheProvider">Optional cache provider. Defaults to <see cref="MemoryCacheProvider"/> if not provided.</param>
     public QueryPlanCache(QueryPlanCacheOptions options, ILogger<QueryPlanCache> logger, ICacheProvider? cacheProvider = null)
     {
         _options = options ?? throw new ArgumentNullException(nameof(options));
