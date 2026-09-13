@@ -12,6 +12,13 @@ namespace DotnetMicroOrm.Integration;
 /// </summary>
 public sealed class CircuitBreakerPolicy : ICircuitBreakerPolicy
 {
+    private const int DefaultFailureThreshold = 5;
+    private const int DefaultBreakDurationSeconds = 30;
+    private const int DefaultHalfOpenAttempts = 3;
+    private const string FailureThresholdMustBePositiveMessage = "Failure threshold must be positive";
+    private const string HalfOpenAttemptsMustBePositiveMessage = "Half-open attempts must be positive";
+    private const string CircuitBreakerOpenMessagePrefix = "Circuit breaker is open. Retry after ";
+
     private readonly int _failureThreshold;
     private readonly TimeSpan _breakDuration;
     private readonly int _halfOpenAttempts;
@@ -29,13 +36,13 @@ public sealed class CircuitBreakerPolicy : ICircuitBreakerPolicy
     /// <param name="breakDuration">Duration to keep the circuit open before transitioning to half-open (default: 30 seconds)</param>
     /// <param name="halfOpenAttempts">Number of attempts in half-open state before determining final state (default: 3)</param>
     public CircuitBreakerPolicy(
-        int failureThreshold = 5,
+        int failureThreshold = DefaultFailureThreshold,
         TimeSpan? breakDuration = null,
-        int halfOpenAttempts = 3)
+        int halfOpenAttempts = DefaultHalfOpenAttempts)
     {
-        _failureThreshold = failureThreshold > 0 ? failureThreshold : throw new ArgumentOutOfRangeException(nameof(failureThreshold), "Failure threshold must be positive");
-        _breakDuration = breakDuration ?? TimeSpan.FromSeconds(30);
-        _halfOpenAttempts = halfOpenAttempts > 0 ? halfOpenAttempts : throw new ArgumentOutOfRangeException(nameof(halfOpenAttempts), "Half-open attempts must be positive");
+        _failureThreshold = failureThreshold > 0 ? failureThreshold : throw new ArgumentOutOfRangeException(nameof(failureThreshold), FailureThresholdMustBePositiveMessage);
+        _breakDuration = breakDuration ?? TimeSpan.FromSeconds(DefaultBreakDurationSeconds);
+        _halfOpenAttempts = halfOpenAttempts > 0 ? halfOpenAttempts : throw new ArgumentOutOfRangeException(nameof(halfOpenAttempts), HalfOpenAttemptsMustBePositiveMessage);
     }
 
     /// <inheritdoc/>
@@ -83,7 +90,7 @@ public sealed class CircuitBreakerPolicy : ICircuitBreakerPolicy
                     throw new CircuitBreakerOpenException(
                         _lastStateChange + _breakDuration,
                         _state,
-                        $"Circuit breaker is open. Retry after {_lastStateChange + _breakDuration:O}");
+                        $"{CircuitBreakerOpenMessagePrefix}{_lastStateChange + _breakDuration:O}");
                 }
             }
         }
