@@ -13,9 +13,17 @@ using DotnetMicroOrm.Domain.Models;
 /// </summary>
 public sealed class UserRepository : Repository<User>
 {
+    /// <summary>
+    /// Initializes a new instance of the UserRepository class.
+    /// </summary>
+    /// <param name="context">The database context to use for data operations.</param>
     public UserRepository(IDatabaseContext context) : base(context) { }
 
-    // Gets user by username
+    /// <summary>
+    /// Gets a user by their username.
+    /// </summary>
+    /// <param name="username">The username to search for.</param>
+    /// <returns>The user with the specified username, or null if not found.</returns>
     public async Task<User?> GetByUsernameAsync(string username)
     {
         if (string.IsNullOrWhiteSpace(username))
@@ -25,7 +33,11 @@ public sealed class UserRepository : Repository<User>
         return users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
     }
 
-    // Gets user by email
+    /// <summary>
+    /// Gets a user by their email address.
+    /// </summary>
+    /// <param name="email">The email address to search for.</param>
+    /// <returns>The user with the specified email address, or null if not found.</returns>
     public async Task<User?> GetByEmailAsync(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
@@ -35,28 +47,43 @@ public sealed class UserRepository : Repository<User>
         return users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
     }
 
-    // Gets active users
+    /// <summary>
+    /// Gets all active users.
+    /// </summary>
+    /// <returns>A list of all active users.</returns>
     public async Task<List<User>> GetActiveUsersAsync()
     {
         var users = await GetAllAsync();
         return users.Where(u => u.IsActive).ToList();
     }
 
-    // Gets verified users
+    /// <summary>
+    /// Gets all verified and active users.
+    /// </summary>
+    /// <returns>A list of all verified and active users.</returns>
     public async Task<List<User>> GetVerifiedUsersAsync()
     {
         var users = await GetAllAsync();
         return users.Where(u => u.IsEmailVerified && u.IsActive).ToList();
     }
 
-    // Gets users by creation date range
+    /// <summary>
+    /// Gets users created within a specific date range.
+    /// </summary>
+    /// <param name="startDate">The start date of the range (inclusive).</param>
+    /// <param name="endDate">The end date of the range (inclusive).</param>
+    /// <returns>A list of users created within the specified date range.</returns>
     public async Task<List<User>> GetUsersByDateRangeAsync(DateTime startDate, DateTime endDate)
     {
         var users = await GetAllAsync();
         return users.Where(u => u.CreatedDate >= startDate && u.CreatedDate <= endDate).ToList();
     }
 
-    // Gets users without recent login
+    /// <summary>
+    /// Gets users who have not logged in for a specified number of days.
+    /// </summary>
+    /// <param name="daysInactive">The number of days of inactivity to consider a user inactive. Default is 30 days.</param>
+    /// <returns>A list of inactive users.</returns>
     public async Task<List<User>> GetInactiveUsersAsync(int daysInactive = 30)
     {
         var users = await GetActiveUsersAsync();
@@ -64,7 +91,10 @@ public sealed class UserRepository : Repository<User>
         return users.Where(u => !u.LastLoginDate.HasValue || u.LastLoginDate < cutoffDate).ToList();
     }
 
-    // Counts active users
+    /// <summary>
+    /// Counts the number of active users.
+    /// </summary>
+    /// <returns>The count of active users.</returns>
     public async Task<int> CountActiveUsersAsync()
     {
         var users = await GetActiveUsersAsync();
