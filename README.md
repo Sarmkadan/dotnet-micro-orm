@@ -689,3 +689,53 @@ catch
     throw;
 }
 ```
+
+## EventBus and IEventBus
+
+The `EventBus` class is an in-process implementation of the publisher-subscriber pattern, allowing loose communication between components via domain events. It implements the `IEventBus` interface.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Events;
+using System.Threading.Tasks;
+
+// 1. Define an event handler for UserCreatedEvent
+public class UserCreatedEventHandler : IEventHandler<UserCreatedEvent>
+{
+    public Task HandleAsync(UserCreatedEvent @event)
+    {
+        Console.WriteLine($"User created: {@event.Username} ({@event.Email})");
+        return Task.CompletedTask;
+    }
+}
+
+// 2. Create an instance of the event bus
+var eventBus = new EventBus();
+
+// 3. Subscribe the handler to the event bus
+eventBus.Subscribe<UserCreatedEvent, UserCreatedEventHandler>(new UserCreatedEventHandler());
+
+// 4. Publish a UserCreatedEvent
+await eventBus.PublishAsync(new UserCreatedEvent
+{
+    UserId = 1,
+    Username = "john_doe",
+    Email = "john@example.com",
+    // Note: EventId, OccurredAt, InitiatedBy are set by the base class DomainEvent
+    // You can set InitiatedBy if needed, otherwise it defaults to "System"
+    InitiatedBy = "UserService"
+});
+```
+
+### Handler Execution
+
+By default, the `EventBus` executes handlers asynchronously. To execute handlers synchronously, pass `false` to the constructor:
+
+```csharp
+var synchronousEventBus = new EventBus(executeAsync: false);
+```
+
+### Lifetime and Scope
+
+The `EventBus` is designed for single-application use. For distributed scenarios, consider using a message queue.
