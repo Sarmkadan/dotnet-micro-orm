@@ -739,3 +739,49 @@ var synchronousEventBus = new EventBus(executeAsync: false);
 ### Lifetime and Scope
 
 The `EventBus` is designed for single-application use. For distributed scenarios, consider using a message queue.
+
+## CircuitBreakerPolicy
+
+The `CircuitBreakerPolicy` class (in `src/Integration/CircuitBreakerPolicy.cs`) implements the circuit breaker pattern to prevent cascading failures in distributed systems. It monitors failures and opens the circuit when a threshold is reached, allowing the system to recover before attempting operations again.
+
+### States
+
+The circuit breaker has three states:
+- **Closed**: Normal operation. Failures are counted, and when the failure threshold is reached, the circuit opens.
+- **Open**: Operations are short-circuited and immediately fail with a `CircuitBreakerOpenException`. After the break duration elapses, the circuit transitions to half-open.
+- **Half-open**: A limited number of operations are allowed to test if the underlying has recovered. If successful, the circuit closes; if not, it reopens.
+
+### Configuration
+
+The policy is configured via constructor parameters:
+- `failureThreshold`: Number of failures before opening the circuit (default: 5)
+- `breakDuration`: Duration to keep the circuit open before transitioning to half-open (default: 30 seconds)
+- `halfOpenAttempts`: Number of attempts in half-open state before determining final state (default: 3)
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Integration;
+
+// Create circuit breaker with default settings
+var circuitBreaker = new CircuitBreakerPolicy();
+
+// Or customize settings
+var customBreaker = new CircuitBreakerPolicy(
+    failureThreshold: 3,
+    breakDuration: TimeSpan.FromSeconds(60),
+    halfOpenAttempts: 2);
+
+// Execute operations through the circuit breaker
+await circuitBreaker.ExecuteAsync(async () =>
+{
+    // Your operation that might fail
+    await riskyOperationAsync();
+});
+
+// For operations that return a value
+var result = await circuitBreaker.ExecuteAsync(async () =>
+{
+    return await fetchDataFromServiceAsync();
+});
+```
