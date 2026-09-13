@@ -26,6 +26,8 @@ public sealed class ProductRepository : Repository<Product>
     /// <returns>The matching product, or <c>null</c> if not found or <paramref name="sku"/> is blank.</returns>
     public async Task<Product?> GetBySkuAsync(string sku)
     {
+        ArgumentNullException.ThrowIfNull(sku);
+
         if (string.IsNullOrWhiteSpace(sku))
             return null;
 
@@ -108,6 +110,8 @@ public sealed class ProductRepository : Repository<Product>
     /// <returns>A list of active products matching the search term, or an empty list if <paramref name="searchTerm"/> is blank.</returns>
     public async Task<List<Product>> SearchByNameAsync(string searchTerm)
     {
+        ArgumentNullException.ThrowIfNull(searchTerm);
+
         if (string.IsNullOrWhiteSpace(searchTerm))
             return [];
 
