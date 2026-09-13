@@ -153,6 +153,83 @@ foreach (var kvp in batchResults)
 }
 ```
 
+## WebhookHandler
+
+`WebhookHandler` (in `src/Integration/WebhookHandler.cs`) is a sealed, `IAsyncDisposable`
+class that receives incoming webhooks with **HMAC-SHA256 signature verification** and
+delivers outgoing webhooks with **SSRF protection**, circuit breaking, retry, and
+dead-letter support. It is the entry point for the webhook subsystem and is backed by
+`WebhookSignatureValidator` (signature + anti-replay) and `UrlSsrfValidator` (SSRF
+protection).
+
+### Signature Validation
+
+Incoming webhooks are verified in `ProcessAsync` before any handler runs. The signature
+header uses the format `t={unixTimestamp},v1={hexSignature}` and is checked by
+`WebhookSignatureValidator`:
+
+- **HMAC-SHA256** — the signature is computed over `"{timestamp}.{payloadJson}"` using
+  the shared secret, so the payload cannot be tampered with without the secret.
+- **Timestamp anti-replay** — the `t` value must fall within the configured tolerance
+  window (default: 5 minutes) of the current time, rejecting replayed or stale requests.
+- **Constant-time comparison** — signatures are compared with
+  `CryptographicOperations.FixedTimeEquals` to prevent timing attacks.
+
+A failed check returns a `WebhookResult` with `Success = false` and
+`Error = "Invalid signature"`; no handlers are invoked.
+
+### SSRF Protection via UrlSsrfValidator
+
+Outgoing deliveries are protected against Server-Side Request Forgery. The default
+`IHttpClient` is constructed with `UrlSsrfValidator.CreateSsrfProtectedConfig()`, and
+`DeliverAsync` calls `UrlSsrfValidator.IsUrlSafeAtDeliveryTimeAsync(url)` before posting.
+The validator blocks unsafe targets by checking:
+
+- **Scheme** — only `https` is allowed.
+- **Host** — rejects loopback (`localhost`, `127.0.0.1`, `::1`), private ranges
+  (`10/8`, `172.16/12`, `192.168/16`), link-local, and multicast addresses.
+- **DNS resolution** — resolves the host at delivery time and rejects it if any resolved
+  IP falls in a forbidden range, mitigating DNS-rebinding attacks.
+
+A URL that fails SSRF validation returns a `WebhookResult` with
+`FinalDisposition = "ssrf_violation"` and no request is sent.
+
+### Delivery Pipeline
+
+`DeliverAsync` combines SSRF validation with a per-URL `CircuitBreakerPolicy`, exponential
+backoff retries (default 3 attempts, doubling delay capped at 5 minutes), and a dead-letter
+store for failed deliveries. Non-retryable `4xx` responses short-circuit to the dead-letter
+store, while `5xx`/timeouts/exceptions are retried.
+
+### Example Usage
+
+```csharp
+using System;
+using System.Threading.Tasks;
+using DotnetMicroOrm.Integration;
+
+// Create a handler with a shared secret
+await using var handler = new WebhookHandler("your-webhook-secret");
+
+// Register a handler for an event type
+handler.Subscribe(WebhookEvents.OrderCreated, async payload =>
+{
+    Console.WriteLine($"Order event received: {payload.Id}");
+});
+
+// Process an incoming webhook (signature verified before handlers run)
+var incoming = new WebhookPayload { EventType = WebhookEvents.OrderCreated };
+var signatureHeader = handler.GenerateSignatureHeader(incoming);
+var result = await handler.ProcessAsync(incoming, signatureHeader);
+Console.WriteLine(result.Success ? "Verified and processed" : $"Rejected: {result.Error}");
+
+// Deliver an outgoing webhook (SSRF-protected, with retry + circuit breaker)
+var delivery = await handler.DeliverAsync(
+    new WebhookPayload { EventType = WebhookEvents.OrderShipped },
+    url: "https://partner.example.com/hooks/order-shipped");
+Console.WriteLine(delivery.Success ? "Delivered" : $"Failed: {delivery.Error}");
+```
+
 ## MigrationRecordExtensions
 
 `MigrationRecordExtensions` provides a set of extension methods for `MigrationRecord` that simplify common migration operations such as checking success status, retrieving error messages, comparing migration timestamps, formatting records for display, and filtering failed migrations. These helpers encapsulate repetitive patterns and provide a fluent API for working with migration records.
