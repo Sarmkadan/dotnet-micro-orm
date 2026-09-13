@@ -115,4 +115,7 @@ public class Product : BaseEntity
     }
 
     public bool IsLowStock(int threshold = 10) => StockQuantity <= threshold;
+
+    public override string ToString() =>
+        $"Product {{ Id = {Id}, Sku = {Sku}, Name = {Name}, Price = {Price} }}";
 }
