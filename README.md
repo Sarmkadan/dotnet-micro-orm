@@ -618,3 +618,74 @@ await repository.AddRangeAsync(batch);
 var page = await repository.GetPagedResultAsync(pageNumber: 1, pageSize: 20);
 Console.WriteLine($"Page {page.PageNumber} of {page.TotalCount} total users");
 ```
+
+## UnitOfWork
+
+`UnitOfWork` (in `src/Data/UnitOfWork.cs`) is the unit-of-work pattern
+implementation for transaction management. It wraps an `IDatabaseContext`,
+caches one repository instance per entity type, and tracks a lightweight
+in-memory change set. It implements `IUnitOfWork` and is `sealed`.
+
+### Repository Caching
+
+`Repository<T>()` returns a cached `IRepository<T>` for the entity type. The
+first call constructs a `Repository<T>` over the shared `IDatabaseContext` and
+stores it in a `ConcurrentDictionary`; subsequent calls return the same
+instance. All repositories obtained from one `UnitOfWork` therefore share the
+same underlying context and transaction.
+
+### Transaction Semantics
+
+Transactions are explicit — nothing is committed implicitly. The lifecycle is
+`BeginTransactionAsync` → work → `CommitAsync` (or `RollbackAsync`).
+
+- **`BeginTransactionAsync(isolationLevel = ReadCommitted)`** — starts a
+  transaction on the underlying context. Throws `OrmException` with code
+  `UOW_TRANSACTION_ACTIVE` if a transaction is already active. Failures are
+  wrapped in `ConfigurationException`.
+- **`CommitAsync()`** — commits the active transaction and clears the change
+  set. Throws `OrmException` with code `UOW_NO_TRANSACTION` if no transaction
+  is active. If the commit itself fails, the transaction is automatically
+  rolled back before the exception is rethrown.
+- **`RollbackAsync()`** — rolls back the active transaction and clears the
+  change set. If no transaction is active it is a no-op that returns `true`.
+  Rollback failures are wrapped in `OrmException`.
+
+### Change Set Tracking
+
+`SaveChangesAsync()` and `HasChanges()` operate on an in-memory change set
+that is **not** persisted to the database. `SaveChangesAsync()` returns the
+number of tracked changes and clears the set (or `0` when empty); it does not
+issue any SQL. Actual persistence is performed by the repository operations
+against the shared context, and durability is governed by the explicit
+transaction above.
+
+### Disposal
+
+`DisposeAsync()` rolls back any still-active transaction, disposes the
+underlying `IDatabaseContext`, and clears cached repositories and the change
+set. It is idempotent.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Domain.Models;
+
+await using var uow = new UnitOfWork(context);
+
+var users = uow.Repository<User>();
+
+await uow.BeginTransactionAsync();
+try
+{
+    await users.AddAsync(new User { Email = "a@example.com" });
+    await users.AddAsync(new User { Email = "b@example.com" });
+    await uow.CommitAsync();
+}
+catch
+{
+    await uow.RollbackAsync();
+    throw;
+}
+```
