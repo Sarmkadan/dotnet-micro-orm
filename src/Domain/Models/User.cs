@@ -98,4 +98,7 @@ public class User : BaseEntity
     public void UpdateLastLogin() => LastLoginDate = DateTime.UtcNow;
 
     public void Deactivate() => IsActive = false;
+
+    public override string ToString() =>
+        $"User {{ Id = {Id}, Username = {Username}, Email = {Email}, IsActive = {IsActive} }}";
 }
