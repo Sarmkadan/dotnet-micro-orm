@@ -24,7 +24,8 @@ public sealed class UnitOfWork : IUnitOfWork
 
     public UnitOfWork(IDatabaseContext context)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
+        ArgumentNullException.ThrowIfNull(context);
+        _context = context;
     }
 
     // Gets or creates repository for entity type
