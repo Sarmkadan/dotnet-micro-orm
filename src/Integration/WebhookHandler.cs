@@ -52,6 +52,7 @@ public sealed class WebhookHandler : IAsyncDisposable
     /// </summary>
     public void Subscribe(string eventType, Func<WebhookPayload, Task> handler)
     {
+        ArgumentNullException.ThrowIfNull(eventType);
         ArgumentException.ThrowIfNullOrEmpty(eventType);
         ArgumentNullException.ThrowIfNull(handler);
 
@@ -74,6 +75,7 @@ public sealed class WebhookHandler : IAsyncDisposable
     public async Task<WebhookResult> ProcessAsync(WebhookPayload payload, string signatureHeader)
     {
         ArgumentNullException.ThrowIfNull(payload);
+        ArgumentNullException.ThrowIfNull(signatureHeader);
 
         // Verify signature with timestamp validation
         if (!_signatureValidator.ValidateSignature(payload, signatureHeader))
@@ -185,6 +187,7 @@ public sealed class WebhookHandler : IAsyncDisposable
         TimeSpan? circuitBreakerDuration = null)
     {
         ArgumentNullException.ThrowIfNull(payload);
+        ArgumentNullException.ThrowIfNull(url);
         ArgumentException.ThrowIfNullOrEmpty(url);
 
         // Validate URL for SSRF safety at delivery time with DNS resolution
