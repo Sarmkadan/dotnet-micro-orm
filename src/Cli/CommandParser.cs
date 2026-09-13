@@ -23,6 +23,10 @@ public sealed class CommandParser
     /// </summary>
     public void RegisterCommand(string name, string description, Action<CommandContext> handler)
     {
+        ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(description);
+        ArgumentNullException.ThrowIfNull(handler);
+
         if (string.IsNullOrWhiteSpace(name))
             throw new OrmException("Command name cannot be empty");
 
@@ -42,6 +46,10 @@ public sealed class CommandParser
     /// </summary>
     public void AddOption(string commandName, string optionName, string description, bool isRequired = false)
     {
+        ArgumentNullException.ThrowIfNull(commandName);
+        ArgumentNullException.ThrowIfNull(optionName);
+        ArgumentNullException.ThrowIfNull(description);
+
         if (!_commands.TryGetValue(commandName, out var command))
             throw new OrmException($"Command '{commandName}' not found");
 
@@ -58,7 +66,9 @@ public sealed class CommandParser
     /// </summary>
     public CommandContext Parse(string[] args)
     {
-        if (args is null || args.Length == 0)
+        ArgumentNullException.ThrowIfNull(args);
+
+        if (args.Length == 0)
             return new CommandContext { ShowHelp = true };
 
         var commandName = args[0].ToLowerInvariant();
@@ -173,6 +183,15 @@ public sealed class CommandContext
     public Dictionary<string, string> Arguments { get; set; } = [];
     public bool ShowHelp { get; set; }
 
-    public string GetArgument(string name) => Arguments.TryGetValue(name, out var value) ? value : string.Empty;
-    public bool HasArgument(string name) => Arguments.ContainsKey(name);
+    public string GetArgument(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        return Arguments.TryGetValue(name, out var value) ? value : string.Empty;
+    }
+
+    public bool HasArgument(string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        return Arguments.ContainsKey(name);
+    }
 }
