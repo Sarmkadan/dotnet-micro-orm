@@ -29,6 +29,8 @@ public sealed class CommandHandler
     /// </summary>
     public async Task<int> ExecuteAsync(CommandContext context)
     {
+        ArgumentNullException.ThrowIfNull(context);
+
         try
         {
             if (context.ShowHelp)
