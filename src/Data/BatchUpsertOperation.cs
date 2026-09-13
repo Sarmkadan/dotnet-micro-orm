@@ -24,7 +24,13 @@ public sealed class BatchUpsertOperation<T> : IBatchUpsertOperation<T>
     private readonly string _tableName;
     private readonly string _schema;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BatchUpsertOperation{T}"/> class
+    /// for the given database context, resolving the target table name and schema
+    /// from <typeparamref name="T"/>'s mapping attributes.
+    /// </summary>
     /// <param name="context">Active database context.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="context"/> is <c>null</c>.</exception>
     public BatchUpsertOperation(IDatabaseContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -32,7 +38,16 @@ public sealed class BatchUpsertOperation<T> : IBatchUpsertOperation<T>
         _schema = GetTableSchema();
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Upserts a single entity. If a row matching the key selector already exists
+    /// it is updated; otherwise a new row is inserted.
+    /// </summary>
+    /// <param name="entity">Entity to upsert.</param>
+    /// <param name="keySelector">Expression identifying the unique key columns used
+    /// to detect whether a row already exists.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains
+    /// the upsert result describing what the batch operation did to the entity.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="entity"/> is <c>null</c>.</exception>
     public async Task<UpsertResult<T>> UpsertAsync(T entity, Expression<Func<T, object>> keySelector)
     {
         if (entity is null) throw new ArgumentNullException(nameof(entity));
@@ -41,7 +56,28 @@ public sealed class BatchUpsertOperation<T> : IBatchUpsertOperation<T>
         return results[0];
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Upserts a collection of entities in configurable batches.
+    /// </summary>
+    /// <param name="entities">Entities to upsert.</param>
+    /// <param name="keySelector">Expression identifying the unique key columns.</param>
+    /// <param name="batchSize">
+    /// Maximum entities per SQL statement. Defaults to
+    /// <see cref="OrmConstants.DefaultBatchSize"/>.
+    /// </param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains a list
+    /// of <see cref="UpsertResult{T}"/> in the same order as <paramref name="entities"/>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="entities"/> or <paramref name="keySelector"/> is <c>null</c>.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <paramref name="batchSize"/> is not within the allowed range.
+    /// </exception>
+    /// <exception cref="EntityValidationException">
+    /// One or more entities failed validation.
+    /// </exception>
     public async Task<List<UpsertResult<T>>> UpsertRangeAsync(
         List<T> entities,
         Expression<Func<T, object>> keySelector,
