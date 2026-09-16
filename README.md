@@ -929,4 +929,78 @@ var result = await circuitBreaker.ExecuteAsync(async () =>
 {
     return await fetchDataFromServiceAsync();
 });
+
+## JobScheduler and IBackgroundJob
+
+The background job subsystem (in `src/BackgroundJobs/`) provides a thread-safe scheduler for running asynchronous work outside the request pipeline, with support for interval- and cron-based scheduling, retries, timeouts, and execution history tracking.
+
+### IBackgroundJob interface
+
+Any job you want to schedule implements `IBackgroundJob`:
+
+```csharp
+public interface IBackgroundJob
+{
+    string JobId { get; }        // Unique identifier for this job type
+    string Name { get; }         // Human-readable name
+    string Description { get; }  // What the job does
+    Task ExecuteAsync();         // The job logic
+    bool CanExecute();           // Whether the job can run in the current context
+    Task OnFailureAsync(Exception ex); // Called on failure (logging/alerting)
+}
+```
+
+### Scheduling model
+
+`JobScheduler` (in `src/BackgroundJobs/JobScheduler.cs`) is a sealed, `IAsyncDisposable` class that owns the scheduling lifecycle:
+
+- **Registration** — jobs are registered with a `JobScheduleConfig` via `Register(IBackgroundJob, JobScheduleConfig)`. The config controls `Enabled`, `RunOnStartup`, `Interval`, `CronExpression`, `MaxRetries`, `RetryDelay`, and `ExecutionTimeout`.
+- **Start** — `StartAsync()` iterates registered jobs, runs enabled jobs immediately when `RunOnStartup` is set and `CanExecute()` returns true, then schedules each job by interval (`System.Threading.Timer` repeating) or by cron expression (a one-shot timer re-armed after each run).
+- **Stop** — `StopAsync()` disposes all timers and clears the timer map; `DisposeAsync()` stops the scheduler and releases the execution semaphore.
+- **Execution** — `ExecuteJobAsync` runs a job under a `SemaphoreSlim` so only one job executes at a time. It honors `CanExecute()`, applies `ExecutionTimeout` via `WaitAsync`, and retries up to `MaxRetries` times with `RetryDelay` between attempts. On final failure it invokes `OnFailureAsync` and records the failure.
+- **Cron expressions** — `GetNextOccurrence(string, DateTime)` is a public static helper that computes the next UTC match for a five-field expression (`minute hour day-of-month month day-of-week`), supporting `*`, single values, comma lists, `a-b` ranges, and `*/step` / `a-b/step` increments. It returns `null` for invalid or never-matching expressions.
+- **History** — every run is recorded as a `JobExecutionResult` (job id, start time, duration, success, error message/stack trace, and optional output). History is kept in memory, capped at 1000 entries, and queryable via `GetExecutionHistory(jobId)`, `GetRecentExecutions(count)`, and `ClearHistory()`.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.BackgroundJobs;
+
+// Implement a job
+public sealed class DataCleanupJob : IBackgroundJob
+{
+    public string JobId => "data-cleanup";
+    public string Name => "Data Cleanup";
+    public string Description => "Purges stale records";
+
+    public bool CanExecute() => true;
+
+    public Task ExecuteAsync()
+    {
+        // ... job logic ...
+        return Task.CompletedTask;
+    }
+
+    public Task OnFailureAsync(Exception ex)
+    {
+        // ... log / alert ...
+        return Task.CompletedTask;
+    }
+}
+
+// Register and run
+var scheduler = new JobScheduler();
+scheduler.Register(new DataCleanupJob(), new JobScheduleConfig
+{
+    RunOnStartup = true,
+    CronExpression = "0 2 * * *", // 2 AM daily
+    MaxRetries = 3,
+    RetryDelay = TimeSpan.FromSeconds(30),
+    ExecutionTimeout = TimeSpan.FromMinutes(5)
+});
+
+await scheduler.StartAsync();
+// ...
+await scheduler.DisposeAsync();
+```
 ```
