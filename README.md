@@ -230,6 +230,74 @@ var delivery = await handler.DeliverAsync(
 Console.WriteLine(delivery.Success ? "Delivered" : $"Failed: {delivery.Error}");
 ```
 
+## MigrationRunner
+
+`MigrationRunner` (in `src/Migrations/MigrationRunner.cs`) is the default implementation of `IMigrationRunner`. It discovers registered `IMigration` implementations, orders them by version, and applies the pending ones to the database, persisting state in a `dbo._MigrationHistory` table that is created automatically on first use.
+
+### How migrations are discovered
+
+Migrations are not auto-scanned from the assembly. Instead, each migration is registered explicitly with the DI container:
+
+- `AddMigration<TMigration>()` registers a migration as a transient `IMigration` (`src/Configuration/ServiceCollectionExtensions.cs`).
+- `MigrationRunner` receives all registered `IMigration` instances through its constructor as an `IEnumerable<IMigration>`.
+- The runner sorts them by `IMigration.Version` using `StringComparer.OrdinalIgnoreCase`, so the order in which they are registered does not matter.
+
+A migration implements `IMigration`:
+
+```csharp
+public interface IMigration
+{
+    string Version { get; }        // e.g. "20240101_001" (YYYYMMdd_seq)
+    string Description { get; }
+    Task UpAsync(IDatabaseContext context);
+    Task DownAsync(IDatabaseContext context);
+}
+```
+
+### How migrations are applied
+
+`MigrateAsync()` is the entry point:
+
+1. `EnsureHistoryTableAsync()` creates `dbo._MigrationHistory` if it does not exist.
+2. `GetAppliedVersionsAsync()` reads the versions already recorded with `Success = 1`.
+3. For each migration whose version is not in the applied set (in ascending version order), `ApplyMigrationAsync()` runs `UpAsync(context)` and then records the outcome in the history table.
+
+Key behaviors:
+
+- **Idempotent**: already-applied versions are skipped, so running `MigrateAsync()` repeatedly is safe.
+- **Failure handling**: if `UpAsync` throws, the runner records the migration as failed (`Success = 0` with the error message) and rethrows an `OrmException` with code `MIGRATION_FAILED`.
+- **Targeted apply**: `MigrateToAsync(targetVersion)` applies only migrations with `Version <= targetVersion`.
+- **Rollback**: `RollbackToAsync(targetVersion)` runs `DownAsync` in descending version order for applied migrations above the target, then deletes their history rows.
+- **Dry runs**: `MigrateDryRunAsync` / `RollbackDryRunAsync` generate the SQL that would run without executing it, by replaying each migration against an in-memory `SqlCaptureContext` that captures statements.
+- **Introspection**: `GetAppliedMigrationsAsync`, `GetPendingMigrationsAsync`, and `GetPendingMigrationsWithDetailsAsync` report applied/pending state; `GenerateUpSqlAsync` / `GenerateDownSqlAsync` produce SQL for a single version.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using DotnetMicroOrm.Migrations;
+
+// Implement a migration
+public sealed class CreateUsersTable : IMigration
+{
+    public string Version => "20240101_001";
+    public string Description => "Create users table";
+
+    public Task UpAsync(IDatabaseContext context) =>
+        context.ExecuteNonQueryAsync("CREATE TABLE Users (Id INT NOT NULL PRIMARY KEY, Name NVARCHAR(100) NOT NULL)");
+
+    public Task DownAsync(IDatabaseContext context) =>
+        context.ExecuteNonQueryAsync("DROP TABLE Users");
+}
+
+// Register it with DI
+services.AddMigration<CreateUsersTable>();
+
+// Resolve the runner and apply pending migrations
+var runner = services.BuildServiceProvider().GetRequiredService<IMigrationRunner>();
+await runner.MigrateAsync();
+```
+
 ## MigrationRecordExtensions
 
 `MigrationRecordExtensions` provides a set of extension methods for `MigrationRecord` that simplify common migration operations such as checking success status, retrieving error messages, comparing migration timestamps, formatting records for display, and filtering failed migrations. These helpers encapsulate repetitive patterns and provide a fluent API for working with migration records.
