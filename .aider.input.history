@@ -15234,3 +15234,33 @@
 +- chore: maintenance updates
 +- refactor(JobScheduler): add ArgumentNullException.ThrowIfNull guards to public method parameters
 +- refactor(MigrationRunner): add ArgumentNullException.ThrowIfNull guards to public method parameters
+
+# 2026-09-17 09:45:49.883824
++In repo dotnet-micro-orm, extract magic numbers/strings (header names, timeouts) in src/Integration/WebhookHandler.cs into named constants. HARD RULES: Do NOT touch .csproj/.sln. Do NOT change behavior. Do NOT add NuGet. Must compile. Conventional commit.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- refactor(ConnectionRetryPolicy): extract magic numbers into named constants
++- refactor: extract default retry policy values to constants
++- refactor(PreparedStatementPool): extract magic numbers into named constants
++- refactor(RateLimitingMiddleware): extract magic numbers into named constants
++- chore: apply workspace updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
+
+# 2026-09-17 09:45:49.883943
++In repo dotnet-micro-orm, extract magic numbers/strings (header names, timeouts) in src/Integration/WebhookHandler.cs into named constants. HARD RULES: Do NOT touch .csproj/.sln. Do NOT change behavior. Do NOT add NuGet. Must compile. Conventional commit.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: apply workspace updates
++- refactor(ConnectionRetryPolicy): extract magic numbers into named constants
++- refactor: extract default retry policy values to constants
++- refactor(PreparedStatementPool): extract magic numbers into named constants
++- refactor(RateLimitingMiddleware): extract magic numbers into named constants
++- chore: apply workspace updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
