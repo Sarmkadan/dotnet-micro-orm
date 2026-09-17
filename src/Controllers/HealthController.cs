@@ -19,6 +19,10 @@ namespace DotnetMicroOrm.Controllers
         /// <param name="_dbContext">The database context.</param>
         private readonly IDatabaseContext _dbContext;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HealthController"/> class.
+        /// </summary>
+        /// <param name="_dbContext">The database context.</param>
         public HealthController(IDatabaseContext _dbContext)
         {
             this._dbContext = _dbContext;
