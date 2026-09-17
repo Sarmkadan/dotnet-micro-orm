@@ -32,6 +32,11 @@ public sealed class ConnectionRetryPolicy
     public const int DefaultMaxAttempts = 3;
 
     /// <summary>
+    /// Minimum number of attempts allowed.
+    /// </summary>
+    private const int MinAttempts = 1;
+
+    /// <summary>
     /// Base delay used to compute the exponential backoff for the first retry. Defaults to <c>200ms</c>.
     /// </summary>
     public TimeSpan BaseDelay { get; set; } = DefaultBaseDelay;
@@ -73,7 +78,7 @@ public sealed class ConnectionRetryPolicy
     /// A no-op policy that performs exactly one attempt and never retries. Useful as an explicit
     /// opt-out default for callers that construct a <see cref="DatabaseContext"/> without retry.
     /// </summary>
-    public static ConnectionRetryPolicy None => new() { MaxAttempts = 1 };
+    public static ConnectionRetryPolicy None => new() { MaxAttempts = MinAttempts };
 
     /// <summary>
     /// Executes <paramref name="operation"/>, retrying with exponential backoff and jitter whenever
@@ -114,13 +119,19 @@ public sealed class ConnectionRetryPolicy
         _ => TransientErrorClassifier(exception, provider)
     };
 
+    private const int ExponentialBase = 2;
+    private const int ExponentOffset = 1;
+    private const double JitterScale = 2.0;
+    private const double JitterBias = 1.0;
+    private const double MinDelayMs = 0.0;
+
     private TimeSpan ComputeDelay(int attempt)
     {
-        var exponentialMs = BaseDelay.TotalMilliseconds * Math.Pow(2, attempt - 1);
+        var exponentialMs = BaseDelay.TotalMilliseconds * Math.Pow(ExponentialBase, attempt - ExponentOffset);
         var cappedMs = Math.Min(exponentialMs, MaxDelay.TotalMilliseconds);
         var jitterRangeMs = cappedMs * JitterFactor;
-        var jitteredMs = cappedMs + (_random.NextDouble() * 2 - 1) * jitterRangeMs;
-        var clampedMs = Math.Clamp(jitteredMs, 0, MaxDelay.TotalMilliseconds);
+        var jitteredMs = cappedMs + (_random.NextDouble() * JitterScale - JitterBias) * jitterRangeMs;
+        var clampedMs = Math.Clamp(jitteredMs, MinDelayMs, MaxDelay.TotalMilliseconds);
         return TimeSpan.FromMilliseconds(clampedMs);
     }
 
