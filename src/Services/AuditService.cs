@@ -41,6 +41,7 @@ public sealed class AuditService : IAuditService, IAsyncDisposable
     /// <param name="context">The database context used to access the audit log repository.</param>
     public AuditService(IDatabaseContext context)
     {
+        ArgumentNullException.ThrowIfNull(context);
         _context = context;
         _auditRepository = new Repository<AuditLog>(context);
     }
@@ -56,6 +57,7 @@ public sealed class AuditService : IAuditService, IAsyncDisposable
     /// <returns>The created audit log entry.</returns>
     public async Task<AuditLog> LogInsertAsync(string entityType, int entityId, string? newValues = null, int? userId = null, string? username = null)
     {
+        ArgumentNullException.ThrowIfNull(entityType);
         var log = AuditLog.CreateInsert(entityType, entityId, newValues, userId, username);
         log.MarkAsSuccess();
         return await _auditRepository.AddAsync(log);
@@ -74,6 +76,7 @@ public sealed class AuditService : IAuditService, IAsyncDisposable
     /// <returns>The created audit log entry.</returns>
     public async Task<AuditLog> LogUpdateAsync(string entityType, int entityId, string? oldValues = null, string? newValues = null, string? changedProperties = null, int? userId = null, string? username = null)
     {
+        ArgumentNullException.ThrowIfNull(entityType);
         var log = AuditLog.CreateUpdate(entityType, entityId, oldValues, newValues, changedProperties, userId, username);
         log.MarkAsSuccess();
         return await _auditRepository.AddAsync(log);
@@ -90,6 +93,7 @@ public sealed class AuditService : IAuditService, IAsyncDisposable
     /// <returns>The created audit log entry.</returns>
     public async Task<AuditLog> LogDeleteAsync(string entityType, int entityId, string? oldValues = null, int? userId = null, string? username = null)
     {
+        ArgumentNullException.ThrowIfNull(entityType);
         var log = AuditLog.CreateDelete(entityType, entityId, oldValues, userId, username);
         log.MarkAsSuccess();
         return await _auditRepository.AddAsync(log);
@@ -107,6 +111,9 @@ public sealed class AuditService : IAuditService, IAsyncDisposable
     /// <returns>The created audit log entry.</returns>
     public async Task<AuditLog> LogFailureAsync(string entityType, int entityId, string action, string errorMessage, int? userId = null, string? username = null)
     {
+        ArgumentNullException.ThrowIfNull(entityType);
+        ArgumentNullException.ThrowIfNull(action);
+        ArgumentNullException.ThrowIfNull(errorMessage);
         var log = new AuditLog(entityType, entityId, action)
         {
             UserId = userId,
@@ -125,6 +132,7 @@ public sealed class AuditService : IAuditService, IAsyncDisposable
     /// <returns>The audit log entries for the entity, ordered by timestamp descending.</returns>
     public async Task<List<AuditLog>> GetAuditLogsAsync(string entityType, int entityId)
     {
+        ArgumentNullException.ThrowIfNull(entityType);
         var logs = await _auditRepository.GetAllAsync();
         return logs.Where(l => l.EntityType == entityType && l.EntityId == entityId)
                    .OrderByDescending(l => l.Timestamp)
@@ -151,6 +159,7 @@ public sealed class AuditService : IAuditService, IAsyncDisposable
     /// <returns>The audit log entries matching the action, ordered by timestamp descending.</returns>
     public async Task<List<AuditLog>> GetLogsByActionAsync(string action)
     {
+        ArgumentNullException.ThrowIfNull(action);
         var logs = await _auditRepository.GetAllAsync();
         return logs.Where(l => l.Action.Equals(action, StringComparison.OrdinalIgnoreCase))
                    .OrderByDescending(l => l.Timestamp)
