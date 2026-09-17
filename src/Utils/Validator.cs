@@ -18,35 +18,55 @@ public sealed class ValidationBuilder
 
     public ValidationBuilder When(bool condition, string errorMessage)
     {
+        ArgumentNullException.ThrowIfNull(errorMessage);
         if (condition)
             _errors.Add(errorMessage);
         return this;
     }
 
-    public ValidationBuilder NotNull(object? value, string propertyName) =>
-        When(value is null, $"{propertyName} is required");
+    public ValidationBuilder NotNull(object? value, string propertyName)
+    {
+        ArgumentNullException.ThrowIfNull(propertyName);
+        return When(value is null, $"{propertyName} is required");
+    }
 
-    public ValidationBuilder NotEmpty(string? value, string propertyName) =>
-        When(string.IsNullOrWhiteSpace(value), $"{propertyName} cannot be empty");
+    public ValidationBuilder NotEmpty(string? value, string propertyName)
+    {
+        ArgumentNullException.ThrowIfNull(propertyName);
+        return When(string.IsNullOrWhiteSpace(value), $"{propertyName} cannot be empty");
+    }
 
-    public ValidationBuilder MinLength(string? value, int minLength, string propertyName) =>
-        When(string.IsNullOrEmpty(value) || value.Length < minLength,
+    public ValidationBuilder MinLength(string? value, int minLength, string propertyName)
+    {
+        ArgumentNullException.ThrowIfNull(propertyName);
+        return When(string.IsNullOrEmpty(value) || value.Length < minLength,
             $"{propertyName} must be at least {minLength} characters");
+    }
 
-    public ValidationBuilder MaxLength(string? value, int maxLength, string propertyName) =>
-        When(!string.IsNullOrEmpty(value) && value.Length > maxLength,
+    public ValidationBuilder MaxLength(string? value, int maxLength, string propertyName)
+    {
+        ArgumentNullException.ThrowIfNull(propertyName);
+        return When(!string.IsNullOrEmpty(value) && value.Length > maxLength,
             $"{propertyName} cannot exceed {maxLength} characters");
+    }
 
-    public ValidationBuilder Range(int value, int min, int max, string propertyName) =>
-        When(value < min || value > max,
+    public ValidationBuilder Range(int value, int min, int max, string propertyName)
+    {
+        ArgumentNullException.ThrowIfNull(propertyName);
+        return When(value < min || value > max,
             $"{propertyName} must be between {min} and {max}");
+    }
 
-    public ValidationBuilder Range(decimal value, decimal min, decimal max, string propertyName) =>
-        When(value < min || value > max,
+    public ValidationBuilder Range(decimal value, decimal min, decimal max, string propertyName)
+    {
+        ArgumentNullException.ThrowIfNull(propertyName);
+        return When(value < min || value > max,
             $"{propertyName} must be between {min} and {max}");
+    }
 
     public ValidationBuilder Email(string? value, string propertyName)
     {
+        ArgumentNullException.ThrowIfNull(propertyName);
         if (string.IsNullOrEmpty(value))
             return this;
 
@@ -57,6 +77,7 @@ public sealed class ValidationBuilder
 
     public ValidationBuilder Url(string? value, string propertyName)
     {
+        ArgumentNullException.ThrowIfNull(propertyName);
         if (string.IsNullOrEmpty(value))
             return this;
 
@@ -67,6 +88,7 @@ public sealed class ValidationBuilder
 
     public ValidationBuilder PhoneNumber(string? value, string propertyName)
     {
+        ArgumentNullException.ThrowIfNull(propertyName);
         if (string.IsNullOrEmpty(value))
             return this;
 
@@ -77,6 +99,8 @@ public sealed class ValidationBuilder
 
     public ValidationBuilder Regex(string? value, string pattern, string propertyName, string? message = null)
     {
+        ArgumentNullException.ThrowIfNull(pattern);
+        ArgumentNullException.ThrowIfNull(propertyName);
         if (string.IsNullOrEmpty(value))
             return this;
 
@@ -84,8 +108,11 @@ public sealed class ValidationBuilder
         return When(!System.Text.RegularExpressions.Regex.IsMatch(value, pattern), errorMsg);
     }
 
-    public ValidationBuilder Custom(bool isValid, string errorMessage) =>
-        When(!isValid, errorMessage);
+    public ValidationBuilder Custom(bool isValid, string errorMessage)
+    {
+        ArgumentNullException.ThrowIfNull(errorMessage);
+        return When(!isValid, errorMessage);
+    }
 
     public List<string> GetErrors() => _errors;
 
@@ -105,6 +132,7 @@ public static class ValidationRules
 {
     public static bool IsValidEmail(string email)
     {
+        ArgumentNullException.ThrowIfNull(email);
         try
         {
             var addr = new System.Net.Mail.MailAddress(email);
@@ -118,18 +146,21 @@ public static class ValidationRules
 
     public static bool IsValidPhoneNumber(string phoneNumber)
     {
+        ArgumentNullException.ThrowIfNull(phoneNumber);
         var cleaned = new string(phoneNumber.Where(char.IsDigit).ToArray());
         return cleaned.Length >= 10 && cleaned.Length <= 15;
     }
 
     public static bool IsValidUrl(string url)
     {
+        ArgumentNullException.ThrowIfNull(url);
         return Uri.TryCreate(url, UriKind.Absolute, out var uriResult) &&
                (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
     }
 
     public static bool IsStrongPassword(string password)
     {
+        ArgumentNullException.ThrowIfNull(password);
         if (password.Length < 8)
             return false;
 
@@ -143,6 +174,7 @@ public static class ValidationRules
 
     public static bool IsValidCreditCard(string cardNumber)
     {
+        ArgumentNullException.ThrowIfNull(cardNumber);
         var cleaned = new string(cardNumber.Where(char.IsDigit).ToArray());
         if (cleaned.Length < 13 || cleaned.Length > 19)
             return false;
@@ -175,11 +207,13 @@ public static class ValidationRules
 
     public static bool IsValidIPAddress(string ipAddress)
     {
+        ArgumentNullException.ThrowIfNull(ipAddress);
         return System.Net.IPAddress.TryParse(ipAddress, out _);
     }
 
     public static bool IsValidGuid(string guid)
     {
+        ArgumentNullException.ThrowIfNull(guid);
         return Guid.TryParse(guid, out _);
     }
 }
@@ -191,11 +225,16 @@ public static class ValidationExtensions
 {
     public static ValidationBuilder CreateValidator(this BaseEntity entity)
     {
+        ArgumentNullException.ThrowIfNull(entity);
         return new ValidationBuilder();
     }
 
     public static ValidationBuilder NotModified(this ValidationBuilder validator, object original, object current, string propertyName)
     {
+        ArgumentNullException.ThrowIfNull(validator);
+        ArgumentNullException.ThrowIfNull(original);
+        ArgumentNullException.ThrowIfNull(current);
+        ArgumentNullException.ThrowIfNull(propertyName);
         if (!Equals(original, current))
             validator.When(true, $"{propertyName} cannot be modified");
         return validator;
@@ -203,6 +242,9 @@ public static class ValidationExtensions
 
     public static ValidationBuilder Custom<T>(this ValidationBuilder validator, Func<T, bool> rule, T value, string message)
     {
+        ArgumentNullException.ThrowIfNull(validator);
+        ArgumentNullException.ThrowIfNull(rule);
+        ArgumentNullException.ThrowIfNull(message);
         return validator.When(!rule(value), message);
     }
 }
