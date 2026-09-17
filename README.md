@@ -670,6 +670,90 @@ var first = await new QueryBuilder<User>(repository)
     .FirstOrDefaultAsync();
 ```
 
+## Specification Pattern
+
+The specification pattern is implemented in `src/Data/Specification.cs` and
+`src/Data/SpecificationCombinators.cs`. It encapsulates query logic (filters,
+eager-loading includes, ordering, and pagination) into reusable, composable
+objects instead of scattering `Where` clauses across call sites.
+
+### Specification<T>
+
+`Specification<T>` (in `src/Data/Specification.cs`) is the abstract base class.
+A concrete specification sets `Criteria` (an `Expression<Func<T, bool>>`
+predicate) and optionally configures includes, ordering, and paging through the
+protected `Apply*` helpers:
+
+| Member | Purpose |
+| --- | --- |
+| `Criteria` | Predicate that filters results |
+| `Includes` / `IncludeStrings` | Eager-loading includes (expression or raw SQL) |
+| `OrderBy` / `OrderByDescending` | Ordering expressions |
+| `PageNumber` / `PageSize` / `IsPagingEnabled` | Pagination settings |
+| `AddInclude(...)` | Adds an eager-loading include |
+| `ApplyPaging(page, size)` | Enables pagination |
+| `ApplyOrderBy(...)` / `ApplyOrderByDescending(...)` | Sets ordering |
+
+The file also ships ready-made specifications for the demo domain models, e.g.
+`ActiveProductsSpecification`, `ProductsByPriceRangeSpecification`,
+`LowStockProductsSpecification`, `ActiveUsersSpecification`,
+`UserByIdSpecification`, `UsersByEmailSpecification`, `UserOrdersSpecification`,
+`PendingOrdersSpecification`, and `RecentOrdersSpecification`.
+
+```csharp
+using DotnetMicroOrm.Data;
+
+// Reuse a built-in specification
+var active = new ActiveProductsSpecification();
+
+// Or define your own
+public sealed class ProductsOverPriceSpecification : Specification<Product>
+{
+    public ProductsOverPriceSpecification(decimal minPrice)
+    {
+        Criteria = p => p.Price >= minPrice && p.IsActive;
+        ApplyOrderBy(p => p.Price);
+    }
+}
+```
+
+### SpecificationCombinators
+
+`SpecificationCombinators` (in `src/Data/SpecificationCombinators.cs`) provides
+extension methods to compose specifications into new ones. Composition unions
+the `Includes` and `IncludeStrings` of both operands and combines their
+`Criteria` into a single expression tree (rebinding the right-hand parameter
+onto the left-hand one):
+
+| Method | Result |
+| --- | --- |
+| `spec1.And(spec2)` | Criteria is `spec1.Criteria AND spec2.Criteria` |
+| `spec1.Or(spec2)` | Criteria is `spec1.Criteria OR spec2.Criteria` |
+| `spec.Not()` | Criteria is the logical negation of `spec.Criteria` |
+
+A `null` criteria is treated as always-true, so combining a filter with a
+filter-less specification still yields the filter.
+
+```csharp
+using DotnetMicroOrm.Data;
+
+var active = new ActiveProductsSpecification();
+var inStock = new ProductsByPriceRangeSpecification(0, 1000);
+
+// Active AND in the price range
+var activeInRange = active.And(inStock);
+
+// Active OR in the price range
+var activeOrInRange = active.Or(inStock);
+
+// Not active
+var inactive = active.Not();
+```
+
+Related validation helpers live in `src/Data/SpecificationValidation.cs`
+(`Validate`, `IsValid`, `EnsureValid`) and
+`src/Data/SpecificationCombinatorsValidation.cs` (composition validation).
+
 ## Repository
 
 `Repository<T>` (in `src/Data/Repository.cs`) is the generic base repository
