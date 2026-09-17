@@ -24,23 +24,43 @@ public sealed class ConnectionRetryPolicy
     /// Maximum number of attempts, including the first, before the failure propagates to the caller.
     /// Defaults to <c>3</c>. Must be at least <c>1</c>.
     /// </summary>
-    public int MaxAttempts { get; set; } = 3;
+    public int MaxAttempts { get; set; } = DefaultMaxAttempts;
+
+    /// <summary>
+    /// Default maximum number of attempts.
+    /// </summary>
+    public const int DefaultMaxAttempts = 3;
 
     /// <summary>
     /// Base delay used to compute the exponential backoff for the first retry. Defaults to <c>200ms</c>.
     /// </summary>
-    public TimeSpan BaseDelay { get; set; } = TimeSpan.FromMilliseconds(200);
+    public TimeSpan BaseDelay { get; set; } = DefaultBaseDelay;
+
+    /// <summary>
+    /// Default base delay value.
+    /// </summary>
+    public static readonly TimeSpan DefaultBaseDelay = TimeSpan.FromMilliseconds(200);
 
     /// <summary>
     /// Upper bound applied to the computed backoff delay, after jitter. Defaults to <c>5</c> seconds.
     /// </summary>
-    public TimeSpan MaxDelay { get; set; } = TimeSpan.FromSeconds(5);
+    public TimeSpan MaxDelay { get; set; } = DefaultMaxDelay;
+
+    /// <summary>
+    /// Default maximum delay value.
+    /// </summary>
+    public static readonly TimeSpan DefaultMaxDelay = TimeSpan.FromSeconds(5);
 
     /// <summary>
     /// Fraction (0.0-1.0) of the computed delay randomly added or subtracted to avoid synchronized
     /// retry storms across concurrent callers. Defaults to <c>0.2</c> (±20%).
     /// </summary>
-    public double JitterFactor { get; set; } = 0.2;
+    public double JitterFactor { get; set; } = DefaultJitterFactor;
+
+    /// <summary>
+    /// Default jitter factor value.
+    /// </summary>
+    public const double DefaultJitterFactor = 0.2;
 
     /// <summary>
     /// Determines whether a given exception, raised while targeting the given provider, should be
