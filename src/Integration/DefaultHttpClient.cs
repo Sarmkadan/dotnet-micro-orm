@@ -33,6 +33,8 @@ public sealed class DefaultHttpClient : IHttpClient
 
     public async Task<HttpResponseData> GetAsync(string url, Dictionary<string, string>? headers = null)
     {
+        ArgumentNullException.ThrowIfNull(url);
+
         if (string.IsNullOrEmpty(url))
             throw new ArgumentException("URL cannot be empty", nameof(url));
 
@@ -41,6 +43,9 @@ public sealed class DefaultHttpClient : IHttpClient
 
     public async Task<HttpResponseData> PostAsync(string url, string body, string contentType = "application/json", Dictionary<string, string>? headers = null)
     {
+        ArgumentNullException.ThrowIfNull(url);
+        ArgumentNullException.ThrowIfNull(body);
+
         if (string.IsNullOrEmpty(url))
             throw new ArgumentException("URL cannot be empty", nameof(url));
 
@@ -49,6 +54,9 @@ public sealed class DefaultHttpClient : IHttpClient
 
     public async Task<HttpResponseData> PutAsync(string url, string body, string contentType = "application/json", Dictionary<string, string>? headers = null)
     {
+        ArgumentNullException.ThrowIfNull(url);
+        ArgumentNullException.ThrowIfNull(body);
+
         if (string.IsNullOrEmpty(url))
             throw new ArgumentException("URL cannot be empty", nameof(url));
 
@@ -57,6 +65,8 @@ public sealed class DefaultHttpClient : IHttpClient
 
     public async Task<HttpResponseData> DeleteAsync(string url, Dictionary<string, string>? headers = null)
     {
+        ArgumentNullException.ThrowIfNull(url);
+
         if (string.IsNullOrEmpty(url))
             throw new ArgumentException("URL cannot be empty", nameof(url));
 
