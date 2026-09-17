@@ -115,4 +115,6 @@ public class OrderItem : BaseEntity
         var subtotal = GetSubtotal();
         return subtotal > 0 ? TaxAmount / subtotal : 0;
     }
+
+    public override string ToString() => $"OrderItem {{ Id = {Id}, OrderId = {OrderId}, ProductId = {ProductId}, Quantity = {Quantity}, UnitPrice = {UnitPrice}, LineTotal = {LineTotal} }}";
 }
