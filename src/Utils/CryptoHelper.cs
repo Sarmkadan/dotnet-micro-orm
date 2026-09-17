@@ -24,6 +24,9 @@ public static class CryptoHelper
     /// Creates a salted hash of a password using PBKDF2-SHA256
     /// Returns base64-encoded salt + hash for storage in database
     /// </summary>
+    /// <param name="password">The plaintext password to hash.</param>
+    /// <returns>A base64-encoded string containing the salt and hash.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="password"/> is null or whitespace.</exception>
     public static string HashPassword(string password)
     {
         if (string.IsNullOrWhiteSpace(password))
@@ -48,6 +51,9 @@ public static class CryptoHelper
     /// Verifies a password against a stored hash created by HashPassword
     /// Uses constant-time comparison to prevent timing attacks
     /// </summary>
+    /// <param name="password">The plaintext password to verify.</param>
+    /// <param name="storedHash">The base64-encoded salt + hash previously produced by <see cref="HashPassword"/>.</param>
+    /// <returns><see langword="true"/> if the password matches; otherwise, <see langword="false"/>.</returns>
     public static bool VerifyPassword(string password, string storedHash)
     {
         if (string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(storedHash))
@@ -80,6 +86,9 @@ public static class CryptoHelper
     /// <summary>
     /// Generates a cryptographically secure random token suitable for API keys/tokens
     /// </summary>
+    /// <param name="length">The number of random bytes to generate. Must be at least 16.</param>
+    /// <returns>A base64-encoded string of the generated random bytes.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="length"/> is less than 16.</exception>
     public static string GenerateSecureToken(int length = 32)
     {
         if (length < 16)
@@ -97,6 +106,9 @@ public static class CryptoHelper
     /// Creates SHA256 hash of a string (not suitable for passwords, use HashPassword instead)
     /// Used for checksums and data integrity verification
     /// </summary>
+    /// <param name="input">The string to hash.</param>
+    /// <returns>A hexadecimal string representation of the SHA256 hash.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="input"/> is null or whitespace.</exception>
     public static string ComputeSha256(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
@@ -113,6 +125,10 @@ public static class CryptoHelper
     /// Encrypts a string using AES-256-CBC with random IV
     /// Returns base64-encoded IV + ciphertext
     /// </summary>
+    /// <param name="plaintext">The plaintext to encrypt.</param>
+    /// <param name="key">The encryption key. Must be at least 32 characters; the first 32 are used as the 256-bit key.</param>
+    /// <returns>A base64-encoded string containing the IV and ciphertext.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="plaintext"/> is empty, or <paramref name="key"/> is null or shorter than 32 characters.</exception>
     public static string EncryptAes256(string plaintext, string key)
     {
         if (string.IsNullOrEmpty(plaintext))
@@ -148,6 +164,10 @@ public static class CryptoHelper
     /// <summary>
     /// Decrypts an AES-256-CBC encrypted string created by EncryptAes256
     /// </summary>
+    /// <param name="ciphertext">The base64-encoded IV + ciphertext to decrypt.</param>
+    /// <param name="key">The encryption key. Must be at least 32 characters; the first 32 are used as the 256-bit key.</param>
+    /// <returns>The decrypted plaintext string.</returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="ciphertext"/> is empty, or <paramref name="key"/> is null or shorter than 32 characters.</exception>
     public static string DecryptAes256(string ciphertext, string key)
     {
         if (string.IsNullOrEmpty(ciphertext))
