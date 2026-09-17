@@ -18,6 +18,14 @@ public sealed class CommandHandler
     private readonly IDatabaseContext _dbContext;
     private readonly IServiceProvider _serviceProvider;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CommandHandler"/> class.
+    /// </summary>
+    /// <param name="dbContext">The database context used for data operations.</param>
+    /// <param name="serviceProvider">The service provider used to resolve services.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="dbContext"/> or <paramref name="serviceProvider"/> is <c>null</c>.
+    /// </exception>
     public CommandHandler(IDatabaseContext dbContext, IServiceProvider serviceProvider)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
