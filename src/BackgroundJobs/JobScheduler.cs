@@ -83,6 +83,8 @@ public sealed class JobScheduler : IAsyncDisposable
     /// </summary>
     public async Task<JobExecutionResult> ExecuteJobAsync(IBackgroundJob job, JobScheduleConfig config)
     {
+        ArgumentNullException.ThrowIfNull(job);
+        ArgumentNullException.ThrowIfNull(config);
         await _executionLock.WaitAsync();
 
         try
