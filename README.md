@@ -1003,4 +1003,77 @@ await scheduler.StartAsync();
 // ...
 await scheduler.DisposeAsync();
 ```
+
+## QueryProfiler and IProfilerSink
+
+The `QueryProfiler` class provides thread-safe, in-process query profiling. Wrap any
+database call with `ProfileAsync<T>` to measure its wall-clock duration and capture
+diagnostics such as the SQL text, bound parameters, and the calling member. Profiles
+are stored in a bounded ring-buffer (default 1000 entries) so memory usage stays
+predictable under sustained load.
+
+### Public API
+
+- `ProfileAsync<T>(query, operation, parameters, callerMemberName)` — executes the
+  wrapped operation and records a `QueryProfile`. When `IsEnabled` is `false` the
+  delegate runs directly with no overhead.
+- `GetProfiles()` — returns all captured profiles ordered by execution time descending.
+- `GetSummary()` — returns aggregated statistics (`QueryProfilerSummary`) across all
+  captured profiles.
+- `Clear()` — removes all captured profiles from memory.
+- `IsEnabled` — when `false`, profiling is skipped entirely. Defaults to `true`.
+
+### Diagnostics
+
+The profiler automatically detects and reports:
+
+- **Slow queries** — queries exceeding `SlowQueryThresholdMs` (default 500ms).
+- **N+1 patterns** — the same parameterized SQL executed more than `NPlusOneThreshold`
+  times (default 3), suggesting inefficient data loading.
+- **Failed queries** — executions that threw an exception.
+
+These thresholds and toggles are configured via `QueryProfilerOptions`.
+
+### IProfilerSink
+
+`IProfilerSink` is a pluggable sink for profiler events. Implement it to route
+diagnostics to your own logging or monitoring system:
+
+- `ReportSlowQuery(profile, thresholdMs)`
+- `ReportNPlusOneQuery(queryText, executionCount, threshold)`
+- `ReportFailedQuery(profile)`
+
+The default `ConsoleProfilerSink` writes diagnostics to standard error. Pass a custom
+sink to the `QueryProfiler` constructor to override it.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Profiling;
+
+// Custom sink routing diagnostics to your logging system
+public sealed class LoggingProfilerSink : IProfilerSink
+{
+    public void ReportSlowQuery(QueryProfile profile, int thresholdMs)
+        => Console.WriteLine($"Slow query ({profile.Duration.TotalMilliseconds:F0}ms): {profile.Query}");
+
+    public void ReportNPlusOneQuery(string queryText, int executionCount, int threshold)
+        => Console.WriteLine($"N+1 pattern ({executionCount} executions): {queryText}");
+
+    public void ReportFailedQuery(QueryProfile profile)
+        => Console.WriteLine($"Failed query: {profile.ErrorMessage}");
+}
+
+var profiler = new QueryProfiler(
+    maxProfiles: 500,
+    options: new QueryProfilerOptions { SlowQueryThresholdMs = 250 },
+    sink: new LoggingProfilerSink());
+
+var users = await profiler.ProfileAsync(
+    "SELECT * FROM Users WHERE Id = @id",
+    () => connection.QueryAsync<User>("SELECT * FROM Users WHERE Id = @id", new { id = 42 }),
+    parameters: new Dictionary<string, object> { ["id"] = 42 });
+
+var summary = profiler.GetSummary();
+Console.WriteLine($"Total queries: {summary.TotalQueries}, avg: {summary.AverageDuration.TotalMilliseconds:F2}ms");
 ```
