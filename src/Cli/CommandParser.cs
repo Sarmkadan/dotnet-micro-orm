@@ -21,6 +21,9 @@ public sealed class CommandParser
     /// <summary>
     /// Registers a command with its handler and options
     /// </summary>
+    /// <param name="name">The command name used to invoke it from the CLI.</param>
+    /// <param name="description">A short description shown in the help text.</param>
+    /// <param name="handler">The delegate invoked when the command is parsed.</param>
     public void RegisterCommand(string name, string description, Action<CommandContext> handler)
     {
         ArgumentNullException.ThrowIfNull(name);
@@ -44,6 +47,10 @@ public sealed class CommandParser
     /// <summary>
     /// Adds an option to a previously registered command
     /// </summary>
+    /// <param name="commandName">The name of the command to add the option to.</param>
+    /// <param name="optionName">The option name (without the leading dashes).</param>
+    /// <param name="description">A short description shown in the help text.</param>
+    /// <param name="isRequired">Whether the option must be supplied when the command is parsed.</param>
     public void AddOption(string commandName, string optionName, string description, bool isRequired = false)
     {
         ArgumentNullException.ThrowIfNull(commandName);
@@ -64,6 +71,8 @@ public sealed class CommandParser
     /// <summary>
     /// Parses command-line arguments and returns execution context
     /// </summary>
+    /// <param name="args">The raw command-line arguments.</param>
+    /// <returns>The parsed execution context.</returns>
     public CommandContext Parse(string[] args)
     {
         ArgumentNullException.ThrowIfNull(args);
@@ -130,6 +139,7 @@ public sealed class CommandParser
     /// <summary>
     /// Generates and returns help text for all commands
     /// </summary>
+    /// <returns>The formatted help text.</returns>
     public string GetHelpText()
     {
         var sb = new StringBuilder();
@@ -178,17 +188,42 @@ public sealed class CommandParser
 /// </summary>
 public sealed class CommandContext
 {
+    /// <summary>
+    /// The name of the parsed command.
+    /// </summary>
     public string CommandName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The handler registered for the parsed command.
+    /// </summary>
     public Action<CommandContext>? Handler { get; set; }
+
+    /// <summary>
+    /// The parsed options and arguments keyed by name.
+    /// </summary>
     public Dictionary<string, string> Arguments { get; set; } = [];
+
+    /// <summary>
+    /// Whether help should be shown instead of executing a command.
+    /// </summary>
     public bool ShowHelp { get; set; }
 
+    /// <summary>
+    /// Returns the value of the named argument, or an empty string if absent.
+    /// </summary>
+    /// <param name="name">The argument name.</param>
+    /// <returns>The argument value, or <see cref="string.Empty"/> if not present.</returns>
     public string GetArgument(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
         return Arguments.TryGetValue(name, out var value) ? value : string.Empty;
     }
 
+    /// <summary>
+    /// Determines whether the named argument is present.
+    /// </summary>
+    /// <param name="name">The argument name.</param>
+    /// <returns><see langword="true"/> if the argument is present; otherwise, <see langword="false"/>.</returns>
     public bool HasArgument(string name)
     {
         ArgumentNullException.ThrowIfNull(name);
