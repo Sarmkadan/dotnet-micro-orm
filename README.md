@@ -1076,4 +1076,64 @@ var users = await profiler.ProfileAsync(
 
 var summary = profiler.GetSummary();
 Console.WriteLine($"Total queries: {summary.TotalQueries}, avg: {summary.AverageDuration.TotalMilliseconds:F2}ms");
+
+## PreparedStatementPool
+
+`PreparedStatementPool` (in `src/Data/PreparedStatementPool.cs`) is a thread-safe pool of prepared-statement entries that caches SQL parameter shapes, eliminating redundant `DbCommand` construction overhead on high-frequency query paths. It is registered alongside `IQueryPlanCache` via `AddQueryPlanCaching`.
+
+### Options
+
+`PreparedStatementPoolOptions` controls pool capacity:
+
+- `MaxPoolSize` — maximum number of statements held in the pool before least-used eviction. Defaults to `200`.
+
+Fluent configuration helpers live in `src/Data/PreparedStatementPoolOptionsExtensions.cs`:
+
+- `WithMaxPoolSize(int maxPoolSize)` — sets the maximum pool size explicitly.
+- `WithMemoryBasedMaxPoolSize(int reservedMemoryMb)` — sizes the pool from available memory using a ~1KB-per-statement heuristic (minimum 10).
+- `WithNoEviction()` — sets `MaxPoolSize` to `int.MaxValue`, effectively disabling eviction.
+- `WithDefaultSize()` — restores the default of `200`.
+
+JSON serialization helpers live in `src/Data/PreparedStatementPoolOptionsJsonExtensions.cs` (`ToJson`, `FromJson`, `TryFromJson`).
+
+### Public API
+
+- `BorrowAsync(string statementKey, CancellationToken)` — returns the cached entry for a key, or `null` on a miss.
+- `ReturnAsync(PreparedStatementEntry entry, CancellationToken)` — registers an entry, evicting the least-used entry when the pool is at capacity.
+- `ReleaseAsync(string statementKey, CancellationToken)` — removes an entry from the pool.
+- `GetPoolStatsAsync(CancellationToken)` — returns `(PoolSize, HitRatio)` where `HitRatio` is successful borrows over total borrow attempts.
+- `DisposeAsync()` — clears the pool.
+
+### Example Usage
+
+```csharp
+using DotnetMicroOrm.Data;
+using Microsoft.Extensions.DependencyInjection;
+
+var services = new ServiceCollection();
+
+// Register the pool (and query plan cache) as singletons with custom capacity
+services.AddQueryPlanCaching(
+    configureStatementPool: options => options.WithMaxPoolSize(500));
+
+var provider = services.BuildServiceProvider();
+var pool = provider.GetRequiredService<IPreparedStatementPool>();
+
+// Borrow a cached statement shape, or null on a miss
+var entry = await pool.BorrowAsync("SELECT * FROM Users WHERE Id = @id");
+if (entry is null)
+{
+    // Compile the statement, then register it for reuse
+    entry = new PreparedStatementEntry
+    {
+        StatementKey = "SELECT * FROM Users WHERE Id = @id",
+        Sql = "SELECT * FROM Users WHERE Id = @id",
+        Parameters = [new QueryParameterDescriptor { Name = "@id", DbType = DbType.Int32 }]
+    };
+    await pool.ReturnAsync(entry);
+}
+
+var (poolSize, hitRatio) = await pool.GetPoolStatsAsync();
+Console.WriteLine($"Pool size: {poolSize}, hit ratio: {hitRatio:P0}");
+```
 ```
