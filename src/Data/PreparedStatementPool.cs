@@ -20,7 +20,12 @@ public sealed class PreparedStatementPoolOptions
     /// Maximum number of statements held in the pool before least-used eviction.
     /// Defaults to <c>200</c>.
     /// </summary>
-    public int MaxPoolSize { get; set; } = 200;
+    public int MaxPoolSize { get; set; } = DefaultMaxPoolSize;
+
+    /// <summary>
+    /// Default maximum pool size.
+    /// </summary>
+    public const int DefaultMaxPoolSize = 200;
 }
 
 /// <summary>
