@@ -29,6 +29,7 @@ public static class CryptoHelper
     /// <exception cref="ArgumentException">Thrown when <paramref name="password"/> is null or whitespace.</exception>
     public static string HashPassword(string password)
     {
+        ArgumentNullException.ThrowIfNull(password);
         if (string.IsNullOrWhiteSpace(password))
             throw new ArgumentException("Password cannot be empty", nameof(password));
 
@@ -111,6 +112,7 @@ public static class CryptoHelper
     /// <exception cref="ArgumentException">Thrown when <paramref name="input"/> is null or whitespace.</exception>
     public static string ComputeSha256(string input)
     {
+        ArgumentNullException.ThrowIfNull(input);
         if (string.IsNullOrWhiteSpace(input))
             throw new ArgumentException("Input cannot be empty", nameof(input));
 
@@ -131,6 +133,8 @@ public static class CryptoHelper
     /// <exception cref="ArgumentException">Thrown when <paramref name="plaintext"/> is empty, or <paramref name="key"/> is null or shorter than 32 characters.</exception>
     public static string EncryptAes256(string plaintext, string key)
     {
+        ArgumentNullException.ThrowIfNull(plaintext);
+        ArgumentNullException.ThrowIfNull(key);
         if (string.IsNullOrEmpty(plaintext))
             throw new ArgumentException("Plaintext cannot be empty", nameof(plaintext));
         if (string.IsNullOrEmpty(key) || key.Length < 32)
@@ -170,6 +174,8 @@ public static class CryptoHelper
     /// <exception cref="ArgumentException">Thrown when <paramref name="ciphertext"/> is empty, or <paramref name="key"/> is null or shorter than 32 characters.</exception>
     public static string DecryptAes256(string ciphertext, string key)
     {
+        ArgumentNullException.ThrowIfNull(ciphertext);
+        ArgumentNullException.ThrowIfNull(key);
         if (string.IsNullOrEmpty(ciphertext))
             throw new ArgumentException("Ciphertext cannot be empty", nameof(ciphertext));
         if (string.IsNullOrEmpty(key) || key.Length < 32)
