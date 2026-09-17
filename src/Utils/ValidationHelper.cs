@@ -20,6 +20,8 @@ public static class ValidationHelper
     /// </summary>
     public static (bool isValid, string errorMessage) ValidateRequired(string? value, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         if (string.IsNullOrWhiteSpace(value))
             return (false, $"{fieldName} is required");
 
@@ -32,6 +34,8 @@ public static class ValidationHelper
     public static (bool isValid, string errorMessage) ValidateLength(
         string? value, int minLength, int maxLength, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         if (string.IsNullOrEmpty(value))
             return (false, $"{fieldName} is required");
 
@@ -96,6 +100,8 @@ public static class ValidationHelper
     public static (bool isValid, string errorMessage) ValidateRange(
         int value, int minValue, int maxValue, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         if (value < minValue || value > maxValue)
             return (false, $"{fieldName} must be between {minValue} and {maxValue}");
 
@@ -108,6 +114,8 @@ public static class ValidationHelper
     public static (bool isValid, string errorMessage) ValidateRange(
         decimal value, decimal minValue, decimal maxValue, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         if (value < minValue || value > maxValue)
             return (false, $"{fieldName} must be between {minValue} and {maxValue}");
 
@@ -119,6 +127,8 @@ public static class ValidationHelper
     /// </summary>
     public static (bool isValid, string errorMessage) ValidatePositive(decimal value, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         if (value <= 0)
             return (false, $"{fieldName} must be greater than zero");
 
@@ -130,6 +140,8 @@ public static class ValidationHelper
     /// </summary>
     public static (bool isValid, string errorMessage) ValidateNonNegative(decimal value, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         if (value < 0)
             return (false, $"{fieldName} cannot be negative");
 
@@ -171,6 +183,8 @@ public static class ValidationHelper
     public static (bool isValid, string errorMessage) ValidateNotEmpty<T>(
         IEnumerable<T>? collection, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         if (collection is null || !collection.Any())
             return (false, $"{fieldName} must contain at least one item");
 
@@ -183,6 +197,8 @@ public static class ValidationHelper
     public static (bool isValid, string errorMessage) ValidateCollectionSize<T>(
         IEnumerable<T>? collection, int minSize, int maxSize, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         var list = collection?.ToList() ?? [];
 
         if (list.Count < minSize)
@@ -199,6 +215,8 @@ public static class ValidationHelper
     /// </summary>
     public static (bool isValid, string errorMessage) ValidateFutureDate(DateTime value, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         if (value <= DateTime.UtcNow)
             return (false, $"{fieldName} must be in the future");
 
@@ -210,6 +228,8 @@ public static class ValidationHelper
     /// </summary>
     public static (bool isValid, string errorMessage) ValidatePastDate(DateTime value, string fieldName)
     {
+        ArgumentNullException.ThrowIfNull(fieldName);
+
         if (value >= DateTime.UtcNow)
             return (false, $"{fieldName} must be in the past");
 
@@ -222,6 +242,8 @@ public static class ValidationHelper
     public static (bool isValid, string errorMessage) ValidateAll(
         params (bool isValid, string errorMessage)[] validations)
     {
+        ArgumentNullException.ThrowIfNull(validations);
+
         foreach (var validation in validations)
         {
             if (!validation.isValid)
