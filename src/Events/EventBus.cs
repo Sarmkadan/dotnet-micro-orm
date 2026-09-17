@@ -25,8 +25,7 @@ public sealed class EventBus : IEventBus
 
     public async Task PublishAsync<TEvent>(TEvent @event) where TEvent : IEvent
     {
-        if (@event is null)
-            throw new ArgumentNullException(nameof(@event));
+        ArgumentNullException.ThrowIfNull(@event);
 
         var eventType = typeof(TEvent);
 
@@ -57,8 +56,7 @@ public sealed class EventBus : IEventBus
         where TEvent : IEvent
         where THandler : IEventHandler<TEvent>
     {
-        if (handler is null)
-            throw new ArgumentNullException(nameof(handler));
+        ArgumentNullException.ThrowIfNull(handler);
 
         var eventType = typeof(TEvent);
 
