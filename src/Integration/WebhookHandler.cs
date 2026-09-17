@@ -12,6 +12,43 @@ using DotnetMicroOrm.Integration;
 namespace DotnetMicroOrm.Integration;
 
 /// <summary>
+/// Constants used throughout the WebhookHandler class
+/// </summary>
+internal static class WebhookConstants
+{
+    // Default values for DeliverAsync parameters
+    public const int DefaultMaxRetries = 3;
+    public static readonly TimeSpan DefaultInitialRetryDelay = TimeSpan.FromSeconds(1);
+    public const int DefaultCircuitBreakerThreshold = 5;
+    public static readonly TimeSpan DefaultCircuitBreakerDuration = TimeSpan.FromSeconds(30);
+
+    // Retry configuration
+    public static readonly TimeSpan MaximumRetryDelay = TimeSpan.FromMinutes(5);
+
+    // Error messages
+    public const string InvalidSignatureError = "Invalid signature";
+    public const string NoHandlersMessage = "No handlers registered for this event type";
+    public const string WebhookDeliveredSuccessfullyMessage = "Webhook delivered successfully";
+    public const string UnknownErrorMessage = "Unknown error";
+    public const string AllRetryAttemptsFailedError = "All retry attempts failed";
+
+    // Final disposition values
+    public const string DispositionSuccess = "success";
+    public const string DispositionHttpError = "http_error";
+    public const string DispositionClientError = "client_error";
+    public const string DispositionCircuitOpen = "circuit_open";
+    public const string DispositionRetryExhausted = "retry_exhausted";
+    public const string DispositionException = "exception";
+    public const string DispositionSsrfViolation = "ssrf_violation";
+
+    // SSRF error message
+    public const string SsrfViolationError = "Invalid webhook URL - SSRF protection violation";
+
+    // Circuit breaker error message
+    public const string CircuitBreakerOpenError = "Circuit breaker is open";
+}
+
+/// <summary>
 /// Handles incoming webhooks with signature verification and event processing.
 /// Supports multiple webhook types (user events, order events, etc).
 /// Verifies authenticity using HMAC-SHA256 signatures with timestamp-based anti-replay protection.
@@ -83,7 +120,7 @@ public sealed class WebhookHandler : IAsyncDisposable
             return new WebhookResult
             {
                 Success = false,
-                Error = "Invalid signature",
+                Error = WebhookConstants.InvalidSignatureError,
                 ProcessedAt = DateTime.UtcNow
             };
         }
@@ -96,7 +133,7 @@ public sealed class WebhookHandler : IAsyncDisposable
                 return new WebhookResult
                 {
                     Success = true,
-                    Message = "No handlers registered for this event type",
+                    Message = WebhookConstants.NoHandlersMessage,
                     ProcessedAt = DateTime.UtcNow
                 };
             }
@@ -181,9 +218,9 @@ public sealed class WebhookHandler : IAsyncDisposable
     public async Task<WebhookResult> DeliverAsync(
         WebhookPayload payload,
         string url,
-        int maxRetries = 3,
+        int maxRetries = WebhookConstants.DefaultMaxRetries,
         TimeSpan? initialRetryDelay = null,
-        int circuitBreakerThreshold = 5,
+        int circuitBreakerThreshold = WebhookConstants.DefaultCircuitBreakerThreshold,
         TimeSpan? circuitBreakerDuration = null)
     {
         ArgumentNullException.ThrowIfNull(payload);
@@ -196,10 +233,10 @@ public sealed class WebhookHandler : IAsyncDisposable
             return new WebhookResult
             {
                 Success = false,
-                Error = "Invalid webhook URL - SSRF protection violation",
+                Error = WebhookConstants.SsrfViolationError,
                 ProcessedAt = DateTime.UtcNow,
                 AttemptCount = 1,
-                FinalDisposition = "ssrf_violation"
+                FinalDisposition = WebhookConstants.DispositionSsrfViolation
             };
         }
 
@@ -228,14 +265,14 @@ public sealed class WebhookHandler : IAsyncDisposable
                     lastResult = new WebhookResult
                     {
                         Success = false,
-                        Error = "Circuit breaker is open",
+                        Error = WebhookConstants.CircuitBreakerOpenError,
                         ProcessedAt = DateTime.UtcNow,
                         AttemptCount = attemptCount,
-                        FinalDisposition = "circuit_open",
+                        FinalDisposition = WebhookConstants.DispositionCircuitOpen,
                         Duration = DateTime.UtcNow - startTime
                     };
                     shouldStoreInDeadLetter = true;
-                    finalDisposition = "circuit_open";
+                    finalDisposition = WebhookConstants.DispositionCircuitOpen;
                     break;
                 }
 
@@ -248,11 +285,11 @@ public sealed class WebhookHandler : IAsyncDisposable
                     return new WebhookResult
                     {
                         Success = response.IsSuccess,
-                        Message = response.IsSuccess ? "Webhook delivered successfully" : $"HTTP {(int)response.StatusCode}",
+                        Message = response.IsSuccess ? WebhookConstants.WebhookDeliveredSuccessfullyMessage : $"HTTP {(int)response.StatusCode}",
                         Error = response.IsSuccess ? null : response.Body,
                         ProcessedAt = DateTime.UtcNow,
                         AttemptCount = attemptCount,
-                        FinalDisposition = response.IsSuccess ? "success" : "http_error",
+                        FinalDisposition = response.IsSuccess ? WebhookConstants.DispositionSuccess : "http_error",
                         Duration = response.Duration,
                         HttpStatusCode = response.StatusCode
                     };
@@ -271,13 +308,13 @@ public sealed class WebhookHandler : IAsyncDisposable
                 // Check if this is a retryable error (5xx or timeout)
                 if ((lastResult.HttpStatusCode ?? 0) >= 500 || lastResult.Exception is not null)
                 {
-		lastException = lastResult.Exception ?? new HttpRequestException(lastResult.Error ?? "Unknown error");
+		lastException = lastResult.Exception ?? new HttpRequestException(lastResult.Error ?? WebhookConstants.UnknownErrorMessage);
 
                     // Exponential backoff
                     if (attemptCount <= maxRetries)
                     {
                         await Task.Delay(retryDelay).ConfigureAwait(false);
-                        retryDelay = TimeSpan.FromTicks(Math.Min(retryDelay.Ticks * 2, TimeSpan.FromMinutes(5).Ticks));
+                        retryDelay = TimeSpan.FromTicks(Math.Min(retryDelay.Ticks * 2, WebhookConstants.MaximumRetryDelay.Ticks));
                     }
                 }
                 else
@@ -321,7 +358,7 @@ public sealed class WebhookHandler : IAsyncDisposable
                 if (attemptCount <= maxRetries)
                 {
                     await Task.Delay(retryDelay).ConfigureAwait(false);
-                    retryDelay = TimeSpan.FromTicks(Math.Min(retryDelay.Ticks * 2, TimeSpan.FromMinutes(5).Ticks));
+                    retryDelay = TimeSpan.FromTicks(Math.Min(retryDelay.Ticks * 2, WebhookConstants.MaximumRetryDelay.Ticks));
                 }
             }
         }
