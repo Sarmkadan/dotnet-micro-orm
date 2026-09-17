@@ -17,8 +17,16 @@ public sealed class AuthenticationMiddleware : IMiddleware
 {
     private readonly Dictionary<string, (int userId, string role)> _apiKeys = [];
 
-    public int Order => 20; // Execute after error handling but before rate limiting
+    /// <summary>
+    /// Gets the execution order of this middleware.
+    /// Executes after error handling but before rate limiting.
+    /// </summary>
+    public int Order => 20;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AuthenticationMiddleware"/> class
+    /// with a set of example API keys.
+    /// </summary>
     public AuthenticationMiddleware()
     {
         // Initialize with example API keys (in production, load from secure storage)
@@ -26,6 +34,15 @@ public sealed class AuthenticationMiddleware : IMiddleware
         _apiKeys["demo-key-67890"] = (2, "user");
     }
 
+    /// <summary>
+    /// Authenticates the request using an API key or bearer token and invokes the next middleware.
+    /// On successful authentication, populates <see cref="MiddlewareContext.User"/> with the
+    /// associated <see cref="AuthenticationInfo"/>. On failure, sets an unauthorized response
+    /// and marks the request as handled.
+    /// </summary>
+    /// <param name="context">The middleware context for the current request.</param>
+    /// <param name="next">The delegate to invoke the next middleware in the pipeline.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
     {
         // Try to authenticate using API key
@@ -138,8 +155,16 @@ public sealed class AuthorizationMiddleware : IMiddleware
 {
     private readonly Dictionary<string, string[]> _operationRoles = [];
 
-    public int Order => 25; // Execute after authentication
+    /// <summary>
+    /// Gets the execution order of this middleware.
+    /// Executes after authentication.
+    /// </summary>
+    public int Order => 25;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AuthorizationMiddleware"/> class
+    /// with the default role requirements for built-in operations.
+    /// </summary>
     public AuthorizationMiddleware()
     {
         // Define role requirements for operations
@@ -148,6 +173,14 @@ public sealed class AuthorizationMiddleware : IMiddleware
         _operationRoles["product-management"] = ["admin"];
     }
 
+    /// <summary>
+    /// Enforces role-based authorization for the current operation and invokes the next middleware.
+    /// If the operation requires roles and the user lacks them, sets a forbidden response
+    /// and marks the request as handled.
+    /// </summary>
+    /// <param name="context">The middleware context for the current request.</param>
+    /// <param name="next">The delegate to invoke the next middleware in the pipeline.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
     public async Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
     {
         // Check if operation requires authorization
