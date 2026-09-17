@@ -43,8 +43,17 @@ public sealed class PagedResult<T>
     public int SkippedItems => (PageNumber - 1) * PageSize;
 
     /// <summary>
-    /// Creates a paged result from a complete list
+    /// Creates a paged result from a complete list.
     /// </summary>
+    /// <param name="items">The full collection of items to paginate.</param>
+    /// <param name="pageNumber">The 1-based page number to return.</param>
+    /// <param name="pageSize">The number of items per page.</param>
+    /// <param name="totalCount">The total number of items across all pages.</param>
+    /// <param name="orderBy">The field name used to order the results, if any.</param>
+    /// <param name="sortDirection">The sort direction (<c>asc</c> or <c>desc</c>).</param>
+    /// <returns>A <see cref="PagedResult{T}"/> containing the requested page and pagination metadata.</returns>
+    /// <exception cref="ArgumentException"><paramref name="pageNumber"/> is less than 1.</exception>
+    /// <exception cref="ArgumentException"><paramref name="pageSize"/> is less than 1.</exception>
     public static PagedResult<T> Create(
         IEnumerable<T> items,
         int pageNumber,
@@ -71,8 +80,13 @@ public sealed class PagedResult<T>
     }
 
     /// <summary>
-    /// Creates a paged result from a queryable
+    /// Creates a paged result from a queryable by counting total items and
+    /// applying skip/take pagination.
     /// </summary>
+    /// <param name="query">The queryable source to paginate.</param>
+    /// <param name="pageNumber">The 1-based page number to return.</param>
+    /// <param name="pageSize">The number of items per page.</param>
+    /// <returns>A <see cref="PagedResult{T}"/> containing the requested page and pagination metadata.</returns>
     public static PagedResult<T> FromQueryable(
         IQueryable<T> query,
         int pageNumber = 1,
@@ -88,8 +102,11 @@ public sealed class PagedResult<T>
     }
 
     /// <summary>
-    /// Maps items to a different type while preserving pagination metadata
+    /// Maps items to a different type while preserving pagination metadata.
     /// </summary>
+    /// <typeparam name="TNew">The type of the mapped items.</typeparam>
+    /// <param name="selector">The function used to project each item.</param>
+    /// <returns>A new <see cref="PagedResult{TNew}"/> with the same pagination metadata.</returns>
     public PagedResult<TNew> Map<TNew>(Func<T, TNew> selector)
     {
         return new PagedResult<TNew>
@@ -104,8 +121,10 @@ public sealed class PagedResult<T>
     }
 
     /// <summary>
-    /// Gets the next page configuration
+    /// Gets the next page configuration.
     /// </summary>
+    /// <returns>A <see cref="PaginationInfo"/> describing the next page.</returns>
+    /// <exception cref="InvalidOperationException">There is no next page available.</exception>
     public PaginationInfo GetNextPageInfo()
     {
         if (!HasNextPage)
@@ -119,8 +138,10 @@ public sealed class PagedResult<T>
     }
 
     /// <summary>
-    /// Gets the previous page configuration
+    /// Gets the previous page configuration.
     /// </summary>
+    /// <returns>A <see cref="PaginationInfo"/> describing the previous page.</returns>
+    /// <exception cref="InvalidOperationException">There is no previous page available.</exception>
     public PaginationInfo GetPreviousPageInfo()
     {
         if (!HasPreviousPage)
