@@ -4,6 +4,8 @@
 // CTO & Software Architect
 // =============================================================================
 
+using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -16,9 +18,15 @@ namespace DotnetMicroOrm.Utils;
 /// </summary>
 public static class CryptoHelper
 {
+    // Existing cryptographic parameters
     private const int SaltLength = 16;
     private const int HashLength = 32;
     private const int Iterations = 10000;
+
+    // New extracted constants
+    private const int MinTokenLength = 16;
+    private const int DefaultTokenLength = 32;
+    private const int MinKeyLength = 32;
 
     /// <summary>
     /// Creates a salted hash of a password using PBKDF2-SHA256
@@ -87,13 +95,13 @@ public static class CryptoHelper
     /// <summary>
     /// Generates a cryptographically secure random token suitable for API keys/tokens
     /// </summary>
-    /// <param name="length">The number of random bytes to generate. Must be at least 16.</param>
+    /// <param name="length">The number of random bytes to generate. Must be at least <see cref="MinTokenLength"/>.</param>
     /// <returns>A base64-encoded string of the generated random bytes.</returns>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="length"/> is less than 16.</exception>
-    public static string GenerateSecureToken(int length = 32)
+    /// <exception cref="ArgumentException">Thrown when <paramref name="length"/> is less than <see cref="MinTokenLength"/>.</exception>
+    public static string GenerateSecureToken(int length = DefaultTokenLength)
     {
-        if (length < 16)
-            throw new ArgumentException("Token length must be at least 16 bytes", nameof(length));
+        if (length < MinTokenLength)
+            throw new ArgumentException($"Token length must be at least {MinTokenLength} bytes", nameof(length));
 
         using (var rng = RandomNumberGenerator.Create())
         {
@@ -128,19 +136,19 @@ public static class CryptoHelper
     /// Returns base64-encoded IV + ciphertext
     /// </summary>
     /// <param name="plaintext">The plaintext to encrypt.</param>
-    /// <param name="key">The encryption key. Must be at least 32 characters; the first 32 are used as the 256-bit key.</param>
+    /// <param name="key">The encryption key. Must be at least <see cref="MinKeyLength"/> characters; the first <see cref="MinKeyLength"/> are used as the 256-bit key.</param>
     /// <returns>A base64-encoded string containing the IV and ciphertext.</returns>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="plaintext"/> is empty, or <paramref name="key"/> is null or shorter than 32 characters.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="plaintext"/> is empty, or <paramref name="key"/> is null or shorter than <see cref="MinKeyLength"/> characters.</exception>
     public static string EncryptAes256(string plaintext, string key)
     {
         ArgumentNullException.ThrowIfNull(plaintext);
         ArgumentNullException.ThrowIfNull(key);
         if (string.IsNullOrEmpty(plaintext))
             throw new ArgumentException("Plaintext cannot be empty", nameof(plaintext));
-        if (string.IsNullOrEmpty(key) || key.Length < 32)
-            throw new ArgumentException("Key must be at least 32 characters", nameof(key));
+        if (string.IsNullOrEmpty(key) || key.Length < MinKeyLength)
+            throw new ArgumentException($"Key must be at least {MinKeyLength} characters", nameof(key));
 
-        var keyBytes = Encoding.UTF8.GetBytes(key[..32]); // Use first 32 chars as 256-bit key
+        var keyBytes = Encoding.UTF8.GetBytes(key[..MinKeyLength]); // Use first MinKeyLength chars as 256-bit key
 
         using (var aes = Aes.Create())
         {
@@ -169,19 +177,19 @@ public static class CryptoHelper
     /// Decrypts an AES-256-CBC encrypted string created by EncryptAes256
     /// </summary>
     /// <param name="ciphertext">The base64-encoded IV + ciphertext to decrypt.</param>
-    /// <param name="key">The encryption key. Must be at least 32 characters; the first 32 are used as the 256-bit key.</param>
+    /// <param name="key">The encryption key. Must be at least <see cref="MinKeyLength"/> characters; the first <see cref="MinKeyLength"/> are used as the 256-bit key.</param>
     /// <returns>The decrypted plaintext string.</returns>
-    /// <exception cref="ArgumentException">Thrown when <paramref name="ciphertext"/> is empty, or <paramref name="key"/> is null or shorter than 32 characters.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="ciphertext"/> is empty, or <paramref name="key"/> is null or shorter than <see cref="MinKeyLength"/> characters.</exception>
     public static string DecryptAes256(string ciphertext, string key)
     {
         ArgumentNullException.ThrowIfNull(ciphertext);
         ArgumentNullException.ThrowIfNull(key);
         if (string.IsNullOrEmpty(ciphertext))
             throw new ArgumentException("Ciphertext cannot be empty", nameof(ciphertext));
-        if (string.IsNullOrEmpty(key) || key.Length < 32)
-            throw new ArgumentException("Key must be at least 32 characters", nameof(key));
+        if (string.IsNullOrEmpty(key) || key.Length < MinKeyLength)
+            throw new ArgumentException($"Key must be at least {MinKeyLength} characters", nameof(key));
 
-        var keyBytes = Encoding.UTF8.GetBytes(key[..32]);
+        var keyBytes = Encoding.UTF8.GetBytes(key[..MinKeyLength]);
         var ciphertextBytes = Convert.FromBase64String(ciphertext);
 
         using (var aes = Aes.Create())
