@@ -17,7 +17,9 @@ public sealed class RateLimitingMiddleware : IMiddleware
     private readonly Dictionary<string, TokenBucket> _buckets = [];
     private readonly object _lock = new();
 
-    public int Order => 5; // Execute early but after error handling
+    private const int MiddlewareOrder = 5; // Execute early but after error handling
+
+    public int Order => MiddlewareOrder;
 
     public RateLimitingMiddleware(RateLimitConfig config)
     {
@@ -79,6 +81,7 @@ public sealed class RateLimitingMiddleware : IMiddleware
     /// </summary>
     private class TokenBucket
     {
+        private const int ExpirationOffsetMinutes = 1;
         private readonly int _capacity;
         private readonly TimeSpan _refillInterval;
         private double _tokens;
@@ -92,7 +95,7 @@ public sealed class RateLimitingMiddleware : IMiddleware
             _lastRefill = DateTime.UtcNow;
         }
 
-        public bool IsExpired => DateTime.UtcNow - _lastRefill > _refillInterval.Add(TimeSpan.FromMinutes(1));
+        public bool IsExpired => DateTime.UtcNow - _lastRefill > _refillInterval.Add(TimeSpan.FromMinutes(ExpirationOffsetMinutes));
 
         public bool TryConsume()
         {
