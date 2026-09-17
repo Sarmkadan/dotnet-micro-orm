@@ -15,8 +15,18 @@ namespace DotnetMicroOrm.Middleware;
 /// </summary>
 public sealed class ErrorHandlingMiddleware : IMiddleware
 {
-    public int Order => 1; // Execute first to wrap all other middleware
+    /// <summary>
+    /// Execution order of this middleware. Set to 1 so it runs first and wraps all other middleware.
+    /// </summary>
+    public int Order => 1;
 
+    /// <summary>
+    /// Invokes the next middleware in the pipeline, catching any thrown exception and
+    /// converting it into a standardized <see cref="ErrorResponse"/>.
+    /// </summary>
+    /// <param name="context">The middleware context for the current request.</param>
+    /// <param name="next">The next middleware delegate to invoke.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public async Task InvokeAsync(MiddlewareContext context, Func<MiddlewareContext, Task> next)
     {
         try
