@@ -149,4 +149,6 @@ public class Order : BaseEntity
     private static bool IsValidStatus(string status) => status is "Pending" or "Confirmed" or "Shipped" or "Delivered" or "Cancelled";
 
     public decimal GetTaxableAmount() => TotalAmount - TaxAmount;
+
+    public override string ToString() => $"Order {{ Id = {Id}, Status = {Status}, Total = {TotalAmount} }}";
 }
