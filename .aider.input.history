@@ -15174,3 +15174,33 @@
 +- chore: maintenance updates
 +- chore: maintenance updates
 +- docs: add XML doc comments to DatabaseContext public members
+
+# 2026-09-17 06:12:24.945514
++In repo dotnet-micro-orm, add a ToString() override for OrderItem (src/Domain/Models/OrderItem.cs). HARD RULES: Do NOT touch .csproj/.sln. Do NOT change behavior. Do NOT add NuGet. Must compile. Conventional commit.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- refactor(JobScheduler): add ArgumentNullException.ThrowIfNull guards to public method parameters
++- refactor(MigrationRunner): add ArgumentNullException.ThrowIfNull guards to public method parameters
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
+
+# 2026-09-17 06:12:24.946360
++In repo dotnet-micro-orm, add a ToString() override for OrderItem (src/Domain/Models/OrderItem.cs). HARD RULES: Do NOT touch .csproj/.sln. Do NOT change behavior. Do NOT add NuGet. Must compile. Conventional commit.
++
++Recent commits in this repo (other automated tasks - avoid undoing or conflicting with this work, e.g. don't remove inheritance from a class another commit just derived from, don't re-add something already added):
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
++- refactor(JobScheduler): add ArgumentNullException.ThrowIfNull guards to public method parameters
++- refactor(MigrationRunner): add ArgumentNullException.ThrowIfNull guards to public method parameters
++- chore: maintenance updates
++- chore: maintenance updates
++- chore: maintenance updates
