@@ -37,7 +37,9 @@ public sealed class MigrationRunner : IMigrationRunner
     /// </param>
     public MigrationRunner(IDatabaseContext context, IEnumerable<IMigration> migrations)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(migrations);
+        _context = context;
         _migrations = migrations
             .OrderBy(m => m.Version, StringComparer.OrdinalIgnoreCase)
             .ToList();
