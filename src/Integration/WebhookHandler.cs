@@ -21,6 +21,7 @@ internal static class WebhookConstants
     public static readonly TimeSpan DefaultInitialRetryDelay = TimeSpan.FromSeconds(1);
     public const int DefaultCircuitBreakerThreshold = 5;
     public static readonly TimeSpan DefaultCircuitBreakerDuration = TimeSpan.FromSeconds(30);
+    public static readonly TimeSpan DefaultTimestampTolerance = TimeSpan.FromMinutes(5);
 
     // Retry configuration
     public static readonly TimeSpan MaximumRetryDelay = TimeSpan.FromMinutes(5);
@@ -46,6 +47,17 @@ internal static class WebhookConstants
 
     // Circuit breaker error message
     public const string CircuitBreakerOpenError = "Circuit breaker is open";
+
+    // Signature header format
+    public const string SignatureHeaderFormat = "t={timestamp},v1={signature}";
+    public const string SignatureTimestampPrefix = "t=";
+    public const string SignatureVersionPrefix = "v1=";
+
+    // Retry delay key prefix
+    public const string RetryDelayKeyPrefix = "retry_delay_";
+
+    // HTTP status codes
+    public const int RetryableHttpStatusCodeThreshold = 500;
 }
 
 /// <summary>
@@ -306,9 +318,9 @@ public sealed class WebhookHandler : IAsyncDisposable
                 }
 
                 // Check if this is a retryable error (5xx or timeout)
-                if ((lastResult.HttpStatusCode ?? 0) >= 500 || lastResult.Exception is not null)
+                if ((lastResult.HttpStatusCode ?? 0) >= WebhookConstants.RetryableHttpStatusCodeThreshold || lastResult.Exception is not null)
                 {
-		lastException = lastResult.Exception ?? new HttpRequestException(lastResult.Error ?? WebhookConstants.UnknownErrorMessage);
+                    lastException = lastResult.Exception ?? new HttpRequestException(lastResult.Error ?? WebhookConstants.UnknownErrorMessage);
 
                     // Exponential backoff
                     if (attemptCount <= maxRetries)
@@ -401,7 +413,7 @@ public sealed class WebhookHandler : IAsyncDisposable
             {
                 circuitBreaker = new CircuitBreakerPolicy(
                     failureThreshold: threshold,
-                    breakDuration: duration ?? TimeSpan.FromSeconds(30));
+                    breakDuration: duration ?? WebhookConstants.DefaultCircuitBreakerDuration);
                 _circuitBreakers[url] = circuitBreaker;
             }
             return circuitBreaker;
@@ -412,10 +424,10 @@ public sealed class WebhookHandler : IAsyncDisposable
     {
         lock (_lock)
         {
-            var key = $"retry_delay_{eventType}";
+            var key = $"{WebhookConstants.RetryDelayKeyPrefix}{eventType}";
             if (!_retryDelays.TryGetValue(key, out var delay))
             {
-                delay = initialDelay ?? TimeSpan.FromSeconds(1);
+                delay = initialDelay ?? WebhookConstants.DefaultInitialRetryDelay;
                 _retryDelays[key] = delay;
             }
             return delay;
