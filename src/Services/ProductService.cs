@@ -15,6 +15,16 @@ using DotnetMicroOrm.Domain.Models;
 /// </summary>
 public sealed class ProductService : IAsyncDisposable
 {
+    private const int MinSkuLength = 3;
+    private const int DefaultLowStockThreshold = 10;
+    private const decimal MinimumPrice = 0m;
+    private const int MinimumStockQuantity = 0;
+
+    private const string ProductNotFoundMessage = "Product not found";
+    private const string SkuTooShortMessage = "SKU must be at least 3 characters";
+    private const string SkuAlreadyExistsMessage = "Product with this SKU already exists";
+    private const string NegativeQuantityMessage = "Quantity cannot be negative";
+
     private readonly ProductRepository _productRepository;
     private readonly IDatabaseContext _context;
 
@@ -45,12 +55,12 @@ public sealed class ProductService : IAsyncDisposable
         ArgumentNullException.ThrowIfNull(sku);
         ArgumentNullException.ThrowIfNull(name);
 
-        if (string.IsNullOrWhiteSpace(sku) || sku.Length < 3)
-            throw new ArgumentException("SKU must be at least 3 characters");
+        if (string.IsNullOrWhiteSpace(sku) || sku.Length < MinSkuLength)
+            throw new ArgumentException(SkuTooShortMessage);
 
         var existingSku = await _productRepository.GetBySkuAsync(sku);
         if (existingSku is not null)
-            throw new InvalidOperationException("Product with this SKU already exists");
+            throw new InvalidOperationException(SkuAlreadyExistsMessage);
 
         var product = new Product(sku, name, price, categoryId)
         {
@@ -103,12 +113,12 @@ public sealed class ProductService : IAsyncDisposable
     {
         var product = await _productRepository.GetByIdAsync(productId);
         if (product is null)
-            throw new InvalidOperationException("Product not found");
+            throw new InvalidOperationException(ProductNotFoundMessage);
 
         if (!string.IsNullOrWhiteSpace(name))
             product.Name = name;
 
-        if (price.HasValue && price > 0)
+        if (price.HasValue && price > MinimumPrice)
             product.Price = price.Value;
 
         if (description is not null)
@@ -130,10 +140,10 @@ public sealed class ProductService : IAsyncDisposable
     {
         var product = await _productRepository.GetByIdAsync(productId);
         if (product is null)
-            throw new InvalidOperationException("Product not found");
+            throw new InvalidOperationException(ProductNotFoundMessage);
 
-        if (quantity < 0)
-            throw new ArgumentException("Quantity cannot be negative");
+        if (quantity < MinimumStockQuantity)
+            throw new ArgumentException(NegativeQuantityMessage);
 
         product.StockQuantity = quantity;
         product.ModifiedDate = DateTime.UtcNow;
@@ -151,7 +161,7 @@ public sealed class ProductService : IAsyncDisposable
     {
         var product = await _productRepository.GetByIdAsync(productId);
         if (product is null)
-            throw new InvalidOperationException("Product not found");
+            throw new InvalidOperationException(ProductNotFoundMessage);
 
         product.IncreaseStock(quantity);
         return await _productRepository.UpdateAsync(product);
@@ -168,7 +178,7 @@ public sealed class ProductService : IAsyncDisposable
     {
         var product = await _productRepository.GetByIdAsync(productId);
         if (product is null)
-            throw new InvalidOperationException("Product not found");
+            throw new InvalidOperationException(ProductNotFoundMessage);
 
         product.DecreaseStock(quantity);
         return await _productRepository.UpdateAsync(product);
@@ -179,7 +189,7 @@ public sealed class ProductService : IAsyncDisposable
     /// </summary>
     /// <param name="threshold">The stock quantity threshold. Defaults to 10.</param>
     /// <returns>A list of products with low stock.</returns>
-    public async Task<List<Product>> GetLowStockProductsAsync(int threshold = 10)
+    public async Task<List<Product>> GetLowStockProductsAsync(int threshold = DefaultLowStockThreshold)
     {
         return await _productRepository.GetLowStockProductsAsync(threshold);
     }
@@ -226,7 +236,7 @@ public sealed class ProductService : IAsyncDisposable
     {
         var product = await _productRepository.GetByIdAsync(productId);
         if (product is null)
-            throw new InvalidOperationException("Product not found");
+            throw new InvalidOperationException(ProductNotFoundMessage);
 
         product.IsActive = false;
         product.ModifiedDate = DateTime.UtcNow;
