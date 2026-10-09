@@ -37,7 +37,8 @@ public sealed class ProductService : IAsyncDisposable
     /// <param name="categoryId">The identifier of the category the product belongs to.</param>
     /// <param name="description">An optional description of the product.</param>
     /// <returns>The newly created product.</returns>
-    /// <exception cref="ArgumentException">Thrown when the SKU is null, empty, or shorter than three characters.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="sku"/> or <paramref name="name"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when the SKU is empty, whitespace, or shorter than three characters.</exception>
     /// <exception cref="InvalidOperationException">Thrown when a product with the same SKU already exists.</exception>
     public async Task<Product> CreateProductAsync(string sku, string name, decimal price, int categoryId, string? description = null)
     {
@@ -94,7 +95,7 @@ public sealed class ProductService : IAsyncDisposable
     /// </summary>
     /// <param name="productId">The identifier of the product to update.</param>
     /// <param name="name">An optional new name for the product.</param>
-    /// <param name="price">An optional new price for the product.</param>
+    /// <param name="price">An optional new price for the product. Values less than or equal to zero are ignored.</param>
     /// <param name="description">An optional new description for the product.</param>
     /// <returns>The updated product.</returns>
     /// <exception cref="InvalidOperationException">Thrown when no product with the given identifier exists.</exception>
@@ -197,6 +198,7 @@ public sealed class ProductService : IAsyncDisposable
     /// </summary>
     /// <param name="searchTerm">The search term to match against product names.</param>
     /// <returns>A list of products matching the search term.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="searchTerm"/> is null.</exception>
     public async Task<List<Product>> SearchProductsAsync(string searchTerm)
     {
         ArgumentNullException.ThrowIfNull(searchTerm);
