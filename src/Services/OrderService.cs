@@ -10,8 +10,13 @@ using DotnetMicroOrm.Data;
 using DotnetMicroOrm.Domain.Models;
 
 /// <summary>
-/// Order service for order processing and management
+/// Order service for order processing and management.
 /// </summary>
+/// <remarks>
+/// Coordinates order creation, item management, and status transitions
+/// (Pending, Confirmed, Shipped, Delivered, Cancelled) on top of <see cref="IRepository{T}"/>.
+/// The service owns the <see cref="IDatabaseContext"/> it receives and disposes it in <see cref="DisposeAsync"/>.
+/// </remarks>
 public sealed class OrderService : IAsyncDisposable
 {
     private readonly IRepository<Order> _orderRepository;
@@ -160,7 +165,7 @@ public sealed class OrderService : IAsyncDisposable
     /// <param name="orderId">The ID of the order to ship.</param>
     /// <param name="shipDate">The date the order was shipped; defaults to the current UTC time.</param>
     /// <returns>The shipped order.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when the order is not found.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the order is not found, or when the order is not confirmed.</exception>
     public async Task<Order> ShipOrderAsync(int orderId, DateTime? shipDate = null)
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
@@ -192,7 +197,7 @@ public sealed class OrderService : IAsyncDisposable
     /// </summary>
     /// <param name="orderId">The ID of the order to cancel.</param>
     /// <returns>The canceled order.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when the order is not found.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when the order is not found, or when the order has already been shipped or delivered.</exception>
     public async Task<Order> CancelOrderAsync(int orderId)
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
