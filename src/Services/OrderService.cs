@@ -19,6 +19,15 @@ using DotnetMicroOrm.Domain.Models;
 /// </remarks>
 public sealed class OrderService : IAsyncDisposable
 {
+    private const int MinShippingAddressLength = 10;
+
+    private const string StatusPending = "Pending";
+    private const string StatusConfirmed = "Confirmed";
+    private const string StatusShipped = "Shipped";
+    private const string StatusDelivered = "Delivered";
+
+    private const string OrderNotFoundMessage = "Order not found";
+
     private readonly IRepository<Order> _orderRepository;
     private readonly IRepository<OrderItem> _orderItemRepository;
     private readonly IDatabaseContext _context;
@@ -51,7 +60,7 @@ public sealed class OrderService : IAsyncDisposable
         if (userId <= 0)
             throw new ArgumentException("Invalid user ID");
 
-        if (string.IsNullOrWhiteSpace(shippingAddress) || shippingAddress.Length < 10)
+        if (string.IsNullOrWhiteSpace(shippingAddress) || shippingAddress.Length < MinShippingAddressLength)
             throw new ArgumentException("Invalid shipping address");
 
         var order = new Order(userId, shippingAddress)
@@ -118,7 +127,7 @@ public sealed class OrderService : IAsyncDisposable
 
         var order = await _orderRepository.GetByIdAsync(orderId);
         if (order is null)
-            throw new InvalidOperationException("Order not found");
+            throw new InvalidOperationException(OrderNotFoundMessage);
 
         var item = new OrderItem(orderId, productId, productName, quantity, unitPrice)
         {
@@ -146,15 +155,15 @@ public sealed class OrderService : IAsyncDisposable
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
         if (order is null)
-            throw new InvalidOperationException("Order not found");
+            throw new InvalidOperationException(OrderNotFoundMessage);
 
-        if (order.Status != "Pending")
+        if (order.Status != StatusPending)
             throw new InvalidOperationException("Only pending orders can be confirmed");
 
         if (order.Items.Count == 0)
             throw new InvalidOperationException("Cannot confirm order without items");
 
-        order.Status = "Confirmed";
+        order.Status = StatusConfirmed;
         order.ModifiedDate = DateTime.UtcNow;
         return await _orderRepository.UpdateAsync(order);
     }
@@ -170,7 +179,7 @@ public sealed class OrderService : IAsyncDisposable
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
         if (order is null)
-            throw new InvalidOperationException("Order not found");
+            throw new InvalidOperationException(OrderNotFoundMessage);
 
         order.Ship(shipDate ?? DateTime.UtcNow);
         return await _orderRepository.UpdateAsync(order);
@@ -186,7 +195,7 @@ public sealed class OrderService : IAsyncDisposable
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
         if (order is null)
-            throw new InvalidOperationException("Order not found");
+            throw new InvalidOperationException(OrderNotFoundMessage);
 
         order.MarkAsDelivered();
         return await _orderRepository.UpdateAsync(order);
@@ -202,7 +211,7 @@ public sealed class OrderService : IAsyncDisposable
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
         if (order is null)
-            throw new InvalidOperationException("Order not found");
+            throw new InvalidOperationException(OrderNotFoundMessage);
 
         order.Cancel();
         return await _orderRepository.UpdateAsync(order);
@@ -214,7 +223,7 @@ public sealed class OrderService : IAsyncDisposable
     /// <returns>A list of orders with a pending status.</returns>
     public async Task<List<Order>> GetPendingOrdersAsync()
     {
-        return await GetOrdersByStatusAsync("Pending");
+        return await GetOrdersByStatusAsync(StatusPending);
     }
 
     /// <summary>
@@ -224,7 +233,7 @@ public sealed class OrderService : IAsyncDisposable
     public async Task<decimal> GetTotalRevenueAsync()
     {
         var orders = await _orderRepository.GetAllAsync();
-        return orders.Where(o => o.Status is "Delivered" or "Shipped")
+        return orders.Where(o => o.Status is StatusDelivered or StatusShipped)
                      .Sum(o => o.TotalAmount);
     }
 
